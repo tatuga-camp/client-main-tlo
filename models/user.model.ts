@@ -1,3 +1,5 @@
+import { UserRole, UserType } from "./type.model";
+
 export type User = {
   id: string;
   createAt: Date;
@@ -24,6 +26,3 @@ export type User = {
   passwordResetTokenExpiresAt: Date;
   isDeleted: boolean;
 };
-
-export type UserRole = "ADMIN" | "USER";
-export type UserType = "EXTERNAL" | "INTERNAL";
