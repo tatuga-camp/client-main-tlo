@@ -20,6 +20,13 @@ import Select from 'react-select'
 import fakeInformations from "@/data/fakeInformation";
 import fakeOptions from "@/data/fakeOptions";
 import fakeSearchResult from "@/data/fakeSearchResult";
+import { PiUserCircleFill } from "react-icons/pi";
+
+
+import { GoGoal } from "react-icons/go";
+import { LiaClipboardListSolid } from "react-icons/lia";
+import { GrGroup } from "react-icons/gr";
+import { FaRegCircleCheck } from "react-icons/fa6";
 
 export default function Home() {
   return (
@@ -172,31 +179,11 @@ export default function Home() {
 
           {/* ข้อมูลการค้นหา */}
           <div className="w-full flex flex-col items-center mt-12 gap-8">
-          <h1 className="w-[85%]  md:text-xl py-2 px-4 bg-[var(--secondary-yellow)] font-semibold drop-shadow-md text-center">
-              ข้อมูลการค้นหา
-          </h1> 
-
-          <table className="w-[85%] text-[0.7rem] md:text-base text-center p-1 md:p-4 border-separate border-spacing-1 md:border-spacing-2 bg-white rounded-md">
-            <thead className="">
-              <th className=" bg-[#BED6FF] rounded-md p-2 ">รายการ</th>
-              <th className=" bg-[#BED6FF] rounded-md p-2 ">วันที่ส่งขอ</th>
-              <th className=" bg-[#BED6FF] rounded-md p-2 ">หมายเลขคำขอ</th>
-              <th className=" bg-[#BED6FF] rounded-md p-2 ">ประเภทคำขอ</th>
-              <th className=" bg-[#BED6FF] rounded-md p-2 ">สถานะคำขอ</th>
-            </thead>
-
-            <tbody>
-            {fakeSearchResult.map((item) => (
-                <tr key={item.id} >
-                  <td className="p-2 border-[1px] border-solid border-[#BED6FF] rounded-md">{item.id}</td>
-                  <td className="p-2 border-[1px] border-solid border-[#BED6FF] rounded-md">{item.date}</td>
-                  <td className="p-2 border-[1px] border-solid border-[#BED6FF] rounded-md">{item.requestId}</td>
-                  <td className="p-2 border-[1px] border-solid border-[#BED6FF] rounded-md">{item.categories}</td>
-                  <td className="p-2 border-[1px] border-solid border-[#BED6FF] rounded-md">{item.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            <h1 className="w-[85%]  md:text-xl py-2 px-4 bg-[var(--secondary-yellow)] font-semibold drop-shadow-md text-center">
+                ข้อมูลการค้นหา
+            </h1> 
+            
+          
           </div>
 
           {/* ข่าวประชาสัมพันธ์ */}
@@ -272,6 +259,140 @@ export default function Home() {
 
           
           </section>
+        </div>
+              
+              
+        {/* เกี่ยวกับเรา */}
+        <div className="w-full flex flex-col items-center md:items-start mt-12 gap-8 bg-[var(--primary-blue)] md:bg-[#F4F8FF] py-5 md:py-0">
+          <h1 className="z-10 w-[85%] md:text-xl flex items-center justify-center md:justify-start gap-5 py-2 px-4 bg-[var(--secondary-yellow)] 
+          font-semibold drop-shadow-md text-center md:text-start md:pl-32">
+            <PiUserCircleFill />
+              เกี่ยวกับเรา
+          </h1>
+
+          {/* Desktop */}
+          <div className="-mt-12 hidden md:flex w-full min-h-[50rem] bg-[var(--primary-blue)] text-[white]">
+            <div className="w-[35%] min-h-full bg-slate-400 relative">
+              <Image alt="pictor of aboutUs" fill className="object-cover" src={"/aboutUs.png"}/>
+            </div>
+            <section className="flex flex-col gap-9 z-10 my-16">
+
+              {/* วิสัยทัศน์ */}
+              <div className="flex items-center gap-5 -ml-9">
+                <div className="flex items-center justify-center text-[var(--primary-blue)] text-7xl w-32 h-32 bg-[#DDE9FF] rounded-full border-[var(--primary-blue)] border-solid border-[0.5rem]">
+                    <GoGoal />
+                </div>
+                <div className="w-[70%] flex flex-col gap-3 justify-center">
+                  <h1 className="text-2xl font-semibold">วิสัยทัศน์</h1>
+                  <p>การบริหารจัดการทรัพย์สินทางปัญญา ให้เกิดการจัดการองค์ความรู้ และประโยชน์ที่ได้รับจากการจัดการทรัพย์สินทางปัญญา</p>
+                </div>
+              </div>
+
+              {/* พันธกิจ */}
+              <div className="flex items-center gap-5 -ml-9">
+                <div className="flex items-center justify-center text-[var(--primary-blue)] text-7xl w-32 h-32 bg-[#ACC9FF] rounded-full border-[var(--primary-blue)] border-solid border-[0.5rem]">
+                    <LiaClipboardListSolid />
+                </div>
+                <div className="w-[70%] flex flex-col gap-3 justify-center">
+                  <h1 className="text-2xl font-semibold">พันธกิจ</h1>
+                  <ol>
+                    <li>1. บริการฝึกอบรมความรู้ทางด้านทรัพย์สินทางปัญญา</li>
+                    <li>2. บริการให้คำปรึกษาทางด้านทรัพย์สินทางปัญญา แก่ผู้เข้าร่วมโครงการและชุมชนท้องถิ่น</li>
+                    <li>3. บริการให้ความช่วยเหลือด้านทรัพย์สินทางปัญญา ในการดำเนินการต่างๆ ที่เกี่ยวข้องกับงานทรัพย์สินทางปัญญา</li>
+                    <li>4. สร้างและพัฒนาเครือข่ายความร่วมมือทางด้านทรัพย์สินทางปัญญา</li>
+                    <li>5. สนับสนุนวิจัยเพื่อพัฒนาและต่อยอดงานทรัพย์สินทางปัญญาและจดทะเบียนทรัพย์สินทางปัญญา</li>
+                  </ol>
+                </div>
+              </div>
+
+              {/* กลุ่มเป้าหมาย */}
+              <div className="flex items-center gap-5 -ml-9">
+                <div className="flex items-center justify-center text-[var(--primary-blue)] text-7xl w-32 h-32 bg-[#82ADFF] rounded-full border-[var(--primary-blue)] border-solid border-[0.5rem]">
+                  <GrGroup />
+                </div>
+                <div className="w-[70%] flex flex-col gap-3 justify-center">
+                  <h1 className="text-2xl font-semibold">กลุ่มเป้าหมาย</h1>
+                  <ol>
+                    <li>1. นักศึกษามหาวิทยาลัยราชภัฏนครราชสีมา</li>
+                    <li>2. คณาจารย์/นักวิชาการ ที่มีผลงานวิจัย สามารถนำมาพัฒนาต่อยอดได้</li>
+                    <li>3. บัณฑิตของมหาวิทยาลัย</li>
+                    <li>4. ผู้ประกอบการในพื้นที่การให้บริการของมหาวิทยาลัย</li>
+                  </ol>
+                </div>
+              </div>
+
+              {/* บริการของเรา */}
+              <div className="flex items-center gap-5 -ml-9">
+                <div className="flex items-center justify-center text-[var(--primary-blue)] text-7xl w-32 h-32 bg-[#5D95FF] rounded-full border-[var(--primary-blue)] border-solid border-[0.5rem]">
+                    <FaRegCircleCheck  />
+                </div>
+                <div className="w-[70%] flex flex-col gap-3 justify-center">
+                  <h1 className="text-2xl font-semibold">บริการของเรา</h1>
+                  <ol>
+                    <li>1. บริการให้คำปรึกษาแนะนำความรู้เกี่ยวกับทรัพย์สินทางปัญญาแก่นักศึกษา คณาจารย์ เจ้าหน้าที่ภายในมหาวิทยาลัยและผู้สนใจทั่วไป</li>
+                    <li>2. ช่วยเหลือในการร่างคำขอ ยื่นคำขอและติดตามผลการจดทะเบียนทรัพย์สินทางปัญญา</li>
+                    <li>3. ให้ข่าวสารประชาสัมพันธ์และจัดอบรมสัมมนาความรู้เกี่ยวกับทรัพย์สินทางปัญญา</li>
+                    <li>4. ส่งเสริมการนำผลงานวิจัยภายในมหาวิทยาลัยไปใช้เชิงพาณิชย์ หรือพัฒนาเป็นผลิตภัณฑ์ผ่านการถ่ายทอดเทคโนโลยี</li>
+                    <li>5. ประเมินมูลค่าทรัพย์สินทางปัญญา</li>
+                    <li>6. ค้นหาธุรกิจใหม่ที่ใช้องค์ความรู้ด้านทรัพย์สินทางปัญญา</li>
+                  </ol>
+                </div>
+              </div>
+
+
+
+            </section>
+          </div>
+
+
+          {/* mobile (swiper) */}
+          <div className="w-[85%] min-h-[15rem] bg-[var(--primary-blue)] md:hidden ">
+                <Swiper 
+                slidesPerView={2}
+                spaceBetween={10}
+                freeMode={true}
+                >
+                  <SwiperSlide className="">
+                    <div className="w-36 h-48 flex flex-col gap-3 mr-5 items-center justify-center bg-white drop-shadow-sm">
+                      <h1 className="text-xl font-semibold">วิสัยทัศน์</h1>
+                      <div className="text-5xl">
+                        <GoGoal   />
+                      </div>
+                      <button className="mt-2 py-1 px-2 bg-[var(--secondary-yellow)] font-semibold">เพิ่มเติม</button>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide className="">
+                    <div className="w-36 h-48 flex flex-col gap-3 mr-5 items-center justify-center bg-white drop-shadow-sm">
+                      <h1 className="text-xl font-semibold">พันธกิจ</h1>
+                      <div className="text-5xl">
+                        <LiaClipboardListSolid   />
+                      </div>
+                      <button className="mt-2 py-1 px-2 bg-[var(--secondary-yellow)] font-semibold">เพิ่มเติม</button>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide className="">
+                    <div className="w-36 h-48 flex flex-col gap-3 mr-5 items-center justify-center bg-white drop-shadow-sm">
+                      <h1 className="text-xl font-semibold">กลุ่มเป้าหมาย</h1>
+                      <div className="text-5xl">
+                        <GrGroup    />
+                      </div>
+                      <button className="mt-2 py-1 px-2 bg-[var(--secondary-yellow)] font-semibold">เพิ่มเติม</button>
+                    </div>
+                  </SwiperSlide>
+                  <SwiperSlide className="">
+                    <div className="w-36 h-48 flex flex-col gap-3 mr-5 items-center justify-center bg-white drop-shadow-sm">
+                      <h1 className="text-xl font-semibold">บริการ</h1>
+                      <div className="text-5xl">
+                        <FaRegCircleCheck/>
+                      </div>
+                      <button className="mt-2 py-1 px-2 bg-[var(--secondary-yellow)] font-semibold">เพิ่มเติม</button>
+                    </div>
+                  </SwiperSlide>
+                    
+                    
+                
+                </Swiper>
+          </div>
         </div>
 
 

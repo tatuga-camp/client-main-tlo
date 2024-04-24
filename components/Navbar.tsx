@@ -18,8 +18,8 @@ const Navbar = () => {
 
         {/* Links */}
         <div className='mr-3 md:mr-10 text-[var(--primary-blue)] flex gap-4 md:gap-6 font-semibold text-base md:text-xl'>
-            <Link href={''} className='flex gap-1 md:gap-2 items-center hover:text-[#2166DD] duration-300 '>  <PiUserCircleFill /><p className='text-[0.8rem] md:text-base'>เข้าสู่ระบบ</p></Link >
-            <Link href={''} className='flex gap-1 md:gap-2 items-center hover:text-[#2166DD] duration-300'> <PiUserCirclePlus /> <p className='text-[0.8rem] md:text-base'>ลงทะเบียน</p></Link >
+            <Link href={'/auth/sign-in'} className='flex gap-1 md:gap-2 items-center hover:text-[#2166DD] duration-300 '>  <PiUserCircleFill /><p className='text-[0.8rem] md:text-base'>เข้าสู่ระบบ</p></Link >
+            <Link href={'/auth/sign-up'} className='flex gap-1 md:gap-2 items-center hover:text-[#2166DD] duration-300'> <PiUserCirclePlus /> <p className='text-[0.8rem] md:text-base'>ลงทะเบียน</p></Link >
             <Link href={''} className='flex gap-1 md:gap-2 items-center hover:text-[#2166DD] duration-300'> <p className='text-[0.8rem] md:text-base'>ติดต่อเรา</p></Link>
         </div>
             
