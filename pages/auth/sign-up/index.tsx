@@ -27,36 +27,6 @@ const Index = () => {
       {/* Right */}
       <div className="flex  w-full flex-col items-center  md:justify-center ">
         <div className="my-8 flex w-full flex-col items-center justify-center">
-          {/* md: Page before sign up/sign in  */}
-          {/* <button onClick={toggleVisibility} className='absolute top-0 z-30'>XXX</button>
-            {!isHidden && (
-                <div className='z-20 bg-white absolute top-0 w-full h-full lg:hidden flex flex-col items-center justify-center'>
-                <div className='mt flex flex-col items-start font-semibold'>
-                    <div className='w-[10rem] h-[5rem] relative'>
-                        <Image alt="pictor of logo" fill className="object-cover" src={"/picture/logo.png"}/>
-                    </div>
-                    <h1 className='text-[0.9rem] md:text-xl text-[#2166DD99] mt-2'>ระบบจดทะเบียนทรัพย์สินทางปัญญา</h1>
-                    <h2 className='text-2xl md:text-3xl text-[#10316B]'>งานทรัพย์สินทางปัญญา</h2>
-                    <p className='text-[#2166DD99] text-[0.9rem] font-semibold'>กองพัฒนาพิเศษ สำนักงานอธิการบดี</p>
-                </div>
-                
-                
-                <div className='mt-6 w-[17rem] h-[16rem]  relative '>
-                    <Image alt="pictor of authBlob" fill className="object-cover" src={"/picture/authBlob.png"}/>
-                </div>
-
-                <button className='px-3 py-1 mt-4 border-2 border-solid border-[#10316B] hover:text-blue-600 hover:border-blue-600 duration-300 text-[#10316B] rounded-md'>
-                   <Link href={'/auth/sign-in'}> เข้าสู่ระบบ</Link>
-                   
-                </button>
-                <button 
-                onClick={toggleVisibility}
-                className='px-3 py-1 mt-4 border-2 border-solid border-[#10316B] hover:text-blue-600  hover:border-blue-600 duration-300text-[#10316B] rounded-md'>
-                    ลงทะเบียน
-                </button>
-            </div>
-            )} */}
-
           {/* Sign-up */}
           <div className="flex w-full flex-col  items-center gap-3 pt-16">
             <h2 className="text-3xl font-bold text-[var(--primary-blue)]">

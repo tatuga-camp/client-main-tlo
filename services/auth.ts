@@ -101,6 +101,7 @@ export async function SignInAsAnotherUserService(
 
 type RequestForgetPasswordService = {
   email: string;
+  phone: string;
 };
 
 type ResponseForgetPasswordService = {

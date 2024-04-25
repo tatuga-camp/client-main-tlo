@@ -22,6 +22,20 @@ const Index = () => {
   const toggleVisibility = () => {
     setIsHidden(!isHidden);
   };
+  const [forgetPasswordForm, setForgetPasswordForm] = useState<{
+    email?: string;
+    phone?: string;
+  }>();
+
+  const handleChangeForgetPasswordForm = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setForgetPasswordForm({
+      ...forgetPasswordForm,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <div className=" flex min-h-screen bg-[#F4F8FF] font-Anuphan">
       <Head>
@@ -43,23 +57,20 @@ const Index = () => {
               // onSubmit={handleSubmitSignIn}
               className="mt-8 w-[70%] max-w-[30rem] bg-white p-8 drop-shadow-md"
             >
-              <TextField
-                name="email"
-                type="email"
-                isRequired
-                className="flex flex-col gap-3"
-              >
+              <TextField isRequired className="flex flex-col gap-3">
                 <Label className="font-semibold text-[var(--primary-blue)]">
                   E-mail
                 </Label>
                 <Input
-                  // onChange={handleChangeSignInForm}
+                  type="email"
+                  name="email"
+                  onChange={handleChangeForgetPasswordForm}
                   className="w-full rounded-md bg-slate-300 p-2 pl-4"
                   placeholder="กรอก E-mail ของท่าน"
                 />
+                <FieldError className="text-xs text-red-600" />
               </TextField>
               <TextField
-                name="phone"
                 type="telephone"
                 isRequired
                 className="mt-3 flex flex-col gap-3"
@@ -68,10 +79,13 @@ const Index = () => {
                   หมายเลขโทรศัพท์
                 </Label>
                 <Input
-                  // onChange={handleChangeSignInForm}
+                  onChange={handleChangeForgetPasswordForm}
+                  name="phone"
+                  type="tel"
                   className="w-full rounded-md bg-slate-300 p-2 pl-4"
                   placeholder="กรอกหมายเลขโทรศัพท์"
                 />
+                <FieldError className="text-xs text-red-600" />
               </TextField>
 
               <div className="mt-5 flex justify-center">

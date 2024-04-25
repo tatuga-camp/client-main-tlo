@@ -14,15 +14,66 @@ import {
   TextField,
 } from "react-aria-components";
 import Navbar from "../../../components/Navbar";
+import { SignInService } from "../../../services/auth";
+import Swal from "sweetalert2";
+import { ErrorMessages } from "../../../models";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { setCookie } from "nookies";
 
 const Index = () => {
   const [isHidden, setIsHidden] = useState<boolean>(false);
   const [signInForm, setSignInForm] = useState<{
-    email: string;
-    password: string;
+    email?: string;
+    password?: string;
   }>();
-  const toggleVisibility = () => {
-    setIsHidden(!isHidden);
+  const handleTriggerVisibility = () => {
+    setIsHidden((prev) => !prev);
+  };
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    try {
+      e.preventDefault();
+      Swal.fire({
+        title: "กำลังเข้าสู่ระบบ",
+        text: "กรุณารอสักครู่",
+        showConfirmButton: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      if (!signInForm?.email || !signInForm?.password) {
+        throw new Error("โปรดกรอกข้อมูลให้ครบ");
+      }
+      const signIn = await SignInService({
+        email: signInForm.email,
+        password: signInForm.password,
+      });
+      setCookie(null, "access_token", signIn.access_token, {
+        maxAge: 1 * 24 * 60 * 60, // Cookie expiration time in seconds (e.g., 1 days)
+        path: "/", // Cookie path (can be adjusted based on your needs)
+      });
+      Swal.fire({
+        title: "เข้าสู่ระบบสำเร็จ",
+        text: "ยินดีต้อนรับ",
+        icon: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: "รหัสข้อผิดพลาด: " + result.statusCode?.toString(),
+        icon: "error",
+      });
+    }
+  };
+
+  const handleChangeSignInForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSignInForm({
+      ...signInForm,
+      [e.target.name]: e.target.value,
+    });
   };
 
   return (
@@ -37,37 +88,6 @@ const Index = () => {
       {/* Right */}
       <div className="mt-20 flex w-full flex-col items-center md:mt-5  md:justify-center ">
         <div className="my-0 flex w-full flex-col items-center justify-center">
-          {/* md: Page before sign up/sign in  */}
-          {/* <button onClick={toggleVisibility} className='absolute top-0 z-30'>XXX</button>
-            {!isHidden && (
-                <div className='z-20 bg-white absolute top-0 w-full h-full lg:hidden flex flex-col items-center justify-center'>
-                <div className='mt flex flex-col items-start font-semibold'>
-                    <div className='w-[10rem] h-[5rem] relative'>
-                        <Image alt="pictor of logo" fill className="object-cover" src={"/picture/logo.png"}/>
-                    </div>
-                    <h1 className='text-[0.9rem] md:text-xl text-[#2166DD99] mt-2'>ระบบจดทะเบียนทรัพย์สินทางปัญญา</h1>
-                    <h2 className='text-2xl md:text-3xl text-[#10316B]'>งานทรัพย์สินทางปัญญา</h2>
-                    <p className='text-[#2166DD99] text-[0.9rem] font-semibold'>กองพัฒนาพิเศษ สำนักงานอธิการบดี</p>
-                </div>
-                
-                
-                <div className='mt-6 w-[17rem] h-[16rem]  relative '>
-                    <Image alt="pictor of authBlob" fill className="object-cover" src={"/picture/authBlob.png"}/>
-                </div>
-
-                <button
-                onClick={toggleVisibility}
-                className='px-3 py-1 mt-4 border-2 border-solid border-[#10316B] hover:text-blue-600 hover:border-blue-600 duration-300 text-[#10316B] rounded-md'>
-                   เข้าสู่ระบบ
-                   
-                </button>
-                <button className='px-3 py-1 mt-4 border-2 border-solid border-[#10316B] hover:text-blue-600  hover:border-blue-600 duration-300text-[#10316B] rounded-md'>
-                <Link href={'/auth/sign-up'}> ลงทะเบียน</Link>
-                    
-                </button>
-            </div>
-            )} */}
-
           {/* Sign-in*/}
           <div className="flex w-full flex-col  items-center gap-3 pt-10">
             <h2 className="text-3xl font-bold text-[var(--primary-blue)]">
@@ -75,38 +95,45 @@ const Index = () => {
             </h2>
 
             <Form
-              // onSubmit={handleSubmitSignIn}
+              onSubmit={handleSignIn}
               className="mt-8 w-[70%] max-w-[30rem] bg-white p-8 drop-shadow-md"
             >
-              <TextField
-                name="userName"
-                type="text"
-                isRequired
-                className="flex flex-col gap-3"
-              >
+              <TextField type="text" isRequired className="flex flex-col gap-3">
                 <Label className="font-semibold text-[var(--primary-blue)]">
-                  บัญชีผู้ใช้
+                  อีเมลล์
                 </Label>
                 <Input
-                  // onChange={handleChangeSignInForm}
+                  name="email"
+                  type="email"
+                  onChange={handleChangeSignInForm}
                   className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                  placeholder="Username"
+                  placeholder="email"
                 />
+                <FieldError className="text-xs text-red-600" />
               </TextField>
               <TextField
-                name="password"
-                type="password"
+                type={isHidden ? "text" : "password"}
                 isRequired
-                className="mt-3 flex flex-col gap-3"
+                className="relative mt-3 flex flex-col gap-3"
               >
                 <Label className="font-semibold text-[var(--primary-blue)]">
                   รหัสผ่าน
                 </Label>
+
                 <Input
-                  // onChange={handleChangeSignInForm}
+                  name="password"
+                  onChange={handleChangeSignInForm}
                   className="w-full rounded-md bg-slate-300 p-2 pl-4"
                   placeholder="Password"
                 />
+                <Button
+                  onPress={handleTriggerVisibility}
+                  className="absolute bottom-3 right-2 text-lg "
+                >
+                  {isHidden ? <FaRegEye /> : <FaRegEyeSlash />}
+                </Button>
+
+                <FieldError className="text-xs text-red-600" />
               </TextField>
 
               <div className="mt-5 flex justify-center">

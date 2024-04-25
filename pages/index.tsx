@@ -249,11 +249,13 @@ export default function Home() {
             </h1>
             <table className="w-[85%] border-separate border-spacing-1 rounded-md bg-white p-1 text-center text-[0.7rem] md:border-spacing-2 md:p-4 md:text-base">
               <thead className="">
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">รายการ</th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">วันที่ส่งขอ</th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
+                <tr>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">รายการ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">วันที่ส่งขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
+                </tr>
               </thead>
 
               <tbody>
