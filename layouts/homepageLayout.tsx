@@ -7,11 +7,13 @@ type LayoutProps = {
 };
 
 function HomeLayout({ children }: LayoutProps) {
-  return <section>
-    <Navbar/>
-    {children}
-    <Footer/>
-    </section>;
+  return (
+    <>
+      <Navbar />
+      {children}
+      <Footer />
+    </>
+  );
 }
 
 export default HomeLayout;
