@@ -389,7 +389,7 @@ const Index = () => {
 
                   <Input
                     onChange={handleChangeSignUpNRRUForm}
-                    name="password"
+                    name="confirmPassword"
                     className="w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="ยืนยันรหัสผ่าน"
                   />
