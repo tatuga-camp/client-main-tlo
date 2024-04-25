@@ -113,7 +113,7 @@ export async function ForgetPasswordService(
   try {
     const user = await axios({
       method: "POST",
-      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/auth/forget-password`,
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/auth/forgot-password`,
       data: {
         ...input,
       },
@@ -139,7 +139,7 @@ export async function ResetPasswordService(
 ): Promise<ResponseResetPasswordService> {
   try {
     const user = await axios({
-      method: "POST",
+      method: "PATCH",
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/auth/reset-password`,
       data: {
         ...input,

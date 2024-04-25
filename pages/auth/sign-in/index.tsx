@@ -19,8 +19,12 @@ import Swal from "sweetalert2";
 import { ErrorMessages } from "../../../models";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { setCookie } from "nookies";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next-nprogress-bar";
 
 const Index = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const [isHidden, setIsHidden] = useState<boolean>(false);
   const [signInForm, setSignInForm] = useState<{
     email?: string;
@@ -48,10 +52,13 @@ const Index = () => {
         email: signInForm.email,
         password: signInForm.password,
       });
+      queryClient.setQueryData(["user"], signIn.user);
       setCookie(null, "access_token", signIn.access_token, {
         maxAge: 1 * 24 * 60 * 60, // Cookie expiration time in seconds (e.g., 1 days)
         path: "/", // Cookie path (can be adjusted based on your needs)
       });
+      router.push("/");
+
       Swal.fire({
         title: "เข้าสู่ระบบสำเร็จ",
         text: "ยินดีต้อนรับ",
