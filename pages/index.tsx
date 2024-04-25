@@ -28,6 +28,8 @@ import { LiaClipboardListSolid } from "react-icons/lia";
 import { GrGroup } from "react-icons/gr";
 import { FaRegCircleCheck } from "react-icons/fa6";
 
+import { Link, Button, Element, Events, animateScroll as scroll, scrollSpy } from 'react-scroll';
+
 export default function Home() {
   return (
     <>
@@ -40,8 +42,8 @@ export default function Home() {
       <div className="bg-[#F4F8FF] flex h-full w-full flex-col items-center lg:justify-center font-Anuphan text-[var(--primary-blue)] pb-10 ">
         <div className="flex w-full flex-col items-center justify-center  ">
           {/* Header */}
-          <div className="w-full md:h-[27rem] lg:h-[34.5rem] bg-[url('/HomeHeader.png')] mb-10 flex flex-col items-center justify-start gap-5 pt-10 md:pt-20">
-              <section className="w-[80%] md:w-[75%] flex flex-col md:flex-row-reverse items-start md:items-center justify-between font-semibold ">
+          <div className="w-full mt-10 md:h-[27rem] lg:h-[34.5rem] bg-[url('/HomeHeader.png')] mb-10 flex flex-col items-center justify-start gap-5 pt-10 md:pt-20">
+              <section className=" w-[80%] md:w-[75%] flex flex-col md:flex-row-reverse items-start md:items-center justify-between font-semibold ">
                   <div className="w-[10rem] md:w-[15rem] lg:w-[20rem]">
                     <LogoFile/>
                   </div>
@@ -62,6 +64,9 @@ export default function Home() {
               
 
           </div>
+
+         
+
           {/* งานทรัพย์สินทางปัญญา */}
           <div className="">
             <section className=" flex flex-col justify-center items-center gap-3">
@@ -70,34 +75,49 @@ export default function Home() {
             </section>
 
             <section className="mt-8 grid grid-cols-2 gap-4 lg:gap-3 lg:grid-cols-4 lg:grid-rows-1 items-center justify-center font-semibold">
-              <button className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-6 hover:bg-[var(--primary-blue)] duration-300">
-                <div className="text-[2.5rem] md:text-[5rem] text-white p-4 md:p-3 bg-[var(--primary-blue)] rounded-full group-hover:bg-white group-hover:text-[var(--primary-blue)] duration-300 group-hover:scale-110">
-                  <PiCertificate/>
-                </div>
-                <p className="text-[0.85rem] md:text-[1.1rem] group-hover:text-[0.95rem] md:group-hover:text-base group-hover:text-white duration-300">จดทะเบียน <br></br>ทรัพย์สินทางปัญญา</p>
+              <button className="">
+                <Link to="request" smooth={true} offset={10} duration={300}  className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-6 hover:bg-[var(--primary-blue)] duration-300">
+                  <div className="text-[2.5rem] md:text-[5rem] text-white p-4 md:p-3 bg-[var(--primary-blue)] rounded-full group-hover:bg-white group-hover:text-[var(--primary-blue)] duration-300 group-hover:scale-110">
+                    <PiCertificate/>
+                  </div>
+                  <p className="text-[0.85rem] md:text-[1.1rem] group-hover:text-[0.95rem] md:group-hover:text-base group-hover:text-white duration-300">จดทะเบียน <br></br>ทรัพย์สินทางปัญญา</p>
+                </Link>
+                
               </button>
-              <button className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-6 hover:bg-[var(--primary-blue)] duration-300">
-                <div className="text-[2.5rem] md:text-[4.6rem] text-white p-4 bg-[var(--primary-blue)] rounded-full group-hover:bg-white group-hover:text-[var(--primary-blue)] duration-300 group-hover:scale-110">
-                  <BsEnvelopePaper />
-                </div>
-                <p className="text-[0.85rem] md:text-[1.1rem] group-hover:text-[0.95rem] md:group-hover:text-base group-hover:text-white duration-300">ข่าวประชาสัมพันธ์</p>
+
+              <button className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-0 hover:bg-[var(--primary-blue)] duration-300">
+                <Link to="information" smooth={true} offset={-100} duration={300}  className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-6 hover:bg-[var(--primary-blue)] duration-300">
+                  <div className="text-[2.5rem] md:text-[4.6rem] text-white p-4 bg-[var(--primary-blue)] rounded-full group-hover:bg-white group-hover:text-[var(--primary-blue)] duration-300 group-hover:scale-110">
+                    <BsEnvelopePaper />
+                  </div>
+                  <p className="text-[0.85rem] md:text-[1.1rem] group-hover:text-[0.95rem] md:group-hover:text-base group-hover:text-white duration-300">ข่าวประชาสัมพันธ์</p>
+                </Link>
+                
               </button>
-              <button className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-6 hover:bg-[var(--primary-blue)] duration-300">
-                <div className="text-[2.5rem] md:text-[5rem] text-white p-4 md:p-3  bg-[var(--primary-blue)] rounded-full group-hover:bg-white group-hover:text-[var(--primary-blue)] duration-300 group-hover:scale-110">
+
+              <button className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-0 hover:bg-[var(--primary-blue)] duration-300">
+                <Link to="knowledge" smooth={true} offset={-100} duration={300}  className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-6 hover:bg-[var(--primary-blue)] duration-300">
+                  <div className="text-[2.5rem] md:text-[5rem] text-white p-4 md:p-3  bg-[var(--primary-blue)] rounded-full group-hover:bg-white group-hover:text-[var(--primary-blue)] duration-300 group-hover:scale-110">
                   <GiBrain/>
                 </div>
                 <p className="text-[0.85rem] md:text-[1.1rem] group-hover:text-[0.95rem] md:group-hover:text-base group-hover:text-white duration-300">ความรู้เกี่ยวกับ <br></br>ทรัพย์สินทางปัญญา</p>
+                </Link>
+                
               </button>
-              <button className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-6 hover:bg-[var(--primary-blue)] duration-300">
-                <div className="text-[2.5rem] md:text-[5rem] text-white p-4 md:p-3  bg-[var(--primary-blue)] rounded-full group-hover:bg-white group-hover:text-[var(--primary-blue)] duration-300 group-hover:scale-110">
-                  <FaUserCircle/>
-                </div>
-                <p className="text-[0.85rem] md:text-[1.1rem] group-hover:text-[0.95rem] md:group-hover:text-base group-hover:text-white duration-300">เกี่ยวกับเรา</p>
+              <button className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-0 hover:bg-[var(--primary-blue)] duration-300">
+                <Link to="aboutUs" smooth={true} offset={-100} duration={300}  className="group gap-3 md:gap-4 bg-white drop-shadow-md w-40 h-40 text-xs md:text-base md:w-52 md:h-52 flex flex-col text-center items-center pt-6 hover:bg-[var(--primary-blue)] duration-300">
+                  <div className="text-[2.5rem] md:text-[4.6rem] text-white p-4 bg-[var(--primary-blue)] rounded-full group-hover:bg-white group-hover:text-[var(--primary-blue)] duration-300 group-hover:scale-110">
+                    <FaUserCircle />
+                  </div>
+                  <p className="text-[0.85rem] md:text-[1.1rem] group-hover:text-[0.95rem] md:group-hover:text-base group-hover:text-white duration-300">เกี่ยวกับเรา</p>
+                </Link>
+                
               </button>
             </section>
           </div>
 
           {/* ตรวจสอบสถานะคำขอ */}
+          <Element name="request">
           <div className="w-full flex flex-col items-center mt-12 gap-8">
             <h1 className="w-[85%]  md:text-xl py-2 px-4 bg-[var(--secondary-yellow)] font-semibold drop-shadow-md text-center">
               ตรวจสอบสถานะคำขอ
@@ -176,19 +196,42 @@ export default function Home() {
                 </button>
             </section>
           </div>
+          </Element>
+          
 
           {/* ข้อมูลการค้นหา */}
           <div className="w-full flex flex-col items-center mt-12 gap-8">
             <h1 className="w-[85%]  md:text-xl py-2 px-4 bg-[var(--secondary-yellow)] font-semibold drop-shadow-md text-center">
                 ข้อมูลการค้นหา
             </h1> 
-            
+            {/* <table className="w-[85%] text-[0.7rem] md:text-base text-center p-1 md:p-4 border-separate border-spacing-1 md:border-spacing-2 bg-white rounded-md">
+            <thead className="">
+              <th className=" bg-[#BED6FF] rounded-md p-2 ">รายการ</th>
+              <th className=" bg-[#BED6FF] rounded-md p-2 ">วันที่ส่งขอ</th>
+              <th className=" bg-[#BED6FF] rounded-md p-2 ">หมายเลขคำขอ</th>
+              <th className=" bg-[#BED6FF] rounded-md p-2 ">ประเภทคำขอ</th>
+              <th className=" bg-[#BED6FF] rounded-md p-2 ">สถานะคำขอ</th>
+            </thead>
+
+            <tbody>
+            {fakeSearchResult.map((item) => (
+                <tr key={item.id} >
+                  <td className="p-2 border-[1px] border-solid border-[#BED6FF] rounded-md">{item.id}</td>
+                  <td className="p-2 border-[1px] border-solid border-[#BED6FF] rounded-md">{item.date}</td>
+                  <td className="p-2 border-[1px] border-solid border-[#BED6FF] rounded-md">{item.requestId}</td>
+                  <td className="p-2 border-[1px] border-solid border-[#BED6FF] rounded-md">{item.categories}</td>
+                  <td className="p-2 border-[1px] border-solid border-[#BED6FF] rounded-md">{item.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table> */}
           
           </div>
 
           {/* ข่าวประชาสัมพันธ์ */}
-        <div className="w-full flex flex-col items-center md:items-start mt-12 gap-8 ">
-          <h1 className="z-10 w-[85%] md:text-xl flex items-center justify-center md:justify-start gap-5 py-2 px-4 bg-[var(--secondary-yellow)] font-semibold drop-shadow-md text-center md:text-start md:pl-32">
+        <div className="w-full">
+          <Element name="information" className="w-full flex flex-col items-center md:items-start mt-12 gap-8 ">
+            <h1 className="z-10 w-[85%] md:text-xl flex items-center justify-center md:justify-start gap-5 py-2 px-4 bg-[var(--secondary-yellow)] font-semibold drop-shadow-md text-center md:text-start md:pl-32">
             <BsEnvelopePaper />
               ข่าวประชาสัมพันธ์
           </h1>
@@ -228,10 +271,13 @@ export default function Home() {
 
           
           </div>
+          </Element>
+          
         </div>
 
         {/* ความรู้เกี่ยวกับงานทรัพย์สินทางปัญญา */}
-        <div className="w-[100%] md:w-[85%] mt-12 flex justify-center gap-4 ">
+        <div className="w-full flex justify-center gap-4 ">
+          <Element name="knowledge" className="w-[100%] md:w-[85%] mt-12 flex justify-center gap-4 ">
             <div className="hidden md:w-96 md:flex relative">
               <Image alt="pictor of Knowledge" fill className="object-cover" src={"/knowledge.png"}/>
             </div>
@@ -259,16 +305,21 @@ export default function Home() {
 
           
           </section>
+          </Element>
+            
         </div>
               
               
         {/* เกี่ยวกับเรา */}
         <div className="w-full flex flex-col items-center md:items-start mt-12 gap-8 bg-[var(--primary-blue)] md:bg-[#F4F8FF] py-5 md:py-0">
-          <h1 className="z-10 w-[85%] md:text-xl flex items-center justify-center md:justify-start gap-5 py-2 px-4 bg-[var(--secondary-yellow)] 
+          <Element name="aboutUs" className="z-10 w-[85%] md:text-xl flex items-center justify-center md:justify-start gap-5 py-2 px-4 bg-[var(--secondary-yellow)] 
           font-semibold drop-shadow-md text-center md:text-start md:pl-32">
+            
             <PiUserCircleFill />
               เกี่ยวกับเรา
-          </h1>
+            
+          </Element>
+          
 
           {/* Desktop */}
           <div className="-mt-12 hidden md:flex w-full min-h-[50rem] bg-[var(--primary-blue)] text-[white]">

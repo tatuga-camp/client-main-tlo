@@ -7,8 +7,8 @@ import { PiUserCircleFill } from "react-icons/pi";
 
 const Navbar = () => {
   return (
-    <div className='w-full h-full '>
-      <div className="flex h-13 p-2 w-full items-center justify-between bg-white drop-shadow-md font-Anuphan ">
+    <div className='w-full h-full'>
+      <div className="flex h-13 p-2 w-full items-center justify-between bg-white drop-shadow-md font-Anuphan fixed z-30">
         {/* Logo */}
         <div className='w-[5rem] md:w-[6.25rem] ml-3 md:ml-10'>
             <LogoFile/>
