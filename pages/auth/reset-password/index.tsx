@@ -17,51 +17,33 @@ import {
 import HomeLayout from "../../../layouts/homepageLayout";
 import Navbar from "../../../components/Navbar";
 import Swal from "sweetalert2";
-import { ForgetPasswordService } from "../../../services/auth";
+import {
+  ForgetPasswordService,
+  ResetPasswordService,
+} from "../../../services/auth";
 import { ErrorMessages } from "../../../models";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const Index = () => {
+  const router = useRouter();
   const [isHidden, setIsHidden] = useState(false);
-  const toggleVisibility = () => {
-    setIsHidden(!isHidden);
+  const handleTriggerVisibility = () => {
+    setIsHidden((prev) => !prev);
   };
-  const [forgetPasswordForm, setForgetPasswordForm] = useState<{
-    email?: string;
-    phone?: string;
+  const [resetPassword, setResetPassword] = useState<{
+    password?: string;
+    confirmPassword?: string;
   }>();
-  const [wait, setWait] = useState(false);
-  const [secound, setSecound] = useState(0);
 
-  const handleChangeForgetPasswordForm = (
+  const handleChangeResetPassword = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setForgetPasswordForm({
-      ...forgetPasswordForm,
+    setResetPassword({
+      ...resetPassword,
       [e.target.name]: e.target.value,
     });
-  };
-
-  const hanldeTimmingWait = () => {
-    setSecound(60); // Set the initial value of the countdown timer
-    setWait(() => true);
-    const timer = setInterval(() => {
-      setSecound((prevCount) => prevCount - 1);
-    }, 1000);
-
-    setTimeout(() => {
-      clearInterval(timer);
-      if (secound === 0) {
-        setWait(() => false);
-      }
-      setWait(false);
-      // Perform your action here after the wait duration
-      // For example, you can set the `wait` state to false to indicate that the wait is over
-    }, 60000); // Wait for 10 seconds (1000 milliseconds * 10)
-
-    // Cleanup function
-    return () => {
-      clearInterval(timer);
-    };
   };
 
   const handleSummitForgetPassword = async (e: React.FormEvent) => {
@@ -76,19 +58,22 @@ const Index = () => {
         },
       });
 
-      if (!forgetPasswordForm?.email || !forgetPasswordForm?.phone) {
+      if (!resetPassword?.password || !resetPassword?.confirmPassword) {
         throw new Error("โปรดกรอกข้อมูลให้ครบ");
       }
-      const forget = await ForgetPasswordService({
-        email: forgetPasswordForm?.email,
-        phone: forgetPasswordForm?.phone.replace(/-/g, ""),
+
+      if (resetPassword.confirmPassword !== resetPassword.password) {
+        throw new Error("รหัสผ่านไม่ตรงกัน");
+      }
+      const forget = await ResetPasswordService({
+        passwordResetToken: router.query.passwordResetToken as string,
+        newPassword: resetPassword?.password,
       });
-      setWait(() => true);
-      hanldeTimmingWait();
+
       Swal.fire({
         title: "สำเร็จ",
-        text: "โปรดเปิดอีเมลของท่านเพื่อดำเนินการต่อ",
-        footer: "ระบบได้ส่งอีเมลให้ท่านเรียบร้อยแล้ว",
+        text: "เปลี่ยนรหัสสำเร็จ",
+        footer: "โปรดเข้าสู่ระบบอีกครั้ง",
         icon: "success",
       });
     } catch (error) {
@@ -106,7 +91,7 @@ const Index = () => {
   return (
     <div className=" flex min-h-screen bg-[#F4F8FF] font-Anuphan">
       <Head>
-        <title>ลืมรหัสผ่าน</title>
+        <title>เปลี่ยนรหัสผ่านใหม่</title>
       </Head>
       <Navbar />
       {/* Left */}
@@ -117,57 +102,69 @@ const Index = () => {
         <div className="my-0 flex w-full flex-col items-center justify-center">
           <div className="flex w-full flex-col  items-center gap-3 pt-10">
             <h2 className="text-3xl font-bold text-[var(--primary-blue)]">
-              ลืมรหัสผ่าน
+              เปลี่ยนรหัสผ่านใหม่
             </h2>
 
             <Form
               onSubmit={handleSummitForgetPassword}
               className="mt-8 w-[70%] max-w-[30rem] bg-white p-8 drop-shadow-md"
             >
-              <TextField isRequired className="flex flex-col gap-3">
+              <TextField
+                type={isHidden ? "text" : "password"}
+                isRequired
+                className="relative mt-3 flex flex-col gap-3"
+              >
                 <Label className="font-semibold text-[var(--primary-blue)]">
-                  E-mail
+                  รหัสผ่านใหม่
                 </Label>
+
                 <Input
-                  type="email"
-                  name="email"
-                  onChange={handleChangeForgetPasswordForm}
+                  onChange={handleChangeResetPassword}
+                  name="password"
                   className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                  placeholder="กรอก E-mail ของท่าน"
+                  placeholder="Password"
                 />
+                <Button
+                  onPress={handleTriggerVisibility}
+                  className="absolute bottom-3 right-2 text-lg "
+                >
+                  {isHidden ? <FaRegEye /> : <FaRegEyeSlash />}
+                </Button>
+
                 <FieldError className="text-xs text-red-600" />
               </TextField>
               <TextField
-                type="tel"
+                type={isHidden ? "text" : "password"}
                 isRequired
-                className="mt-3 flex flex-col gap-3"
+                className="relative mt-3 flex flex-col gap-3"
               >
                 <Label className="font-semibold text-[var(--primary-blue)]">
-                  หมายเลขโทรศัพท์
+                  รหัสผ่าน
                 </Label>
+
                 <Input
-                  onChange={handleChangeForgetPasswordForm}
-                  name="phone"
-                  type="tel"
+                  onChange={handleChangeResetPassword}
+                  name="confirmPassword"
                   className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                  placeholder="กรอกหมายเลขโทรศัพท์"
+                  placeholder="Confirm Password"
                 />
+                <Button
+                  onPress={handleTriggerVisibility}
+                  className="absolute bottom-3 right-2 text-lg "
+                >
+                  {isHidden ? <FaRegEye /> : <FaRegEyeSlash />}
+                </Button>
+
                 <FieldError className="text-xs text-red-600" />
               </TextField>
 
               <div className="mt-5 flex justify-center">
-                {wait ? (
-                  <div className="rounded-md bg-[var(--primary-blue)] px-3 py-2 text-white">
-                    โปรดตรวจสอบอีเมลของคุณ {secound}
-                  </div>
-                ) : (
-                  <Button
-                    type="submit"
-                    className="rounded-md bg-[var(--primary-blue)] px-3 py-2 text-white"
-                  >
-                    รีเซ็ตรหัสผ่าน
-                  </Button>
-                )}
+                <Button
+                  type="submit"
+                  className="rounded-md bg-[var(--primary-blue)] px-3 py-2 text-white"
+                >
+                  รีเซ็ตรหัสผ่าน
+                </Button>
               </div>
             </Form>
           </div>

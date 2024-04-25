@@ -3,7 +3,7 @@ import { User } from "../models";
 import axios from "axios";
 
 type RequestGetUserService = {
-  access_token: string;
+  access_token?: string;
 };
 type ResponseGetUserService = User;
 export async function GetUserService(
