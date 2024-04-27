@@ -300,8 +300,9 @@ export default function Home() {
                     title={information.title}
                     date={information.date}
                     info={information.info}
-                    image={information.image}
+                    image={information.image[0]}
                     index={index}
+                    slugId={information.slugId}
                   />
                 ))}
               </div>
@@ -319,8 +320,9 @@ export default function Home() {
                         title={information.title}
                         date={information.date}
                         info={information.info}
-                        image={information.image}
+                        image={information.image[0]}
                         index={index}
+                        slugId={information.slugId}
                       />
                     </SwiperSlide>
                   ))}
