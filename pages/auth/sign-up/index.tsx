@@ -36,22 +36,28 @@ const Index = () => {
               โปรดเลือกประเภทผู้จดทะเบียน
             </p>
             <section className="flex items-center justify-center gap-3">
-              <button className="group mt-5 flex h-40 w-40 flex-col items-center justify-center gap-3 bg-[#BED6FF] text-center text-xs text-[var(--primary-blue)] drop-shadow-md duration-300 hover:bg-[#A7C1ED] md:h-52  md:w-52 md:gap-4 md:text-base">
+              <Link
+                href={"/auth/sign-up/commonUser"}
+                className="group mt-5 flex h-40 w-40 flex-col items-center justify-center gap-3 bg-[#BED6FF] text-center text-xs text-[var(--primary-blue)] drop-shadow-md duration-300 hover:bg-[#A7C1ED] md:h-52  md:w-52 md:gap-4 md:text-base"
+              >
                 <div className="text-[4rem] duration-300 group-hover:scale-110 group-hover:text-[var(--primary-blue)] md:text-[5rem]">
                   <PiUserCircleDuotone />
                 </div>
                 <p className="text-[1.1rem] font-semibold duration-300 group-hover:text-[0.95rem] md:group-hover:text-base">
                   บุคคลภายนอก
                 </p>
-              </button>
-              <button className="group mt-5 flex h-40 w-40 flex-col items-center justify-center gap-3 bg-[#FFE867] text-center text-xs text-[var(--primary-blue)] drop-shadow-md duration-300 hover:bg-[#EBD662] md:h-52  md:w-52 md:gap-4 md:text-base">
+              </Link>
+              <Link
+                href={"/auth/sign-up/nrru"}
+                className="group mt-5 flex h-40 w-40 flex-col items-center justify-center gap-3 bg-[#FFE867] text-center text-xs text-[var(--primary-blue)] drop-shadow-md duration-300 hover:bg-[#EBD662] md:h-52  md:w-52 md:gap-4 md:text-base"
+              >
                 <div className="text-[4rem] duration-300 group-hover:scale-110 group-hover:text-[var(--primary-blue)] md:text-[5rem]">
                   <PiUserCircleGearDuotone />
                 </div>
                 <p className="text-[1.1rem] font-semibold duration-300 group-hover:text-[0.95rem] md:group-hover:text-base">
                   บุคคลากร NRRU
                 </p>
-              </button>
+              </Link>
             </section>
           </div>
         </div>
