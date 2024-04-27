@@ -6,3 +6,4 @@ export * from "./invention-patent.model";
 export * from "./design-patent.model";
 export * from "./trademark.model";
 export * from "./error.model";
+export * from "./thai-data.model";

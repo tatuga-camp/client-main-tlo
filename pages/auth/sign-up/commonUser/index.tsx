@@ -21,9 +21,18 @@ import {
 } from "react-aria-components";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { Amphure, ErrorMessages, Province, Tambon } from "../../../../models";
+import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
+import ProviceCombobox from "../../../../components/Combobox/proviceCombobox";
+import AmphureCombobox from "../../../../components/Combobox/amphureCombobox";
+import TambonCombobox from "../../../../components/Combobox/tambonCombobox";
+import Swal from "sweetalert2";
+import { SingUpService } from "../../../../services/auth";
+import { useRouter } from "next-nprogress-bar";
 
 const Index = () => {
   const [isHidden, setIsHidden] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleTriggerVisibility = () => {
     setIsHidden((prev) => !prev);
@@ -33,24 +42,127 @@ const Index = () => {
     firstName?: string;
     lastName?: string;
     phone?: string;
+    idCard?: string;
     houseNumber?: string;
     villageNumber?: string;
-    subDistrict?: string;
-    district?: string;
-    province?: string;
+    road?: string;
+    subDistrict?: Tambon;
+    district?: Amphure;
+    province?: Province;
     zipCode?: string;
     email?: string;
     password?: string;
+    title?: string;
     confirmPassword?: string;
   }>();
 
   const handleSignUpCommon = async (e: React.FormEvent) => {
     try {
-    } catch (err) {}
+      e.preventDefault();
+      Swal.fire({
+        title: "กำลังสมัครสมาชิก",
+        text: "กรุณารอสักครู่",
+        showConfirmButton: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      if (signUpCommonForm?.password !== signUpCommonForm?.confirmPassword) {
+        throw new Error("รหัสผ่านไม่ตรงกัน");
+      }
+      if (
+        !signUpCommonForm?.email ||
+        !signUpCommonForm?.password ||
+        !signUpCommonForm?.confirmPassword ||
+        !signUpCommonForm?.firstName ||
+        !signUpCommonForm?.lastName ||
+        !signUpCommonForm?.title ||
+        !signUpCommonForm?.phone ||
+        !signUpCommonForm?.idCard ||
+        !signUpCommonForm?.houseNumber ||
+        !signUpCommonForm?.villageNumber ||
+        !signUpCommonForm?.subDistrict ||
+        !signUpCommonForm?.district ||
+        !signUpCommonForm?.province ||
+        !signUpCommonForm?.zipCode ||
+        !signUpCommonForm?.road ||
+        !signUpCommonForm?.subDistrict ||
+        !signUpCommonForm?.district ||
+        !signUpCommonForm?.province
+      ) {
+        throw new Error("กรุณากรอกข้อมูลให้ครบถ้วน");
+      }
+      const signUp = await SingUpService({
+        email: signUpCommonForm?.email,
+        firstName: signUpCommonForm?.firstName,
+        lastName: signUpCommonForm?.lastName,
+        password: signUpCommonForm?.password,
+        title: signUpCommonForm?.title,
+        phone: signUpCommonForm?.phone.replace(/-/g, ""),
+        type: "EXTERNAL",
+        idCard: signUpCommonForm?.idCard.replace(/-/g, ""),
+        addressNumber: signUpCommonForm?.houseNumber,
+        moo: signUpCommonForm?.villageNumber,
+        road: signUpCommonForm?.road,
+        tambon: signUpCommonForm?.subDistrict.name_th,
+        amphure: signUpCommonForm?.district.name_th,
+        province: signUpCommonForm?.province.name_th,
+        nationality: "Thai",
+        postalCode: signUpCommonForm?.zipCode,
+      });
+      router.push("/auth/sign-in");
+      Swal.fire({
+        title: "สมัครสมาชิกสำเร็จ",
+        text: "ยินดีต้อนรับ",
+        icon: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
+  };
+
+  const handleDataFromCombobox = ({
+    value,
+    type,
+  }: {
+    value: Province | Amphure | Tambon;
+    type: "provice" | "amphure" | "tambon";
+  }) => {
+    if (type === "provice") {
+      setsignUpCommonForm((prev) => {
+        return {
+          ...prev,
+          province: value as Province,
+        };
+      });
+    } else if (type === "amphure") {
+      setsignUpCommonForm((prev) => {
+        return {
+          ...prev,
+          district: value as Amphure,
+        };
+      });
+    } else if (type === "tambon") {
+      setsignUpCommonForm((prev) => {
+        return {
+          ...prev,
+          subDistrict: value as Tambon,
+        };
+      });
+    }
   };
 
   const handleChangeSignUpCommonForm = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement> | InputMaskChangeEvent,
   ) => {
     setsignUpCommonForm({
       ...signUpCommonForm,
@@ -80,36 +192,24 @@ const Index = () => {
 
               <Form
                 onSubmit={handleSignUpCommon}
-                className="mt-8 w-[70%] max-w-[30rem] bg-white p-8 drop-shadow-md"
+                className="mt-8 flex w-11/12 flex-col gap-3 bg-white p-8 md:w-[70%] md:max-w-[30rem]"
               >
-                <Select
-                  className="mb-6 flex w-full items-center gap-3"
-                  placeholder="กรุณาเลือก"
-                >
+                <TextField type="text" className="flex flex-col gap-1">
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     คำนำหน้า
                   </Label>
-                  <Button className="relative flex w-32 gap-3 rounded-md bg-slate-300 p-2 pl-4">
-                    <SelectValue />
-                    <span
-                      aria-hidden="true"
-                      className="absolute right-3 text-xl"
-                    >
-                      <MdKeyboardArrowDown />
-                    </span>
-                  </Button>
-                  <Popover className="w-32  rounded-md bg-white p-2 font-Anuphan drop-shadow-md">
-                    <ListBox className={"flex w-full flex-col gap-3"}>
-                      <ListBoxItem>นาย</ListBoxItem>
-                      <ListBoxItem>นาง</ListBoxItem>
-                      <ListBoxItem>นางสาว</ListBoxItem>
-                    </ListBox>
-                  </Popover>
-                </Select>
+                  <Input
+                    onChange={handleChangeSignUpCommonForm}
+                    name="title"
+                    type="text"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
+                    placeholder="คำนำหน้า"
+                  />
+                </TextField>
                 <TextField
                   type="text"
                   isRequired
-                  className="flex flex-col gap-3"
+                  className="flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     ชื่อจริง
@@ -118,7 +218,7 @@ const Index = () => {
                     onChange={handleChangeSignUpCommonForm}
                     name="firstName"
                     type="text"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="ชื่อจริง"
                   />
                   <FieldError className="text-xs text-red-600" />
@@ -127,7 +227,7 @@ const Index = () => {
                 <TextField
                   type="text"
                   isRequired
-                  className="mt-3 flex flex-col gap-3"
+                  className=" flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     นามสกุล
@@ -136,8 +236,8 @@ const Index = () => {
                     onChange={handleChangeSignUpCommonForm}
                     name="lastName"
                     type="text"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                    placeholder="ชื่อจริง"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
+                    placeholder="นามสกุล"
                   />
                   <FieldError className="text-xs text-red-600" />
                 </TextField>
@@ -145,18 +245,42 @@ const Index = () => {
                 <TextField
                   type="telephone"
                   isRequired
-                  className="mt-3 flex flex-col gap-3"
+                  className=" flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     หมายเลขโทรศัพท์
                   </Label>
-                  <Input
-                    onChange={handleChangeSignUpCommonForm}
+                  <InputMask
                     name="phone"
-                    type="tel"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    onChange={handleChangeSignUpCommonForm}
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="กรอกหมายเลขโทรศัพท์"
+                    maxLength={10}
+                    inputMode="numeric"
+                    type="text"
+                    mask="999-999-9999"
                   />
+                  <FieldError className="text-xs text-red-600" />
+                </TextField>
+                <TextField
+                  type="text"
+                  isRequired
+                  className=" flex flex-col gap-1"
+                >
+                  <Label className="font-semibold text-[var(--primary-blue)]">
+                    หมายเลขบัตรประชาชน
+                  </Label>
+                  <InputMask
+                    name="idCard"
+                    onChange={handleChangeSignUpCommonForm}
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
+                    placeholder="กรอกหมายเลขบัตรประชาชน"
+                    maxLength={13}
+                    inputMode="numeric"
+                    type="text"
+                    mask="9-9999-99999-99-9"
+                  />
+
                   <FieldError className="text-xs text-red-600" />
                 </TextField>
 
@@ -164,21 +288,21 @@ const Index = () => {
                   ที่อยู่
                 </p>
 
-                <div className="flex gap-3">
+                <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
                   <TextField
                     type="text"
                     isRequired
-                    className="mt-3 flex flex-col  gap-3"
+                    className=" flex flex-col  gap-1"
                   >
-                    <div className="flex items-center gap-3">
-                      <Label className="font-semibold text-[var(--primary-blue)]">
+                    <div className="flex items-center gap-1">
+                      <Label className="w-20 font-semibold text-[var(--primary-blue)]">
                         บ้านเลขที่
                       </Label>
                       <Input
                         onChange={handleChangeSignUpCommonForm}
                         name="houseNumber"
                         type="text"
-                        className="w-24 rounded-md bg-slate-300 p-2 pl-4"
+                        className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4 md:w-24"
                         placeholder="บ้านเลขที่"
                       />
                     </div>
@@ -188,18 +312,38 @@ const Index = () => {
                   <TextField
                     type="text"
                     isRequired
-                    className="mt-3 flex flex-col gap-3"
+                    className=" flex flex-col gap-1"
                   >
-                    <div className="flex items-center gap-3">
-                      <Label className="font-semibold text-[var(--primary-blue)]">
+                    <div className="flex items-center gap-1">
+                      <Label className="w-20 font-semibold text-[var(--primary-blue)]">
                         หมู่ที่
                       </Label>
                       <Input
                         onChange={handleChangeSignUpCommonForm}
                         name="villageNumber"
                         type="text"
-                        className="w-24 rounded-md bg-slate-300 p-2 pl-4"
+                        className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4 md:w-24"
                         placeholder="หมู่ที่"
+                      />
+                    </div>
+
+                    <FieldError className="text-xs text-red-600" />
+                  </TextField>
+                  <TextField
+                    type="text"
+                    isRequired
+                    className=" flex flex-col gap-1"
+                  >
+                    <div className="flex items-center gap-1">
+                      <Label className="w-20 font-semibold text-[var(--primary-blue)]">
+                        ถนน
+                      </Label>
+                      <Input
+                        onChange={handleChangeSignUpCommonForm}
+                        name="road"
+                        type="text"
+                        className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4 md:w-24"
+                        placeholder="ถนน"
                       />
                     </div>
 
@@ -210,58 +354,36 @@ const Index = () => {
                 <TextField
                   type="text"
                   isRequired
-                  className="mt-3 flex flex-col gap-3"
+                  className=" flex flex-col gap-1"
                 >
-                  <div className="flex items-center gap-3">
-                    <Label className="font-semibold text-[var(--primary-blue)]">
-                      ตำบล
-                    </Label>
-                    <Input
-                      onChange={handleChangeSignUpCommonForm}
-                      name="subDistrict"
-                      type="text"
-                      className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                      placeholder="ตำบล"
-                    />
-                  </div>
-
-                  <FieldError className="text-xs text-red-600" />
-                </TextField>
-                <TextField
-                  type="text"
-                  isRequired
-                  className="mt-3 flex flex-col gap-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <Label className="font-semibold text-[var(--primary-blue)]">
-                      อำเภอ
-                    </Label>
-                    <Input
-                      onChange={handleChangeSignUpCommonForm}
-                      name="district"
-                      type="text"
-                      className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                      placeholder="อำเภอ"
-                    />
-                  </div>
-
-                  <FieldError className="text-xs text-red-600" />
-                </TextField>
-                <TextField
-                  type="text"
-                  isRequired
-                  className="mt-3 flex flex-col gap-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <Label className="font-semibold text-[var(--primary-blue)]">
+                  <div className="flex items-center gap-1">
+                    <Label className=" w-20 font-semibold text-[var(--primary-blue)]">
                       จังหวัด
                     </Label>
-                    <Input
-                      onChange={handleChangeSignUpCommonForm}
-                      name="province"
-                      type="text"
-                      className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                      placeholder="จังหวัด"
+                    <ProviceCombobox
+                      selectProvince={signUpCommonForm?.province as Province}
+                      handleDataFromCombobox={handleDataFromCombobox}
+                    />
+                  </div>
+
+                  <FieldError className="text-xs text-red-600" />
+                </TextField>
+
+                <TextField
+                  type="text"
+                  isRequired
+                  className=" flex flex-col gap-1"
+                >
+                  <div className="flex items-center gap-1">
+                    <Label className="w-20 font-semibold text-[var(--primary-blue)]">
+                      อำเภอ
+                    </Label>
+                    <AmphureCombobox
+                      handleDataFromCombobox={handleDataFromCombobox}
+                      selectAmphure={signUpCommonForm?.district as Amphure}
+                      selectProvinceId={
+                        signUpCommonForm?.province?.originalId as number
+                      }
                     />
                   </div>
 
@@ -270,7 +392,28 @@ const Index = () => {
                 <TextField
                   type="text"
                   isRequired
-                  className="mt-3 flex flex-col gap-3"
+                  className=" flex flex-col gap-1"
+                >
+                  <div className="flex items-center gap-1">
+                    <Label className="w-20 font-semibold text-[var(--primary-blue)]">
+                      ตำบล
+                    </Label>
+                    <TambonCombobox
+                      handleDataFromCombobox={handleDataFromCombobox}
+                      selectAmphureId={
+                        signUpCommonForm?.district?.originalId as number
+                      }
+                      selectTambon={signUpCommonForm?.subDistrict as Tambon}
+                    />
+                  </div>
+
+                  <FieldError className="text-xs text-red-600" />
+                </TextField>
+
+                <TextField
+                  type="text"
+                  isRequired
+                  className=" flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     รหัสไปรษณีย์
@@ -279,12 +422,11 @@ const Index = () => {
                     onChange={handleChangeSignUpCommonForm}
                     name="zipCode"
                     type="text"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="รหัสไปรษณีย์"
                   />
                   <FieldError className="text-xs text-red-600" />
                 </TextField>
-
                 <TextField
                   type="text"
                   isRequired
@@ -305,7 +447,7 @@ const Index = () => {
                 <TextField
                   type={isHidden ? "text" : "password"}
                   isRequired
-                  className="relative mt-3 flex flex-col gap-3"
+                  className="relative flex flex-col gap-3"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     รหัสผ่าน
@@ -329,7 +471,7 @@ const Index = () => {
                 <TextField
                   type={isHidden ? "text" : "password"}
                   isRequired
-                  className="relative mt-3 flex flex-col gap-3"
+                  className="relative flex flex-col gap-3"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     ยืนยันรหัสผ่าน

@@ -12,6 +12,8 @@ import {
   Label,
   TextField,
 } from "react-aria-components";
+import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
+
 import {
   ListBox,
   ListBoxItem,
@@ -21,23 +23,34 @@ import {
 } from "react-aria-components";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import ProviceCombobox from "../../../../components/Combobox/proviceCombobox";
+import { Amphure, ErrorMessages, Province, Tambon } from "../../../../models";
+import AmphureCombobox from "../../../../components/Combobox/amphureCombobox";
+import TambonCombobox from "../../../../components/Combobox/tambonCombobox";
+import Swal from "sweetalert2";
+import { SingUpService } from "../../../../services/auth";
+import { useRouter } from "next-nprogress-bar";
 
 const Index = () => {
-  const [isHidden, setIsHidden] = useState<boolean>(false);
+  const router = useRouter();
+  const [isHidden, setIsHidden] = useState<boolean>(true);
   const handleTriggerVisibility = () => {
     setIsHidden((prev) => !prev);
   };
   const [signUpNRRUForm, setsignUpNRRUForm] = useState<{
     firstName?: string;
     lastName?: string;
+    title?: string;
     phone?: string;
+    idCard?: string;
     houseNumber?: string;
     villageNumber?: string;
-    subDistrict?: string;
-    district?: string;
-    province?: string;
+    subDistrict?: Tambon;
+    district?: Amphure;
+    province?: Province;
+    road?: string;
     zipCode?: string;
-    organize?: string;
+    department?: string;
     faculty?: string;
     major?: string;
     email?: string;
@@ -47,17 +60,118 @@ const Index = () => {
 
   const handleSignUpNRRUForm = async (e: React.FormEvent) => {
     try {
-    } catch (err) {}
+      e.preventDefault();
+      Swal.fire({
+        title: "กำลังสมัครสมาชิก",
+        text: "กรุณารอสักครู่",
+        showConfirmButton: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      if (signUpNRRUForm?.password !== signUpNRRUForm?.confirmPassword) {
+        throw new Error("รหัสผ่านไม่ตรงกัน");
+      }
+      if (
+        !signUpNRRUForm?.email ||
+        !signUpNRRUForm?.password ||
+        !signUpNRRUForm?.confirmPassword ||
+        !signUpNRRUForm?.firstName ||
+        !signUpNRRUForm?.lastName ||
+        !signUpNRRUForm?.title ||
+        !signUpNRRUForm?.phone ||
+        !signUpNRRUForm?.idCard ||
+        !signUpNRRUForm?.houseNumber ||
+        !signUpNRRUForm?.villageNumber ||
+        !signUpNRRUForm?.subDistrict ||
+        !signUpNRRUForm?.district ||
+        !signUpNRRUForm?.province ||
+        !signUpNRRUForm?.zipCode ||
+        !signUpNRRUForm?.department ||
+        !signUpNRRUForm?.faculty ||
+        !signUpNRRUForm?.major ||
+        !signUpNRRUForm?.road ||
+        !signUpNRRUForm?.subDistrict ||
+        !signUpNRRUForm?.district ||
+        !signUpNRRUForm?.province
+      ) {
+        throw new Error("กรุณากรอกข้อมูลให้ครบถ้วน");
+      }
+      const signUp = await SingUpService({
+        email: signUpNRRUForm?.email,
+        firstName: signUpNRRUForm?.firstName,
+        lastName: signUpNRRUForm?.lastName,
+        password: signUpNRRUForm?.password,
+        title: signUpNRRUForm?.title,
+        phone: signUpNRRUForm?.phone.replace(/-/g, ""),
+        type: "INTERNAL",
+        idCard: signUpNRRUForm?.idCard.replace(/-/g, ""),
+        addressNumber: signUpNRRUForm?.houseNumber,
+        moo: signUpNRRUForm?.villageNumber,
+        road: signUpNRRUForm?.road,
+        tambon: signUpNRRUForm?.subDistrict.name_th,
+        amphure: signUpNRRUForm?.district.name_th,
+        province: signUpNRRUForm?.province.name_th,
+        nationality: "Thai",
+        postalCode: signUpNRRUForm?.zipCode,
+        major: signUpNRRUForm?.major,
+        faculty: signUpNRRUForm?.faculty,
+        department: signUpNRRUForm?.department,
+      });
+      router.push("/auth/sign-in");
+      Swal.fire({
+        title: "สมัครสมาชิกสำเร็จ",
+        text: "ยินดีต้อนรับ",
+        icon: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
   };
 
   const handleChangeSignUpNRRUForm = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement> | InputMaskChangeEvent,
   ) => {
     setsignUpNRRUForm({
       ...signUpNRRUForm,
       [e.target.name]: e.target.value,
     });
   };
+
+  const handleDataFromCombobox = ({
+    value,
+    type,
+  }: {
+    value: Province | Amphure | Tambon;
+    type: "provice" | "amphure" | "tambon";
+  }) => {
+    if (type === "provice") {
+      setsignUpNRRUForm({
+        ...signUpNRRUForm,
+        province: value as Province,
+      });
+    } else if (type === "amphure") {
+      setsignUpNRRUForm({
+        ...signUpNRRUForm,
+        district: value as Amphure,
+      });
+    } else if (type === "tambon") {
+      setsignUpNRRUForm({
+        ...signUpNRRUForm,
+        subDistrict: value as Tambon,
+      });
+    }
+  };
+
   return (
     <div>
       <div className=" flex min-h-screen bg-[#F4F8FF] font-Anuphan">
@@ -72,7 +186,7 @@ const Index = () => {
         <div className="mt-20 flex w-full flex-col items-center md:mt-5  md:justify-center ">
           <div className="my-0 flex w-full flex-col items-center justify-center">
             {/* Sign-up*/}
-            <div className="flex w-full flex-col  items-center gap-3 pt-10">
+            <div className="flex w-full flex-col  items-center gap-1 pt-10">
               <h2 className="mt-10 text-3xl font-bold text-[var(--primary-blue)]">
                 ลงทะเบียน
               </h2>
@@ -80,36 +194,24 @@ const Index = () => {
 
               <Form
                 onSubmit={handleSignUpNRRUForm}
-                className="mt-8 w-[70%] max-w-[30rem] bg-white p-8 drop-shadow-md"
+                className="mt-8 flex w-11/12 flex-col gap-2 bg-white p-8 md:w-[70%] "
               >
-                <Select
-                  className="mb-6 flex w-full items-center gap-3"
-                  placeholder="กรุณาเลือก"
-                >
+                <TextField type="text" className="flex flex-col gap-1">
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     คำนำหน้า
                   </Label>
-                  <Button className="relative flex w-32 gap-3 rounded-md bg-slate-300 p-2 pl-4">
-                    <SelectValue />
-                    <span
-                      aria-hidden="true"
-                      className="absolute right-3 text-xl"
-                    >
-                      <MdKeyboardArrowDown />
-                    </span>
-                  </Button>
-                  <Popover className="w-32  rounded-md bg-white p-2 font-Anuphan drop-shadow-md">
-                    <ListBox className={"flex w-full flex-col gap-3"}>
-                      <ListBoxItem>นาย</ListBoxItem>
-                      <ListBoxItem>นาง</ListBoxItem>
-                      <ListBoxItem>นางสาว</ListBoxItem>
-                    </ListBox>
-                  </Popover>
-                </Select>
+                  <Input
+                    onChange={handleChangeSignUpNRRUForm}
+                    name="title"
+                    type="text"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
+                    placeholder="คำนำหน้า"
+                  />
+                </TextField>
                 <TextField
                   type="text"
                   isRequired
-                  className="flex flex-col gap-3"
+                  className="flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     ชื่อจริง
@@ -118,7 +220,7 @@ const Index = () => {
                     onChange={handleChangeSignUpNRRUForm}
                     name="firstName"
                     type="text"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="ชื่อจริง"
                   />
                   <FieldError className="text-xs text-red-600" />
@@ -127,7 +229,7 @@ const Index = () => {
                 <TextField
                   type="text"
                   isRequired
-                  className="mt-3 flex flex-col gap-3"
+                  className=" flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     นามสกุล
@@ -136,8 +238,8 @@ const Index = () => {
                     onChange={handleChangeSignUpNRRUForm}
                     name="lastName"
                     type="text"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                    placeholder="ชื่อจริง"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
+                    placeholder="นามสกุล"
                   />
                   <FieldError className="text-xs text-red-600" />
                 </TextField>
@@ -145,18 +247,42 @@ const Index = () => {
                 <TextField
                   type="telephone"
                   isRequired
-                  className="mt-3 flex flex-col gap-3"
+                  className=" flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     หมายเลขโทรศัพท์
                   </Label>
-                  <Input
-                    onChange={handleChangeSignUpNRRUForm}
+                  <InputMask
                     name="phone"
-                    type="tel"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    onChange={handleChangeSignUpNRRUForm}
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="กรอกหมายเลขโทรศัพท์"
+                    maxLength={10}
+                    inputMode="numeric"
+                    type="text"
+                    mask="999-999-9999"
                   />
+                  <FieldError className="text-xs text-red-600" />
+                </TextField>
+                <TextField
+                  type="text"
+                  isRequired
+                  className=" flex flex-col gap-1"
+                >
+                  <Label className="font-semibold text-[var(--primary-blue)]">
+                    หมายเลขบัตรประชาชน
+                  </Label>
+                  <InputMask
+                    name="idCard"
+                    onChange={handleChangeSignUpNRRUForm}
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
+                    placeholder="กรอกหมายเลขบัตรประชาชน"
+                    maxLength={13}
+                    inputMode="numeric"
+                    type="text"
+                    mask="9-9999-99999-99-9"
+                  />
+
                   <FieldError className="text-xs text-red-600" />
                 </TextField>
 
@@ -164,21 +290,21 @@ const Index = () => {
                   ที่อยู่
                 </p>
 
-                <div className="flex gap-3">
+                <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
                   <TextField
                     type="text"
                     isRequired
-                    className="mt-3 flex flex-col  gap-3"
+                    className=" flex flex-col  gap-1"
                   >
-                    <div className="flex items-center gap-3">
-                      <Label className="font-semibold text-[var(--primary-blue)]">
+                    <div className="flex items-center gap-1">
+                      <Label className="w-20 font-semibold text-[var(--primary-blue)]">
                         บ้านเลขที่
                       </Label>
                       <Input
                         onChange={handleChangeSignUpNRRUForm}
                         name="houseNumber"
                         type="text"
-                        className="w-24 rounded-md bg-slate-300 p-2 pl-4"
+                        className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4 md:w-24"
                         placeholder="บ้านเลขที่"
                       />
                     </div>
@@ -188,18 +314,38 @@ const Index = () => {
                   <TextField
                     type="text"
                     isRequired
-                    className="mt-3 flex flex-col gap-3"
+                    className=" flex flex-col gap-1"
                   >
-                    <div className="flex items-center gap-3">
-                      <Label className="font-semibold text-[var(--primary-blue)]">
+                    <div className="flex items-center ">
+                      <Label className="w-20 font-semibold text-[var(--primary-blue)]">
                         หมู่ที่
                       </Label>
                       <Input
                         onChange={handleChangeSignUpNRRUForm}
                         name="villageNumber"
                         type="text"
-                        className="w-24 rounded-md bg-slate-300 p-2 pl-4"
+                        className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4 md:w-24"
                         placeholder="หมู่ที่"
+                      />
+                    </div>
+
+                    <FieldError className="text-xs text-red-600" />
+                  </TextField>
+                  <TextField
+                    type="text"
+                    isRequired
+                    className=" flex flex-col gap-1"
+                  >
+                    <div className="flex items-center gap-1">
+                      <Label className="w-20 font-semibold text-[var(--primary-blue)]">
+                        ถนน
+                      </Label>
+                      <Input
+                        onChange={handleChangeSignUpNRRUForm}
+                        name="road"
+                        type="text"
+                        className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4 md:w-24"
+                        placeholder="ถนน"
                       />
                     </div>
 
@@ -210,58 +356,36 @@ const Index = () => {
                 <TextField
                   type="text"
                   isRequired
-                  className="mt-3 flex flex-col gap-3"
+                  className=" flex flex-col gap-1"
                 >
-                  <div className="flex items-center gap-3">
-                    <Label className="font-semibold text-[var(--primary-blue)]">
-                      ตำบล
-                    </Label>
-                    <Input
-                      onChange={handleChangeSignUpNRRUForm}
-                      name="subDistrict"
-                      type="text"
-                      className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                      placeholder="ตำบล"
-                    />
-                  </div>
-
-                  <FieldError className="text-xs text-red-600" />
-                </TextField>
-                <TextField
-                  type="text"
-                  isRequired
-                  className="mt-3 flex flex-col gap-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <Label className="font-semibold text-[var(--primary-blue)]">
-                      อำเภอ
-                    </Label>
-                    <Input
-                      onChange={handleChangeSignUpNRRUForm}
-                      name="district"
-                      type="text"
-                      className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                      placeholder="อำเภอ"
-                    />
-                  </div>
-
-                  <FieldError className="text-xs text-red-600" />
-                </TextField>
-                <TextField
-                  type="text"
-                  isRequired
-                  className="mt-3 flex flex-col gap-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <Label className="font-semibold text-[var(--primary-blue)]">
+                  <div className="flex items-center gap-1">
+                    <Label className="w-20 font-semibold text-[var(--primary-blue)]">
                       จังหวัด
                     </Label>
-                    <Input
-                      onChange={handleChangeSignUpNRRUForm}
-                      name="province"
-                      type="text"
-                      className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                      placeholder="จังหวัด"
+                    <ProviceCombobox
+                      selectProvince={signUpNRRUForm?.province as Province}
+                      handleDataFromCombobox={handleDataFromCombobox}
+                    />
+                  </div>
+
+                  <FieldError className="text-xs text-red-600" />
+                </TextField>
+
+                <TextField
+                  type="text"
+                  isRequired
+                  className=" flex flex-col gap-1"
+                >
+                  <div className="flex items-center gap-1">
+                    <Label className="w-20 font-semibold text-[var(--primary-blue)]">
+                      อำเภอ
+                    </Label>
+                    <AmphureCombobox
+                      handleDataFromCombobox={handleDataFromCombobox}
+                      selectAmphure={signUpNRRUForm?.district as Amphure}
+                      selectProvinceId={
+                        signUpNRRUForm?.province?.originalId as number
+                      }
                     />
                   </div>
 
@@ -270,16 +394,37 @@ const Index = () => {
                 <TextField
                   type="text"
                   isRequired
-                  className="mt-3 flex flex-col gap-3"
+                  className=" flex flex-col gap-1"
                 >
-                  <Label className="font-semibold text-[var(--primary-blue)]">
+                  <div className="flex items-center gap-1">
+                    <Label className="w-20 font-semibold text-[var(--primary-blue)]">
+                      ตำบล
+                    </Label>
+                    <TambonCombobox
+                      handleDataFromCombobox={handleDataFromCombobox}
+                      selectAmphureId={
+                        signUpNRRUForm?.district?.originalId as number
+                      }
+                      selectTambon={signUpNRRUForm?.subDistrict as Tambon}
+                    />
+                  </div>
+
+                  <FieldError className="text-xs text-red-600" />
+                </TextField>
+
+                <TextField
+                  type="text"
+                  isRequired
+                  className=" flex flex-col gap-1"
+                >
+                  <Label className=" font-semibold text-[var(--primary-blue)]">
                     รหัสไปรษณีย์
                   </Label>
                   <Input
                     onChange={handleChangeSignUpNRRUForm}
                     name="zipCode"
                     type="text"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="รหัสไปรษณีย์"
                   />
                   <FieldError className="text-xs text-red-600" />
@@ -288,16 +433,16 @@ const Index = () => {
                 <TextField
                   type="text"
                   isRequired
-                  className="mt-12 flex flex-col gap-3"
+                  className="mt-10 flex  flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     หน่วยงาน/สังกัด
                   </Label>
                   <Input
                     onChange={handleChangeSignUpNRRUForm}
-                    name="organize"
+                    name="department"
                     type="text"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="กรุณาเลือกหน่วยงาน/สังกัด"
                   />
                   <FieldError className="text-xs text-red-600" />
@@ -305,7 +450,7 @@ const Index = () => {
                 <TextField
                   type="text"
                   isRequired
-                  className="mt-3 flex flex-col gap-3"
+                  className=" flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     คณะ
@@ -314,7 +459,7 @@ const Index = () => {
                     onChange={handleChangeSignUpNRRUForm}
                     name="faculty"
                     type="text"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="รหัสผ่าน"
                   />
                   <FieldError className="text-xs text-red-600" />
@@ -322,7 +467,7 @@ const Index = () => {
                 <TextField
                   type="text"
                   isRequired
-                  className="mt-3 flex flex-col gap-3"
+                  className=" flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     สาขาวิชา
@@ -331,7 +476,7 @@ const Index = () => {
                     onChange={handleChangeSignUpNRRUForm}
                     name="major"
                     type="text"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="สาขาวิชา"
                   />
                   <FieldError className="text-xs text-red-600" />
@@ -340,7 +485,7 @@ const Index = () => {
                 <TextField
                   type="text"
                   isRequired
-                  className="mt-14 flex flex-col gap-3"
+                  className="mt-14 flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     E-mail
@@ -349,7 +494,7 @@ const Index = () => {
                     onChange={handleChangeSignUpNRRUForm}
                     name="email"
                     type="email"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="email"
                   />
                   <FieldError className="text-xs text-red-600" />
@@ -357,7 +502,7 @@ const Index = () => {
                 <TextField
                   type={isHidden ? "text" : "password"}
                   isRequired
-                  className="relative mt-3 flex flex-col gap-3"
+                  className="relative  flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     รหัสผ่าน
@@ -366,12 +511,12 @@ const Index = () => {
                   <Input
                     onChange={handleChangeSignUpNRRUForm}
                     name="password"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="รหัสผ่าน"
                   />
                   <Button
                     onPress={handleTriggerVisibility}
-                    className="absolute right-2 top-12 text-lg "
+                    className="absolute right-2 top-10 text-lg "
                   >
                     {isHidden ? <FaRegEye /> : <FaRegEyeSlash />}
                   </Button>
@@ -381,7 +526,7 @@ const Index = () => {
                 <TextField
                   type={isHidden ? "text" : "password"}
                   isRequired
-                  className="relative mt-3 flex flex-col gap-3"
+                  className="relative  flex flex-col gap-1"
                 >
                   <Label className="font-semibold text-[var(--primary-blue)]">
                     ยืนยันรหัสผ่าน
@@ -390,12 +535,12 @@ const Index = () => {
                   <Input
                     onChange={handleChangeSignUpNRRUForm}
                     name="confirmPassword"
-                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                     placeholder="ยืนยันรหัสผ่าน"
                   />
                   <Button
                     onPress={handleTriggerVisibility}
-                    className="absolute right-2 top-12 text-lg "
+                    className="absolute right-2 top-10 text-lg "
                   >
                     {isHidden ? <FaRegEye /> : <FaRegEyeSlash />}
                   </Button>

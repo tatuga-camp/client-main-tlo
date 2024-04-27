@@ -66,7 +66,7 @@ export default function Home() {
             </section>
 
             <section className="mb-8 flex w-[80%] items-start md:mt-10 md:w-[75%]">
-              <button className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] drop-shadow-md duration-300 hover:scale-110 hover:bg-yellow-500 md:px-4 md:py-2 md:text-xl">
+              <button className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] duration-300 hover:scale-110 hover:bg-yellow-500 hover:drop-shadow-md md:px-4 md:py-2 md:text-xl">
                 สำรวจ
               </button>
             </section>
@@ -77,7 +77,7 @@ export default function Home() {
               <h2 className="text-2xl font-bold md:text-3xl">
                 งานทรัพย์สินทางปัญญา
               </h2>
-              <h1 className="bg-[var(--secondary-yellow)] px-4 py-2 font-semibold drop-shadow-md md:text-xl">
+              <h1 className="bg-[var(--secondary-yellow)] px-4 py-2 font-semibold hover:drop-shadow-md md:text-xl">
                 มหาวิทยาลัยราชภัฏนครราชสีมา
               </h1>
             </section>
@@ -89,7 +89,7 @@ export default function Home() {
                   smooth={true}
                   offset={10}
                   duration={300}
-                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs drop-shadow-md duration-300 hover:bg-[var(--primary-blue)] md:h-52 md:w-52 md:gap-4 md:text-base"
+                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base"
                 >
                   <div className="rounded-full bg-[var(--primary-blue)] p-4 text-[2.5rem] text-white duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-[var(--primary-blue)] md:p-3 md:text-[5rem]">
                     <PiCertificate />
@@ -100,13 +100,13 @@ export default function Home() {
                 </Link>
               </button>
 
-              <button className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-0 text-center text-xs drop-shadow-md duration-300 hover:bg-[var(--primary-blue)] md:h-52 md:w-52 md:gap-4 md:text-base">
+              <button className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-0 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base">
                 <Link
                   to="information"
                   smooth={true}
                   offset={-100}
                   duration={300}
-                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs drop-shadow-md duration-300 hover:bg-[var(--primary-blue)] md:h-52 md:w-52 md:gap-4 md:text-base"
+                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base"
                 >
                   <div className="rounded-full bg-[var(--primary-blue)] p-4 text-[2.5rem] text-white duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-[var(--primary-blue)] md:text-[4.6rem]">
                     <BsEnvelopePaper />
@@ -117,13 +117,13 @@ export default function Home() {
                 </Link>
               </button>
 
-              <button className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-0 text-center text-xs drop-shadow-md duration-300 hover:bg-[var(--primary-blue)] md:h-52 md:w-52 md:gap-4 md:text-base">
+              <button className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-0 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base">
                 <Link
                   to="knowledge"
                   smooth={true}
                   offset={-100}
                   duration={300}
-                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs drop-shadow-md duration-300 hover:bg-[var(--primary-blue)] md:h-52 md:w-52 md:gap-4 md:text-base"
+                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base"
                 >
                   <div className="rounded-full bg-[var(--primary-blue)] p-4 text-[2.5rem] text-white  duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-[var(--primary-blue)] md:p-3 md:text-[5rem]">
                     <GiBrain />
@@ -133,13 +133,13 @@ export default function Home() {
                   </p>
                 </Link>
               </button>
-              <button className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-0 text-center text-xs drop-shadow-md duration-300 hover:bg-[var(--primary-blue)] md:h-52 md:w-52 md:gap-4 md:text-base">
+              <button className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-0 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base">
                 <Link
                   to="aboutUs"
                   smooth={true}
                   offset={-100}
                   duration={300}
-                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs drop-shadow-md duration-300 hover:bg-[var(--primary-blue)] md:h-52 md:w-52 md:gap-4 md:text-base"
+                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base"
                 >
                   <div className="rounded-full bg-[var(--primary-blue)] p-4 text-[2.5rem] text-white duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-[var(--primary-blue)] md:text-[4.6rem]">
                     <FaUserCircle />
@@ -154,7 +154,7 @@ export default function Home() {
           {/* ตรวจสอบสถานะคำขอ */}
           <Element name="request">
             <div className="mt-12 flex w-full flex-col items-center gap-8">
-              <h1 className="w-full  bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold drop-shadow-md md:text-xl">
+              <h1 className="w-full  bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold hover:drop-shadow-md md:text-xl">
                 ตรวจสอบสถานะคำขอ
               </h1>
               <section
@@ -236,7 +236,7 @@ export default function Home() {
                   />
                 </div>
 
-                <button className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] drop-shadow-md duration-300 hover:scale-110 hover:bg-yellow-500 md:px-6 md:py-2 md:text-xl">
+                <button className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] duration-300 hover:scale-110 hover:bg-yellow-500 hover:drop-shadow-md md:px-6 md:py-2 md:text-xl">
                   ค้นหา
                 </button>
               </section>
@@ -244,7 +244,7 @@ export default function Home() {
           </Element>
           {/* ข้อมูลการค้นหา */}
           <div className="mt-12 flex w-full flex-col items-center gap-8">
-            <h1 className="w-[85%]  bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold drop-shadow-md md:text-xl">
+            <h1 className="w-[85%]  bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold hover:drop-shadow-md md:text-xl">
               ข้อมูลการค้นหา
             </h1>
             <table className="w-[85%] border-separate border-spacing-1 rounded-md bg-white p-1 text-center text-[0.7rem] md:border-spacing-2 md:p-4 md:text-base">
@@ -287,7 +287,7 @@ export default function Home() {
               name="information"
               className="mt-12 flex w-full flex-col items-center gap-8 md:items-start "
             >
-              <h1 className="z-10 flex w-[85%] items-center justify-center gap-5 bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold drop-shadow-md md:justify-start md:pl-32 md:text-start md:text-xl">
+              <h1 className="z-10 flex w-[85%] items-center justify-center gap-5 bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold hover:drop-shadow-md md:justify-start md:pl-32 md:text-start md:text-xl">
                 <BsEnvelopePaper />
                 ข่าวประชาสัมพันธ์
               </h1>
@@ -344,7 +344,7 @@ export default function Home() {
               </div>
 
               <section className="flex w-full flex-col items-center gap-10 font-semibold md:w-[600px]">
-                <h2 className="flex w-[85%] items-center justify-center gap-2 bg-[var(--secondary-yellow)] px-4 py-3 text-center font-semibold drop-shadow-md md:w-full md:gap-4 md:text-xl">
+                <h2 className="flex w-[85%] items-center justify-center gap-2 bg-[var(--secondary-yellow)] px-4 py-3 text-center font-semibold hover:drop-shadow-md md:w-full md:gap-4 md:text-xl">
                   <IoBulbOutline />
                   ความรู้เกี่ยวกับงานทรัพย์สินทางปัญญา
                 </h2>
@@ -372,7 +372,7 @@ export default function Home() {
             <Element
               name="aboutUs"
               className="z-10 flex w-[85%] items-center justify-center gap-5 bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold 
-          drop-shadow-md md:justify-start md:pl-32 md:text-start md:text-xl"
+         hover:drop-shadow-md md:justify-start md:pl-32 md:text-start md:text-xl"
             >
               <PiUserCircleFill />
               เกี่ยวกับเรา
