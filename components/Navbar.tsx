@@ -23,7 +23,7 @@ const Navbar = () => {
     queryKey: ["user"],
     queryFn: () =>
       GetUserService({
-        access_token: access_token,
+        type: "CLIENT-SIDE",
       }),
   });
   const handleSignOut = () => {
@@ -32,7 +32,7 @@ const Navbar = () => {
     router.push("/");
   };
   return (
-    <nav className="h-13 fixed top-0 z-30 flex w-full items-center justify-between bg-white p-2 font-Anuphan drop-shadow-md">
+    <nav className="h-13 sticky top-0 z-30 flex w-full items-center justify-between bg-white p-2 font-Anuphan drop-shadow-md">
       {/* Logo */}
 
       <Link href="/" className="ml-3 w-[5rem] md:ml-10 md:w-[6.25rem]">

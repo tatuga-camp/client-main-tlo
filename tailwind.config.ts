@@ -18,6 +18,8 @@ const config: Config = {
       },
       colors: {
         "main-color": "#10316B",
+        "second-color": "#FFE867",
+        "background-color": "#F4F8FF",
       },
     },
   },

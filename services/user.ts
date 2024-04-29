@@ -1,20 +1,26 @@
 import { parseCookies } from "nookies";
 import { User } from "../models";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { GetServerSidePropsContext } from "next";
 
 type RequestGetUserService = {
-  access_token?: string;
+  type: "CLIENT-SIDE" | "SERVER-SIDE";
+  context?: GetServerSidePropsContext;
 };
 type ResponseGetUserService = User;
 export async function GetUserService(
   input: RequestGetUserService,
 ): Promise<ResponseGetUserService> {
   try {
-    let access_token = input.access_token;
-    if (!access_token) {
-      const cookies = parseCookies();
+    let access_token: string | undefined;
+    if (input.type === "SERVER-SIDE") {
+      const cookies = parseCookies(input.context);
       access_token = cookies.access_token;
+    } else if (input.type === "CLIENT-SIDE") {
+      access_token = Cookies.get("access_token") as string;
     }
+    if (!access_token) throw new Error("Access token not found");
     const user = await axios({
       method: "GET",
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users`,
