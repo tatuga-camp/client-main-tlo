@@ -8,6 +8,7 @@ type CardInformationProps = {
   date: string;
   info: string;
   image: string;
+  slugId: string;
 };
 
 const CardInformation = ({
@@ -16,6 +17,7 @@ const CardInformation = ({
   date,
   info,
   image,
+  slugId
 }: CardInformationProps) => {
   const isOdd = index % 2 !== 0;
   return (
@@ -38,9 +40,9 @@ const CardInformation = ({
         <p className="text-[0.6rem] md:text-base">{date}</p>
         <p className="text-[0.6rem] md:text-base">{info}</p>
 
-        <button className="bg-[var(--secondary-yellow)] px-3 py-1 text-xs font-semibold text-[var(--primary-blue)] drop-shadow-md duration-300 hover:scale-110 hover:bg-yellow-500 md:px-4 md:py-2 md:text-base">
+        <Link href={`/informations/${slugId}`} className="bg-[var(--secondary-yellow)] px-3 py-1 text-xs font-semibold text-[var(--primary-blue)] drop-shadow-md duration-300 hover:scale-110 hover:bg-yellow-500 md:px-4 md:py-2 md:text-base">
           เพิ่มเติม
-        </button>
+        </Link>
       </div>
     </div>
   );
