@@ -3,7 +3,7 @@ import LogoFile from "./LogoFile";
 import Link from "next/link";
 import { PiUserCirclePlus } from "react-icons/pi";
 import { PiUserCircleFill } from "react-icons/pi";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "../models";
 import Image from "next/image";
 import { IoIosArrowDropdown, IoIosArrowDropdownCircle } from "react-icons/io";
@@ -12,12 +12,22 @@ import { Fragment } from "react";
 import { MdAccountCircle } from "react-icons/md";
 import { GoSignOut } from "react-icons/go";
 import { useRouter } from "next-nprogress-bar";
+import Cookies from "js-cookie";
+import { GetUserService } from "../services/user";
 
 const Navbar = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const user = queryClient.getQueryData<User>(["user"]);
+  const access_token = Cookies.get("access_token");
+  const user = useQuery({
+    queryKey: ["user"],
+    queryFn: () =>
+      GetUserService({
+        access_token: access_token,
+      }),
+  });
   const handleSignOut = () => {
+    Cookies.remove("access_token");
     queryClient.removeQueries();
     router.push("/");
   };
@@ -30,27 +40,27 @@ const Navbar = () => {
       </Link>
 
       {/* Links */}
-      {user ? (
+      {user.data ? (
         <Popover>
           {({ open }) => (
             <>
               <Popover.Button
-                className="text-main-color ring-main-color group absolute right-0 top-1 mr-3
-               flex items-center  gap-1 rounded-lg  p-2 font-Anuphan text-base font-semibold
-                text-[var(--primary-blue)] hover:ring-1 md:mr-10 md:gap-3 md:text-xl"
+                className="group absolute right-0 top-1 mr-3 flex items-center
+               gap-1 rounded-lg  p-2 font-Anuphan  text-base font-semibold text-[var(--primary-blue)] text-main-color
+                ring-main-color hover:ring-1 md:mr-10 md:gap-3 md:text-xl"
               >
                 <div className="relative h-10 w-10 overflow-hidden rounded-full">
                   <Image
-                    src={user.picture}
+                    src={user.data.picture}
                     alt="profile picture"
                     fill
                     className=" object-cover"
                   />
                 </div>
                 <div className="flex items-center  gap-2 text-base">
-                  <span>{user.title}</span>
-                  <span>{user.firstName}</span>
-                  <span>{user.lastName}</span>
+                  <span>{user.data.title}</span>
+                  <span>{user.data.firstName}</span>
+                  <span>{user.data.lastName}</span>
                 </div>
                 <IoIosArrowDropdown className="block group-hover:hidden" />
                 <IoIosArrowDropdownCircle className="hidden group-hover:block" />
@@ -64,16 +74,20 @@ const Navbar = () => {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel className="ring-main-color absolute right-10 top-[4.5rem] w-60 rounded-md bg-white p-5 ring-1 drop-shadow-md">
+                <Popover.Panel className="absolute right-10 top-[4.5rem] w-60 rounded-md bg-white p-5 ring-1 ring-main-color drop-shadow-md">
                   <ul>
-                    <li
-                      className="flex cursor-pointer items-center 
-                    justify-start gap-2 rounded-md p-2 text-xl
+                    <li>
+                      <Link
+                        href="/account/setting"
+                        className="flex cursor-pointer items-center justify-start gap-2 
+                    rounded-md p-2 text-xl  no-underline
                      transition duration-150 hover:bg-slate-200  "
-                    >
-                      <MdAccountCircle />
-                      ตั้งค่าบัญชี
+                      >
+                        <MdAccountCircle />
+                        ตั้งค่าบัญชี
+                      </Link>
                     </li>
+
                     <li
                       onClick={handleSignOut}
                       className="flex cursor-pointer items-center 

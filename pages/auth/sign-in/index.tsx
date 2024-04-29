@@ -52,6 +52,7 @@ const Index = () => {
         email: signInForm.email,
         password: signInForm.password,
       });
+
       queryClient.setQueryData(["user"], signIn.user);
       setCookie(null, "access_token", signIn.access_token, {
         maxAge: 1 * 24 * 60 * 60, // Cookie expiration time in seconds (e.g., 1 days)
