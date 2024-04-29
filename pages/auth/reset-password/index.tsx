@@ -89,88 +89,90 @@ const Index = () => {
   };
 
   return (
-    <div className=" flex min-h-screen bg-[#F4F8FF] font-Anuphan">
-      <Head>
-        <title>เปลี่ยนรหัสผ่านใหม่</title>
-      </Head>
-      <Navbar />
-      {/* Left */}
-      <HomepageSidebar />
+    <HomeLayout>
+      <div className=" flex min-h-screen bg-[#F4F8FF] font-Anuphan">
+        <Head>
+          <title>เปลี่ยนรหัสผ่านใหม่</title>
+        </Head>
 
-      {/* Right */}
-      <div className=" mt-20 flex h-full w-full flex-col items-center  md:mt-20 md:justify-center ">
-        <div className="my-0 flex w-full flex-col items-center justify-center">
-          <div className="flex w-full flex-col  items-center gap-3 pt-10">
-            <h2 className="text-3xl font-bold text-[var(--primary-blue)]">
-              เปลี่ยนรหัสผ่านใหม่
-            </h2>
+        {/* Left */}
+        <HomepageSidebar />
 
-            <Form
-              onSubmit={handleSummitForgetPassword}
-              className="mt-8 w-[70%] max-w-[30rem] bg-white p-8 drop-shadow-md"
-            >
-              <TextField
-                type={isHidden ? "text" : "password"}
-                isRequired
-                className="relative mt-3 flex flex-col gap-3"
+        {/* Right */}
+        <div className="  flex h-full w-full flex-col items-center   md:justify-center ">
+          <div className="my-0 flex w-full flex-col items-center justify-center">
+            <div className="flex w-full flex-col  items-center gap-3 pt-10">
+              <h2 className="text-3xl font-bold text-[var(--primary-blue)]">
+                เปลี่ยนรหัสผ่านใหม่
+              </h2>
+
+              <Form
+                onSubmit={handleSummitForgetPassword}
+                className="mt-8 w-[70%] max-w-[30rem] bg-white p-8 drop-shadow-md"
               >
-                <Label className="font-semibold text-[var(--primary-blue)]">
-                  รหัสผ่านใหม่
-                </Label>
-
-                <Input
-                  onChange={handleChangeResetPassword}
-                  name="password"
-                  className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                  placeholder="Password"
-                />
-                <Button
-                  onPress={handleTriggerVisibility}
-                  className="absolute bottom-3 right-2 text-lg "
+                <TextField
+                  type={isHidden ? "text" : "password"}
+                  isRequired
+                  className="relative mt-3 flex flex-col gap-3"
                 >
-                  {isHidden ? <FaRegEye /> : <FaRegEyeSlash />}
-                </Button>
+                  <Label className="font-semibold text-[var(--primary-blue)]">
+                    รหัสผ่านใหม่
+                  </Label>
 
-                <FieldError className="text-xs text-red-600" />
-              </TextField>
-              <TextField
-                type={isHidden ? "text" : "password"}
-                isRequired
-                className="relative mt-3 flex flex-col gap-3"
-              >
-                <Label className="font-semibold text-[var(--primary-blue)]">
-                  รหัสผ่าน
-                </Label>
+                  <Input
+                    onChange={handleChangeResetPassword}
+                    name="password"
+                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    placeholder="Password"
+                  />
+                  <Button
+                    onPress={handleTriggerVisibility}
+                    className="absolute bottom-3 right-2 text-lg "
+                  >
+                    {isHidden ? <FaRegEye /> : <FaRegEyeSlash />}
+                  </Button>
 
-                <Input
-                  onChange={handleChangeResetPassword}
-                  name="confirmPassword"
-                  className="w-full rounded-md bg-slate-300 p-2 pl-4"
-                  placeholder="Confirm Password"
-                />
-                <Button
-                  onPress={handleTriggerVisibility}
-                  className="absolute bottom-3 right-2 text-lg "
+                  <FieldError className="text-xs text-red-600" />
+                </TextField>
+                <TextField
+                  type={isHidden ? "text" : "password"}
+                  isRequired
+                  className="relative mt-3 flex flex-col gap-3"
                 >
-                  {isHidden ? <FaRegEye /> : <FaRegEyeSlash />}
-                </Button>
+                  <Label className="font-semibold text-[var(--primary-blue)]">
+                    รหัสผ่าน
+                  </Label>
 
-                <FieldError className="text-xs text-red-600" />
-              </TextField>
+                  <Input
+                    onChange={handleChangeResetPassword}
+                    name="confirmPassword"
+                    className="w-full rounded-md bg-slate-300 p-2 pl-4"
+                    placeholder="Confirm Password"
+                  />
+                  <Button
+                    onPress={handleTriggerVisibility}
+                    className="absolute bottom-3 right-2 text-lg "
+                  >
+                    {isHidden ? <FaRegEye /> : <FaRegEyeSlash />}
+                  </Button>
 
-              <div className="mt-5 flex justify-center">
-                <Button
-                  type="submit"
-                  className="rounded-md bg-[var(--primary-blue)] px-3 py-2 text-white"
-                >
-                  รีเซ็ตรหัสผ่าน
-                </Button>
-              </div>
-            </Form>
+                  <FieldError className="text-xs text-red-600" />
+                </TextField>
+
+                <div className="mt-5 flex justify-center">
+                  <Button
+                    type="submit"
+                    className="rounded-md bg-[var(--primary-blue)] px-3 py-2 text-white"
+                  >
+                    รีเซ็ตรหัสผ่าน
+                  </Button>
+                </div>
+              </Form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </HomeLayout>
   );
 };
 

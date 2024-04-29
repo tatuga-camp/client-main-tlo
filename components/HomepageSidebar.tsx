@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const HomepageSidebar = () => {
   return (
-    <div className="sticky top-0 mt-10 hidden h-screen  lg:block lg:w-[70rem] lg:bg-white">
+    <div className="sticky top-0  hidden h-screen  lg:block lg:w-[70rem] lg:bg-white">
       <div className="ml-20 mt-9 flex flex-col items-start justify-center gap-2 font-bold">
         <div className="w-[8rem]">
           <LogoFile />
