@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Amphure, Province, Tambon, User } from "../../../models";
+import {
+  Amphure,
+  ErrorMessages,
+  Province,
+  Tambon,
+  User,
+} from "../../../models";
 import { DefinedUseQueryResult } from "@tanstack/react-query";
 import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import {
@@ -17,6 +23,12 @@ import { FaImagePortrait } from "react-icons/fa6";
 import ProviceCombobox from "../../Combobox/proviceCombobox";
 import AmphureCombobox from "../../Combobox/amphureCombobox";
 import TambonCombobox from "../../Combobox/tambonCombobox";
+import Swal from "sweetalert2";
+import { UpdateUserService } from "../../../services/user";
+import {
+  GetSignURLService,
+  UploadSignURLService,
+} from "../../../services/google-storage";
 type BasicInformationProps = {
   user: DefinedUseQueryResult<User, Error>;
 };
@@ -26,6 +38,10 @@ function BasicInformation({ user }: BasicInformationProps) {
     lastName?: string;
     title?: string;
     phone?: string;
+    picture?: {
+      url: string;
+      file?: File;
+    };
     idCard?: string;
     houseNumber?: string;
     villageNumber?: string;
@@ -43,6 +59,9 @@ function BasicInformation({ user }: BasicInformationProps) {
   }>({
     firstName: user.data?.firstName,
     lastName: user.data?.lastName,
+    picture: {
+      url: user.data?.picture as string,
+    },
     title: user.data?.title,
     phone: user.data?.phone,
     idCard: user.data?.idCard,
@@ -57,6 +76,7 @@ function BasicInformation({ user }: BasicInformationProps) {
     province: {
       name_th: user.data?.province,
     },
+
     road: user.data?.road,
     zipCode: user.data?.postalCode,
     department: user.data?.department,
@@ -89,6 +109,102 @@ function BasicInformation({ user }: BasicInformationProps) {
     }
   };
 
+  const handleUpdateUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      Swal.fire({
+        title: "กำลังแก้ไขข้อมูล",
+        text: "กรุณารอสักครู่",
+        showConfirmButton: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      let profileURL = {
+        picture: userForm?.picture?.url,
+      };
+      if (userForm.picture?.file) {
+        const getSignURL = await GetSignURLService({
+          fileName: userForm?.picture?.file?.name,
+          fileType: userForm?.picture?.file?.type,
+        });
+        const uploadFile = await UploadSignURLService({
+          contentType: userForm?.picture?.file?.type,
+          file: userForm?.picture?.file,
+          signURL: getSignURL.signURL,
+        });
+        profileURL.picture = getSignURL.originalURL;
+      }
+      if (profileURL.picture?.startsWith("data:image/jpeg;base64")) {
+        delete profileURL.picture;
+      }
+      const updateUser = await UpdateUserService({
+        title: userForm?.title,
+        firstName: userForm?.firstName,
+        lastName: userForm?.lastName,
+        phone: userForm?.phone?.replace(/-/g, ""),
+        ...profileURL,
+        idCard: userForm?.idCard?.replace(/-/g, ""),
+        addressNumber: userForm?.houseNumber,
+        moo: userForm?.villageNumber,
+        road: userForm?.road,
+        tambon: userForm?.subDistrict?.name_th,
+        amphure: userForm?.district?.name_th,
+        province: userForm?.province?.name_th,
+        postalCode: userForm?.zipCode,
+        major: userForm?.major,
+        faculty: userForm?.faculty,
+        department: userForm?.department,
+      });
+      await user.refetch();
+      setUserForm(() => {
+        return {
+          firstName: user.data?.firstName,
+          lastName: user.data?.lastName,
+          picture: {
+            url: user.data?.picture as string,
+          },
+          title: user.data?.title,
+          phone: user.data?.phone,
+          idCard: user.data?.idCard,
+          houseNumber: user.data?.addressNumber,
+          villageNumber: user.data?.moo,
+          subDistrict: {
+            name_th: user.data?.tambon,
+          },
+          district: {
+            name_th: user.data?.amphure,
+          },
+          province: {
+            name_th: user.data?.province,
+          },
+          road: user.data?.road,
+          zipCode: user.data?.postalCode,
+          department: user.data?.department,
+          faculty: user.data?.faculty,
+          major: user.data?.major,
+        };
+      });
+      Swal.fire({
+        title: "แก้ไขข้อมูลสำเร็จ",
+        text: "ข้อมูลของคุณได้รับการแก้ไขแล้ว",
+        icon: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: `${result.error ? result.error : "เกิดข้อผิดพลาด"}`,
+        text: result.message.toString(),
+        footer:
+          result.statusCode &&
+          "รหัสข้อผิดพลาด: " + result.statusCode?.toString(),
+        icon: "error",
+      });
+    }
+  };
+
   const handleChangeUserForm = (
     e: React.ChangeEvent<HTMLInputElement> | InputMaskChangeEvent,
   ) => {
@@ -98,11 +214,14 @@ function BasicInformation({ user }: BasicInformationProps) {
     });
   };
   return (
-    <Form className=" flex w-6/12 flex-col gap-2 bg-white p-8 ">
+    <Form
+      onSubmit={handleUpdateUser}
+      className=" flex w-11/12 flex-col gap-2 bg-white p-8 md:w-6/12 "
+    >
       <div className="flex flex-col items-center justify-center gap-3">
         <div className="relative h-20 w-20 overflow-hidden rounded-sm">
           <Image
-            src={user.data?.picture as string}
+            src={userForm?.picture?.url as string}
             alt="profile"
             fill
             className="object-cover"
@@ -110,11 +229,26 @@ function BasicInformation({ user }: BasicInformationProps) {
         </div>
         <FileTrigger
           acceptedFileTypes={["image/png", "image/jpeg", "image/jpg"]}
-          onSelect={(e) => {}}
+          onSelect={(e) => {
+            if (!e) return null;
+            const files: FileList = e;
+            const url = URL.createObjectURL(files[0]);
+            setUserForm((prev) => {
+              return {
+                ...prev,
+                picture: {
+                  url,
+                  file: files[0],
+                },
+              };
+            });
+            const reader = new FileReader();
+            reader.readAsDataURL(files[0]);
+          }}
         >
           <Button
-            className="hover:bg-second-color flex items-center justify-center gap-1 rounded-md bg-main-color px-4
-         py-1 text-white drop-shadow-md transition duration-100 hover:text-black active:scale-105"
+            className="flex items-center justify-center gap-1 rounded-md bg-main-color px-4 py-1
+         text-white drop-shadow-md transition duration-100 hover:bg-second-color hover:text-black active:scale-105"
           >
             <FaImagePortrait />
             อัพโหลดรูปภาพ

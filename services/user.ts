@@ -36,18 +36,83 @@ export async function GetUserService(
   }
 }
 
+type RequestUpdateUserEmailService = {
+  email: string;
+  password: string;
+};
+type ResponseUpdateUserEmailService = User;
+export async function UpdateUserEmailService(
+  input: RequestUpdateUserEmailService,
+): Promise<ResponseUpdateUserEmailService> {
+  try {
+    const cookies = parseCookies();
+    const access_token = cookies.access_token;
+    const user = await axios({
+      method: "PATCH",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users/email`,
+      data: {
+        ...input,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+    return user.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw error?.response?.data;
+  }
+}
+
+type RequestUpdateUserPasswordService = {
+  newPassword: string;
+  confirmNewPassword: string;
+  oldPassword: string;
+};
+type ResponseUpdateUserPasswordService = User;
+export async function UpdateUserPasswordService(
+  input: RequestUpdateUserPasswordService,
+): Promise<ResponseUpdateUserPasswordService> {
+  try {
+    const cookies = parseCookies();
+    const access_token = cookies.access_token;
+    const user = await axios({
+      method: "PATCH",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users/password`,
+      data: {
+        ...input,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+    return user.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw error?.response?.data;
+  }
+}
+
 type RequestUpdateUserService = {
-  query: {
-    userId: string;
-  };
-  body: {
-    email?: string;
-    firstName?: string;
-    lastName?: string;
-    title?: string;
-    phone?: string;
-    picture?: string;
-  };
+  title?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  picture?: string;
+  idCard?: string;
+  addressNumber?: string;
+  moo?: string;
+  road?: string;
+  tambon?: string;
+  amphure?: string;
+  province?: string;
+  postalCode?: string;
+  nationality?: string;
+  major?: string;
+  faculty?: string;
+  department?: string;
 };
 type ResponseUpdateUserService = User;
 export async function UpdateUserService(
