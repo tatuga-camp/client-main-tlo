@@ -18,8 +18,8 @@ type RequestGetCopyrightsService = {
   searchField?: string;
 };
 
-type ResponseGetCopyrightsService = Pagination<Copyright>;
-export async function GetCopyrightService(
+type ResponseGetCopyrightsService = Pagination<Copyright & { user: User }>;
+export async function GetCopyrightsService(
   input: RequestGetCopyrightsService,
 ): Promise<ResponseGetCopyrightsService> {
   try {
@@ -47,7 +47,7 @@ type RequestGetCopyrightsByUserIdService = {
 };
 
 type ResponseGetCopyrightsByUserIdService = Pagination<Copyright>;
-export async function GetCopyrightsByUserIdervice(
+export async function GetCopyrightsByUserIdService(
   input: RequestGetCopyrightsByUserIdService,
 ): Promise<ResponseGetCopyrightsByUserIdService> {
   try {

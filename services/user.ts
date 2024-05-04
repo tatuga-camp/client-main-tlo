@@ -21,6 +21,7 @@ export async function GetUserService(
       access_token = Cookies.get("access_token") as string;
     }
     if (!access_token) throw new Error("Access token not found");
+
     const user = await axios({
       method: "GET",
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users`,

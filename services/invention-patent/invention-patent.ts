@@ -7,6 +7,7 @@ import {
   Pagination,
   PartnerInfoOnInventionPatent,
   SupportingDataOnInventionPatent,
+  User,
   WorkInfoOnInventionPatent,
 } from "../../models";
 
@@ -16,8 +17,10 @@ type RequestGetInventionPatentsService = {
   searchField?: string;
 };
 
-type ResponseGetInventionPatentsService = Pagination<InventionPatent>;
-export async function GetInventionPatentService(
+type ResponseGetInventionPatentsService = Pagination<
+  InventionPatent & { user: User }
+>;
+export async function GetInventionPatentsService(
   input: RequestGetInventionPatentsService,
 ): Promise<ResponseGetInventionPatentsService> {
   try {
@@ -41,11 +44,10 @@ export async function GetInventionPatentService(
 type RequestGetInventionPatentsByUserIdService = {
   limit: number;
   page: number;
-  searchField?: string;
 };
 
 type ResponseGetInventionPatentsByUserIdService = Pagination<InventionPatent>;
-export async function GetInventionPatentsByUserIdervice(
+export async function GetInventionPatentsByUserIdService(
   input: RequestGetInventionPatentsByUserIdService,
 ): Promise<ResponseGetInventionPatentsByUserIdService> {
   try {

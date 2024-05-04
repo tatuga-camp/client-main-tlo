@@ -10,6 +10,7 @@ import {
   WorkInfoOnDesignPatent,
   FilePublicResearchOnDesignPatent,
   PatentRelateToSearchResultOnDesignPatent,
+  User,
 } from "../../models";
 
 type RequestGetDesignPatentsService = {
@@ -18,8 +19,10 @@ type RequestGetDesignPatentsService = {
   searchField?: string;
 };
 
-type ResponseGetDesignPatentsService = Pagination<DesignPatent>;
-export async function GetDesignPatentService(
+type ResponseGetDesignPatentsService = Pagination<
+  DesignPatent & { user: User }
+>;
+export async function GetDesignPatentsService(
   input: RequestGetDesignPatentsService,
 ): Promise<ResponseGetDesignPatentsService> {
   try {
@@ -47,7 +50,7 @@ type RequestGetDesignPatentsByUserIdService = {
 };
 
 type ResponseGetDesignPatentsByUserIdService = Pagination<DesignPatent>;
-export async function GetDesignPatentsByUserIdervice(
+export async function GetDesignPatentsByUserIdService(
   input: RequestGetDesignPatentsByUserIdService,
 ): Promise<ResponseGetDesignPatentsByUserIdService> {
   try {

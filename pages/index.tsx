@@ -8,25 +8,22 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoBulbOutline } from "react-icons/io5";
 import Image from "next/image";
 import CardInformation from "@/components/CardInformation";
-
+import { Pagination as PaginationMUI } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { LuSearch } from "react-icons/lu";
-
 import Select from "react-select";
-
 import fakeInformations from "@/data/fakeInformation";
 import fakeOptions from "@/data/fakeOptions";
 import fakeSearchResult from "@/data/fakeSearchResult";
 import { PiUserCircleFill } from "react-icons/pi";
-
 import { GoGoal } from "react-icons/go";
 import { LiaClipboardListSolid } from "react-icons/lia";
 import { GrGroup } from "react-icons/gr";
 import { FaRegCircleCheck } from "react-icons/fa6";
-
+import LinkNextJS from "next/link";
 import {
   Link,
   Button,
@@ -35,8 +32,220 @@ import {
   animateScroll as scroll,
   scrollSpy,
 } from "react-scroll";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { GetInventionPatentsService } from "../services/invention-patent/invention-patent";
+import { GetDesignPatentsService } from "../services/design-patent/design-patent";
+import { GetCopyrightsService } from "../services/copyright/copyright";
+import { GetTrademarksService } from "../services/trademark/trademark";
+import {
+  Copyright,
+  DesignPatent,
+  InventionPatent,
+  Trademark,
+  User,
+} from "../models";
+import moment from "moment";
+
+const menuTypes = [
+  {
+    value: "all",
+    label: "ทั้งหมด",
+  },
+  {
+    value: "invention-patent",
+    label: "สิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร",
+  },
+  { value: "design-patent", label: "สิทธิบัตรการออกแบบผลิตภัณฑ์" },
+  { value: "copyright", label: "จดแจ้งข้อมูลลิขสิทธ์" },
+  { value: "trademark", label: "จดทะเบียนเครื่องหมายการค้า" },
+] as const;
 
 export default function Home() {
+  const [totalPage, setTotalPage] = useState(1);
+  const [requests, setRequests] = useState<{
+    inventions:
+      | (InventionPatent & { type: "invention-patent"; user: User })[]
+      | [];
+    designs: (DesignPatent & { type: "design-patent"; user: User })[] | [];
+    copyrights: (Copyright & { type: "copyright"; user: User })[] | [];
+    trademarks: (Trademark & { type: "trademark"; user: User })[] | [];
+  }>({
+    inventions: [],
+    designs: [],
+    copyrights: [],
+    trademarks: [],
+  });
+  const [searchField, setSearchField] = useState({
+    delay: "",
+    actual: "",
+  });
+  const [page, setPage] = useState(1);
+  const [filterType, setFilterType] = useState<
+    "invention-patent" | "all" | "design-patent" | "copyright" | "trademark"
+  >("all");
+
+  const inventions = useQuery({
+    queryKey: ["public-invention", { page: page, search: searchField.actual }],
+    queryFn: () =>
+      GetInventionPatentsService({
+        page: page,
+        searchField: searchField.actual,
+        limit: 3,
+      }),
+  });
+
+  const designs = useQuery({
+    queryKey: ["public-design", { page: page, search: searchField.actual }],
+    queryFn: () =>
+      GetDesignPatentsService({
+        page: page,
+        searchField: searchField.actual,
+        limit: 3,
+      }),
+  });
+
+  const copyrights = useQuery({
+    queryKey: ["public-copyright", { page: page, search: searchField.actual }],
+    queryFn: () =>
+      GetCopyrightsService({
+        page: page,
+        searchField: searchField.actual,
+        limit: 3,
+      }),
+  });
+
+  const trademarks = useQuery({
+    queryKey: ["public-trademark", { page: page, search: searchField.actual }],
+    queryFn: () =>
+      GetTrademarksService({
+        page: page,
+        searchField: searchField.actual,
+        limit: 3,
+      }),
+  });
+
+  useEffect(() => {
+    if (inventions.data && designs.data && trademarks.data && copyrights.data) {
+      const pages = [
+        inventions.data.meta.total,
+        designs.data.meta.total,
+        trademarks.data.meta.total,
+        copyrights.data.meta.total,
+      ];
+      const highestPage = Math.max(...pages);
+
+      setRequests(() => {
+        const inventionsState = inventions.data.data.map((invention) => {
+          return {
+            ...invention,
+            type: "invention-patent",
+          };
+        }) as (InventionPatent & { type: "invention-patent"; user: User })[];
+
+        const designsState = designs.data.data.map((design) => {
+          return {
+            ...design,
+            type: "design-patent",
+          };
+        }) as (DesignPatent & { type: "design-patent"; user: User })[];
+
+        const copyrightsState = copyrights.data.data.map((copyright) => {
+          return {
+            ...copyright,
+            type: "copyright",
+          };
+        }) as (Copyright & { type: "copyright"; user: User })[];
+
+        const trademarksState = trademarks.data.data.map((trademark) => {
+          return {
+            ...trademark,
+            type: "trademark",
+          };
+        }) as (Trademark & { type: "trademark"; user: User })[];
+
+        switch (filterType) {
+          case "all":
+            setTotalPage(() => highestPage);
+            return {
+              inventions: inventionsState,
+              designs: designsState,
+              copyrights: copyrightsState,
+              trademarks: trademarksState,
+            };
+
+            break;
+
+          case "copyright":
+            setTotalPage(() => copyrights.data.meta.total);
+            return {
+              copyrights: copyrightsState,
+              inventions: [],
+              designs: [],
+              trademarks: [],
+            };
+            break;
+
+          case "design-patent":
+            setTotalPage(() => designs.data.meta.total);
+            return {
+              copyrights: [],
+              inventions: [],
+              designs: designsState,
+              trademarks: [],
+            };
+            break;
+
+          case "trademark":
+            setTotalPage(() => trademarks.data.meta.total);
+            return {
+              copyrights: [],
+              inventions: [],
+              designs: [],
+              trademarks: trademarksState,
+            };
+            break;
+
+          case "invention-patent":
+            setTotalPage(() => inventions.data.meta.total);
+            return {
+              copyrights: [],
+              inventions: inventionsState,
+              designs: [],
+              trademarks: [],
+            };
+            break;
+
+          default:
+            return {
+              inventions: [],
+              designs: [],
+              trademarks: [],
+              copyrights: [],
+            };
+        }
+      });
+    }
+  }, [
+    inventions.data,
+    designs.data,
+    trademarks.data,
+    copyrights.data,
+    filterType,
+  ]);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      setSearchField((prev) => {
+        return {
+          ...prev,
+          actual: prev.delay,
+        };
+      });
+    }, 1500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchField]);
   return (
     <>
       <Head>
@@ -66,9 +275,12 @@ export default function Home() {
             </section>
 
             <section className="mb-8 flex w-[80%] items-start md:mt-10 md:w-[75%]">
-              <button className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] duration-300 hover:scale-110 hover:bg-yellow-500 hover:drop-shadow-md md:px-4 md:py-2 md:text-xl">
+              <LinkNextJS
+                href="/dashboard"
+                className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] duration-300 hover:scale-110 hover:bg-yellow-500 hover:drop-shadow-md md:px-4 md:py-2 md:text-xl"
+              >
                 สำรวจ
-              </button>
+              </LinkNextJS>
             </section>
           </header>
 
@@ -166,9 +378,18 @@ export default function Home() {
                   <div className="flex w-full items-center  gap-3 md:w-[50%] md:gap-5 ">
                     <label className="font-semibold">ประเภท</label>
                     <Select
-                      options={fakeOptions}
-                      className="w-[15rem]"
-                      placeholder={<div>ทั้งหมด</div>}
+                      defaultValue={menuTypes.find(
+                        (type) => type.value === "all",
+                      )}
+                      onChange={(e) => {
+                        if (e) {
+                          setPage(1);
+                          setFilterType(() => e.value);
+                        }
+                      }}
+                      options={menuTypes}
+                      className="w-72"
+                      placeholder={<div>เลือกประเภท</div>}
                       styles={{
                         control: (base, state) => ({
                           ...base,
@@ -230,56 +451,118 @@ export default function Home() {
 
                   <input
                     type="text"
+                    onChange={(e) => {
+                      setSearchField((prev) => {
+                        return {
+                          ...prev,
+                          delay: e.target.value,
+                        };
+                      });
+                      setPage(() => 1);
+                    }}
+                    value={searchField.delay}
                     placeholder="กรอกชื่อสิ่งประดิษฐ์ เลขที่คำขอ หรือชื่อผู้ประดิษฐ์ผลงาน"
                     className="w-full rounded-md border-[1.5px] border-solid border-[#BED6FF] p-3 pl-2 placeholder:font-medium placeholder:text-[#2166DD] 
                   md:p-2 md:pl-10"
                   />
                 </div>
-
-                <button className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] duration-300 hover:scale-110 hover:bg-yellow-500 hover:drop-shadow-md md:px-6 md:py-2 md:text-xl">
-                  ค้นหา
-                </button>
               </section>
             </div>
           </Element>
           {/* ข้อมูลการค้นหา */}
           <div className="mt-12 flex w-full flex-col items-center gap-8">
-            <h1 className="w-[85%]  bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold hover:drop-shadow-md md:text-xl">
-              ข้อมูลการค้นหา
-            </h1>
-            <table className="w-[85%] border-separate border-spacing-1 rounded-md bg-white p-1 text-center text-[0.7rem] md:border-spacing-2 md:p-4 md:text-base">
-              <thead className="">
-                <tr>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">รายการ</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">วันที่ส่งขอ</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {fakeSearchResult.map((item) => (
-                  <tr key={item.id}>
-                    <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                      {item.id}
-                    </td>
-                    <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                      {item.date}
-                    </td>
-                    <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                      {item.requestId}
-                    </td>
-                    <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                      {item.categories}
-                    </td>
-                    <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                      {item.status}
-                    </td>
+            <div className="max-h-96 w-10/12 overflow-auto">
+              <table className="w-max min-w-full border-separate border-spacing-1 rounded-md bg-white p-1 text-center text-[0.7rem] md:border-spacing-2 md:p-4 md:text-base">
+                <thead className="">
+                  <tr className="sticky top-2">
+                    <th className=" rounded-md bg-[#BED6FF] p-2 ">
+                      รายชื่อผู้ยื่น
+                    </th>
+                    <th className=" rounded-md bg-[#BED6FF] p-2 ">
+                      วันที่ส่งขอ
+                    </th>
+                    <th className=" rounded-md bg-[#BED6FF] p-2 ">
+                      หมายเลขคำขอ
+                    </th>
+                    <th className=" rounded-md bg-[#BED6FF] p-2 ">
+                      ประเภทคำขอ
+                    </th>
+                    <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody>
+                  {inventions.isFetching ||
+                  designs.isFetching ||
+                  trademarks.isFetching ||
+                  copyrights.isFetching
+                    ? [...Array(5)].map((_, index) => (
+                        <tr key={index} className="animate-pulse">
+                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-200 p-2"></td>
+                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-50 p-2"></td>
+                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-500 p-2"></td>
+                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-slate-300 p-2"></td>
+                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-100 p-2"></td>
+                        </tr>
+                      ))
+                    : Object.values(requests)
+                        .flat()
+                        .map((item) => {
+                          let title:
+                            | "สิทธิบัตรการประดิษฐ์และอนุสิทธิบัตร"
+                            | "สิทธิบัตรการออกแบบผลิตภัณฑ์"
+                            | "ลิขสิทธิ์"
+                            | "เครื่องหมายการค้า";
+
+                          switch (item.type) {
+                            case "copyright":
+                              title = "ลิขสิทธิ์";
+                              break;
+                            case "invention-patent":
+                              title = "สิทธิบัตรการประดิษฐ์และอนุสิทธิบัตร";
+                              break;
+                            case "design-patent":
+                              title = "สิทธิบัตรการออกแบบผลิตภัณฑ์";
+                              break;
+                            case "trademark":
+                              title = "เครื่องหมายการค้า";
+                              break;
+                          }
+
+                          return (
+                            <tr key={item.id} className="hover:bg-gray-200">
+                              <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                                {item.user.title} {item.user.firstName}{" "}
+                                {item.user.lastName}
+                              </td>
+                              <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                                {moment(item.createAt).format(
+                                  "DD/MM/YYYY - HH:MM:SS",
+                                ) ?? "ไม่มีวันที่ส่งขอ"}
+                              </td>
+                              <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                                {item.numberRequest ?? "ไม่มีหมายเลขคำขอ"}
+                              </td>
+                              <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                                {title}
+                              </td>
+                              <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:bg-main-color hover:text-white">
+                                <LinkNextJS href={`/${item.type}/${item.id}`}>
+                                  ตรวจสอบ
+                                </LinkNextJS>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                </tbody>
+              </table>
+            </div>
+            <PaginationMUI
+              page={page}
+              onChange={(e, page) => setPage(page)}
+              count={totalPage}
+              color="primary"
+            />
           </div>
           {/* ข่าวประชาสัมพันธ์ */}
           <div className="w-full">

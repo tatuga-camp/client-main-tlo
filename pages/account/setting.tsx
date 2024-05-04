@@ -20,6 +20,7 @@ const menuAccountSetting = [
     name: "เปลี่ยน E-mail",
   },
 ] as const;
+
 function Setting({ userServer }: { userServer: User }) {
   const [selectMenu, setSelectMenu] = useState<
     "ข้อมูลส่วนตัว" | "เปลี่ยนรหัสผ่าน" | "เปลี่ยน E-mail"

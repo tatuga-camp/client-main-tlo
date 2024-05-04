@@ -5,6 +5,7 @@ import {
   FileOnTrademark,
   Pagination,
   PartnerInfoOnTrademark,
+  User,
 } from "../../models";
 
 type RequestGetTrademarksService = {
@@ -13,8 +14,8 @@ type RequestGetTrademarksService = {
   searchField?: string;
 };
 
-type ResponseGetTrademarksService = Pagination<Trademark>;
-export async function GetTrademarkService(
+type ResponseGetTrademarksService = Pagination<Trademark & { user: User }>;
+export async function GetTrademarksService(
   input: RequestGetTrademarksService,
 ): Promise<ResponseGetTrademarksService> {
   try {
@@ -42,7 +43,7 @@ type RequestGetTrademarksByUserIdService = {
 };
 
 type ResponseGetTrademarksByUserIdService = Pagination<Trademark>;
-export async function GetTrademarksByUserIdervice(
+export async function GetTrademarksByUserIdService(
   input: RequestGetTrademarksByUserIdService,
 ): Promise<ResponseGetTrademarksByUserIdService> {
   try {
