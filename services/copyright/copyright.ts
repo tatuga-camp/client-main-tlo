@@ -86,7 +86,7 @@ type ResponseGetCopyrightService = Copyright & {
   fileOnCopyrights: FileOnCopyright[];
 };
 
-export async function GetCopyrightervice(
+export async function GetCopyrightService(
   input: RequestGetCopyrightService,
 ): Promise<ResponseGetCopyrightService> {
   try {
@@ -112,7 +112,7 @@ export async function GetCopyrightervice(
 
 type ResponseCreateCopyrightService = Copyright;
 
-export async function CreateCopyrightervice(): Promise<ResponseCreateCopyrightService> {
+export async function CreateCopyrightService(): Promise<ResponseCreateCopyrightService> {
   try {
     const cookies = parseCookies();
     const access_token = cookies.access_token;
@@ -156,7 +156,7 @@ type RequestUpdateCopyrightService = {
 
 type ResponseUpdateCopyrightService = Copyright;
 
-export async function UpdateCopyrightervice(
+export async function UpdateCopyrightService(
   input: RequestUpdateCopyrightService,
 ): Promise<ResponseUpdateCopyrightService> {
   try {
@@ -186,7 +186,7 @@ type RequestDeleteCopyrightService = {
 
 type ResponseDeleteCopyrightService = { message: string };
 
-export async function DeleteCopyrightervice(
+export async function DeleteCopyrightService(
   input: RequestDeleteCopyrightService,
 ): Promise<ResponseDeleteCopyrightService> {
   try {

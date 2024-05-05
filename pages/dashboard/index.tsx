@@ -164,7 +164,7 @@ function Index({ user }: { user: User }) {
         <ul className="grid w-11/12 grid-cols-2 gap-5 md:h-40 md:w-10/12 md:grid-cols-4">
           {menuRegister.map((menu) => (
             <Link
-              href={`/${menu.slut}/create`}
+              href={`${user.type === "INTERNAL" ? "nrru" : "outsider"}/${menu.slut}/create`}
               key={menu.title}
               className="flex  h-40 flex-col items-center justify-center gap-2
                 bg-main-color text-white transition duration-100 hover:bg-second-color
@@ -186,7 +186,10 @@ function Index({ user }: { user: User }) {
           </div>
 
           <div className="relative max-h-96 w-full overflow-auto md:max-h-max">
-            <table className="w-max  border-separate border-spacing-1 rounded-md border border-gray-400 bg-white p-1 text-center text-[0.7rem] md:w-full md:border-spacing-2 md:p-4 md:text-base">
+            <table
+              className="w-max   border-separate border-spacing-1 rounded-md border
+             border-gray-400 bg-white p-1 text-center text-[0.7rem] md:w-full md:border-spacing-2 md:p-4 md:text-base"
+            >
               <thead className="">
                 <tr className="sticky top-2 bg-white">
                   <th className=" rounded-md bg-[#BED6FF] p-2 ">วันที่ส่งขอ</th>
@@ -233,8 +236,12 @@ function Index({ user }: { user: User }) {
                         <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                           {title}
                         </td>
-                        <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:bg-main-color hover:text-white">
-                          <Link href={`/${item.type}/${item.id}`}>ตรวจสอบ</Link>
+                        <td className="rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-2 hover:bg-main-color hover:text-white">
+                          <Link
+                            href={`${user.type === "INTERNAL" ? "nrru" : "outsider"}/${item.type}/${item.id}`}
+                          >
+                            ตรวจสอบ
+                          </Link>
                         </td>
                       </tr>
                     );
@@ -260,13 +267,13 @@ export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext,
 ) => {
   try {
-    const userServer = await GetUserService({
+    const user = await GetUserService({
       type: "SERVER-SIDE",
       context: ctx,
     });
     return {
       props: {
-        userServer,
+        user,
       },
     };
   } catch (error) {

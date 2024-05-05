@@ -72,10 +72,10 @@ export async function GetInventionPatentsByUserIdService(
 }
 
 type RequestGetInventionPatentService = {
-  InventionPatentId: string;
+  inventionPatentId: string;
 };
 
-type ResponseGetInventionPatentService = InventionPatent & {
+export type ResponseGetInventionPatentService = InventionPatent & {
   partnerInfoOnInventionPatents: PartnerInfoOnInventionPatent[];
   workInfoOnInventionPatent: WorkInfoOnInventionPatent & {
     fileWorkInfoOnInventionPatents: WorkInfoOnInventionPatent[];
@@ -86,7 +86,7 @@ type ResponseGetInventionPatentService = InventionPatent & {
   fileOnInventionPatents: FileOnInventionPatent[];
 };
 
-export async function GetInventionPatentervice(
+export async function GetInventionPatentService(
   input: RequestGetInventionPatentService,
 ): Promise<ResponseGetInventionPatentService> {
   try {
@@ -94,10 +94,7 @@ export async function GetInventionPatentervice(
     const access_token = cookies.access_token;
     const invention = await axios({
       method: "GET",
-      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/invention-patents/${input.InventionPatentId}`,
-      params: {
-        ...input,
-      },
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/invention-patents/${input.inventionPatentId}`,
       headers: {
         Authorization: "Bearer " + access_token,
         "Content-Type": "application/json",
@@ -112,7 +109,7 @@ export async function GetInventionPatentervice(
 
 type ResponseCreateInventionPatentService = InventionPatent;
 
-export async function CreateInventionPatentervice(): Promise<ResponseCreateInventionPatentService> {
+export async function CreateInventionPatentService(): Promise<ResponseCreateInventionPatentService> {
   try {
     const cookies = parseCookies();
     const access_token = cookies.access_token;
@@ -156,7 +153,7 @@ type RequestUpdateInventionPatentService = {
 
 type ResponseUpdateInventionPatentService = InventionPatent;
 
-export async function UpdateInventionPatentervice(
+export async function UpdateInventionPatentService(
   input: RequestUpdateInventionPatentService,
 ): Promise<ResponseUpdateInventionPatentService> {
   try {
@@ -186,7 +183,7 @@ type RequestDeleteInventionPatentService = {
 
 type ResponseDeleteInventionPatentService = { message: string };
 
-export async function DeleteInventionPatentervice(
+export async function DeleteInventionPatentService(
   input: RequestDeleteInventionPatentService,
 ): Promise<ResponseDeleteInventionPatentService> {
   try {

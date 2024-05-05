@@ -2,15 +2,60 @@ import Number from "@/components/Number";
 import React, { useState } from "react";
 import {
   Button,
+  Checkbox,
+  CheckboxGroup,
   FieldError,
   Form,
   Input,
   Label,
+  Radio,
+  RadioGroup,
   TextField,
 } from "react-aria-components";
-import Checkbox from "@mui/material/Checkbox";
 import { FiPlusCircle } from "react-icons/fi";
+import {
+  MdCheckBoxOutlineBlank,
+  MdOutlineRadioButtonChecked,
+  MdOutlineRadioButtonUnchecked,
+} from "react-icons/md";
+import Link from "next/link";
+import { IoIosCheckbox } from "react-icons/io";
 
+const menuBenefits = [
+  {
+    title: "ตัวผลิตภัณฑ์",
+  },
+  {
+    title: "กรรมวิธีการผลิต",
+  },
+  {
+    title: "ระบบการทำงาน",
+  },
+  {
+    title: "โครงสร้างของเครื่อง",
+  },
+  {
+    title: "โปรแกรมคอมพิวเตอร์",
+  },
+  {
+    title: "องค์ความรู้",
+  },
+  {
+    title: "คู่มือ",
+  },
+  {
+    title: "รูปเล่มรายงานวิจัย",
+  },
+  {
+    title: "สื่อการเรียนการสอน",
+  },
+  {
+    title: "สื่อประชาสัมพันธ์ เช่น โบชัวร์ แผ่นพับ คลิปวิดีโอ",
+  },
+  {
+    title: "สูตร/ส่วนผสมของผลิตภัณฑ์",
+  },
+];
 const InventionSection2 = () => {
   const [activeContent, setActiveContent] = useState(1);
 
@@ -58,32 +103,54 @@ const InventionSection2 = () => {
           </div>
         </section>
         {/* ข้อ 2*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row">
+        <RadioGroup className="flex flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row">
           <section className="flex items-center gap-3">
             <Number number={2} />
-            <p className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
+            <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
               ประเภทสิทธิบัตรที่จะขอรับการคุ้มครอง
-            </p>
+            </Label>
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> สิทธิบัตรการประดิษฐ์</p>
-            </section>
-            <section className="flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> อนุสิทธิบัตร</p>
-            </section>
-            <button className="rounded-md bg-[#BED6FF] p-2 font-semibold duration-300 hover:bg-[#91B2EB]">
+            <Radio className="flex items-center " value="สิทธิบัตรการประดิษฐ์">
+              {({ isSelected }) => (
+                <div className=" flex items-center justify-center gap-2">
+                  <div className=" text-2xl">
+                    {isSelected ? (
+                      <MdOutlineRadioButtonChecked />
+                    ) : (
+                      <MdOutlineRadioButtonUnchecked />
+                    )}
+                  </div>
+                  <span className=" font-semibold">สิทธิบัตรการประดิษฐ์</span>
+                </div>
+              )}
+            </Radio>
+
+            <Radio className="flex items-center " value="อนุสิทธิบัตร">
+              {({ isSelected }) => (
+                <div className=" flex gap-2">
+                  <div className=" text-2xl">
+                    {isSelected ? (
+                      <MdOutlineRadioButtonChecked />
+                    ) : (
+                      <MdOutlineRadioButtonUnchecked />
+                    )}
+                  </div>
+                  <span className="font-semibold">อนุสิทธิบัตร</span>
+                </div>
+              )}
+            </Radio>
+
+            <Link
+              target="_blank"
+              href={"/"}
+              className="rounded-md bg-[#BED6FF] p-2 font-semibold duration-300 hover:bg-[#91B2EB]"
+            >
               เงื่อนไขการขอรับสิทธิบัตร (คลิก)
-            </button>
+            </Link>
           </div>
-        </section>
+        </RadioGroup>
 
         {/* ข้อ 3*/}
         <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
@@ -115,93 +182,45 @@ const InventionSection2 = () => {
         </section>
 
         {/* ข้อ 4*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        <CheckboxGroup className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={4} />
-            <p className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
+            <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
               สิ่งที่ได้จากการประดิษฐ์/งานวิจัย/ข้อค้นพบ (ตอบได้มากกว่า 1 ข้อ)
-            </p>
+            </Label>
           </section>
 
           <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:grid-cols-3 md:gap-3 md:pl-0 md:text-base">
             {/* row1 */}
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> ตัวผลิตภัณฑ์</p>
-            </section>
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> กรรมวิธีการผลิต</p>
-            </section>
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> ระบบการทำงาน</p>
-            </section>
-            {/* row2 */}
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> โครงสร้างของเครื่อง</p>
-            </section>
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> โปรแกรมคอมพิวเตอร์</p>
-            </section>
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> องค์ความรู้</p>
-            </section>
-            {/* row3 */}
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> คู่มือ</p>
-            </section>
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> รูปเล่มรายงานวิจัย</p>
-            </section>
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> สื่อการเรียนการสอน</p>
-            </section>
-            {/* row4 */}
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium">
-                {" "}
-                สื่อประชาสัมพันธ์ เช่น โบชัวร์ แผ่นพับ คลิปวิดีโอ
-              </p>
-            </section>
-            <section className=" flex items-center gap-2">
-              <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
-              </div>
-              <p className="font-medium"> สูตร/ส่วนผสมของผลิตภัณฑ์</p>
-            </section>
+            {menuBenefits.map((menu, index) => {
+              return (
+                <Checkbox
+                  key={index}
+                  className={({ isPressed, isSelected }) =>
+                    isSelected ? "" : ""
+                  }
+                  value={menu.title}
+                >
+                  {({ isSelected }) => (
+                    <div className="flex items-center justify-start gap-2 ">
+                      <div className=" text-3xl">
+                        {isSelected ? (
+                          <IoIosCheckbox />
+                        ) : (
+                          <MdCheckBoxOutlineBlank />
+                        )}
+                      </div>
+                      <span className="font-medium">{menu.title}</span>
+                    </div>
+                  )}
+                </Checkbox>
+              );
+            })}
           </div>
           <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
             <div className="flex items-center gap-2">
               <div>
-                <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                <Checkbox />
               </div>
               <p className="text-[0.8rem] font-medium md:text-base">
                 อื่นๆ (โปรดระบุ)
@@ -217,7 +236,7 @@ const InventionSection2 = () => {
               />
             </TextField>
           </section>
-        </section>
+        </CheckboxGroup>
 
         {/* ข้อ 5*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
@@ -313,7 +332,7 @@ const InventionSection2 = () => {
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
               <div className="flex items-center gap-2">
                 <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                  <Checkbox />
                 </div>
                 <p className="text-[0.8rem] font-medium md:text-base">
                   สัญญาถ่ายโอนวัสดุชีวภาพ (ระบุชื่อหน่วยงาน ปีที่ได้ลงนาม)
@@ -332,7 +351,7 @@ const InventionSection2 = () => {
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
               <div className="flex items-center gap-2">
                 <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                  <Checkbox />
                 </div>
                 <p className="text-[0.8rem] font-medium md:text-base">
                   อื่นๆ (โปรดระบุ)
@@ -351,7 +370,7 @@ const InventionSection2 = () => {
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
               <div className="flex items-center gap-2">
                 <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                  <Checkbox />
                 </div>
                 <p className="text-[0.8rem] font-medium md:text-base">ไม่มี</p>
               </div>
@@ -372,7 +391,7 @@ const InventionSection2 = () => {
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
               <div className="flex items-center gap-2">
                 <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                  <Checkbox />
                 </div>
                 <p className="text-[0.8rem] font-medium md:text-base">มี</p>
               </div>
@@ -398,7 +417,7 @@ const InventionSection2 = () => {
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
               <div className="flex items-center gap-2">
                 <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                  <Checkbox />
                 </div>
                 <p className="text-[0.8rem] font-medium md:text-base">ไม่มี</p>
               </div>
@@ -437,7 +456,7 @@ const InventionSection2 = () => {
                 {/* row1 */}
                 <section className=" flex items-center gap-2">
                   <div>
-                    <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                    <Checkbox />
                   </div>
                   <p className="font-medium">
                     {" "}
@@ -446,26 +465,26 @@ const InventionSection2 = () => {
                 </section>
                 <section className=" flex items-center gap-2">
                   <div>
-                    <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                    <Checkbox />
                   </div>
                   <p className="font-medium"> สหรัฐอเมริกา : www.uspto.gov</p>
                 </section>
                 <section className=" flex items-center gap-2">
                   <div>
-                    <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                    <Checkbox />
                   </div>
                   <p className="font-medium"> ญี่ปุ่น : www.jpo.go.jp</p>
                 </section>
                 <section className=" flex items-center gap-2">
                   <div>
-                    <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                    <Checkbox />
                   </div>
                   <p className="font-medium"> ยุโรป : www.espacenet.com</p>
                 </section>
                 <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
                   <div className="flex items-center gap-2">
                     <div>
-                      <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                      <Checkbox />
                     </div>
                     <p className="text-[0.8rem] font-medium md:text-base">
                       อื่นๆ (วารสาร แหล่งข้อมูลอื่น)
@@ -712,7 +731,7 @@ const InventionSection2 = () => {
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
               <div className="flex items-center gap-2">
                 <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                  <Checkbox />
                 </div>
                 <p className="text-[0.8rem] font-medium md:text-base">เคย</p>
               </div>
@@ -754,7 +773,7 @@ const InventionSection2 = () => {
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
               <div className="flex items-center gap-2">
                 <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                  <Checkbox />
                 </div>
                 <p className="text-[0.8rem] font-medium md:text-base">ไม่เคย</p>
               </div>
@@ -775,7 +794,7 @@ const InventionSection2 = () => {
             <section className="flex w-full flex-col gap-2 px-5 md:w-[60%]  md:px-0">
               <div className="flex items-center gap-2">
                 <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                  <Checkbox />
                 </div>
                 <p className="text-[0.8rem] font-medium md:text-base">
                   มีการเปิดเผยการประดิษฐ์/การเผยแพร่ผลงานแล้วในรูปแบบ :
@@ -801,7 +820,7 @@ const InventionSection2 = () => {
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
               <div className="flex items-center gap-2">
                 <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
+                  <Checkbox />
                 </div>
                 <p className="text-[0.8rem] font-medium md:text-base">
                   ยังไม่เปิดเผยการประดิษฐ์/เผยแพร่ผลงาน

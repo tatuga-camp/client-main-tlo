@@ -26,7 +26,7 @@ type RequestCreatePartnerCopyrightService = {
 };
 type ResponseCreatePartnerCopyrightService = PartnerInfoOnCopyright;
 
-export async function CreatePartnerCopyrightervice(
+export async function CreatePartnerCopyrightService(
   input: RequestCreatePartnerCopyrightService,
 ): Promise<ResponseCreatePartnerCopyrightService> {
   try {
@@ -78,7 +78,7 @@ type RequestUpdatePartnerCopyrightService = {
 };
 type ResponseUpdatePartnerCopyrightService = PartnerInfoOnCopyright;
 
-export async function UpdatePartnerCopyrightervice(
+export async function UpdatePartnerCopyrightService(
   input: RequestUpdatePartnerCopyrightService,
 ): Promise<ResponseUpdatePartnerCopyrightService> {
   try {
@@ -107,7 +107,7 @@ type RequestDeletePartnerCopyrightService = {
 };
 type ResponseDeletePartnerCopyrightService = { message: string };
 
-export async function DeletePartnerCopyrightervice(
+export async function DeletePartnerCopyrightService(
   input: RequestDeletePartnerCopyrightService,
 ): Promise<ResponseDeletePartnerCopyrightService> {
   try {

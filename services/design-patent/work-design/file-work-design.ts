@@ -12,7 +12,7 @@ type RequestCreateFileWorkDesignPatentService = {
 type ResponseCreateFileWorkDesignPatentService =
   FilePublicResearchOnDesignPatent;
 
-export async function CreateFileWorkDesignPatentervice(
+export async function CreateFileWorkDesignPatentService(
   input: RequestCreateFileWorkDesignPatentService,
 ): Promise<ResponseCreateFileWorkDesignPatentService> {
   try {
@@ -41,7 +41,7 @@ type RequestDeleteWorkDesignPatentService = {
 };
 type ResponseDeleteWorkDesignPatentService = { message: string };
 
-export async function DeleteWorkDesignPatentervice(
+export async function DeleteWorkDesignPatentService(
   input: RequestDeleteWorkDesignPatentService,
 ): Promise<ResponseDeleteWorkDesignPatentService> {
   try {

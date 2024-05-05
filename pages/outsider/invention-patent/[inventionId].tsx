@@ -1,7 +1,7 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
 import React, { useState } from "react";
-import { outsiderInventionSection } from "../../../../data/PatentSection";
+import { outsiderInventionSection } from "../../../data/PatentSection";
 import OutsiderInventionForm1 from "@/components/outsider/invention-patent/OutsiderInventionForm1";
 import OutsiderInventionForm2 from "@/components/outsider/invention-patent/OutsiderInventionForm2";
 import OutsiderInventionForm3 from "@/components/outsider/invention-patent/OutsiderInventionForm3";
@@ -25,7 +25,7 @@ const Index = () => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <title>invention patent</title>
+        <title>แบบฟอร์มประกอบคำขอรับสิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร</title>
       </Head>
       <HomeLayout>
         <div className="flex h-full w-full flex-col items-center bg-[#F4F8FF] pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center">

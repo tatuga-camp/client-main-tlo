@@ -39,7 +39,7 @@ type RequestCreateStatusDesignPatentService = {
 };
 type ResponseCreateStatusDesignPatentService = StatusDesignPatent;
 
-export async function CreateStatusDesignPatentervice(
+export async function CreateStatusDesignPatentService(
   input: RequestCreateStatusDesignPatentService,
 ): Promise<ResponseCreateStatusDesignPatentService> {
   try {
@@ -74,7 +74,7 @@ type RequestUpdateStatusDesignPatentService = {
 };
 type ResponseUpdateStatusDesignPatentService = StatusDesignPatent;
 
-export async function UpdateStatusDesignPatentervice(
+export async function UpdateStatusDesignPatentService(
   input: RequestUpdateStatusDesignPatentService,
 ): Promise<ResponseUpdateStatusDesignPatentService> {
   try {
@@ -103,7 +103,7 @@ type RequestDeleteStatusDesignPatentService = {
 };
 type ResponseDeleteStatusDesignPatentService = { message: string };
 
-export async function DeleteStatusDesignPatentervice(
+export async function DeleteStatusDesignPatentService(
   input: RequestDeleteStatusDesignPatentService,
 ): Promise<ResponseDeleteStatusDesignPatentService> {
   try {

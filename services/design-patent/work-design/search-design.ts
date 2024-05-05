@@ -15,7 +15,7 @@ type RequestCreateSearchDesignPatentService = {
 type ResponseCreateSearchDesignPatentService =
   PatentRelateToSearchResultOnDesignPatent;
 
-export async function CreateSearchDesignPatentervice(
+export async function CreateSearchDesignPatentService(
   input: RequestCreateSearchDesignPatentService,
 ): Promise<ResponseCreateSearchDesignPatentService> {
   try {
@@ -55,7 +55,7 @@ type RequestUpdateSearchDesignPatentService = {
 type ResponseUpdateSearchDesignPatentService =
   PatentRelateToSearchResultOnDesignPatent;
 
-export async function UpdateSearchDesignPatentervice(
+export async function UpdateSearchDesignPatentService(
   input: RequestUpdateSearchDesignPatentService,
 ): Promise<ResponseUpdateSearchDesignPatentService> {
   try {
@@ -84,7 +84,7 @@ type RequestDeleteSearchDesignPatentService = {
 };
 type ResponseDeleteSearchDesignPatentService = { message: string };
 
-export async function DeleteSearchDesignPatentervice(
+export async function DeleteSearchDesignPatentService(
   input: RequestDeleteSearchDesignPatentService,
 ): Promise<ResponseDeleteSearchDesignPatentService> {
   try {

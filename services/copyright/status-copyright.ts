@@ -39,7 +39,7 @@ type RequestCreateStatusCopyrightService = {
 };
 type ResponseCreateStatusCopyrightService = StatusCopyright;
 
-export async function CreateStatusCopyrightervice(
+export async function CreateStatusCopyrightService(
   input: RequestCreateStatusCopyrightService,
 ): Promise<ResponseCreateStatusCopyrightService> {
   try {
@@ -74,7 +74,7 @@ type RequestUpdateStatusCopyrightService = {
 };
 type ResponseUpdateStatusCopyrightService = StatusCopyright;
 
-export async function UpdateStatusCopyrightervice(
+export async function UpdateStatusCopyrightService(
   input: RequestUpdateStatusCopyrightService,
 ): Promise<ResponseUpdateStatusCopyrightService> {
   try {
@@ -103,7 +103,7 @@ type RequestDeleteStatusCopyrightService = {
 };
 type ResponseDeleteStatusCopyrightService = { message: string };
 
-export async function DeleteStatusCopyrightervice(
+export async function DeleteStatusCopyrightService(
   input: RequestDeleteStatusCopyrightService,
 ): Promise<ResponseDeleteStatusCopyrightService> {
   try {

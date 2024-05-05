@@ -15,7 +15,7 @@ type RequestCreateFileCopyrightService = {
 };
 type ResponseCreateFileCopyrightService = PartnerInfoOnCopyright;
 
-export async function CreateFileCopyrightervice(
+export async function CreateFileCopyrightService(
   input: RequestCreateFileCopyrightService,
 ): Promise<ResponseCreateFileCopyrightService> {
   try {
@@ -44,7 +44,7 @@ type RequestDeleteFileCopyrightService = {
 };
 type ResponseDeleteFileCopyrightService = { message: string };
 
-export async function DeleteFileCopyrightervice(
+export async function DeleteFileCopyrightService(
   input: RequestDeleteFileCopyrightService,
 ): Promise<ResponseDeleteFileCopyrightService> {
   try {

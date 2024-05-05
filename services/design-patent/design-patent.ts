@@ -89,7 +89,7 @@ type ResponseGetDesignPatentService = DesignPatent & {
   };
   fileOnDesignPatents: FileOnDesignPatent[];
 };
-export async function GetDesignPatentervice(
+export async function GetDesignPatentService(
   input: RequestGetDesignPatentService,
 ): Promise<ResponseGetDesignPatentService> {
   try {
@@ -131,7 +131,7 @@ type RequestCreateDesignPatenetService = {
 };
 type ResponseCreateDesignPatentService = DesignPatent;
 
-export async function CreateDesignPatentervice(
+export async function CreateDesignPatentService(
   input: RequestCreateDesignPatenetService,
 ): Promise<ResponseCreateDesignPatentService> {
   try {
@@ -179,7 +179,7 @@ type RequestUpdateDesignPatentService = {
 
 type ResponseUpdateDesignPatentService = DesignPatent;
 
-export async function UpdateDesignPatentervice(
+export async function UpdateDesignPatentService(
   input: RequestUpdateDesignPatentService,
 ): Promise<ResponseUpdateDesignPatentService> {
   try {
@@ -209,7 +209,7 @@ type RequestDeleteDesignPatentService = {
 
 type ResponseDeleteDesignPatentService = { message: string };
 
-export async function DeleteDesignPatentervice(
+export async function DeleteDesignPatentService(
   input: RequestDeleteDesignPatentService,
 ): Promise<ResponseDeleteDesignPatentService> {
   try {

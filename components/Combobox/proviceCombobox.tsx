@@ -8,17 +8,21 @@ import { GetAllProvinceService } from "../../services/thai-data";
 import { Amphure, Province, Tambon } from "../../models";
 type ProviceComBoxProps = {
   handleDataFromCombobox: ({
+    id,
     value,
     type,
   }: {
+    id?: string;
     value: Province | Amphure | Tambon;
     type: "provice" | "amphure" | "tambon";
   }) => void;
-  selectProvince: Province;
+  arrayId?: string;
+  selectProvince: Province | undefined;
 };
 function ProviceCombobox({
   handleDataFromCombobox,
   selectProvince,
+  arrayId,
 }: ProviceComBoxProps) {
   const [query, setQuery] = useState("");
   const provinces = useQuery({
@@ -45,6 +49,7 @@ function ProviceCombobox({
         handleDataFromCombobox({
           value: value as unknown as Province,
           type: "provice",
+          id: arrayId,
         });
       }}
     >

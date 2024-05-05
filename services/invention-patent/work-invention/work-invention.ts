@@ -30,7 +30,7 @@ type RequestCreateWorkInventionPatentService = {
 };
 type ResponseCreateWorkInventionPatentService = WorkInfoOnInventionPatent;
 
-export async function CreateWorkInventionPatentervice(
+export async function CreateWorkInventionPatentService(
   input: RequestCreateWorkInventionPatentService,
 ): Promise<ResponseCreateWorkInventionPatentService> {
   try {
@@ -86,7 +86,7 @@ type RequestUpdateWorkInventionPatentService = {
 };
 type ResponseUpdateWorkInventionPatentService = WorkInfoOnInventionPatent;
 
-export async function UpdateWorkInventionPatentervice(
+export async function UpdateWorkInventionPatentService(
   input: RequestUpdateWorkInventionPatentService,
 ): Promise<ResponseUpdateWorkInventionPatentService> {
   try {
@@ -115,7 +115,7 @@ type RequestDeleteWorkInventionPatentService = {
 };
 type ResponseDeleteWorkInventionPatentService = { message: string };
 
-export async function DeleteWorkInventionPatentervice(
+export async function DeleteWorkInventionPatentService(
   input: RequestDeleteWorkInventionPatentService,
 ): Promise<ResponseDeleteWorkInventionPatentService> {
   try {

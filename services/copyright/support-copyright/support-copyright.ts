@@ -13,7 +13,7 @@ type RequestCreateSupportCopyrightService = {
 };
 type ResponseCreateSupportCopyrightService = SupportingDataOnCopyright;
 
-export async function CreateSupportCopyrightervice(
+export async function CreateSupportCopyrightService(
   input: RequestCreateSupportCopyrightService,
 ): Promise<ResponseCreateSupportCopyrightService> {
   try {
@@ -52,7 +52,7 @@ type RequestUpdateSupportCopyrightService = {
 };
 type ResponseUpdateSupportCopyrightService = SupportingDataOnCopyright;
 
-export async function UpdateSupportCopyrightervice(
+export async function UpdateSupportCopyrightService(
   input: RequestUpdateSupportCopyrightService,
 ): Promise<ResponseUpdateSupportCopyrightService> {
   try {
@@ -81,7 +81,7 @@ type RequestDeleteSupportCopyrightService = {
 };
 type ResponseDeleteSupportCopyrightService = { message: string };
 
-export async function DeleteSupportCopyrightervice(
+export async function DeleteSupportCopyrightService(
   input: RequestDeleteSupportCopyrightService,
 ): Promise<ResponseDeleteSupportCopyrightService> {
   try {
