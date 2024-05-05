@@ -12,7 +12,7 @@ type RequestCreateCompanyCopyrightService = {
 type ResponseCreateCompanyCopyrightService =
   CompanyInterestedOnSupportCopyright;
 
-export async function CreateCompanyCopyrightervice(
+export async function CreateCompanyCopyrightService(
   input: RequestCreateCompanyCopyrightService,
 ): Promise<ResponseCreateCompanyCopyrightService> {
   try {
@@ -49,7 +49,7 @@ type RequestUpdateCompanyCopyrightService = {
 type ResponseUpdateCompanyCopyrightService =
   CompanyInterestedOnSupportCopyright;
 
-export async function UpdateCompanyCopyrightervice(
+export async function UpdateCompanyCopyrightService(
   input: RequestUpdateCompanyCopyrightService,
 ): Promise<ResponseUpdateCompanyCopyrightService> {
   try {
@@ -78,7 +78,7 @@ type RequestDeleteCompanyCopyrightService = {
 };
 type ResponseDeleteCompanyCopyrightService = { message: string };
 
-export async function DeleteCompanyCopyrightervice(
+export async function DeleteCompanyCopyrightService(
   input: RequestDeleteCompanyCopyrightService,
 ): Promise<ResponseDeleteCompanyCopyrightService> {
   try {

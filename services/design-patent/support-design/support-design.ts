@@ -13,7 +13,7 @@ type RequestCreateSupportDesignPatentService = {
 };
 type ResponseCreateSupportDesignPatentService = SupportingDataOnDesignPatent;
 
-export async function CreateSupportDesignPatentervice(
+export async function CreateSupportDesignPatentService(
   input: RequestCreateSupportDesignPatentService,
 ): Promise<ResponseCreateSupportDesignPatentService> {
   try {
@@ -52,7 +52,7 @@ type RequestUpdateSupportDesignPatentService = {
 };
 type ResponseUpdateSupportDesignPatentService = SupportingDataOnDesignPatent;
 
-export async function UpdateSupportDesignPatentervice(
+export async function UpdateSupportDesignPatentService(
   input: RequestUpdateSupportDesignPatentService,
 ): Promise<ResponseUpdateSupportDesignPatentService> {
   try {
@@ -81,7 +81,7 @@ type RequestDeleteSupportDesignPatentService = {
 };
 type ResponseDeleteSupportDesignPatentService = { message: string };
 
-export async function DeleteSupportDesignPatentervice(
+export async function DeleteSupportDesignPatentService(
   input: RequestDeleteSupportDesignPatentService,
 ): Promise<ResponseDeleteSupportDesignPatentService> {
   try {

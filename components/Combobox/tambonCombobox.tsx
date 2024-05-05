@@ -8,12 +8,15 @@ import { GetAllTambonByAmphureService } from "../../services/thai-data";
 import { Amphure, Province, Tambon } from "../../models";
 
 type TambonComBoxProps = {
-  selectAmphureId: number | null;
-  selectTambon: Tambon;
+  selectAmphureId: number | undefined;
+  selectTambon: Tambon | undefined;
+  arrayId?: string;
   handleDataFromCombobox: ({
     value,
     type,
+    id,
   }: {
+    id?: string;
     value: Province | Amphure | Tambon;
     type: "provice" | "amphure" | "tambon";
   }) => void;
@@ -21,6 +24,7 @@ type TambonComBoxProps = {
 function TambonCombobox({
   selectAmphureId,
   selectTambon,
+  arrayId,
   handleDataFromCombobox,
 }: TambonComBoxProps) {
   const [query, setQuery] = useState("");
@@ -54,6 +58,7 @@ function TambonCombobox({
         handleDataFromCombobox({
           value: value as unknown as Tambon,
           type: "tambon",
+          id: arrayId,
         });
       }}
     >

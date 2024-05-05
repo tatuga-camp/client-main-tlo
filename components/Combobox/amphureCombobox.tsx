@@ -8,18 +8,22 @@ import { Amphure, Province, Tambon } from "../../models";
 import { GetAllAmphuresByProvinceService } from "../../services/thai-data";
 
 type AmphureComBoxProps = {
-  selectAmphure: Amphure;
-  selectProvinceId: number;
+  selectAmphure: Amphure | undefined;
+  selectProvinceId: number | undefined;
+  arrayId?: string;
   handleDataFromCombobox: ({
     value,
     type,
+    id,
   }: {
+    id?: string;
     value: Province | Amphure | Tambon;
     type: "provice" | "amphure" | "tambon";
   }) => void;
 };
 function AmphureCombobox({
   selectAmphure,
+  arrayId,
   handleDataFromCombobox,
   selectProvinceId,
 }: AmphureComBoxProps) {
@@ -31,6 +35,8 @@ function AmphureCombobox({
         provinceId: selectProvinceId as number,
       }),
   });
+
+  console.log(selectProvinceId);
 
   if (amphures.isFetching)
     return (
@@ -53,6 +59,7 @@ function AmphureCombobox({
         handleDataFromCombobox({
           value: value as unknown as Amphure,
           type: "amphure",
+          id: arrayId,
         });
       }}
     >

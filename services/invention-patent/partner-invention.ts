@@ -26,7 +26,7 @@ type RequestCreatePartnerInventionPatentService = {
 };
 type ResponseCreatePartnerInventionPatentService = PartnerInfoOnInventionPatent;
 
-export async function CreatePartnerInventionPatentervice(
+export async function CreatePartnerInventionPatentService(
   input: RequestCreatePartnerInventionPatentService,
 ): Promise<ResponseCreatePartnerInventionPatentService> {
   try {
@@ -78,7 +78,7 @@ type RequestUpdatePartnerInventionPatentService = {
 };
 type ResponseUpdatePartnerInventionPatentService = PartnerInfoOnInventionPatent;
 
-export async function UpdatePartnerInventionPatentervice(
+export async function UpdatePartnerInventionPatentService(
   input: RequestUpdatePartnerInventionPatentService,
 ): Promise<ResponseUpdatePartnerInventionPatentService> {
   try {
@@ -107,7 +107,7 @@ type RequestDeletePartnerInventionPatentService = {
 };
 type ResponseDeletePartnerInventionPatentService = { message: string };
 
-export async function DeletePartnerInventionPatentervice(
+export async function DeletePartnerInventionPatentService(
   input: RequestDeletePartnerInventionPatentService,
 ): Promise<ResponseDeletePartnerInventionPatentService> {
   try {

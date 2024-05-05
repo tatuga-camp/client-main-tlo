@@ -28,19 +28,6 @@ const OutsiderInventionForm1 = () => {
                 ผู้ขอรับสิทธิบัตร/อนุสิทธิบัตร
               </h1>
             </section>
-
-            <TextField
-              className={
-                "flex w-full items-center gap-3 text-[0.8rem]  md:w-[50%] md:text-base"
-              }
-            >
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-auto md:pl-4 "
-                placeholder="บุคคลธรรมดา"
-              />
-            </TextField>
           </section>
 
           <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
@@ -117,20 +104,20 @@ const OutsiderInventionForm1 = () => {
                 จังหวัด
               </Label>
 
-              <ProviceCombobox />
+              {/* <ProviceCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 อำเภอ
               </Label>
 
-              <AmphureCombobox />
+              {/* <AmphureCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 ตำบล
               </Label>
-              <TambonCombobox />
+              {/* <TambonCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
@@ -326,21 +313,20 @@ const OutsiderInventionForm1 = () => {
               <Label className=" text-[var(--primary-blue) font-medium ">
                 จังหวัด
               </Label>
-
-              <ProviceCombobox />
+              {/* <ProviceCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 อำเภอ
               </Label>
 
-              <AmphureCombobox />
+              {/* <AmphureCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 ตำบล
               </Label>
-              <TambonCombobox />
+              {/* <TambonCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">

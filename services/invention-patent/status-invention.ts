@@ -39,7 +39,7 @@ type RequestCreateStatusInventionPatentService = {
 };
 type ResponseCreateStatusInventionPatentService = StatusInventionPatent;
 
-export async function CreateStatusInventionPatentervice(
+export async function CreateStatusInventionPatentService(
   input: RequestCreateStatusInventionPatentService,
 ): Promise<ResponseCreateStatusInventionPatentService> {
   try {
@@ -74,7 +74,7 @@ type RequestUpdateStatusInventionPatentService = {
 };
 type ResponseUpdateStatusInventionPatentService = StatusInventionPatent;
 
-export async function UpdateStatusInventionPatentervice(
+export async function UpdateStatusInventionPatentService(
   input: RequestUpdateStatusInventionPatentService,
 ): Promise<ResponseUpdateStatusInventionPatentService> {
   try {
@@ -103,7 +103,7 @@ type RequestDeleteStatusInventionPatentService = {
 };
 type ResponseDeleteStatusInventionPatentService = { message: string };
 
-export async function DeleteStatusInventionPatentervice(
+export async function DeleteStatusInventionPatentService(
   input: RequestDeleteStatusInventionPatentService,
 ): Promise<ResponseDeleteStatusInventionPatentService> {
   try {

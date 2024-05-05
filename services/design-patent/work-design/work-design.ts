@@ -28,7 +28,7 @@ type RequestCreateWorkDesignPatentService = {
 };
 type ResponseCreateWorkDesignPatentService = WorkInfoOnDesignPatent;
 
-export async function CreateWorkDesignPatentervice(
+export async function CreateWorkDesignPatentService(
   input: RequestCreateWorkDesignPatentService,
 ): Promise<ResponseCreateWorkDesignPatentService> {
   try {
@@ -82,7 +82,7 @@ type RequestUpdateWorkDesignPatentService = {
 };
 type ResponseUpdateWorkDesignPatentService = WorkInfoOnDesignPatent;
 
-export async function UpdateWorkDesignPatentervice(
+export async function UpdateWorkDesignPatentService(
   input: RequestUpdateWorkDesignPatentService,
 ): Promise<ResponseUpdateWorkDesignPatentService> {
   try {
@@ -111,7 +111,7 @@ type RequestDeleteWorkDesignPatentService = {
 };
 type ResponseDeleteWorkDesignPatentService = { message: string };
 
-export async function DeleteWorkDesignPatentervice(
+export async function DeleteWorkDesignPatentService(
   input: RequestDeleteWorkDesignPatentService,
 ): Promise<ResponseDeleteWorkDesignPatentService> {
   try {

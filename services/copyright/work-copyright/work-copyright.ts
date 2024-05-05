@@ -27,7 +27,7 @@ type RequestCreateWorkCopyrightService = {
 };
 type ResponseCreateWorkCopyrightService = WorkInfoOnCopyright;
 
-export async function CreateWorkCopyrightervice(
+export async function CreateWorkCopyrightService(
   input: RequestCreateWorkCopyrightService,
 ): Promise<ResponseCreateWorkCopyrightService> {
   try {
@@ -80,7 +80,7 @@ type RequestUpdateWorkCopyrightService = {
 };
 type ResponseUpdateWorkCopyrightService = WorkInfoOnCopyright;
 
-export async function UpdateWorkCopyrightervice(
+export async function UpdateWorkCopyrightService(
   input: RequestUpdateWorkCopyrightService,
 ): Promise<ResponseUpdateWorkCopyrightService> {
   try {
@@ -109,7 +109,7 @@ type RequestDeleteWorkCopyrightService = {
 };
 type ResponseDeleteWorkCopyrightService = { message: string };
 
-export async function DeleteWorkCopyrightervice(
+export async function DeleteWorkCopyrightService(
   input: RequestDeleteWorkCopyrightService,
 ): Promise<ResponseDeleteWorkCopyrightService> {
   try {
