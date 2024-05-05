@@ -13,7 +13,7 @@ import {
   Label,
   TextField,
 } from "react-aria-components";
-import Navbar from "../../../components/Navbar";
+import Navbar from "../../../components/Navbars/MainNavbar";
 import { SignInService } from "../../../services/auth";
 import Swal from "sweetalert2";
 import { ErrorMessages } from "../../../models";

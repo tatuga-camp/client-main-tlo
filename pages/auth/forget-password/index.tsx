@@ -15,7 +15,7 @@ import {
   TextField,
 } from "react-aria-components";
 import HomeLayout from "../../../layouts/homepageLayout";
-import Navbar from "../../../components/Navbar";
+import Navbar from "../../../components/Navbars/MainNavbar";
 import Swal from "sweetalert2";
 import { ForgetPasswordService } from "../../../services/auth";
 import { ErrorMessages } from "../../../models";

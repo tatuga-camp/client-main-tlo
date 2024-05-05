@@ -8,7 +8,7 @@ import React from "react";
 import { useState } from "react";
 import { PiUserCircleDuotone } from "react-icons/pi";
 import { PiUserCircleGearDuotone } from "react-icons/pi";
-import Navbar from "../../../components/Navbar";
+import Navbar from "../../../components/Navbars/MainNavbar";
 import HomeLayout from "../../../layouts/homepageLayout";
 
 const Index = () => {
