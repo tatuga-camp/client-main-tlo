@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   FieldError,
@@ -14,8 +14,65 @@ import ProviceCombobox from "@/components/Combobox/proviceCombobox";
 import AmphureCombobox from "@/components/Combobox/amphureCombobox";
 import TambonCombobox from "@/components/Combobox/tambonCombobox";
 import Checkbox from "@mui/material/Checkbox";
+import { Amphure, Province, Tambon } from "../../../models";
 
 const OutsiderInventionForm1 = () => {
+  const [partnerData, setPartnerData] = useState<
+    {
+      id: string;
+      tambon: Tambon;
+      amphure: Amphure;
+      province: Province;
+    }[]
+  >();
+
+  const handleDataFromCombobox = ({
+    id,
+    value,
+    type,
+  }: {
+    id?: string;
+    value: Province | Amphure | Tambon;
+    type: "provice" | "amphure" | "tambon";
+  }) => {
+    if (type === "provice") {
+      setPartnerData((prev) => {
+        return prev?.map((partner) => {
+          if (partner.id === id) {
+            return {
+              ...partner,
+              province: value as Province,
+            };
+          }
+          return partner;
+        });
+      });
+    } else if (type === "amphure") {
+      setPartnerData((prev) => {
+        return prev?.map((partner) => {
+          if (partner.id === id) {
+            return {
+              ...partner,
+              amphure: value as Amphure,
+            };
+          }
+          return partner;
+        });
+      });
+    } else if (type === "tambon") {
+      setPartnerData((prev) => {
+        return prev?.map((partner) => {
+          if (partner.id === id) {
+            return {
+              ...partner,
+              tambon: value as Tambon,
+            };
+          }
+          return partner;
+        });
+      });
+    }
+  };
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
       <Form className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 ">
@@ -104,7 +161,7 @@ const OutsiderInventionForm1 = () => {
                 จังหวัด
               </Label>
 
-              {/* <ProviceCombobox /> */}
+              <ProviceCombobox />
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
