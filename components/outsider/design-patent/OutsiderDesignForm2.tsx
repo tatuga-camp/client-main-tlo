@@ -2,17 +2,16 @@ import Number from "@/components/Number";
 import React, { useState } from "react";
 import {
   Button,
+  FieldError,
   Checkbox,
   CheckboxGroup,
-  FieldError,
   Form,
-  Input,
-  Label,
   Radio,
   RadioGroup,
+  Input,
+  Label,
   TextField,
 } from "react-aria-components";
-
 import { FiPlusCircle } from "react-icons/fi";
 import { menuDesignForm2, menuWebDesign } from "@/data/menuDesign";
 import { IoIosCheckbox } from "react-icons/io";
@@ -22,7 +21,7 @@ import {
   MdOutlineRadioButtonUnchecked,
 } from "react-icons/md";
 
-const NrruDesignForm2 = () => {
+const OutsiderDesignForm2 = () => {
   const [activeContent, setActiveContent] = useState(1);
 
   const handleClick = (
@@ -48,6 +47,9 @@ const NrruDesignForm2 = () => {
               isRequired
               className={"flex w-full min-w-60 items-center gap-3 "}
             >
+              <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-20">
+                ชื่อภาษาไทย
+              </Label>
               <section className="flex flex-col">
                 <Input
                   name=""
@@ -55,7 +57,6 @@ const NrruDesignForm2 = () => {
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
                   placeholder="กรอกชื่อภาษาไทย"
                 />
-
                 <FieldError className="text-xs text-red-700" />
               </section>
             </TextField>
@@ -80,7 +81,7 @@ const NrruDesignForm2 = () => {
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
                   placeholder="ปี 2565"
                 />
-                <FieldError className="text-xs  text-red-700" />
+                <FieldError className="text-xs text-red-700" />
               </section>
             </TextField>
             <TextField
@@ -97,7 +98,6 @@ const NrruDesignForm2 = () => {
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
                   placeholder="ปี 2567"
                 />
-
                 <FieldError className="text-xs text-red-700" />
               </section>
             </TextField>
@@ -164,103 +164,6 @@ const NrruDesignForm2 = () => {
         </CheckboxGroup>
 
         {/* ข้อ 4*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={4} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              ผลิตภัณฑ์/ผลงานนี้ได้รับทุนอุดหนุนหรืออยู่ภายใต้ข้อตกลง
-              หรือสัญญาใด ๆ กับหน่วยงานอื่น หรือไม่ (ให้ระบุ)
-            </p>
-          </section>
-
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <TextField
-              isRequired
-              className={
-                "flex w-full flex-col items-start gap-3 md:w-[80%] md:flex-row md:items-center"
-              }
-            >
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="เลือกประเภททุนอุดหนุน"
-              />
-              <FieldError className="text-xs text-red-700" />
-            </TextField>
-
-            <section className="flex flex-col gap-5 md:flex-row">
-              <TextField
-                isRequired
-                className={"flex w-full items-center gap-3 md:w-[50%]"}
-              >
-                <Label className=" text-[var(--primary-blue) min-w-28 font-semibold md:min-w-20">
-                  แหล่งทุน
-                </Label>
-                <section className="flex flex-col">
-                  <Input
-                    name=""
-                    type="text"
-                    className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                    placeholder="แหล่งทุน"
-                  />
-                  <FieldError className="text-xs text-red-700" />
-                </section>
-              </TextField>
-              <TextField
-                isRequired
-                className={"flex w-full items-center gap-3 md:w-[50%]"}
-              >
-                <Label className="min-w-28 font-semibold text-[var(--primary-blue)] md:min-w-24">
-                  ปีงบประมาณ
-                </Label>
-                <section className="flex flex-col">
-                  <Input
-                    name=""
-                    type="text"
-                    className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
-                    placeholder="ปี 2567"
-                  />
-                  <FieldError className="text-xs text-red-700" />
-                </section>
-              </TextField>
-            </section>
-          </div>
-        </section>
-
-        {/* ข้อ 5*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={5} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              การยื่นขอความเป็นเจ้าของผลงานวิจัยและนวัตกรรมกับแหล่งให้ทุน
-              (กรณีรับทุนวิจัยจากแหล่งทุนภายนอก)
-            </p>
-          </section>
-
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <TextField
-              isRequired
-              className={"flex w-full items-center gap-3 md:w-[70%]"}
-            >
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="มีการยื่นขอเป็นเจ้าของผลงานวิจัยและนวัตกรรมกับแหล่งทุนแล้ว"
-              />
-              <FieldError className="text-xs text-red-700" />
-            </TextField>
-            <button className=" flex  items-center justify-center gap-3 rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB] md:gap-5">
-              <span className="text-3xl md:text-base">
-                <FiPlusCircle />
-              </span>
-              <p>แนบหนังสือแสดงความเป็นเจ้าของผลงานวิจัยและนวัตกรรม</p>
-            </button>
-          </div>
-        </section>
-
-        {/* ข้อ 6*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={4} />
@@ -355,10 +258,10 @@ const NrruDesignForm2 = () => {
           </RadioGroup>
         </section>
 
-        {/* ข้อ 7*/}
+        {/* ข้อ 5*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
-            <Number number={7} />
+            <Number number={5} />
             <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
               ข้อมูลประกอบการสืบค้นสิทธิบัตรเบื้องต้น
             </p>
@@ -367,22 +270,25 @@ const NrruDesignForm2 = () => {
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <section className="flex w-full items-center gap-3 md:pl-10">
               <p className="font-semibold md:min-w-52">
-                7.1 Keyword ที่ใช้ในการสืบค้น
+                5.1 Keyword ที่ใช้ในการสืบค้น
               </p>
               <TextField isRequired className={"w-full md:px-8"}>
-                <Input
-                  name=""
-                  type="text"
-                  className="h-8 w-auto rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2   md:text-base"
-                  placeholder="โปรดระบุ Keyword"
-                />
-                <FieldError className="text-xs text-red-700" />
+                <section className="flex flex-col">
+                  <Input
+                    name=""
+                    type="text"
+                    className="h-8 w-auto rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2   md:text-base"
+                    placeholder="โปรดระบุ Keyword"
+                  />
+                  <FieldError className="text-xs text-red-700" />
+                </section>
               </TextField>
             </section>
             <section className="flex w-full flex-col  gap-3 md:pl-10">
               <p className="font-semibold md:min-w-52">
-                7.2 เว็บไซต์/ฐานข้อมูลที่ใช้ในการสืบค้น
+                5.2 เว็บไซต์/ฐานข้อมูลที่ใช้ในการสืบค้น
               </p>
+
               <CheckboxGroup className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
                 <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:grid-cols-2 md:gap-3 md:pl-0 md:text-base">
                   {/* row1 */}
@@ -436,21 +342,23 @@ const NrruDesignForm2 = () => {
             </section>
             <section className="flex w-full items-center gap-3 md:pl-10">
               <p className="font-semibold md:min-w-52">
-                7.3 ผลของการสืบค้นพบว่า
+                5.3 ผลของการสืบค้นพบว่า
               </p>
               <TextField isRequired className={"w-full md:px-8"}>
-                <Input
-                  name=""
-                  type="text"
-                  className="h-8 w-auto rounded-md bg-slate-300 p-1  pl-3 text-[0.8rem] md:h-10 md:min-w-96 md:p-2   md:text-base"
-                  placeholder="ไม่เหมือนหรือคล้ายกับงานที่ปรากฏอยู่ก่อนแล้ว"
-                />
-                <FieldError className="text-xs text-red-700" />
+                <section className="flex flex-col">
+                  <Input
+                    name=""
+                    type="text"
+                    className="h-8 w-auto rounded-md bg-slate-300 p-1  pl-3 text-[0.8rem] md:h-10 md:min-w-96 md:p-2   md:text-base"
+                    placeholder="ไม่เหมือนหรือคล้ายกับงานที่ปรากฏอยู่ก่อนแล้ว"
+                  />
+                  <FieldError className="text-xs text-red-700" />
+                </section>
               </TextField>
             </section>
             <section className="flex w-full flex-col gap-3 md:pl-10">
               <p className="font-semibold md:min-w-52">
-                7.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น
+                5.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น
                 หรืองานที่ปรากฏอยู่ก่อน
               </p>
               <div className="flex flex-col items-center justify-center md:w-full">
@@ -570,7 +478,6 @@ const NrruDesignForm2 = () => {
                               className="h-8 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:w-72 md:p-2  md:pl-4 md:text-base"
                               placeholder=""
                             />
-
                             <FieldError className="text-xs text-red-700" />
                           </section>
                         </TextField>
@@ -688,17 +595,18 @@ const NrruDesignForm2 = () => {
           </div>
         </section>
 
-        {/* ข้อ 8*/}
+        {/* ข้อ 6*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
-            <Number number={8} />
+            <Number number={6} />
             <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              ผลิตภัณฑ์/ผลงานนี้เคยนำไปยื่นขอรับสิทธิบัตรหรือไม่
+              ส่วนใดส่วนหนึ่งของการวิจัยที่นำมาซึ่งการประดิษฐ์นี้
+              ได้มีการลงนามหรืออยู่ภายใต้ข้อตกลงหรือสัญญาใด ๆ
+              กับหน่วยงานอื่นหรือไม่ (ให้ระบุ)
             </p>
           </section>
-
-          <RadioGroup className="my-3 flex flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row">
-            <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-0 md:text-base">
+          <RadioGroup className="my-3 flex w-full flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row">
+            <div className="flex w-full flex-col   gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-0 md:text-base">
               <Radio value={"1"} className="flex w-full items-center">
                 {({ isSelected }) => (
                   <div className="flex flex-col justify-center gap-2 md:flex-row md:items-center">
@@ -785,73 +693,85 @@ const NrruDesignForm2 = () => {
           </RadioGroup>
         </section>
 
-        {/* ข้อ 9*/}
+        {/* ข้อ 7*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
-            <Number number={9} />
+            <Number number={7} />
             <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
               การเปิดเผยสาระสำคัญของการประดิษฐ์/การเผยแพร่ผลงาน
             </p>
           </section>
 
-          <RadioGroup className="flex w-full flex-col gap-2 px-5 md:w-[60%]  md:px-0">
-            <Radio value={"1"} className="flex  items-center">
-              {({ isSelected }) => (
-                <div className="flex items-start justify-center gap-2">
-                  <div className="text-2xl">
-                    {isSelected ? (
-                      <MdOutlineRadioButtonChecked />
-                    ) : (
-                      <MdOutlineRadioButtonUnchecked />
-                    )}
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
+            <RadioGroup className="flex w-full flex-col gap-2 px-5 md:w-[60%]  md:px-0">
+              <Radio value={"1"} className="flex  items-center">
+                {({ isSelected }) => (
+                  <div className="flex items-start justify-center gap-2">
+                    <div className="text-2xl">
+                      {isSelected ? (
+                        <MdOutlineRadioButtonChecked />
+                      ) : (
+                        <MdOutlineRadioButtonUnchecked />
+                      )}
+                    </div>
+                    <span className="font-medium md:min-w-[7rem]">
+                      มีการเปิดเผยการประดิษฐ์/การเผยแพร่ผลงานแล้วในรูปแบบ :
+                    </span>
                   </div>
-                  <span className="font-medium md:min-w-[7rem]">
-                    มีการเปิดเผยการประดิษฐ์/การเผยแพร่ผลงานแล้วในรูปแบบ :
-                  </span>
-                </div>
-              )}
-            </Radio>
-            <TextField isRequired className={"ml-3"}>
-              <section className="flex flex-col">
-                <Input
-                  name=""
-                  type="text"
-                  className="h-8 w-full rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:ml-8 md:h-10 md:p-2  md:pl-4 md:text-base"
-                  placeholder="การนำเสนอผลงานในการประชุม/การแสดงสินค้า/การออก..."
-                />
-                <FieldError className="text-xs text-red-700 md:ml-7" />
-              </section>
-            </TextField>
-            <button className=" flex items-center  justify-center gap-3 rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB] md:ml-11 md:gap-5">
-              <span className="text-3xl md:text-base">
-                <FiPlusCircle />
-              </span>
+                )}
+              </Radio>
+              <TextField isRequired className={"ml-3"}>
+                <section className="flex flex-col">
+                  <Input
+                    name=""
+                    type="text"
+                    className="h-8 w-full rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:ml-8 md:h-10 md:p-2  md:pl-4 md:text-base"
+                    placeholder="การนำเสนอผลงานในการประชุม/การแสดงสินค้า/การออก..."
+                  />
+                  <FieldError className="text-xs text-red-700 md:ml-7" />
+                </section>
+              </TextField>
+              <button className=" flex items-center  justify-center gap-3 rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB] md:ml-11 md:gap-5">
+                <span className="text-3xl md:text-base">
+                  <FiPlusCircle />
+                </span>
 
-              <p>แนบรายละเอียดหรือเอกสารประกอบการเผยแพร่ (ถ้ามี)</p>
-            </button>
-            <Radio value={"2"} className="flex  items-center">
-              {({ isSelected }) => (
-                <div className="flex items-start justify-center gap-2">
-                  <div className="text-2xl">
-                    {isSelected ? (
-                      <MdOutlineRadioButtonChecked />
-                    ) : (
-                      <MdOutlineRadioButtonUnchecked />
-                    )}
+                <p>แนบรายละเอียดหรือเอกสารประกอบการเผยแพร่ (ถ้ามี)</p>
+              </button>
+              <Radio value={"2"} className="flex  items-center">
+                {({ isSelected }) => (
+                  <div className="flex items-start justify-center gap-2">
+                    <div className="text-2xl">
+                      {isSelected ? (
+                        <MdOutlineRadioButtonChecked />
+                      ) : (
+                        <MdOutlineRadioButtonUnchecked />
+                      )}
+                    </div>
+                    <span className="font-medium md:min-w-[7rem]">
+                      ยังไม่เปิดเผยการประดิษฐ์/เผยแพร่ผลงาน :
+                    </span>
                   </div>
-                  <span className="font-medium md:min-w-[7rem]">
-                    ยังไม่เปิดเผยการประดิษฐ์/เผยแพร่ผลงาน :
-                  </span>
+                )}
+              </Radio>
+            </RadioGroup>
+            <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
+              <div className="flex items-center gap-2">
+                <div>
+                  <Checkbox />
                 </div>
-              )}
-            </Radio>
-          </RadioGroup>
+                <p className="text-[0.8rem] font-medium md:text-base">
+                  ยังไม่เปิดเผยการประดิษฐ์/เผยแพร่ผลงาน
+                </p>
+              </div>
+            </section>
+          </div>
         </section>
 
         {/* ข้อ 10*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
-            <Number number={10} />
+            <Number number={8} />
             <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
               ความใหม่ของการออกแบบผลิตภัณฑ์
             </p>
@@ -864,20 +784,22 @@ const NrruDesignForm2 = () => {
               โดยเน้นให้เห็นถึงความ แตกต่างจากแบบผลิตภัณฑ์เดิม
             </p>
             <TextField isRequired className={"w-full md:px-8"}>
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                placeholder="กรอกข้อมูล"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                  placeholder="กรอกข้อมูล"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
           </div>
         </section>
         {/* ข้อ 11*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
-            <Number number={11} />
+            <Number number={9} />
             <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
               คำพรรณนาผลิตภัณฑ์ (ถ้ามี)
             </p>
@@ -885,32 +807,15 @@ const NrruDesignForm2 = () => {
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <TextField className={"w-full md:px-8"}>
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                placeholder="กรอกข้อมูล"
-              />
-            </TextField>
-          </div>
-        </section>
-        {/* ข้อ 12*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={12} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              แผนการพัฒนาวิจัย ที่ต้องการพัฒนาผลิตภัณฑ์ในขั้นต่อไป (ถ้ามี)
-            </p>
-          </section>
-
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <TextField className={"w-full md:px-8"}>
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                placeholder="กรอกข้อมูล"
-              />
+              <section className="flex flex-col">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                  placeholder="กรอกข้อมูล"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
           </div>
         </section>
@@ -919,4 +824,4 @@ const NrruDesignForm2 = () => {
   );
 };
 
-export default NrruDesignForm2;
+export default OutsiderDesignForm2;

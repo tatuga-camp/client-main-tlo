@@ -1,12 +1,13 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
 import React, { useState } from "react";
-import { nrruDesignnSection } from "../../../../data/PatentSection";
+
 import NrruDesignForm1 from "@/components/nrru/design-patent/NrruDesignForm1";
 import NrruDesignForm2 from "@/components/nrru/design-patent/NrruDesignForm2";
 import NrruDesignForm3 from "@/components/nrru/design-patent/NrruDesignForm3";
 import NrruDesignForm4 from "@/components/nrru/design-patent/NrruDesignForm4";
 import NrruDesignForm5 from "@/components/nrru/design-patent/NrruDesignForm5";
+import { nrruDesignnSection } from "@/data/PatentSection";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -40,15 +41,16 @@ const Index = () => {
 
             <section className="flex w-full flex-wrap items-center justify-center gap-3">
               {nrruDesignnSection.map((item, index) => (
-                <div
+                <button
                   key={index}
-                  className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
+                  className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md duration-200 hover:text-blue-500 md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
+                  onClick={() => setCurrentSection(index)}
                 >
                   <h2 className={`text-base font-semibold md:text-lg`}>
                     {item.section}
                   </h2>
                   <p className={`text-xs md:text-[0.9rem]`}>{item.title}</p>
-                </div>
+                </button>
               ))}
             </section>
             <section className="my-4 w-full md:pl-16">
