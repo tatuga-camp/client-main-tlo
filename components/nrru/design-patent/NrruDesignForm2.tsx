@@ -832,13 +832,14 @@ const NrruDesignForm2 = () => {
                 <FieldError className="text-xs text-red-700 md:ml-7" />
               </section>
             </TextField>
-            <button className=" flex items-center  justify-center gap-3 rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB] md:ml-11 md:gap-5">
-              <span className="text-3xl md:text-base">
-                <FiPlusCircle />
-              </span>
-
-              <p>แนบรายละเอียดหรือเอกสารประกอบการเผยแพร่ (ถ้ามี)</p>
-            </button>
+            <FileTrigger>
+              <Button className=" flex  items-center justify-center gap-3 rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB] md:gap-5">
+                <span className="text-3xl md:text-base">
+                  <FiPlusCircle />
+                </span>
+                <p>แนบรายละเอียดหรือเอกสารประกอบการเผยแพร่ (ถ้ามี)</p>
+              </Button>
+            </FileTrigger>
             <Radio value={"2"} className="flex  items-center">
               {({ isSelected }) => (
                 <div className="flex items-start justify-center gap-2">
@@ -913,10 +914,9 @@ const NrruDesignForm2 = () => {
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <TextField className={"w-full md:px-8"}>
-              <Input
+              <TextArea
                 name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                className="h-40 w-full resize-none rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem]  md:p-2  md:pl-4 md:text-base"
                 placeholder="กรอกข้อมูล"
               />
             </TextField>

@@ -29,13 +29,15 @@ const NrruDesignForm1 = () => {
               <Label className=" text-[var(--primary-blue) min-w-20 font-semibold md:min-w-24">
                 คำนำหน้าชื่อ
               </Label>
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="คำนำหน้า"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  placeholder="คำนำหน้า"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
             <TextField
               isRequired
@@ -44,13 +46,15 @@ const NrruDesignForm1 = () => {
               <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
                 ชื่อ-สกุล
               </Label>
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
-                placeholder="ฐิติวรดา หาญแก้"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                  placeholder="ฐิติวรดา หาญแก้"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
           </div>
         </section>
@@ -61,22 +65,26 @@ const NrruDesignForm1 = () => {
           <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
             <TextField
               isRequired
-              className={"flex w-full items-center gap-3 md:w-[60%] "}
+              className={
+                "flex w-full flex-col gap-3 md:w-[60%] md:flex-row md:items-center "
+              }
             >
               <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-44">
                 เลขบัตรประจำตัวประชาชน
               </Label>
-              <InputMask
-                required
-                name="idCard"
-                className="h-8 w-72 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="กรอกหมายเลขบัตรประชาชน"
-                maxLength={13}
-                inputMode="numeric"
-                type="text"
-                mask="9-9999-99999-99-9"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col gap-1">
+                <InputMask
+                  required
+                  name="idCard"
+                  className="h-8 w-52 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-72 md:pl-4 "
+                  placeholder="กรอกหมายเลขบัตรประชาชน"
+                  maxLength={13}
+                  inputMode="numeric"
+                  type="text"
+                  mask="9-9999-99999-99-9"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
           </div>
         </section>
@@ -90,63 +98,72 @@ const NrruDesignForm1 = () => {
               <Label className=" text-[var(--primary-blue) font-medium ">
                 บ้านเลขที่
               </Label>
-
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-auto  max-w-20 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="325"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-auto  max-w-20 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  placeholder="325"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
             <TextField isRequired className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 หมู่ที่
               </Label>
-
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-auto  max-w-14 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="5"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-auto  max-w-14 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  placeholder="5"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
             <TextField isRequired className={"flex w-60  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 จังหวัด
               </Label>
 
-              <ProviceCombobox />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col gap-1">
+                <ProviceCombobox />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
             <TextField isRequired className={"flex w-60  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 อำเภอ
               </Label>
 
-              <AmphureCombobox />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col gap-1">
+                <AmphureCombobox />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
             <TextField isRequired className={"flex w-60  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 ตำบล
               </Label>
-              <TambonCombobox />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col gap-1">
+                <TambonCombobox />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
             <TextField isRequired className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 รหัสไปรษณีย์
               </Label>
-
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="36120"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  placeholder="36120"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
           </div>
         </section>
@@ -162,13 +179,16 @@ const NrruDesignForm1 = () => {
               <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-44">
                 สถานะผู้ประดิษฐ์
               </Label>
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="เลือกสถานะผู้ประดิษฐ์"
-              />
-              <FieldError className="text-xs text-red-700" />
+
+              <section className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  placeholder="เลือกสถานะผู้ประดิษฐ์"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
           </div>
         </section>
@@ -213,13 +233,15 @@ const NrruDesignForm1 = () => {
                 หน่วยงาน
               </Label>
 
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60 md:pl-4 "
-                placeholder="หน่วยงาน"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <section className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60 md:pl-4 "
+                  placeholder="หน่วยงาน"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
           </div>
         </section>
@@ -235,16 +257,19 @@ const NrruDesignForm1 = () => {
               <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-36">
                 หมายเลขโทรศัพท์
               </Label>
-              <InputMask
-                name="phone"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="กรอกหมายเลขโทรศัพท์"
-                maxLength={10}
-                inputMode="numeric"
-                type="text"
-                mask="999-999-9999"
-              />
-              <FieldError className="text-xs text-red-700" />
+
+              <section className="flex flex-col gap-1">
+                <InputMask
+                  name="phone"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  placeholder="กรอกหมายเลขโทรศัพท์"
+                  maxLength={10}
+                  inputMode="numeric"
+                  type="text"
+                  mask="999-999-9999"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
           </div>
         </section>
@@ -259,13 +284,16 @@ const NrruDesignForm1 = () => {
               <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-20">
                 E-mail
               </Label>
-              <Input
-                name=""
-                type="email"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="ploytitiworda.123@gmail.com"
-              />
-              <FieldError className="text-xs text-red-700" />
+
+              <section className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="email"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  placeholder="ploytitiworda.123@gmail.com"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
           </div>
         </section>
@@ -280,13 +308,16 @@ const NrruDesignForm1 = () => {
               <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-20">
                 % ส่วนร่วม
               </Label>
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="40"
-              />
-              <FieldError className="text-xs text-red-700" />
+
+              <section className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  placeholder="40"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
             </TextField>
           </div>
         </section>

@@ -4,6 +4,7 @@ import {
   Button,
   FieldError,
   Checkbox,
+  FileTrigger,
   CheckboxGroup,
   Form,
   Radio,
@@ -11,6 +12,7 @@ import {
   Input,
   Label,
   TextField,
+  TextArea,
 } from "react-aria-components";
 import { FiPlusCircle } from "react-icons/fi";
 import { menuDesignForm2, menuWebDesign } from "@/data/menuDesign";
@@ -20,6 +22,7 @@ import {
   MdOutlineRadioButtonChecked,
   MdOutlineRadioButtonUnchecked,
 } from "react-icons/md";
+import { Calendar } from "primereact/calendar";
 
 const OutsiderDesignForm2 = () => {
   const [activeContent, setActiveContent] = useState(1);
@@ -75,13 +78,17 @@ const OutsiderDesignForm2 = () => {
                 ปีที่เริ่มการออกแบบผลิตภัณฑ์
               </Label>
               <section className="flex flex-col">
-                <Input
-                  name=""
-                  type="text"
-                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                  placeholder="ปี 2565"
-                />
-                <FieldError className="text-xs text-red-700" />
+                <div className="w-40 rounded-lg bg-slate-300 p-1">
+                  <Calendar
+                    required
+                    locale="th"
+                    view="year"
+                    placeholder="ปี 2024"
+                    dateFormat="yy"
+                  />
+                </div>
+
+                <FieldError className="text-xs  text-red-700" />
               </section>
             </TextField>
             <TextField
@@ -92,13 +99,17 @@ const OutsiderDesignForm2 = () => {
                 ปีที่ผลงานแล้วเสร็จ
               </Label>
               <section className="flex flex-col">
-                <Input
-                  name=""
-                  type="text"
-                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
-                  placeholder="ปี 2567"
-                />
-                <FieldError className="text-xs text-red-700" />
+                <div className="w-40 rounded-lg bg-slate-300 p-1">
+                  <Calendar
+                    required
+                    locale="th"
+                    view="year"
+                    placeholder="ปี 2024"
+                    dateFormat="yy"
+                  />
+                </div>
+
+                <FieldError className="text-xs  text-red-700" />
               </section>
             </TextField>
           </div>
@@ -731,13 +742,14 @@ const OutsiderDesignForm2 = () => {
                   <FieldError className="text-xs text-red-700 md:ml-7" />
                 </section>
               </TextField>
-              <button className=" flex items-center  justify-center gap-3 rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB] md:ml-11 md:gap-5">
-                <span className="text-3xl md:text-base">
-                  <FiPlusCircle />
-                </span>
-
-                <p>แนบรายละเอียดหรือเอกสารประกอบการเผยแพร่ (ถ้ามี)</p>
-              </button>
+              <FileTrigger>
+                <Button className="ml-5 flex  items-center justify-center gap-3 rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB] md:ml-11 md:gap-5">
+                  <span className="text-3xl md:text-base">
+                    <FiPlusCircle />
+                  </span>
+                  <p>แนบรายละเอียดหรือเอกสารประกอบการเผยแพร่ (ถ้ามี)</p>
+                </Button>
+              </FileTrigger>
               <Radio value={"2"} className="flex  items-center">
                 {({ isSelected }) => (
                   <div className="flex items-start justify-center gap-2">
@@ -784,15 +796,12 @@ const OutsiderDesignForm2 = () => {
               โดยเน้นให้เห็นถึงความ แตกต่างจากแบบผลิตภัณฑ์เดิม
             </p>
             <TextField isRequired className={"w-full md:px-8"}>
-              <section className="flex flex-col">
-                <Input
-                  name=""
-                  type="text"
-                  className="h-8 w-full rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                  placeholder="กรอกข้อมูล"
-                />
-                <FieldError className="text-xs text-red-700" />
-              </section>
+              <TextArea
+                name=""
+                className="h-40 w-full resize-none rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem]  md:p-2  md:pl-4 md:text-base"
+                placeholder="กรอกข้อมูล"
+              />
+              <FieldError className="text-xs text-red-700" />
             </TextField>
           </div>
         </section>
@@ -806,16 +815,13 @@ const OutsiderDesignForm2 = () => {
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <TextField className={"w-full md:px-8"}>
-              <section className="flex flex-col">
-                <Input
-                  name=""
-                  type="text"
-                  className="h-8 w-full rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                  placeholder="กรอกข้อมูล"
-                />
-                <FieldError className="text-xs text-red-700" />
-              </section>
+            <TextField isRequired className={"w-full md:px-8"}>
+              <TextArea
+                name=""
+                className="h-40 w-full resize-none rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem]  md:p-2  md:pl-4 md:text-base"
+                placeholder="กรอกข้อมูล"
+              />
+              <FieldError className="text-xs text-red-700" />
             </TextField>
           </div>
         </section>
