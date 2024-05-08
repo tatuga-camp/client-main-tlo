@@ -3,6 +3,7 @@ import React from "react";
 import {
   Button,
   FieldError,
+  FileTrigger,
   Form,
   Input,
   Label,
@@ -43,9 +44,11 @@ const OutsiderDesignForm3 = () => {
               ไม่ต้องระบุวันท
             </p>
             <section className="flex flex-col gap-2 md:flex-row md:items-start">
-              <button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md">
-                อัพโหลดไฟล์ .pdf/.jpg
-              </button>
+              <FileTrigger>
+                <Button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md">
+                  อัพโหลดไฟล์ .pdf/.jpg
+                </Button>
+              </FileTrigger>
               <section className="flex flex-col gap-2">
                 <div className="flex items-center justify-between rounded-md border-[1px] border-solid border-[#BED6FF] p-2 md:min-w-72 ">
                   <p className="ml-4 text-[#2166DD] underline">File name.pdf</p>
@@ -69,9 +72,11 @@ const OutsiderDesignForm3 = () => {
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem]  md:gap-4 md:pl-10 md:text-base">
             <section className="flex flex-col gap-2 md:flex-row md:items-start">
-              <button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md">
-                อัพโหลดไฟล์ .pdf/.jpg
-              </button>
+              <FileTrigger>
+                <Button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md">
+                  อัพโหลดไฟล์ .pdf/.jpg
+                </Button>
+              </FileTrigger>
               <button className="rounded-md bg-[#BED6FF] p-3 font-semibold duration-300 hover:bg-[#91B2EB]">
                 ตัวอย่างการแสดงภาพของผลิตภัณฑ์ (คลิก)
               </button>
@@ -93,9 +98,11 @@ const OutsiderDesignForm3 = () => {
               เช่น หนังสือรับรองการเผยแพร่ผลงาน
             </p>
             <section className="flex flex-col gap-2 md:flex-row md:items-start">
-              <button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md">
-                อัพโหลดไฟล์ .pdf/.jpg
-              </button>
+              <FileTrigger>
+                <Button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md">
+                  อัพโหลดไฟล์ .pdf/.jpg
+                </Button>
+              </FileTrigger>
               <section className="flex flex-col gap-2">
                 <div className="flex items-center justify-between rounded-md border-[1px] border-solid border-[#BED6FF] p-2 md:min-w-72 ">
                   <p className="ml-4 text-[#2166DD] underline">File name.pdf</p>

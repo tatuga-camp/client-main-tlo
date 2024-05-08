@@ -13,7 +13,7 @@ import { FiPlusCircle } from "react-icons/fi";
 import Checkbox from "@mui/material/Checkbox";
 import { IoTrashOutline } from "react-icons/io5";
 
-const OutsiderDesignForm5 = () => {
+const OutsiderDesignForm4 = () => {
   return (
     <div className=" min-w-[58rem] rounded-md  border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:w-full md:p-10">
       <div className="flex w-full flex-col gap-3">
@@ -182,4 +182,4 @@ const OutsiderDesignForm5 = () => {
   );
 };
 
-export default OutsiderDesignForm5;
+export default OutsiderDesignForm4;

@@ -5,7 +5,8 @@ import { outsiderDesignSection } from "../../../data/PatentSection";
 import OutsiderDesignForm1 from "@/components/outsider/design-patent/OutsiderDesignForm1";
 import OutsiderDesignForm2 from "@/components/outsider/design-patent/OutsiderDesignForm2";
 import OutsiderDesignForm3 from "@/components/outsider/design-patent/OutsiderDesignForm3";
-import OutsiderDesignForm5 from "@/components/outsider/design-patent/OutsiderDesignForm5";
+import OutsiderDesignForm5 from "@/components/outsider/design-patent/OutsiderDesignForm4";
+import OutsiderDesignForm4 from "@/components/outsider/design-patent/OutsiderDesignForm4";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -80,7 +81,7 @@ const Index = () => {
                   <p className="my-5 w-full items-center text-center  font-bold">
                     {" "}
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
-                    <OutsiderDesignForm5 />
+                    <OutsiderDesignForm4 />
                   </p>
                 </div>
               )}
