@@ -143,30 +143,31 @@ const OutsiderDesignForm1 = () => {
                 <FieldError className="text-xs text-red-700" />
               </section>
             </TextField>
-            <TextField isRequired className={"flex  items-center gap-3  "}>
+            <TextField isRequired className={"flex w-60  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 จังหวัด
               </Label>
-              <section className="flex flex-col">
+
+              <section className="flex flex-col gap-1">
                 <ProviceCombobox />
                 <FieldError className="text-xs text-red-700" />
               </section>
             </TextField>
-            <TextField isRequired className={"flex  items-center gap-3  "}>
+            <TextField isRequired className={"flex w-60  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 อำเภอ
               </Label>
 
-              <section className="flex flex-col">
+              <section className="flex flex-col gap-1">
                 <AmphureCombobox />
                 <FieldError className="text-xs text-red-700" />
               </section>
             </TextField>
-            <TextField isRequired className={"flex  items-center gap-3  "}>
+            <TextField isRequired className={"flex w-60  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 ตำบล
               </Label>
-              <section className="flex flex-col">
+              <section className="flex flex-col gap-1">
                 <TambonCombobox />
                 <FieldError className="text-xs text-red-700" />
               </section>
@@ -420,37 +421,38 @@ const OutsiderDesignForm1 = () => {
                   </TextField>
                   <TextField
                     isRequired
-                    className={"flex  items-center gap-3  "}
+                    className={"flex w-60  items-center gap-3  "}
                   >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       จังหวัด
                     </Label>
-                    <section className="flex flex-col">
+
+                    <section className="flex flex-col gap-1">
                       <ProviceCombobox />
                       <FieldError className="text-xs text-red-700" />
                     </section>
                   </TextField>
                   <TextField
                     isRequired
-                    className={"flex  items-center gap-3  "}
+                    className={"flex w-60  items-center gap-3  "}
                   >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       อำเภอ
                     </Label>
 
-                    <section className="flex flex-col">
+                    <section className="flex flex-col gap-1">
                       <AmphureCombobox />
                       <FieldError className="text-xs text-red-700" />
                     </section>
                   </TextField>
                   <TextField
                     isRequired
-                    className={"flex  items-center gap-3  "}
+                    className={"flex w-60  items-center gap-3  "}
                   >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       ตำบล
                     </Label>
-                    <section className="flex flex-col">
+                    <section className="flex flex-col gap-1">
                       <TambonCombobox />
                       <FieldError className="text-xs text-red-700" />
                     </section>
