@@ -112,7 +112,7 @@ const NrruDesignForm1 = () => {
               />
               <FieldError className="text-xs text-red-700" />
             </TextField>
-            <TextField isRequired className={"flex  items-center gap-3  "}>
+            <TextField isRequired className={"flex w-60  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 จังหวัด
               </Label>
@@ -120,7 +120,7 @@ const NrruDesignForm1 = () => {
               <ProviceCombobox />
               <FieldError className="text-xs text-red-700" />
             </TextField>
-            <TextField isRequired className={"flex  items-center gap-3  "}>
+            <TextField isRequired className={"flex w-60  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 อำเภอ
               </Label>
@@ -128,7 +128,7 @@ const NrruDesignForm1 = () => {
               <AmphureCombobox />
               <FieldError className="text-xs text-red-700" />
             </TextField>
-            <TextField isRequired className={"flex  items-center gap-3  "}>
+            <TextField isRequired className={"flex w-60  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 ตำบล
               </Label>
@@ -179,32 +179,34 @@ const NrruDesignForm1 = () => {
           <p className="my-2 text-[0.8rem] font-semibold md:text-base">
             สังกัด
           </p>
-          <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:flex-wrap md:gap-5 md:text-base">
+          <div className=" grid w-full grid-cols-1  flex-col gap-3 text-[0.8rem] md:grid-cols-3  md:gap-5 md:text-base">
             <TextField isRequired className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) min-w-14 font-medium ">
                 สาขาวิชา
               </Label>
-
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 md:h-10 md:w-auto md:pl-4 "
-                placeholder="ภาษาอังกฤษ"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <div className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 md:h-10 md:w-60 md:pl-4 "
+                  placeholder="ภาษาอังกฤษ"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </div>
             </TextField>
             <TextField isRequired className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) min-w-12 font-medium ">
                 คณะ
               </Label>
-
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="มนุษยศาสตร์และสังคมศาสตร์"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <div className="flex flex-col gap-1">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60 md:pl-4 "
+                  placeholder="มนุษยศาสตร์และสังคมศาสตร์"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </div>
             </TextField>
             <TextField isRequired className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) min-w-14 font-medium ">
@@ -214,7 +216,7 @@ const NrruDesignForm1 = () => {
               <Input
                 name=""
                 type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-auto md:pl-4 "
+                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60 md:pl-4 "
                 placeholder="หน่วยงาน"
               />
               <FieldError className="text-xs text-red-700" />

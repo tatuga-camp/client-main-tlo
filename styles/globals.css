@@ -5,6 +5,13 @@
 @tailwind utilities;
 
 :root {
-    --primary-blue: #10316B;
-    --secondary-yellow: #FFE867;
-  }
+  --primary-blue: #10316b;
+  --secondary-yellow: #ffe867;
+}
+.p-inputtext {
+  font-family: "Anuphan", sans-serif;
+  padding: 0.5rem;
+}
+.p-calendar-w-btn {
+  outline: none;
+}
