@@ -3,29 +3,6 @@ import { parseCookies } from "nookies";
 import { WorkInfoOnInventionPatent, WorkType } from "../../../models";
 
 type RequestCreateWorkInventionPatentService = {
-  thaiName: string;
-  englishName: string;
-  type: WorkType;
-  beginWorkAt: string;
-  finishWorkAt: string;
-  benefit: string[];
-  funding: string;
-  yearFunding: string;
-  researchOwnershipSubmission: string;
-  signedDocument: string;
-  researchResult: string;
-  keywords: string;
-  website: string;
-  searchResult: string;
-  requestNumber: string;
-  requestDate: string;
-  requestCountry: string;
-  publicType: string;
-  publicDetail: string;
-  outstandingDetail: string;
-  limitaionDetail: string;
-  marketDetail: string;
-  futureDetail: string;
   inventionPatentId: string;
 };
 type ResponseCreateWorkInventionPatentService = WorkInfoOnInventionPatent;
@@ -56,7 +33,7 @@ export async function CreateWorkInventionPatentService(
 
 type RequestUpdateWorkInventionPatentService = {
   query: {
-    workOnInventionId: string;
+    workOnInventionPatentId: string;
   };
   body: {
     thaiName?: string;
@@ -65,10 +42,15 @@ type RequestUpdateWorkInventionPatentService = {
     beginWorkAt?: string;
     finishWorkAt?: string;
     benefit?: string[];
+    otherBenefit?: string;
     funding?: string;
+    sourceFunding?: string;
     yearFunding?: string;
     researchOwnershipSubmission?: string;
-    signedDocument?: string;
+    agreementTitle?: string;
+    agreementInstitution?: string;
+    agreementYear?: string;
+    otherAgreement?: string;
     researchResult?: string;
     keywords?: string;
     website?: string;
@@ -77,11 +59,13 @@ type RequestUpdateWorkInventionPatentService = {
     requestDate?: string;
     requestCountry?: string;
     publicType?: string;
+    otherPublicType?: string;
     publicDetail?: string;
     outstandingDetail?: string;
-    limitaionDetail?: string;
+    limitationDetail?: string;
     marketDetail?: string;
     futureDetail?: string;
+    isComplete?: boolean;
   };
 };
 type ResponseUpdateWorkInventionPatentService = WorkInfoOnInventionPatent;

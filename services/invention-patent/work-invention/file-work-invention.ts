@@ -1,16 +1,16 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
-import { FilePublicResearchOnInventionPatent } from "../../../models";
+import { FileOnWorkInventionPatent, FileWorkType } from "../../../models";
 
 type RequestCreateFileWorkInventionPatentService = {
   type: string;
   url: string;
+  name: FileWorkType;
   size: number;
   workInfoOnInventionPatentId: string;
   inventionPatentId: string;
 };
-type ResponseCreateFileWorkInventionPatentService =
-  FilePublicResearchOnInventionPatent;
+type ResponseCreateFileWorkInventionPatentService = FileOnWorkInventionPatent;
 
 export async function CreateFileWorkInventionPatentService(
   input: RequestCreateFileWorkInventionPatentService,
@@ -20,7 +20,7 @@ export async function CreateFileWorkInventionPatentService(
     const access_token = cookies.access_token;
     const fileWork = await axios({
       method: "POST",
-      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-research-inventions`,
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-work-inventions`,
       data: {
         ...input,
       },
@@ -49,7 +49,7 @@ export async function DeleteWorkInventionPatentService(
     const access_token = cookies.access_token;
     const fileWork = await axios({
       method: "DELETE",
-      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-research-inventions/${input.fileResearchOnInventionPatentId}`,
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-work-inventions/${input.fileResearchOnInventionPatentId}`,
       headers: {
         Authorization: "Bearer " + access_token,
         "Content-Type": "application/json",

@@ -8,11 +8,12 @@ import {
 
 type RequestCreateSearchInventionPatentService = {
   type: string;
-  nameInovation: string;
-  number: string;
-  nameJournal: string;
-  country: string;
-  releaseDate: string;
+  nameInovation?: string;
+  numberRequest?: string;
+  nameJournal?: string;
+  country?: string;
+  releaseDate?: string;
+  source?: string;
   workInfoOnInventionPatentId: string;
   inventionPatentId: string;
 };

@@ -3,9 +3,11 @@ import { parseCookies } from "nookies";
 import {
   CompanyInterestedOnSupportingDataInventionPatent,
   FileOnInventionPatent,
+  FileOnWorkInventionPatent,
   InventionPatent,
   Pagination,
   PartnerInfoOnInventionPatent,
+  PatentRelateToSearchResultOnInventionPatent,
   SupportingDataOnInventionPatent,
   User,
   WorkInfoOnInventionPatent,
@@ -78,7 +80,8 @@ type RequestGetInventionPatentService = {
 export type ResponseGetInventionPatentService = InventionPatent & {
   partnerInfoOnInventionPatents: PartnerInfoOnInventionPatent[];
   workInfoOnInventionPatent: WorkInfoOnInventionPatent & {
-    fileWorkInfoOnInventionPatents: WorkInfoOnInventionPatent[];
+    fileOnWorkInventionPatents: FileOnWorkInventionPatent[];
+    patentRelateToSearchResultOnInventionPatents: PatentRelateToSearchResultOnInventionPatent[];
   };
   supportingDataOnInventionPatent: SupportingDataOnInventionPatent & {
     companyInterestedOnSupportingDataInventionPatents: CompanyInterestedOnSupportingDataInventionPatent[];
@@ -130,7 +133,7 @@ export async function CreateInventionPatentService(): Promise<ResponseCreateInve
 
 type RequestUpdateInventionPatentService = {
   query: {
-    inventionPatentId: string;
+    workOnInventionPatentId: string;
   };
   body: {
     personStatus?: string;

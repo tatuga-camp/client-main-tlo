@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -18,26 +18,47 @@ import { Calendar } from "primereact/calendar";
 import { FiPlusCircle } from "react-icons/fi";
 import {
   MdCheckBoxOutlineBlank,
+  MdDelete,
   MdOutlineRadioButtonChecked,
   MdOutlineRadioButtonUnchecked,
 } from "react-icons/md";
 import Link from "next/link";
 import { IoIosCheckbox } from "react-icons/io";
 import {
+  AgreementTitle,
   FundingLists,
+  PublicType,
+  ResearchOwnershipSubmission,
+  ResearchType,
+  Websites,
+  agreementTitles,
   fundingLists,
   menuBenefits,
-  releaseType,
+  publicType,
+  researchOwnershipSubmissionList,
   researchTypes,
   searchResults,
   websites,
 } from "../../../../data/invention";
-import { WorkType } from "../../../../models";
+import { ErrorMessages, FileWorkType, WorkType } from "../../../../models";
 import { Dropdown } from "primereact/dropdown";
 import SearchWorkInvention from "./SearchWorkInvention";
 import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
+import { BsFileEarmarkCode } from "react-icons/bs";
+import { GrFormView } from "react-icons/gr";
+import FileOnWorkInvention from "./FileOnWorkInvention";
+import { ResponseGetInventionPatentService } from "../../../../services/invention-patent/invention-patent";
+import { UseQueryResult } from "@tanstack/react-query";
+import Swal from "sweetalert2";
+import SnackbarLoading from "../../../Snackbars/SnackBarLoading";
+import { UpdateWorkInventionPatentService } from "../../../../services/invention-patent/work-invention/work-invention";
+import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
 
-const InventionSection2 = () => {
+type InventSection2Props = {
+  invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
+};
+
+const InventionSection2 = ({ invention }: InventSection2Props) => {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -49,6 +70,13 @@ const InventionSection2 = () => {
     thaiName?: string;
     englishName?: string;
     type?: WorkType;
+    files?: {
+      id?: string;
+      url: string;
+      name?: FileWorkType;
+      type?: string;
+      file?: File;
+    }[];
     beginWorkAt?: string;
     finishWorkAt?: string;
     benefit?: string[];
@@ -56,30 +84,146 @@ const InventionSection2 = () => {
     funding?: FundingLists;
     sourceFunding?: string;
     yearFunding?: string;
-    researchOwnershipSubmission?: string;
-    signedDocument?: string;
-    researchResult?: string;
+    researchOwnershipSubmission?: ResearchOwnershipSubmission;
+    agreementTitle?: string;
+    agreementInstitution?: string;
+    agreementYear?: string;
+    otherAgreement?: string;
+    researchResult?: ResearchType;
     keywords?: string;
-    website?: string;
+    website?: Websites;
     searchResult?: string;
+    isRequest?: string;
     requestNumber?: string;
     requestDate?: string;
     requestCountry?: string;
-    publicType?: string;
+    publicType?: PublicType;
+    otherPublicType?: string;
     publicDetail?: string;
     outstandingDetail?: string;
-    limitaionDetail?: string;
+    limitationDetail?: string;
     marketDetail?: string;
     futureDetail?: string;
-  }>();
+  }>({
+    publicType: "ไม่เผยแพร่ผลงาน",
+  });
 
-  const handleCreateWorkInvention = async (e: React.FormEvent) => {
+  useEffect(() => {
+    if (invention.data?.workInfoOnInventionPatent) {
+      setWorkData(() => {
+        return {
+          thaiName: invention.data?.workInfoOnInventionPatent.thaiName,
+          englishName: invention.data?.workInfoOnInventionPatent.englishName,
+          type: invention.data?.workInfoOnInventionPatent.type,
+          files:
+            invention.data?.workInfoOnInventionPatent.fileOnWorkInventionPatents.map(
+              (file) => {
+                return {
+                  id: file.id,
+                  url: file.url,
+                  name: file.name,
+                  type: file.type,
+                };
+              },
+            ),
+          beginWorkAt: invention.data?.workInfoOnInventionPatent.beginWorkAt,
+          finishWorkAt: invention.data?.workInfoOnInventionPatent.finishWorkAt,
+          benefit: invention.data?.workInfoOnInventionPatent.benefit,
+          otherBenefit: invention.data?.workInfoOnInventionPatent.otherBenefit,
+          funding: invention.data?.workInfoOnInventionPatent.funding,
+          sourceFunding:
+            invention.data?.workInfoOnInventionPatent.sourceFunding,
+          yearFunding: invention.data?.workInfoOnInventionPatent.yearFunding,
+          researchOwnershipSubmission:
+            invention.data?.workInfoOnInventionPatent
+              .researchOwnershipSubmission,
+          agreementTitle:
+            invention.data?.workInfoOnInventionPatent.agreementTitle,
+          agreementInstitution:
+            invention.data?.workInfoOnInventionPatent.agreementInstitution,
+          agreementYear:
+            invention.data?.workInfoOnInventionPatent.agreementYear,
+          otherAgreement:
+            invention.data?.workInfoOnInventionPatent.otherAgreement,
+          researchResult:
+            invention.data?.workInfoOnInventionPatent.researchResult,
+          keywords: invention.data?.workInfoOnInventionPatent.keywords,
+          website: invention.data?.workInfoOnInventionPatent.website,
+          searchResult: invention.data?.workInfoOnInventionPatent.searchResult,
+          isRequest: invention.data?.workInfoOnInventionPatent.requestNumber
+            ? "เคย"
+            : "ไม่เคย",
+          requestNumber:
+            invention.data?.workInfoOnInventionPatent.requestNumber,
+          requestDate: invention.data?.workInfoOnInventionPatent.requestDate,
+          requestCountry:
+            invention.data?.workInfoOnInventionPatent.requestCountry,
+          publicType: invention.data?.workInfoOnInventionPatent.publicType,
+          otherPublicType:
+            invention.data?.workInfoOnInventionPatent.otherPublicType,
+          publicDetail: invention.data?.workInfoOnInventionPatent.publicDetail,
+          outstandingDetail:
+            invention.data?.workInfoOnInventionPatent.outstandingDetail,
+          limitationDetail:
+            invention.data?.workInfoOnInventionPatent.limitaionDetail,
+          marketDetail: invention.data?.workInfoOnInventionPatent.marketDetail,
+          futureDetail: invention.data?.workInfoOnInventionPatent.futureDetail,
+        };
+      });
+    }
+  }, [invention.data]);
+  console.log("workData", workData);
+  const handleUpdateWorkInvention = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
-    } catch (error) {}
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarLoading />,
+        };
+      });
+      await UpdateWorkInventionPatentService({
+        query: {
+          workOnInventionPatentId: invention.data?.workInfoOnInventionPatent
+            .id as string,
+        },
+        body: {
+          thaiName: workData?.thaiName,
+          englishName: workData?.englishName,
+          type: workData?.type,
+          beginWorkAt: workData?.beginWorkAt,
+          finishWorkAt: workData?.finishWorkAt,
+        },
+      });
+      await invention.refetch();
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarNoSaveData />,
+        };
+      });
+    } catch (error) {
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarSaveData />,
+        };
+      });
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
   };
 
-  const handleChangeWorkData = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeWorkData = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setSnackBarData(() => {
       return {
         open: true,
@@ -101,6 +245,15 @@ const InventionSection2 = () => {
       return {
         ...prev,
         [name]: e,
+      };
+    });
+  };
+
+  const handleDeleteFile = (url: string) => {
+    setWorkData((prev) => {
+      return {
+        ...prev,
+        files: prev?.files?.filter((file) => file.url !== url),
       };
     });
   };
@@ -143,12 +296,11 @@ const InventionSection2 = () => {
     }
   };
 
-  console.log("workData", workData);
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
       <Form
         aria-label="form"
-        onSubmit={handleCreateWorkInvention}
+        onSubmit={handleUpdateWorkInvention}
         className="mx-0 my-5 flex flex-col gap-8 md:mx-5 md:my-10 "
       >
         {/* ข้อ 1*/}
@@ -165,6 +317,7 @@ const InventionSection2 = () => {
                 ชื่อภาษาไทย
               </Label>
               <Input
+                value={workData?.thaiName}
                 required
                 name="thaiName"
                 onChange={handleChangeWorkData}
@@ -180,6 +333,7 @@ const InventionSection2 = () => {
               </Label>
               <Input
                 required
+                value={workData?.englishName}
                 name="englishName"
                 onChange={handleChangeWorkData}
                 type="text"
@@ -205,7 +359,7 @@ const InventionSection2 = () => {
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <Radio className="flex items-center " value="สิทธิบัตรการประดิษฐ์">
+            <Radio className="flex items-center " value="INVENTION">
               {({ isSelected }) => (
                 <div className=" flex items-center justify-center gap-2">
                   <div className=" text-2xl">
@@ -220,7 +374,7 @@ const InventionSection2 = () => {
               )}
             </Radio>
 
-            <Radio className="flex items-center " value="อนุสิทธิบัตร">
+            <Radio className="flex items-center " value="PETTY">
               {({ isSelected }) => (
                 <div className=" flex gap-2">
                   <div className=" text-2xl">
@@ -309,7 +463,6 @@ const InventionSection2 = () => {
         <CheckboxGroup
           value={workData?.benefit}
           onChange={(e) => handleChangeCheckbox({ e, name: "benefit" })}
-          isRequired
           className="flex flex-col items-start justify-center gap-2 md:gap-5 "
         >
           <section className="flex items-center gap-3">
@@ -319,7 +472,7 @@ const InventionSection2 = () => {
             </Label>
           </section>
 
-          <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:grid-cols-3 md:gap-3 md:pl-0 md:text-base">
+          <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-0 md:text-base md:xl:grid-cols-3 2xl:grid-cols-4">
             {/* row1 */}
             {menuBenefits.map((menu, index) => {
               return (
@@ -346,6 +499,7 @@ const InventionSection2 = () => {
               );
             })}
           </div>
+          <FieldError className="text-xs text-red-700" />
           <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
             <TextField className={"ml-3"}>
               <Label className="text-[0.8rem] font-medium md:text-base">
@@ -366,7 +520,6 @@ const InventionSection2 = () => {
               />
             </TextField>
           </section>
-          <FieldError className="text-xs text-red-700" />
         </CheckboxGroup>
 
         {/* ข้อ 5*/}
@@ -429,7 +582,7 @@ const InventionSection2 = () => {
                   name="sourceFunding"
                   onChange={handleChangeWorkData}
                   type="text"
-                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  className="h-8 w-80 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
                   placeholder="แหล่งทุน"
                 />
                 <FieldError className="text-xs text-red-700" />
@@ -469,6 +622,10 @@ const InventionSection2 = () => {
 
         {/* ข้อ 6*/}
         <RadioGroup
+          onChange={(e) =>
+            handleChangeRaio({ e, name: "researchOwnershipSubmission" })
+          }
+          value={workData?.researchOwnershipSubmission}
           isRequired
           className="flex flex-col items-start justify-center gap-2 md:gap-5 "
         >
@@ -482,59 +639,104 @@ const InventionSection2 = () => {
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base">
             <div className="flex gap-5">
-              <Radio
-                className="flex items-center "
-                value="มีการยื่นขอเป็นเจ้าของผลงานวิจัยและนวัตกรรมกับแหล่งทุนแล้ว"
-              >
-                {({ isSelected }) => (
-                  <div className=" flex items-center justify-center gap-2">
-                    <div className=" text-2xl">
-                      {isSelected ? (
-                        <MdOutlineRadioButtonChecked />
-                      ) : (
-                        <MdOutlineRadioButtonUnchecked />
-                      )}
-                    </div>
-                    <span className=" font-semibold">
-                      มีการยื่นขอเป็นเจ้าของผลงานวิจัยและนวัตกรรมกับแหล่งทุนแล้ว
-                    </span>
-                  </div>
-                )}
-              </Radio>
-              <FileTrigger>
-                <Button className=" flex  items-center justify-center gap-3 rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB] md:gap-5">
-                  <span className="text-3xl md:text-base">
-                    <FiPlusCircle />
-                  </span>
-                  <p>แนบหนังสือแสดงความเป็นเจ้าของผลงานวิจัยและนวัตกรรม</p>
-                </Button>
-              </FileTrigger>
-            </div>
-
-            <Radio
-              className="flex items-center "
-              value="ยังไม่มีการยื่น
-"
-            >
-              {({ isSelected }) => (
-                <div className=" flex gap-2">
-                  <div className=" text-2xl">
-                    {isSelected ? (
-                      <MdOutlineRadioButtonChecked />
-                    ) : (
-                      <MdOutlineRadioButtonUnchecked />
+              {researchOwnershipSubmissionList.map((item, index) => {
+                return (
+                  <Radio key={index} className="flex items-center" value={item}>
+                    {({ isSelected }) => (
+                      <div className=" flex items-center justify-center gap-2">
+                        <div className=" text-2xl">
+                          {isSelected ? (
+                            <MdOutlineRadioButtonChecked />
+                          ) : (
+                            <MdOutlineRadioButtonUnchecked />
+                          )}
+                        </div>
+                        <span className=" font-semibold">{item}</span>
+                      </div>
                     )}
-                  </div>
-                  <span className="font-semibold">ยังไม่มีการยื่น</span>
-                </div>
-              )}
-            </Radio>
+                  </Radio>
+                );
+              })}
+            </div>
+            <FileTrigger
+              allowsMultiple
+              onSelect={(e) => {
+                if (!e) return null;
+
+                const files: FileList = e;
+                Array.from(files).forEach((file) => {
+                  const url = URL.createObjectURL(file);
+                  const reader = new FileReader();
+
+                  setWorkData((prev) => {
+                    if (!prev?.files)
+                      return {
+                        ...prev,
+                        files: [{ file: file, url: url, name: "OWNERSHIP" }],
+                      };
+                    return {
+                      ...prev,
+                      files: [
+                        ...prev?.files,
+                        { file: file, url: url, name: "OWNERSHIP" },
+                      ],
+                    };
+                  });
+
+                  reader.readAsDataURL(file);
+                });
+              }}
+            >
+              <Button
+                isDisabled={
+                  workData?.researchOwnershipSubmission === "ยังไม่มีการยื่น"
+                }
+                className={`flex w-max  items-center justify-center gap-3 rounded-md 
+               p-2 px-5 font-semibold duration-300 
+               md:gap-5 ${workData?.researchOwnershipSubmission === "ยังไม่มีการยื่น" ? "bg-gray-400 text-black" : "bg-[#BED6FF] hover:bg-[#91B2EB] "} `}
+              >
+                <span className="text-3xl md:text-base">
+                  <FiPlusCircle />
+                </span>
+                <p className="text-sm">
+                  แนบหนังสือแสดงความเป็นเจ้าของผลงานวิจัยและนวัตกรรม
+                </p>
+              </Button>
+            </FileTrigger>
+            <div className="grid w-full gap-2 xl:grid-cols-3 2xl:grid-cols-4">
+              {workData?.files
+                ?.filter((file) => file.name === "OWNERSHIP")
+                .map((file, index) => {
+                  return (
+                    <FileOnWorkInvention
+                      key={index}
+                      file={file}
+                      handleDeleteFile={handleDeleteFile}
+                    />
+                  );
+                })}
+            </div>
           </div>
           <FieldError className="text-xs text-red-700" />
         </RadioGroup>
 
         {/* ข้อ 7*/}
         <RadioGroup
+          value={workData?.agreementTitle}
+          onChange={(e) => {
+            const event: AgreementTitle = e as AgreementTitle;
+            if (event === "ไม่มี") {
+              setWorkData((prev) => {
+                delete prev?.agreementYear;
+                return {
+                  ...prev,
+                  agreementTitle: event,
+                  agreementInstitution: "",
+                };
+              });
+            }
+            handleChangeRaio({ e, name: "agreementTitle" });
+          }}
           isRequired
           className="flex flex-col items-start justify-center gap-2 md:gap-5 "
         >
@@ -551,85 +753,69 @@ const InventionSection2 = () => {
             className="flex w-full flex-col flex-wrap gap-3 pl-5 
           text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base "
           >
-            <div className="flex">
-              <Radio className="flex" value="อนุสิทธิบัตร">
-                {({ isSelected }) => (
-                  <div className=" flex items-center gap-2">
-                    <div className=" text-2xl">
-                      {isSelected ? (
-                        <MdOutlineRadioButtonChecked />
-                      ) : (
-                        <MdOutlineRadioButtonUnchecked />
-                      )}
-                    </div>
-                    <p className="text-[0.8rem] font-medium md:text-base">
-                      สัญญาถ่ายโอนวัสดุชีวภาพ (ระบุชื่อหน่วยงาน ปีที่ได้ลงนาม)
-                    </p>
-                  </div>
-                )}
-              </Radio>
-              <TextField className={"ml-3"}>
-                <Input
-                  aria-label="ระบุชื่อหน่วยงาน ปีที่ได้ลงนาม"
-                  type="text"
-                  className="h-8 w-60 rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                  placeholder=""
-                />
-              </TextField>
-            </div>
-
-            <div className="flex">
-              <Radio className="flex" value="อื่นๆ">
-                {({ isSelected }) => (
-                  <div className=" flex items-center gap-2">
-                    <div className=" text-2xl">
-                      {isSelected ? (
-                        <MdOutlineRadioButtonChecked />
-                      ) : (
-                        <MdOutlineRadioButtonUnchecked />
-                      )}
-                    </div>
-                    <p className="text-[0.8rem] font-medium md:text-base">
-                      อื่นๆ (โปรดระบุ)
-                    </p>
-                  </div>
-                )}
-              </Radio>
-              <TextField aria-label="" className={"ml-3"}>
-                <Input
-                  aria-label="ชื่อหน่วยงาน"
-                  type="text"
-                  className="h-8 w-60 rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                  placeholder=""
-                />
-              </TextField>
-            </div>
-
-            <Radio className="flex" value="ไม่มี">
-              {({ isSelected }) => (
-                <div className=" flex items-center gap-2">
-                  <div className=" text-2xl">
-                    {isSelected ? (
-                      <MdOutlineRadioButtonChecked />
-                    ) : (
-                      <MdOutlineRadioButtonUnchecked />
+            {agreementTitles.map((item, index) => {
+              return (
+                <div key={index} className="flex">
+                  <Radio className="flex" value={item}>
+                    {({ isSelected }) => (
+                      <div className=" flex items-center gap-2">
+                        <div className=" text-2xl">
+                          {isSelected ? (
+                            <MdOutlineRadioButtonChecked />
+                          ) : (
+                            <MdOutlineRadioButtonUnchecked />
+                          )}
+                        </div>
+                        <p className="text-[0.8rem] font-medium md:text-base">
+                          {item}
+                        </p>
+                      </div>
                     )}
-                  </div>
-                  <p className="text-[0.8rem] font-medium md:text-base">
-                    ไม่มี
-                  </p>
+                  </Radio>
                 </div>
-              )}
-            </Radio>
+              );
+            })}
+          </div>
+          <div>
+            <TextField className={`ml-3 flex  gap-5`}>
+              <Input
+                disabled={workData?.agreementTitle === "ไม่มี"}
+                aria-label="ระบุชื่อหน่วยงาน"
+                type="text"
+                name="agreementInstitution"
+                value={workData?.agreementInstitution}
+                onChange={handleChangeWorkData}
+                className=" w-60 rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem]  md:p-2  md:pl-4 md:text-base"
+                placeholder="ระบุชื่อหน่วยงาน"
+              />
+              <div className=" w-40 rounded-lg bg-slate-300 p-1">
+                <Calendar
+                  disabled={workData?.agreementTitle === "ไม่มี"}
+                  value={
+                    workData?.agreementYear
+                      ? new Date(workData.agreementYear)
+                      : null
+                  }
+                  onChange={(e) => {
+                    handleChangeCalendar({
+                      value: e.value as Date,
+                      name: "agreementYear",
+                    });
+                  }}
+                  required
+                  locale="th"
+                  view="year"
+                  placeholder="ปีที่ได้ลงนาม"
+                  dateFormat="yy"
+                />
+              </div>
+            </TextField>
           </div>
           <FieldError className="text-xs text-red-700" />
         </RadioGroup>
 
         {/* ข้อ 8*/}
-        <RadioGroup
-          isRequired
-          className="flex flex-col items-start justify-center gap-2 md:gap-5 "
-        >
+        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={8} />
             <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
@@ -639,30 +825,62 @@ const InventionSection2 = () => {
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
-              <Radio className="flex" value="มี">
-                {({ isSelected }) => (
-                  <div className=" flex items-center gap-2">
-                    <div className=" text-2xl">
-                      {isSelected ? (
-                        <MdOutlineRadioButtonChecked />
-                      ) : (
-                        <MdOutlineRadioButtonUnchecked />
-                      )}
-                    </div>
-                    <p className="text-[0.8rem] font-medium md:text-base">มี</p>
-                  </div>
-                )}
-              </Radio>
               <div className="w-80 rounded-lg bg-slate-300 p-1">
                 <Dropdown
-                  optionLabel="title"
+                  value={workData?.researchResult}
+                  onChange={(e) => {
+                    setWorkData((prev) => {
+                      return {
+                        ...prev,
+                        researchResult: e.value,
+                      };
+                    });
+                  }}
                   options={researchTypes}
                   placeholder="เลือกประเภทแหล่งทุน"
                   className="md:w-14rem w-full"
                 />
               </div>
-              <FileTrigger>
-                <Button className=" flex  items-center justify-center gap-3 rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB] md:gap-5">
+              <FileTrigger
+                allowsMultiple
+                onSelect={(e) => {
+                  if (!e) return null;
+
+                  const files: FileList = e;
+                  Array.from(files).forEach((file) => {
+                    const url = URL.createObjectURL(file);
+                    const reader = new FileReader();
+
+                    setWorkData((prev) => {
+                      if (!prev?.files)
+                        return {
+                          ...prev,
+                          files: [
+                            { file: file, url: url, name: "RESEARCHRESULT" },
+                          ],
+                        };
+                      return {
+                        ...prev,
+                        files: [
+                          ...prev?.files,
+                          { file: file, url: url, name: "RESEARCHRESULT" },
+                        ],
+                      };
+                    });
+
+                    reader.readAsDataURL(file);
+                  });
+                }}
+              >
+                <Button
+                  isDisabled={
+                    workData?.researchResult === "ไม่มี" ? true : false
+                  }
+                  className={` flex  items-center justify-center gap-3 rounded-md 
+                  p-2 px-5
+                   ${workData?.researchResult === "ไม่มี" ? "bg-gray-400 text-black" : "bg-[#BED6FF] hover:bg-[#91B2EB] "} 
+                   font-semibold duration-300  md:gap-5`}
+                >
                   <span className="text-3xl md:text-base">
                     <FiPlusCircle />
                   </span>
@@ -674,25 +892,22 @@ const InventionSection2 = () => {
                 </Button>
               </FileTrigger>
             </section>
-            <Radio className="flex" value="อื่นๆ">
-              {({ isSelected }) => (
-                <div className=" flex items-center gap-2">
-                  <div className=" text-2xl">
-                    {isSelected ? (
-                      <MdOutlineRadioButtonChecked />
-                    ) : (
-                      <MdOutlineRadioButtonUnchecked />
-                    )}
-                  </div>
-                  <p className="text-[0.8rem] font-medium md:text-base">
-                    ไม่มี
-                  </p>
-                </div>
-              )}
-            </Radio>
+            <div className="grid w-full gap-2 xl:grid-cols-3 2xl:grid-cols-4">
+              {workData?.files
+                ?.filter((file) => file.name === "RESEARCHRESULT")
+                .map((file, index) => {
+                  return (
+                    <FileOnWorkInvention
+                      key={index}
+                      file={file}
+                      handleDeleteFile={handleDeleteFile}
+                    />
+                  );
+                })}
+            </div>
           </div>
           <FieldError className="text-xs text-red-700" />
-        </RadioGroup>
+        </section>
 
         {/* ข้อ 9*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
@@ -710,15 +925,20 @@ const InventionSection2 = () => {
               </p>
               <TextField className={"w-full md:px-8"}>
                 <Input
+                  value={workData?.keywords}
+                  onChange={handleChangeWorkData}
+                  name="keywords"
                   required
                   type="text"
-                  className="h-8 w-auto rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2   md:text-base"
+                  className="h-8 w-96 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2   md:text-base"
                   placeholder="โปรดระบุ Keyword"
                 />
                 <FieldError className="text-xs text-red-700" />
               </TextField>
             </section>
             <RadioGroup
+              value={workData?.website}
+              onChange={(e) => handleChangeRaio({ e, name: "website" })}
               isRequired
               className="flex w-full flex-col  gap-3 md:pl-10"
             >
@@ -753,6 +973,9 @@ const InventionSection2 = () => {
                 <TextField className={"flex items-center justify-center gap-2"}>
                   <Label className="font-semibold">อื่นๆ</Label>
                   <Input
+                    value={workData?.website}
+                    onChange={handleChangeWorkData}
+                    name="website"
                     type="text"
                     className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
                     placeholder="โปรดระบุ"
@@ -767,8 +990,16 @@ const InventionSection2 = () => {
               </p>
               <div className="w-80 rounded-lg bg-slate-300 p-1">
                 <Dropdown
+                  value={workData?.searchResult}
+                  onChange={(e) => {
+                    setWorkData((prev) => {
+                      return {
+                        ...prev,
+                        searchResult: e.value,
+                      };
+                    });
+                  }}
                   required
-                  optionLabel="title"
                   options={searchResults}
                   placeholder="เลือกประเภทแหล่งทุน"
                   className="md:w-14rem w-full"
@@ -776,12 +1007,28 @@ const InventionSection2 = () => {
               </div>
               <FieldError className="text-xs text-red-700" />
             </section>
-            <SearchWorkInvention />
+            <SearchWorkInvention invention={invention} />
           </div>
         </section>
 
         {/* ข้อ 10*/}
         <RadioGroup
+          value={workData?.isRequest}
+          onChange={(e) => {
+            if (e === "เคย") {
+              handleChangeRaio({ e, name: "isRequest" });
+            } else {
+              setWorkData((prev) => {
+                delete prev?.requestDate;
+                return {
+                  ...prev,
+                  isRequest: e,
+                  requestNumber: "",
+                  requestCountry: "",
+                };
+              });
+            }
+          }}
           isRequired
           className="flex flex-col items-start justify-center gap-2 md:gap-5 "
         >
@@ -816,9 +1063,13 @@ const InventionSection2 = () => {
                   เลขที่คำขอ :
                 </Label>
                 <Input
+                  disabled={workData?.isRequest === "ไม่เคย"}
+                  value={workData?.requestNumber}
+                  onChange={handleChangeWorkData}
+                  name="requestNumber"
                   type="text"
                   className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                  placeholder=""
+                  placeholder="เลขที่คำขอ"
                 />
               </TextField>
               <TextField className={"ml-3 flex items-center"}>
@@ -827,6 +1078,18 @@ const InventionSection2 = () => {
                 </Label>
                 <div className="w-40 rounded-lg bg-slate-300 p-1">
                   <Calendar
+                    disabled={workData?.isRequest === "ไม่เคย"}
+                    value={
+                      workData?.requestDate
+                        ? new Date(workData.requestDate)
+                        : null
+                    }
+                    onChange={(e) => {
+                      handleChangeCalendar({
+                        value: e.value as Date,
+                        name: "requestDate",
+                      });
+                    }}
                     required
                     locale="th"
                     dateFormat="dd/mm/yy"
@@ -839,6 +1102,10 @@ const InventionSection2 = () => {
                   ประเทศที่ยื่น :
                 </Label>
                 <Input
+                  disabled={workData?.isRequest === "ไม่เคย"}
+                  value={workData?.requestCountry}
+                  onChange={handleChangeWorkData}
+                  name="requestCountry"
                   type="text"
                   className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
                   placeholder=""
@@ -866,10 +1133,7 @@ const InventionSection2 = () => {
         </RadioGroup>
 
         {/* ข้อ 11*/}
-        <RadioGroup
-          isRequired
-          className="flex flex-col items-start justify-center gap-2 md:gap-5 "
-        >
+        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={11} />
             <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
@@ -878,61 +1142,96 @@ const InventionSection2 = () => {
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base">
-            <section className=" flex  w-full gap-5">
-              <Radio className="flex" value="มีการเปิดเผยการประดิษฐ์">
-                {({ isSelected }) => (
-                  <div className=" flex items-center gap-2">
-                    <div className=" text-2xl">
-                      {isSelected ? (
-                        <MdOutlineRadioButtonChecked />
-                      ) : (
-                        <MdOutlineRadioButtonUnchecked />
-                      )}
-                    </div>
-                    <p className="text-[0.8rem] font-medium md:text-base">
-                      มีการเปิดเผยการประดิษฐ์
-                    </p>
-                  </div>
-                )}
-              </Radio>
+            <section className=" flex w-96 flex-col gap-5">
+              <label>เลือกรูปแบบการเผยแพร่</label>
               <div className=" h-12 rounded-lg bg-slate-300 p-1">
                 <Dropdown
-                  optionLabel="title"
-                  options={releaseType}
+                  value={workData?.publicType}
+                  options={publicType}
+                  onChange={(e) => {
+                    setWorkData((prev) => {
+                      return {
+                        ...prev,
+                        publicType: e.value,
+                      };
+                    });
+                  }}
                   placeholder="การเผยแพร่ผลงานแล้วในรูปแบบ"
                   className="md:w-14rem h-10 w-full"
                 />
               </div>
-
-              <FileTrigger>
-                <Button className=" flex items-center  justify-center gap-3 rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB] md:ml-11 md:gap-5">
-                  <span className="text-3xl md:text-base">
-                    <FiPlusCircle />
-                  </span>
-
-                  <p>แนบรายละเอียดหรือเอกสารประกอบการเผยแพร่ (ถ้ามี)</p>
-                </Button>
-              </FileTrigger>
             </section>
-            <Radio
-              className="flex"
-              value="ยังไม่เปิดเผยการประดิษฐ์/เผยแพร่ผลงาน"
+            {workData?.publicType === "อื่น ๆ (โปรดระบุ)" && (
+              <TextField className={"ml-3 flex items-center"}>
+                <Label className="min-w-28  text-[var(--primary-blue)] md:min-w-24">
+                  ระบุุอื่นๆ :
+                </Label>
+                <Input
+                  value={workData?.otherPublicType}
+                  onChange={handleChangeWorkData}
+                  name="otherPublicType"
+                  type="text"
+                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                  placeholder="ระบุุอื่นๆ"
+                />
+              </TextField>
+            )}
+          </div>
+          <FileTrigger
+            allowsMultiple
+            onSelect={(e) => {
+              if (!e) return null;
+
+              const files: FileList = e;
+              Array.from(files).forEach((file) => {
+                const url = URL.createObjectURL(file);
+                const reader = new FileReader();
+
+                setWorkData((prev) => {
+                  if (!prev?.files)
+                    return {
+                      ...prev,
+                      files: [{ file: file, url: url, name: "PUBLIC" }],
+                    };
+                  return {
+                    ...prev,
+                    files: [
+                      ...prev?.files,
+                      { file: file, url: url, name: "PUBLIC" },
+                    ],
+                  };
+                });
+
+                reader.readAsDataURL(file);
+              });
+            }}
+          >
+            <Button
+              isDisabled={workData?.publicType === "ไม่เผยแพร่ผลงาน"}
+              className={`flex items-center  justify-center gap-3 rounded-md 
+             p-2 px-5 font-semibold duration-300  md:gap-5
+             ${workData?.publicType === "ไม่เผยแพร่ผลงาน" ? "bg-gray-400 text-black" : "bg-[#BED6FF] hover:bg-[#91B2EB] "}
+             `}
             >
-              {({ isSelected }) => (
-                <div className=" flex items-center gap-2">
-                  <div className=" text-2xl">
-                    {isSelected ? (
-                      <MdOutlineRadioButtonChecked />
-                    ) : (
-                      <MdOutlineRadioButtonUnchecked />
-                    )}
-                  </div>
-                  <p className="text-[0.8rem] font-medium md:text-base">
-                    ยังไม่เปิดเผยการประดิษฐ์/เผยแพร่ผลงาน
-                  </p>
-                </div>
-              )}
-            </Radio>
+              <span className="text-3xl md:text-base">
+                <FiPlusCircle />
+              </span>
+
+              <p>แนบรายละเอียดหรือเอกสารประกอบการเผยแพร่ (ถ้ามี)</p>
+            </Button>
+          </FileTrigger>
+          <div className="grid w-full gap-2 xl:grid-cols-3 2xl:grid-cols-4">
+            {workData?.files
+              ?.filter((file) => file.name === "PUBLIC")
+              .map((file, index) => {
+                return (
+                  <FileOnWorkInvention
+                    key={index}
+                    file={file}
+                    handleDeleteFile={handleDeleteFile}
+                  />
+                );
+              })}
           </div>
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <p className={"w-full md:px-8"}>
@@ -942,7 +1241,11 @@ const InventionSection2 = () => {
             </p>
             <TextField className={"w-full md:px-8"}>
               <TextArea
-                required
+                required={workData?.publicType !== "ไม่เผยแพร่ผลงาน"}
+                disabled={workData?.publicType === "ไม่เผยแพร่ผลงาน"}
+                value={workData?.publicDetail}
+                onChange={handleChangeWorkData}
+                name="publicDetail"
                 className="no-re min-h-52   w-full	 resize-none
                  rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
                 placeholder="กรอกข้อมูล"
@@ -951,7 +1254,7 @@ const InventionSection2 = () => {
             </TextField>
           </div>
           <FieldError className="text-xs text-red-700" />
-        </RadioGroup>
+        </section>
 
         {/* ข้อ 12*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
@@ -970,6 +1273,9 @@ const InventionSection2 = () => {
             </p>
             <TextField className={"w-full md:px-8"}>
               <TextArea
+                value={workData?.outstandingDetail}
+                onChange={handleChangeWorkData}
+                name="outstandingDetail"
                 required
                 className="no-re min-h-52   w-full	 resize-none
                  rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
@@ -992,6 +1298,9 @@ const InventionSection2 = () => {
             <TextField className={"w-full md:px-8"}>
               <TextArea
                 required
+                value={workData?.limitationDetail}
+                onChange={handleChangeWorkData}
+                name="limitationDetail"
                 className="no-re min-h-52   w-full	 resize-none
                  rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
                 placeholder="กรอกข้อมูล"
@@ -1012,6 +1321,9 @@ const InventionSection2 = () => {
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <TextField className={"w-full md:px-8"}>
               <TextArea
+                value={workData?.marketDetail}
+                onChange={handleChangeWorkData}
+                name="marketDetail"
                 required
                 className="no-re min-h-52   w-full	 resize-none
                  rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
@@ -1033,7 +1345,9 @@ const InventionSection2 = () => {
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <TextField className={"w-full md:px-8"}>
               <TextArea
-                required
+                value={workData?.futureDetail}
+                onChange={handleChangeWorkData}
+                name="futureDetail"
                 className="no-re min-h-52   w-full	 resize-none
                  rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
                 placeholder="กรอกข้อมูล"

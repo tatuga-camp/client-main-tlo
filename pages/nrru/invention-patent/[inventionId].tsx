@@ -146,7 +146,7 @@ const Index = ({ user }: { user: User }) => {
               )}
               {currentSection == 1 && (
                 <div>
-                  <NrruInventionForm2 />
+                  <NrruInventionForm2 invention={invention} />
                 </div>
               )}
               {currentSection == 2 && (

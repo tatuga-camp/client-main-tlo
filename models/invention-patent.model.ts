@@ -1,4 +1,16 @@
-import { StatusPartner, WorkType } from "./type.model";
+import {
+  FundingLists,
+  PublicType,
+  ResearchOwnershipSubmission,
+  ResearchType,
+  Websites,
+} from "../data/invention";
+import {
+  FileWorkType,
+  MenuSearchWorks,
+  StatusPartner,
+  WorkType,
+} from "./type.model";
 
 export type InventionPatent = {
   id: string;
@@ -70,18 +82,25 @@ export type WorkInfoOnInventionPatent = {
   beginWorkAt: string;
   finishWorkAt: string;
   benefit: string[];
-  funding: string;
+  otherBenefit: string;
+  funding: FundingLists;
+  sourceFunding: string;
   yearFunding: string;
-  researchOwnershipSubmission: string;
-  signedDocument: string;
-  researchResult: string;
+  researchOwnershipSubmission: ResearchOwnershipSubmission;
+  agreementTitle: string;
+  agreementInstitution: string;
+  agreementYear: string;
+  otherAgreement: string;
+  researchResult: ResearchType;
   keywords: string;
-  website: string;
+  website: Websites;
+  otherWebsite: string;
   searchResult: string;
   requestNumber: string;
   requestDate: string;
   requestCountry: string;
-  publicType: string;
+  publicType: PublicType;
+  otherPublicType: string;
   publicDetail: string;
   outstandingDetail: string;
   limitaionDetail: string;
@@ -96,22 +115,24 @@ export type PatentRelateToSearchResultOnInventionPatent = {
   id: string;
   createAt: string;
   updateAt: string;
-  type: string;
+  type: MenuSearchWorks;
   nameInovation: string;
-  number: string;
+  numberRequest: string;
   nameJournal: string;
   country: string;
+  source: string;
   releaseDate: string;
   workInfoOnInventionPatentId: string;
   inventionPatentId: string;
   userId: string;
 };
 
-export type FilePublicResearchOnInventionPatent = {
+export type FileOnWorkInventionPatent = {
   id: string;
   createAt: string;
   updateAt: string;
   type: string;
+  name: FileWorkType;
   url: string;
   size: number;
   workInfoOnInventionPatentId: string;
