@@ -103,9 +103,10 @@ export type WorkInfoOnInventionPatent = {
   otherPublicType: string;
   publicDetail: string;
   outstandingDetail: string;
-  limitaionDetail: string;
+  limitationDetail: string;
   marketDetail: string;
   futureDetail: string;
+  isComplete: boolean;
   inventionPatentId: string;
   inventionPatent: InventionPatent;
   userId: string;

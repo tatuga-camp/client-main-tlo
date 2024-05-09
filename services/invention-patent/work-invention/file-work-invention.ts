@@ -36,20 +36,20 @@ export async function CreateFileWorkInventionPatentService(
   }
 }
 
-type RequestDeleteWorkInventionPatentService = {
-  fileResearchOnInventionPatentId: string;
+type RequestDeleteFileWorkInventionPatentService = {
+  fileWorkInventionId: string;
 };
-type ResponseDeleteWorkInventionPatentService = { message: string };
+type ResponseDeleteFileWorkInventionPatentService = { message: string };
 
-export async function DeleteWorkInventionPatentService(
-  input: RequestDeleteWorkInventionPatentService,
-): Promise<ResponseDeleteWorkInventionPatentService> {
+export async function DeleteFileWorkInventionPatentService(
+  input: RequestDeleteFileWorkInventionPatentService,
+): Promise<ResponseDeleteFileWorkInventionPatentService> {
   try {
     const cookies = parseCookies();
     const access_token = cookies.access_token;
     const fileWork = await axios({
       method: "DELETE",
-      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-work-inventions/${input.fileResearchOnInventionPatentId}`,
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-work-inventions/${input.fileWorkInventionId}`,
       headers: {
         Authorization: "Bearer " + access_token,
         "Content-Type": "application/json",

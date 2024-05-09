@@ -53,6 +53,14 @@ import Swal from "sweetalert2";
 import SnackbarLoading from "../../../Snackbars/SnackBarLoading";
 import { UpdateWorkInventionPatentService } from "../../../../services/invention-patent/work-invention/work-invention";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
+import {
+  GetSignURLService,
+  UploadSignURLService,
+} from "../../../../services/google-storage";
+import {
+  CreateFileWorkInventionPatentService,
+  DeleteFileWorkInventionPatentService,
+} from "../../../../services/invention-patent/work-invention/file-work-invention";
 
 type InventSection2Props = {
   invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
@@ -110,13 +118,13 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
 
   useEffect(() => {
     if (invention.data?.workInfoOnInventionPatent) {
-      setWorkData(() => {
+      setWorkData((prev) => {
         return {
           thaiName: invention.data?.workInfoOnInventionPatent.thaiName,
           englishName: invention.data?.workInfoOnInventionPatent.englishName,
           type: invention.data?.workInfoOnInventionPatent.type,
-          files:
-            invention.data?.workInfoOnInventionPatent.fileOnWorkInventionPatents.map(
+          files: [
+            ...invention.data?.workInfoOnInventionPatent.fileOnWorkInventionPatents.map(
               (file) => {
                 return {
                   id: file.id,
@@ -126,6 +134,7 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
                 };
               },
             ),
+          ],
           beginWorkAt: invention.data?.workInfoOnInventionPatent.beginWorkAt,
           finishWorkAt: invention.data?.workInfoOnInventionPatent.finishWorkAt,
           benefit: invention.data?.workInfoOnInventionPatent.benefit,
@@ -165,14 +174,13 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
           outstandingDetail:
             invention.data?.workInfoOnInventionPatent.outstandingDetail,
           limitationDetail:
-            invention.data?.workInfoOnInventionPatent.limitaionDetail,
+            invention.data?.workInfoOnInventionPatent.limitationDetail,
           marketDetail: invention.data?.workInfoOnInventionPatent.marketDetail,
           futureDetail: invention.data?.workInfoOnInventionPatent.futureDetail,
         };
       });
     }
   }, [invention.data]);
-  console.log("workData", workData);
   const handleUpdateWorkInvention = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
@@ -182,6 +190,31 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
           action: <SnackbarLoading />,
         };
       });
+      const filterFiles = workData.files?.filter((file) => !file.id);
+      if (filterFiles) {
+        for (const file of filterFiles) {
+          const getSignURL = await GetSignURLService({
+            fileName: file.file?.name as string,
+            fileType: file.file?.type as string,
+          });
+
+          await UploadSignURLService({
+            contentType: file.file?.type as string,
+            file: file.file as File,
+            signURL: getSignURL.signURL,
+          });
+
+          await CreateFileWorkInventionPatentService({
+            type: file.file?.type as string,
+            url: getSignURL.originalURL,
+            name: file.name as FileWorkType,
+            size: file.file?.size as number,
+            workInfoOnInventionPatentId: invention.data
+              ?.workInfoOnInventionPatent.id as string,
+            inventionPatentId: invention.data?.id as string,
+          });
+        }
+      }
       await UpdateWorkInventionPatentService({
         query: {
           workOnInventionPatentId: invention.data?.workInfoOnInventionPatent
@@ -193,6 +226,30 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
           type: workData?.type,
           beginWorkAt: workData?.beginWorkAt,
           finishWorkAt: workData?.finishWorkAt,
+          benefit: workData?.benefit,
+          otherBenefit: workData?.otherBenefit,
+          funding: workData?.funding,
+          sourceFunding: workData?.sourceFunding,
+          yearFunding: workData?.yearFunding,
+          researchOwnershipSubmission: workData?.researchOwnershipSubmission,
+          agreementTitle: workData?.agreementTitle,
+          agreementInstitution: workData?.agreementInstitution,
+          agreementYear: workData?.agreementYear,
+          researchResult: workData?.researchResult,
+          website: workData?.website,
+          keywords: workData?.keywords,
+          searchResult: workData?.searchResult,
+          requestNumber: workData?.requestNumber,
+          requestDate: workData?.requestDate,
+          requestCountry: workData?.requestCountry,
+          publicType: workData?.publicType,
+          otherPublicType: workData?.otherPublicType,
+          publicDetail: workData?.publicDetail,
+          outstandingDetail: workData?.outstandingDetail,
+          limitationDetail: workData?.limitationDetail,
+          marketDetail: workData?.marketDetail,
+          futureDetail: workData?.futureDetail,
+          isComplete: true,
         },
       });
       await invention.refetch();
@@ -249,13 +306,61 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
     });
   };
 
-  const handleDeleteFile = (url: string) => {
-    setWorkData((prev) => {
-      return {
-        ...prev,
-        files: prev?.files?.filter((file) => file.url !== url),
-      };
-    });
+  const handleDeleteFile = async ({
+    url,
+    fileOnWorkId,
+  }: {
+    url: string;
+    fileOnWorkId?: string;
+  }) => {
+    try {
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarLoading />,
+        };
+      });
+      if (fileOnWorkId) {
+        await DeleteFileWorkInventionPatentService({
+          fileWorkInventionId: fileOnWorkId,
+        });
+        setWorkData((prev) => {
+          return {
+            ...prev,
+            files: prev?.files?.filter((file) => file.url !== url),
+          };
+        });
+      } else {
+        setWorkData((prev) => {
+          return {
+            ...prev,
+            files: prev?.files?.filter((file) => file.url !== url),
+          };
+        });
+      }
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarNoSaveData />,
+        };
+      });
+    } catch (error) {
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarSaveData />,
+        };
+      });
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
   };
 
   const handleChangeCheckbox = ({ e, name }: { e: string[]; name: string }) => {
@@ -537,6 +642,12 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
               <Dropdown
                 value={workData?.funding}
                 onChange={(e) => {
+                  setSnackBarData(() => {
+                    return {
+                      open: true,
+                      action: <SnackbarSaveData />,
+                    };
+                  });
                   setWorkData((prev) => {
                     const value: FundingLists = e.value;
                     if (
@@ -662,7 +773,12 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
               allowsMultiple
               onSelect={(e) => {
                 if (!e) return null;
-
+                setSnackBarData(() => {
+                  return {
+                    open: true,
+                    action: <SnackbarSaveData />,
+                  };
+                });
                 const files: FileList = e;
                 Array.from(files).forEach((file) => {
                   const url = URL.createObjectURL(file);
@@ -829,6 +945,12 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
                 <Dropdown
                   value={workData?.researchResult}
                   onChange={(e) => {
+                    setSnackBarData(() => {
+                      return {
+                        open: true,
+                        action: <SnackbarSaveData />,
+                      };
+                    });
                     setWorkData((prev) => {
                       return {
                         ...prev,
@@ -845,7 +967,12 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-
+                  setSnackBarData(() => {
+                    return {
+                      open: true,
+                      action: <SnackbarSaveData />,
+                    };
+                  });
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
@@ -992,6 +1119,12 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
                 <Dropdown
                   value={workData?.searchResult}
                   onChange={(e) => {
+                    setSnackBarData(() => {
+                      return {
+                        open: true,
+                        action: <SnackbarSaveData />,
+                      };
+                    });
                     setWorkData((prev) => {
                       return {
                         ...prev,
@@ -1149,6 +1282,12 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
                   value={workData?.publicType}
                   options={publicType}
                   onChange={(e) => {
+                    setSnackBarData(() => {
+                      return {
+                        open: true,
+                        action: <SnackbarSaveData />,
+                      };
+                    });
                     setWorkData((prev) => {
                       return {
                         ...prev,
@@ -1181,7 +1320,12 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
             allowsMultiple
             onSelect={(e) => {
               if (!e) return null;
-
+              setSnackBarData(() => {
+                return {
+                  open: true,
+                  action: <SnackbarSaveData />,
+                };
+              });
               const files: FileList = e;
               Array.from(files).forEach((file) => {
                 const url = URL.createObjectURL(file);

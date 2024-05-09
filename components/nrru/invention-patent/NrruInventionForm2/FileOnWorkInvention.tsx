@@ -12,7 +12,13 @@ type FileOnWorkInventionProps = {
     type?: string | undefined;
     file?: File | undefined;
   };
-  handleDeleteFile: (url: string) => void;
+  handleDeleteFile: ({
+    url,
+    fileOnWorkId,
+  }: {
+    url: string;
+    fileOnWorkId?: string;
+  }) => Promise<void>;
 };
 function FileOnWorkInvention({
   file,
@@ -45,7 +51,9 @@ function FileOnWorkInvention({
         </div>
         <button
           type="button"
-          onClick={() => handleDeleteFile(file.url)}
+          onClick={() =>
+            handleDeleteFile({ url: file.url, fileOnWorkId: file.id })
+          }
           className=" z-10 flex cursor-pointer 
    items-center justify-center gap-2 rounded-md bg-red-500 p-1  text-xl text-white"
         >

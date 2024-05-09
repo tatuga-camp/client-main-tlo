@@ -63,7 +63,7 @@ const Index = ({ user }: { user: User }) => {
       throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
     } else if (
       number === 2 &&
-      (!invention.data?.workInfoOnInventionPatent.id ||
+      (invention.data?.workInfoOnInventionPatent.isComplete === false ||
         invention.data?.partnerInfoOnInventionPatents.length === 0)
     ) {
       throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
