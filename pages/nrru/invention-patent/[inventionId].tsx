@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { nrruInventionSection } from "../../../data/PatentSection";
 import NrruInventionForm1 from "../../../components/nrru/invention-patent/NrruInventionForm1";
 import NrruInventionForm2 from "../../../components/nrru/invention-patent/NrruInventionForm2/NrruInventionForm2";
-import NrruInventionForm3 from "../../../components/nrru/invention-patent/NrruInventionForm3";
+import NrruInventionForm3 from "../../../components/nrru/invention-patent/NrruInventionForm3/NrruInventionForm3";
 import NrruInventionForm4 from "../../../components/nrru/invention-patent/NrruInventionForm4";
 import NrruInventionForm5 from "../../../components/nrru/invention-patent/NrruInventionForm5";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
@@ -151,7 +151,7 @@ const Index = ({ user }: { user: User }) => {
               )}
               {currentSection == 2 && (
                 <div>
-                  <NrruInventionForm3 />
+                  <NrruInventionForm3 invention={invention} />
                 </div>
               )}
               {currentSection == 3 && (

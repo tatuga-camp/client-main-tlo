@@ -47,8 +47,9 @@ type RequestUpdateSupportInventionPatentService = {
     durationMonth?: string;
     cost?: number;
     benefit?: string[];
-    allowPublic?: boolean;
+    allowPublic?: string;
     reasonPublic?: string;
+    otherBenefit?: string;
   };
 };
 type ResponseUpdateSupportInventionPatentService =

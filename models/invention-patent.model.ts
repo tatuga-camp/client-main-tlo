@@ -149,7 +149,8 @@ export type SupportingDataOnInventionPatent = {
   durationMonth: string;
   cost: number;
   benefit: string[];
-  allowPublic: boolean;
+  otherBenefit: string;
+  allowPublic: string;
   reasonPublic: string;
   inventionPatentId: string;
   userId: string;
