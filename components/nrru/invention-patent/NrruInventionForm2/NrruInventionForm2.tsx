@@ -66,7 +66,7 @@ type InventSection2Props = {
   invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
 };
 
-const InventionSection2 = ({ invention }: InventSection2Props) => {
+const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -112,75 +112,60 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
     limitationDetail?: string;
     marketDetail?: string;
     futureDetail?: string;
-  }>({
-    publicType: "ไม่เผยแพร่ผลงาน",
+  }>(() => {
+    return {
+      thaiName: invention.data?.workInfoOnInventionPatent.thaiName,
+      englishName: invention.data?.workInfoOnInventionPatent.englishName,
+      type: invention.data?.workInfoOnInventionPatent.type,
+      files: [
+        ...(invention.data?.workInfoOnInventionPatent.fileOnWorkInventionPatents.map(
+          (file) => {
+            return {
+              id: file.id,
+              url: file.url,
+              name: file.name,
+              type: file.type,
+            };
+          },
+        ) ?? []),
+      ],
+      beginWorkAt: invention.data?.workInfoOnInventionPatent.beginWorkAt,
+      finishWorkAt: invention.data?.workInfoOnInventionPatent.finishWorkAt,
+      benefit: invention.data?.workInfoOnInventionPatent.benefit,
+      otherBenefit: invention.data?.workInfoOnInventionPatent.otherBenefit,
+      funding: invention.data?.workInfoOnInventionPatent.funding,
+      sourceFunding: invention.data?.workInfoOnInventionPatent.sourceFunding,
+      yearFunding: invention.data?.workInfoOnInventionPatent.yearFunding,
+      researchOwnershipSubmission:
+        invention.data?.workInfoOnInventionPatent.researchOwnershipSubmission,
+      agreementTitle: invention.data?.workInfoOnInventionPatent.agreementTitle,
+      agreementInstitution:
+        invention.data?.workInfoOnInventionPatent.agreementInstitution,
+      agreementYear: invention.data?.workInfoOnInventionPatent.agreementYear,
+      otherAgreement: invention.data?.workInfoOnInventionPatent.otherAgreement,
+      researchResult: invention.data?.workInfoOnInventionPatent.researchResult,
+      keywords: invention.data?.workInfoOnInventionPatent.keywords,
+      website: invention.data?.workInfoOnInventionPatent.website,
+      searchResult: invention.data?.workInfoOnInventionPatent.searchResult,
+      isRequest: invention.data?.workInfoOnInventionPatent.requestNumber
+        ? "เคย"
+        : "ไม่เคย",
+      requestNumber: invention.data?.workInfoOnInventionPatent.requestNumber,
+      requestDate: invention.data?.workInfoOnInventionPatent.requestDate,
+      requestCountry: invention.data?.workInfoOnInventionPatent.requestCountry,
+      publicType: invention.data?.workInfoOnInventionPatent.publicType,
+      otherPublicType:
+        invention.data?.workInfoOnInventionPatent.otherPublicType,
+      publicDetail: invention.data?.workInfoOnInventionPatent.publicDetail,
+      outstandingDetail:
+        invention.data?.workInfoOnInventionPatent.outstandingDetail,
+      limitationDetail:
+        invention.data?.workInfoOnInventionPatent.limitationDetail,
+      marketDetail: invention.data?.workInfoOnInventionPatent.marketDetail,
+      futureDetail: invention.data?.workInfoOnInventionPatent.futureDetail,
+    };
   });
 
-  useEffect(() => {
-    if (invention.data?.workInfoOnInventionPatent) {
-      setWorkData((prev) => {
-        return {
-          thaiName: invention.data?.workInfoOnInventionPatent.thaiName,
-          englishName: invention.data?.workInfoOnInventionPatent.englishName,
-          type: invention.data?.workInfoOnInventionPatent.type,
-          files: [
-            ...invention.data?.workInfoOnInventionPatent.fileOnWorkInventionPatents.map(
-              (file) => {
-                return {
-                  id: file.id,
-                  url: file.url,
-                  name: file.name,
-                  type: file.type,
-                };
-              },
-            ),
-          ],
-          beginWorkAt: invention.data?.workInfoOnInventionPatent.beginWorkAt,
-          finishWorkAt: invention.data?.workInfoOnInventionPatent.finishWorkAt,
-          benefit: invention.data?.workInfoOnInventionPatent.benefit,
-          otherBenefit: invention.data?.workInfoOnInventionPatent.otherBenefit,
-          funding: invention.data?.workInfoOnInventionPatent.funding,
-          sourceFunding:
-            invention.data?.workInfoOnInventionPatent.sourceFunding,
-          yearFunding: invention.data?.workInfoOnInventionPatent.yearFunding,
-          researchOwnershipSubmission:
-            invention.data?.workInfoOnInventionPatent
-              .researchOwnershipSubmission,
-          agreementTitle:
-            invention.data?.workInfoOnInventionPatent.agreementTitle,
-          agreementInstitution:
-            invention.data?.workInfoOnInventionPatent.agreementInstitution,
-          agreementYear:
-            invention.data?.workInfoOnInventionPatent.agreementYear,
-          otherAgreement:
-            invention.data?.workInfoOnInventionPatent.otherAgreement,
-          researchResult:
-            invention.data?.workInfoOnInventionPatent.researchResult,
-          keywords: invention.data?.workInfoOnInventionPatent.keywords,
-          website: invention.data?.workInfoOnInventionPatent.website,
-          searchResult: invention.data?.workInfoOnInventionPatent.searchResult,
-          isRequest: invention.data?.workInfoOnInventionPatent.requestNumber
-            ? "เคย"
-            : "ไม่เคย",
-          requestNumber:
-            invention.data?.workInfoOnInventionPatent.requestNumber,
-          requestDate: invention.data?.workInfoOnInventionPatent.requestDate,
-          requestCountry:
-            invention.data?.workInfoOnInventionPatent.requestCountry,
-          publicType: invention.data?.workInfoOnInventionPatent.publicType,
-          otherPublicType:
-            invention.data?.workInfoOnInventionPatent.otherPublicType,
-          publicDetail: invention.data?.workInfoOnInventionPatent.publicDetail,
-          outstandingDetail:
-            invention.data?.workInfoOnInventionPatent.outstandingDetail,
-          limitationDetail:
-            invention.data?.workInfoOnInventionPatent.limitationDetail,
-          marketDetail: invention.data?.workInfoOnInventionPatent.marketDetail,
-          futureDetail: invention.data?.workInfoOnInventionPatent.futureDetail,
-        };
-      });
-    }
-  }, [invention.data]);
   const handleUpdateWorkInvention = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
@@ -421,31 +406,35 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
               <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-40">
                 ชื่อภาษาไทย
               </Label>
-              <Input
-                value={workData?.thaiName}
-                required
-                name="thaiName"
-                onChange={handleChangeWorkData}
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
-                placeholder="กรอกชื่อภาษาไทย"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <div className="flex flex-col gap-1">
+                <Input
+                  value={workData?.thaiName}
+                  required
+                  name="thaiName"
+                  onChange={handleChangeWorkData}
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
+                  placeholder="กรอกชื่อภาษาไทย"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </div>
             </TextField>
             <TextField className={"flex w-full min-w-60 items-center gap-3 "}>
               <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-40">
                 ชื่อภาษาอังกฤษ
               </Label>
-              <Input
-                required
-                value={workData?.englishName}
-                name="englishName"
-                onChange={handleChangeWorkData}
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
-                placeholder="กรอกชื่อภาษาอังกฤษ"
-              />
-              <FieldError className="text-xs text-red-700" />
+              <div className="flex flex-col gap-1">
+                <Input
+                  required
+                  value={workData?.englishName}
+                  name="englishName"
+                  onChange={handleChangeWorkData}
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
+                  placeholder="กรอกชื่อภาษาอังกฤษ"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </div>
             </TextField>
           </div>
         </section>
@@ -456,12 +445,16 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
           isRequired
           className="flex flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row"
         >
-          <section className="flex items-center gap-3">
-            <Number number={2} />
-            <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
-              ประเภทสิทธิบัตรที่จะขอรับการคุ้มครอง
-            </Label>
-          </section>
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={2} />
+
+              <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
+                ประเภทสิทธิบัตรที่จะขอรับการคุ้มครอง
+              </Label>
+            </section>
+            <FieldError className="text-xs text-red-700" />
+          </div>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <Radio className="flex items-center " value="INVENTION">
@@ -502,7 +495,6 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
               เงื่อนไขการขอรับสิทธิบัตร (คลิก)
             </Link>
           </div>
-          <FieldError className="text-xs text-red-700" />
         </RadioGroup>
 
         {/* ข้อ 3*/}
@@ -535,7 +527,7 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
               </div>
               <FieldError className="text-xs text-red-700" />
             </TextField>
-            <TextField className={"flex w-full items-center gap-3 md:w-[50%]"}>
+            <TextField className={"flex w-full items-center gap-3 "}>
               <Label className="min-w-28 font-semibold text-[var(--primary-blue)] md:min-w-32">
                 ปีที่ผลงานแล้วเสร็จ
               </Label>
@@ -566,16 +558,20 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
 
         {/* ข้อ 4*/}
         <CheckboxGroup
+          isRequired
           value={workData?.benefit}
           onChange={(e) => handleChangeCheckbox({ e, name: "benefit" })}
           className="flex flex-col items-start justify-center gap-2 md:gap-5 "
         >
-          <section className="flex items-center gap-3">
-            <Number number={4} />
-            <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
-              สิ่งที่ได้จากการประดิษฐ์/งานวิจัย/ข้อค้นพบ (ตอบได้มากกว่า 1 ข้อ)
-            </Label>
-          </section>
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={4} />
+              <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
+                สิ่งที่ได้จากการประดิษฐ์/งานวิจัย/ข้อค้นพบ (ตอบได้มากกว่า 1 ข้อ)
+              </Label>
+            </section>
+            <FieldError className="text-xs text-red-700" />
+          </div>
 
           <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-0 md:text-base md:xl:grid-cols-3 2xl:grid-cols-4">
             {/* row1 */}
@@ -604,7 +600,6 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
               );
             })}
           </div>
-          <FieldError className="text-xs text-red-700" />
           <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
             <TextField className={"ml-3"}>
               <Label className="text-[0.8rem] font-medium md:text-base">
@@ -638,69 +633,75 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <div className="w-80 rounded-lg bg-slate-300 p-1">
-              <Dropdown
-                value={workData?.funding}
-                onChange={(e) => {
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
-                  setWorkData((prev) => {
-                    const value: FundingLists = e.value;
-                    if (
-                      value ===
-                        "ทุนอุดหนุนงบประมาณแผ่นดิน มหาวิทยาลัยราชภัฏนครราชสีมา" ||
-                      value ===
-                        "ทุนอุดหนุนเงินรายได้/กองทุนวิจัย มหาวิทยาลัยราชภัฏนครราชสีมา"
-                    ) {
+            <div className="flex flex-col gap-1">
+              <div className="w-80 rounded-lg bg-slate-300 p-1">
+                <Dropdown
+                  value={workData?.funding}
+                  onChange={(e) => {
+                    setSnackBarData(() => {
                       return {
-                        ...prev,
-                        funding: value,
-                        sourceFunding: "มหาวิทยาลัยราชภัฏนครราชสีมา",
+                        open: true,
+                        action: <SnackbarSaveData />,
                       };
-                    } else {
-                      return {
-                        ...prev,
-                        funding: value,
-                        sourceFunding: "",
-                        yearFunding: undefined,
-                      };
-                    }
-                  });
-                }}
-                aria-label="เลือกประเภทแหล่งทุน"
-                required
-                options={fundingLists}
-                placeholder="เลือกประเภทแหล่งทุน"
-                className="md:w-14rem w-full"
-              />
+                    });
+                    setWorkData((prev) => {
+                      const value: FundingLists = e.value;
+                      if (
+                        value ===
+                          "ทุนอุดหนุนงบประมาณแผ่นดิน มหาวิทยาลัยราชภัฏนครราชสีมา" ||
+                        value ===
+                          "ทุนอุดหนุนเงินรายได้/กองทุนวิจัย มหาวิทยาลัยราชภัฏนครราชสีมา"
+                      ) {
+                        return {
+                          ...prev,
+                          funding: value,
+                          sourceFunding: "มหาวิทยาลัยราชภัฏนครราชสีมา",
+                        };
+                      } else {
+                        return {
+                          ...prev,
+                          funding: value,
+                          sourceFunding: "",
+                          yearFunding: undefined,
+                        };
+                      }
+                    });
+                  }}
+                  aria-label="เลือกประเภทแหล่งทุน"
+                  required
+                  options={fundingLists}
+                  placeholder="เลือกประเภทแหล่งทุน"
+                  className="md:w-14rem w-full"
+                />
+              </div>
+              {!workData.funding && (
+                <span className="text-xs text-red-700">
+                  Please fill out this field.
+                </span>
+              )}
             </div>
 
             <section className="flex flex-col gap-5 md:flex-row">
-              <TextField
-                className={"flex w-full items-center gap-3 md:w-[50%]"}
-              >
+              <TextField className={"flex w-full items-center gap-3 "}>
                 <Label className=" text-[var(--primary-blue) min-w-28 font-semibold md:min-w-20">
                   แหล่งทุน
                 </Label>
-                <Input
-                  disabled={workData?.funding === "ไม่ได้รับทุนอุดหนุนใดๆ"}
-                  value={workData?.sourceFunding}
-                  required={workData?.funding !== "ไม่ได้รับทุนอุดหนุนใดๆ"}
-                  name="sourceFunding"
-                  onChange={handleChangeWorkData}
-                  type="text"
-                  className="h-8 w-80 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                  placeholder="แหล่งทุน"
-                />
-                <FieldError className="text-xs text-red-700" />
+                <div className="flex flex-col gap-1">
+                  <Input
+                    disabled={workData?.funding === "ไม่ได้รับทุนอุดหนุนใดๆ"}
+                    value={workData?.sourceFunding}
+                    required={workData?.funding !== "ไม่ได้รับทุนอุดหนุนใดๆ"}
+                    name="sourceFunding"
+                    onChange={handleChangeWorkData}
+                    type="text"
+                    className="h-8 w-80 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                    placeholder="แหล่งทุน"
+                  />
+                  <FieldError className="text-xs text-red-700" />
+                </div>
               </TextField>
-              <TextField
-                className={"flex w-full items-center gap-3 md:w-[50%]"}
-              >
+
+              <TextField className={"flex  items-center gap-3 "}>
                 <Label className="min-w-28 font-semibold text-[var(--primary-blue)] md:min-w-24">
                   ปีงบประมาณ
                 </Label>
@@ -740,13 +741,16 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
           isRequired
           className="flex flex-col items-start justify-center gap-2 md:gap-5 "
         >
-          <section className="flex items-center gap-3">
-            <Number number={6} />
-            <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
-              การยื่นขอความเป็นเจ้าของผลงานวิจัยและนวัตกรรมกับแหล่งให้ทุน
-              (กรณีรับทุนวิจัยจากแหล่งทุนภายนอก)
-            </Label>
-          </section>
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={6} />
+              <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
+                การยื่นขอความเป็นเจ้าของผลงานวิจัยและนวัตกรรมกับแหล่งให้ทุน
+                (กรณีรับทุนวิจัยจากแหล่งทุนภายนอก)
+              </Label>
+            </section>
+            <FieldError className="text-xs text-red-700" />
+          </div>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base">
             <div className="flex gap-5">
@@ -833,7 +837,6 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
                 })}
             </div>
           </div>
-          <FieldError className="text-xs text-red-700" />
         </RadioGroup>
 
         {/* ข้อ 7*/}
@@ -856,15 +859,17 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
           isRequired
           className="flex flex-col items-start justify-center gap-2 md:gap-5 "
         >
-          <section className="flex items-center gap-3">
-            <Number number={7} />
-            <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              ส่วนใดส่วนหนึ่งของการวิจัยที่นำมาซึ่งการประดิษฐ์นี้
-              ได้มีการลงนามหรืออยู่ภายใต้ข้อตกลงหรือสัญญาใด ๆ
-              กับหน่วยงานอื่นหรือไม่ (ให้ระบุ)
-            </Label>
-          </section>
-
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={7} />
+              <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+                ส่วนใดส่วนหนึ่งของการวิจัยที่นำมาซึ่งการประดิษฐ์นี้
+                ได้มีการลงนามหรืออยู่ภายใต้ข้อตกลงหรือสัญญาใด ๆ
+                กับหน่วยงานอื่นหรือไม่ (ให้ระบุ)
+              </Label>
+            </section>
+            <FieldError className="text-xs text-red-700" />
+          </div>
           <div
             className="flex w-full flex-col flex-wrap gap-3 pl-5 
           text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base "
@@ -927,17 +932,23 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
               </div>
             </TextField>
           </div>
-          <FieldError className="text-xs text-red-700" />
         </RadioGroup>
 
         {/* ข้อ 8*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={8} />
-            <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              ผลการวิจัย ผลการทดสอบ หรือผลการทดลอง
-            </Label>
-          </section>
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={8} />
+              <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+                ผลการวิจัย ผลการทดสอบ หรือผลการทดลอง
+              </Label>
+            </section>
+            {!workData.researchResult && (
+              <span className="text-xs text-red-700">
+                please fill out this field.
+              </span>
+            )}
+          </div>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
@@ -1050,7 +1061,7 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
               <p className="font-semibold md:min-w-52">
                 9.1 Keyword ที่ใช้ในการสืบค้น
               </p>
-              <TextField className={"w-full md:px-8"}>
+              <TextField className={"flex w-full flex-col gap-1 "}>
                 <Input
                   value={workData?.keywords}
                   onChange={handleChangeWorkData}
@@ -1069,8 +1080,9 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
               isRequired
               className="flex w-full flex-col  gap-3 md:pl-10"
             >
-              <Label className="font-semibold md:min-w-52">
+              <Label className="flex items-center  gap-2 font-semibold md:min-w-52">
                 9.2 เว็บไซต์/ฐานข้อมูลที่ใช้ในการสืบค้น
+                <FieldError className="text-xs font-normal text-red-700" />
               </Label>
               <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:grid-cols-2 md:gap-3 md:pl-0 md:text-base">
                 {websites.map((menu, index) => {
@@ -1109,36 +1121,41 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
                   />
                 </TextField>
               </div>
-              <FieldError className="text-xs text-red-700" />
             </RadioGroup>
             <section className="flex w-full items-center gap-3 md:pl-10">
               <p className="font-semibold md:min-w-52">
                 9.3 ผลของการสืบค้นพบว่า
               </p>
-              <div className="w-80 rounded-lg bg-slate-300 p-1">
-                <Dropdown
-                  value={workData?.searchResult}
-                  onChange={(e) => {
-                    setSnackBarData(() => {
-                      return {
-                        open: true,
-                        action: <SnackbarSaveData />,
-                      };
-                    });
-                    setWorkData((prev) => {
-                      return {
-                        ...prev,
-                        searchResult: e.value,
-                      };
-                    });
-                  }}
-                  required
-                  options={searchResults}
-                  placeholder="เลือกประเภทแหล่งทุน"
-                  className="md:w-14rem w-full"
-                />
+              <div className="flex flex-col gap-1">
+                <div className="w-80 rounded-lg bg-slate-300 p-1">
+                  <Dropdown
+                    value={workData?.searchResult}
+                    onChange={(e) => {
+                      setSnackBarData(() => {
+                        return {
+                          open: true,
+                          action: <SnackbarSaveData />,
+                        };
+                      });
+                      setWorkData((prev) => {
+                        return {
+                          ...prev,
+                          searchResult: e.value,
+                        };
+                      });
+                    }}
+                    required
+                    options={searchResults}
+                    placeholder="เลือกประเภทแหล่งทุน"
+                    className="md:w-14rem w-full"
+                  />
+                </div>
+                {!workData.searchResult && (
+                  <span className="text-xs text-red-700">
+                    Please fill out this field.
+                  </span>
+                )}
               </div>
-              <FieldError className="text-xs text-red-700" />
             </section>
             <SearchWorkInvention invention={invention} />
           </div>
@@ -1165,12 +1182,15 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
           isRequired
           className="flex flex-col items-start justify-center gap-2 md:gap-5 "
         >
-          <section className="flex items-center gap-3">
-            <Number number={10} />
-            <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              การประดิษฐ์นี้เคยนำไปยื่นขอรับสิทธิบัตรหรืออนุสิทธิบัตรหรือไม่
-            </Label>
-          </section>
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={10} />
+              <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+                การประดิษฐ์นี้เคยนำไปยื่นขอรับสิทธิบัตรหรืออนุสิทธิบัตรหรือไม่
+              </Label>
+            </section>
+            <FieldError className="text-xs text-red-700" />
+          </div>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
@@ -1262,7 +1282,6 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
               )}
             </Radio>
           </div>
-          <FieldError className="text-xs text-red-700" />
         </RadioGroup>
 
         {/* ข้อ 11*/}
@@ -1277,27 +1296,34 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base">
             <section className=" flex w-96 flex-col gap-5">
               <label>เลือกรูปแบบการเผยแพร่</label>
-              <div className=" h-12 rounded-lg bg-slate-300 p-1">
-                <Dropdown
-                  value={workData?.publicType}
-                  options={publicType}
-                  onChange={(e) => {
-                    setSnackBarData(() => {
-                      return {
-                        open: true,
-                        action: <SnackbarSaveData />,
-                      };
-                    });
-                    setWorkData((prev) => {
-                      return {
-                        ...prev,
-                        publicType: e.value,
-                      };
-                    });
-                  }}
-                  placeholder="การเผยแพร่ผลงานแล้วในรูปแบบ"
-                  className="md:w-14rem h-10 w-full"
-                />
+              <div className="flex flex-col gap-1">
+                <div className=" h-12 rounded-lg bg-slate-300 p-1">
+                  <Dropdown
+                    value={workData?.publicType}
+                    options={publicType}
+                    onChange={(e) => {
+                      setSnackBarData(() => {
+                        return {
+                          open: true,
+                          action: <SnackbarSaveData />,
+                        };
+                      });
+                      setWorkData((prev) => {
+                        return {
+                          ...prev,
+                          publicType: e.value,
+                        };
+                      });
+                    }}
+                    placeholder="การเผยแพร่ผลงานแล้วในรูปแบบ"
+                    className="md:w-14rem h-10 w-full"
+                  />
+                </div>
+                {!workData.publicType && (
+                  <span className="text-xs text-red-700">
+                    Please fill out this field.
+                  </span>
+                )}
               </div>
             </section>
             {workData?.publicType === "อื่น ๆ (โปรดระบุ)" && (
@@ -1506,4 +1532,4 @@ const InventionSection2 = ({ invention }: InventSection2Props) => {
   );
 };
 
-export default InventionSection2;
+export default NrruInventionForm2;

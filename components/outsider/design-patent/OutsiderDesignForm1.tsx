@@ -117,20 +117,20 @@ const OutsiderDesignForm1 = () => {
                 จังหวัด
               </Label>
 
-              <ProviceCombobox />
+              {/* <ProviceCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 อำเภอ
               </Label>
 
-              <AmphureCombobox />
+              {/* <AmphureCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 ตำบล
               </Label>
-              <TambonCombobox />
+              {/* <TambonCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
@@ -327,20 +327,20 @@ const OutsiderDesignForm1 = () => {
                 จังหวัด
               </Label>
 
-              <ProviceCombobox />
+              {/* <ProviceCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 อำเภอ
               </Label>
 
-              <AmphureCombobox />
+              {/* <AmphureCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">
                 ตำบล
               </Label>
-              <TambonCombobox />
+              {/* <TambonCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">

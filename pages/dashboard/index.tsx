@@ -25,6 +25,7 @@ import { GetDesignPatentsByUserIdService } from "../../services/design-patent/de
 import { GetCopyrightsByUserIdService } from "../../services/copyright/copyright";
 import { GetTrademarksByUserIdService } from "../../services/trademark/trademark";
 import moment from "moment";
+import { useRouter } from "next/router";
 
 const menuRegister = [
   {
@@ -41,6 +42,7 @@ const menuRegister = [
   { title: "เครื่องหมายการค้า", icon: FaTrademark, slut: "trademark" },
 ] as const;
 function Index({ user }: { user: User }) {
+  const router = useRouter();
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [requests, setRequests] = useState<{
@@ -87,7 +89,14 @@ function Index({ user }: { user: User }) {
         page: page,
         limit: 5,
       }),
+    // Disables automatic refetching when browser window is focused.
   });
+
+  useEffect(() => {
+    inventions.refetch();
+    designs.refetch();
+    trademarks.refetch();
+  }, []);
 
   useEffect(() => {
     if (inventions.data && designs.data && trademarks.data && copyrights.data) {
@@ -236,12 +245,26 @@ function Index({ user }: { user: User }) {
                         <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                           {title}
                         </td>
-                        <td className="rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-2 hover:bg-main-color hover:text-white">
-                          <Link
-                            href={`${user.type === "INTERNAL" ? "nrru" : "outsider"}/${item.type}/${item.id}`}
-                          >
-                            ตรวจสอบ
-                          </Link>
+                        <td
+                          className={`rounded-md border-[1px] border-solid border-[#BED6FF] ${
+                            item.isComplete === true
+                              ? "bg-white"
+                              : "bg-red-500 text-white"
+                          }  p-2 hover:bg-main-color hover:text-white`}
+                        >
+                          {item.isComplete === true ? (
+                            <Link
+                              href={`${user.type === "INTERNAL" ? "nrru" : "outsider"}/${item.type}/${item.id}`}
+                            >
+                              ตรวจสอบ
+                            </Link>
+                          ) : (
+                            <Link
+                              href={`${user.type === "INTERNAL" ? "nrru" : "outsider"}/${item.type}/${item.id}`}
+                            >
+                              ไม่สมบูรณ์ กรอกข้อมูลไม่ครบ
+                            </Link>
+                          )}
                         </td>
                       </tr>
                     );

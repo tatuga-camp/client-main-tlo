@@ -161,7 +161,7 @@ const OutsiderInventionForm1 = () => {
                 จังหวัด
               </Label>
 
-              <ProviceCombobox />
+              {/* <ProviceCombobox /> */}
             </TextField>
             <TextField className={"flex  items-center gap-3  "}>
               <Label className=" text-[var(--primary-blue) font-medium ">

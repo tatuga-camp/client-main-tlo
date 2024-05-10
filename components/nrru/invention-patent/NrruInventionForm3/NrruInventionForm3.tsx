@@ -54,7 +54,21 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
     allowPublic?: string;
     reasonPublic?: string;
     otherBenefit?: string;
-  }>();
+  }>(() => {
+    return {
+      durationYear:
+        invention.data?.supportingDataOnInventionPatent.durationYear,
+      durationMonth:
+        invention.data?.supportingDataOnInventionPatent.durationMonth,
+      cost: invention.data?.supportingDataOnInventionPatent.cost,
+      benefit: invention.data?.supportingDataOnInventionPatent.benefit,
+      allowPublic: invention.data?.supportingDataOnInventionPatent.allowPublic,
+      reasonPublic:
+        invention.data?.supportingDataOnInventionPatent.reasonPublic,
+      otherBenefit:
+        invention.data?.supportingDataOnInventionPatent.otherBenefit,
+    };
+  });
 
   const handleChange = (
     e:
@@ -70,25 +84,6 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
     const { name, value } = e.target;
     setSupportData((prev) => ({ ...prev, [name]: value }));
   };
-
-  useEffect(() => {
-    if (invention.data?.supportingDataOnInventionPatent) {
-      setSupportData({
-        durationYear:
-          invention.data?.supportingDataOnInventionPatent.durationYear,
-        durationMonth:
-          invention.data?.supportingDataOnInventionPatent.durationMonth,
-        cost: invention.data?.supportingDataOnInventionPatent.cost,
-        benefit: invention.data?.supportingDataOnInventionPatent.benefit,
-        allowPublic:
-          invention.data?.supportingDataOnInventionPatent.allowPublic,
-        reasonPublic:
-          invention.data?.supportingDataOnInventionPatent.reasonPublic,
-        otherBenefit:
-          invention.data?.supportingDataOnInventionPatent.otherBenefit,
-      });
-    }
-  }, [invention.data]);
 
   const handleUpdateSupportData = async (e: React.FormEvent) => {
     try {
@@ -204,27 +199,34 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
             </p>
           </section>
           <div className="flex w-full flex-col gap-3 pl-7 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <TextField className={"flex w-full min-w-60 items-center gap-3 "}>
-              <InputNumber
-                value={supportData?.cost}
-                onValueChange={(e) => {
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
-                  setSupportData((prev) => {
-                    return {
-                      ...prev,
-                      cost: e.value as number,
-                    };
-                  });
-                }}
-                className="h-8 w-60 rounded-md bg-slate-300 p-1 text-[0.8rem]  md:h-10   md:text-base"
-                minFractionDigits={2}
-                maxFractionDigits={5}
-              />
+            <TextField
+              isRequired
+              className={"flex w-full min-w-60 items-center gap-3 "}
+            >
+              <div className="fex-col flex gap-1">
+                <InputNumber
+                  required
+                  value={supportData?.cost}
+                  onValueChange={(e) => {
+                    setSnackBarData(() => {
+                      return {
+                        open: true,
+                        action: <SnackbarSaveData />,
+                      };
+                    });
+                    setSupportData((prev) => {
+                      return {
+                        ...prev,
+                        cost: e.value as number,
+                      };
+                    });
+                  }}
+                  className="h-8 w-60 rounded-md bg-slate-300 p-1 text-[0.8rem]  md:h-10   md:text-base"
+                  minFractionDigits={2}
+                  maxFractionDigits={5}
+                />
+                <FieldError className="text-xs text-red-700" />
+              </div>
               <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-24">
                 บาท
               </Label>
@@ -233,6 +235,7 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
         </section>
         {/* ข้อ 3*/}
         <CheckboxGroup
+          isRequired
           value={supportData?.benefit}
           onChange={(e) => {
             setSnackBarData(() => {
@@ -252,10 +255,11 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
         >
           <section className="flex items-center gap-3">
             <Number number={3} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+            <Label className="my-2 w-max text-[0.8rem] font-semibold md:text-base">
               ผลงานนี้สามารถนำไปใช้ประโยชน์ในรูปแบบหรือลักษณะใด (ตอบได้มากกว่า 1
               ข้อ)
-            </p>
+            </Label>
+            <FieldError className="w-max text-xs text-red-700" />
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
@@ -314,10 +318,11 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
         </CheckboxGroup>
 
         {/* ข้อ 4*/}
-        <CompanyInterest />
+        <CompanyInterest invention={invention} />
 
         {/* ข้อ 5*/}
         <RadioGroup
+          isRequired
           value={supportData?.allowPublic}
           onChange={(e) => {
             setSnackBarData(() => {
@@ -337,9 +342,10 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
         >
           <section className="flex items-center gap-3">
             <Number number={5} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+            <Label className="my-2 w-max text-[0.8rem] font-semibold md:text-base">
               การประชาสัมพันธ์ผลงานการประดิษฐ์นี้โดยมหาวิทยาลัย
-            </p>
+            </Label>
+            <FieldError className="w-max text-xs text-red-700" />
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-10 md:text-base">

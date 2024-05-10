@@ -133,7 +133,7 @@ export async function CreateInventionPatentService(): Promise<ResponseCreateInve
 
 type RequestUpdateInventionPatentService = {
   query: {
-    workOnInventionPatentId: string;
+    inventionPatentId: string;
   };
   body: {
     personStatus?: string;

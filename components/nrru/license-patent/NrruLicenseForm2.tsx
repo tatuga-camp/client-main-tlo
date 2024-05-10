@@ -754,7 +754,7 @@ const NrruLicenseForm2 = () => {
                 <Input
                   name=""
                   type="text"
-                  className="h-8 w-auto rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem]  md:ml-10  md:h-10 md:min-w-[10rem] md:min-w-[45rem] md:p-2  md:pl-4 md:text-base"
+                  className="h-8 w-auto rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem]  md:ml-10  md:h-10  md:min-w-[45rem] md:p-2  md:pl-4 md:text-base"
                   placeholder=""
                 />
               </TextField>

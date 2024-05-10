@@ -412,21 +412,23 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                     <Label className=" text-[var(--primary-blue) min-w-20 font-semibold md:min-w-24">
                       คำนำหน้าชื่อ
                     </Label>
-                    <Input
-                      required
-                      name="title"
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.title
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      type="text"
-                      className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="คำนำหน้า"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        name="title"
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.title
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        type="text"
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        placeholder="คำนำหน้า"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                   <TextField
                     className={"flex w-full items-center gap-3 md:w-[50%]"}
@@ -434,21 +436,24 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                     <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
                       ชื่อ
                     </Label>
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.firstName
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="firstName"
-                      type="text"
-                      className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
-                      placeholder="ชื่อจริง"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.firstName
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="firstName"
+                        type="text"
+                        className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                        placeholder="ชื่อจริง"
+                      />
+
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                   <TextField
                     className={"flex w-full items-center gap-3 md:w-[50%]"}
@@ -456,21 +461,23 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                     <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
                       นามสกุล
                     </Label>
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.lastName
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="lastName"
-                      type="text"
-                      className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
-                      placeholder="นามสกุล"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.lastName
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="lastName"
+                        type="text"
+                        className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                        placeholder="นามสกุล"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                 </div>
               </section>
@@ -485,24 +492,26 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                     <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-44">
                       เลขบัตรประจำตัวประชาชน
                     </Label>
-                    <InputMask
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.idCard
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="idCard"
-                      className="h-8 w-72 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="กรอกหมายเลขบัตรประชาชน"
-                      maxLength={13}
-                      inputMode="numeric"
-                      type="text"
-                      mask="9-9999-99999-99-9"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <InputMask
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.idCard
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="idCard"
+                        className="h-8 w-72 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        placeholder="กรอกหมายเลขบัตรประชาชน"
+                        maxLength={13}
+                        inputMode="numeric"
+                        type="text"
+                        mask="9-9999-99999-99-9"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                 </div>
               </section>
@@ -516,61 +525,67 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       บ้านเลขที่
                     </Label>
-
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.houseNumber
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="houseNumber"
-                      type="text"
-                      className="h-8 w-40  max-w-20 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="บ้านเลขที่"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.houseNumber
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="houseNumber"
+                        type="text"
+                        className="h-8 w-40  max-w-20 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        placeholder="บ้านเลขที่"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                   <TextField className={"flex  items-center gap-3  "}>
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       หมู่ที่
                     </Label>
-
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.villageNumber
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="villageNumber"
-                      type="text"
-                      className="h-8 w-40  max-w-14 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="หมู่"
-                    />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.villageNumber
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="villageNumber"
+                        type="text"
+                        className="h-8 w-40  max-w-14 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        placeholder="หมู่"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                   <TextField className={"flex   items-center gap-3  "}>
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       ถนน
                     </Label>
-
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)?.road
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="road"
-                      type="text"
-                      className="h-8 w-40   rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="ถนน"
-                    />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.road
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="road"
+                        type="text"
+                        className="h-8 w-40   rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        placeholder="ถนน"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                   <TextField className={"flex w-72  items-center gap-3  "}>
                     <Label className=" text-[var(--primary-blue) font-medium ">
@@ -625,21 +640,23 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       รหัสไปรษณีย์
                     </Label>
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.zipCode
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="zipCode"
-                      type="text"
-                      className="h-8 w-40 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="36120"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.zipCode
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="zipCode"
+                        type="text"
+                        className="h-8 w-40 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        placeholder="36120"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                 </div>
               </section>
@@ -655,61 +672,67 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                     <Label className=" text-[var(--primary-blue) min-w-14 font-medium ">
                       สาขาวิชา
                     </Label>
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.major
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="major"
-                      type="text"
-                      className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 md:h-10 md:w-40 md:pl-4 "
-                      placeholder="ภาษาอังกฤษ"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.major
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="major"
+                        type="text"
+                        className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 md:h-10 md:w-40 md:pl-4 "
+                        placeholder="ภาษาอังกฤษ"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                   <TextField className={"flex  items-center gap-3  "}>
                     <Label className=" text-[var(--primary-blue) min-w-12 font-medium ">
                       คณะ
                     </Label>
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.faculty
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="faculty"
-                      type="text"
-                      className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="มนุษยศาสตร์และสังคมศาสตร์"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.faculty
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="faculty"
+                        type="text"
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        placeholder="มนุษยศาสตร์และสังคมศาสตร์"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                   <TextField className={"flex  items-center gap-3  "}>
                     <Label className=" text-[var(--primary-blue) min-w-14 font-medium ">
                       หน่วยงาน
                     </Label>
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.department
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="department"
-                      type="text"
-                      className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-40 md:pl-4 "
-                      placeholder="หน่วยงาน"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.department
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="department"
+                        type="text"
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-40 md:pl-4 "
+                        placeholder="หน่วยงาน"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                 </div>
               </section>
@@ -724,24 +747,28 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                     <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-36">
                       หมายเลขโทรศัพท์
                     </Label>
-                    <InputMask
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.phone
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="phone"
-                      className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="กรอกหมายเลขโทรศัพท์"
-                      maxLength={10}
-                      inputMode="numeric"
-                      type="text"
-                      mask="999-999-9999"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <div className="flex flex-col gap-1">
+                        <InputMask
+                          required
+                          value={
+                            partnerData.find((item) => item.id === partner.id)
+                              ?.phone
+                          }
+                          onChange={(e) =>
+                            handleChangePartnerData({ e, id: partner.id })
+                          }
+                          name="phone"
+                          className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                          placeholder="กรอกหมายเลขโทรศัพท์"
+                          maxLength={10}
+                          inputMode="numeric"
+                          type="text"
+                          mask="999-999-9999"
+                        />
+                        <FieldError className="text-xs text-red-700" />
+                      </div>
+                    </div>
                   </TextField>
                 </div>
               </section>
@@ -755,21 +782,23 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                     <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-20">
                       E-mail
                     </Label>
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.email
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="email"
-                      type="email"
-                      className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="1360401295700"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.email
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="email"
+                        type="email"
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        placeholder="1360401295700"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                 </div>
               </section>
@@ -783,21 +812,23 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                     <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-20">
                       % ส่วนร่วม
                     </Label>
-                    <Input
-                      required
-                      value={
-                        partnerData.find((item) => item.id === partner.id)
-                          ?.participateRate
-                      }
-                      onChange={(e) =>
-                        handleChangePartnerData({ e, id: partner.id })
-                      }
-                      name="participateRate"
-                      type="text"
-                      className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="40"
-                    />
-                    <FieldError className="text-xs text-red-700" />
+                    <div className="flex flex-col gap-1">
+                      <Input
+                        required
+                        value={
+                          partnerData.find((item) => item.id === partner.id)
+                            ?.participateRate
+                        }
+                        onChange={(e) =>
+                          handleChangePartnerData({ e, id: partner.id })
+                        }
+                        name="participateRate"
+                        type="text"
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        placeholder="40"
+                      />
+                      <FieldError className="text-xs text-red-700" />
+                    </div>
                   </TextField>
                 </div>
               </section>

@@ -1,4 +1,4 @@
-import { UseQueryResult } from "@tanstack/react-query";
+import { UseQueryResult, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Label, TextField } from "react-aria-components";
 import { FiPlusCircle } from "react-icons/fi";
@@ -41,15 +41,12 @@ const menuSearchWorks = [
   },
 ];
 function SearchWorkInvention({ invention }: SearchWorkInventionProps) {
+  const queryClient = useQueryClient();
+
   const [activeContent, setActiveContent] = useState<MenuSearchWorks>(
     "สิทธิบัตรหรืออนุสิทธิบัตร",
   );
-  const [searchWorks, setSearchWorks] = useState<
-    PatentRelateToSearchResultOnInventionPatent[]
-  >(
-    invention.data?.workInfoOnInventionPatent
-      .patentRelateToSearchResultOnInventionPatents ?? [],
-  );
+
   const [searchWorkData, setSearchWorkData] = useState<{
     type?: MenuSearchWorks;
     name?: string;
@@ -99,9 +96,20 @@ function SearchWorkInvention({ invention }: SearchWorkInventionProps) {
           .id as string,
         inventionPatentId: invention.data?.id as string,
       });
-      setSearchWorks((prev) => {
-        return [...prev, create];
-      });
+      queryClient.setQueryData(
+        ["invention", { inventionId: invention.data?.id }],
+        {
+          ...invention.data,
+          workInfoOnInventionPatent: {
+            ...invention.data?.workInfoOnInventionPatent,
+            patentRelateToSearchResultOnInventionPatents: [
+              ...(invention.data?.workInfoOnInventionPatent
+                .patentRelateToSearchResultOnInventionPatents ?? []),
+              create,
+            ],
+          },
+        },
+      );
       setSearchWorkData((prev) => {
         delete prev?.releaseDate;
         return {
@@ -145,9 +153,21 @@ function SearchWorkInvention({ invention }: SearchWorkInventionProps) {
       await DeleteSearchInventionPatentService({
         searchInventionId: searchInventionId,
       });
-      setSearchWorks((prev) => {
-        return prev.filter((search) => search.id !== searchInventionId);
-      });
+      const unDelete =
+        invention.data?.workInfoOnInventionPatent.patentRelateToSearchResultOnInventionPatents?.filter(
+          (search) => search.id !== searchInventionId,
+        );
+      queryClient.setQueryData(
+        ["invention", { inventionId: invention.data?.id }],
+        {
+          ...invention.data,
+          workInfoOnInventionPatent: {
+            ...invention.data?.workInfoOnInventionPatent,
+            patentRelateToSearchResultOnInventionPatents: [...(unDelete ?? [])],
+          },
+        },
+      );
+
       Swal.fire({
         title: "ลบข้อมูลสำเร็จ",
         icon: "success",
@@ -400,68 +420,72 @@ function SearchWorkInvention({ invention }: SearchWorkInventionProps) {
         <div className="mt-5 flex w-full flex-col items-center justify-center gap-3">
           <h3 className="font-semibold">ข้อมูลที่เพิ่มล่าสุด</h3>
           <div className="grid w-full grid-cols-3 gap-5">
-            {searchWorks.map((search, index) => (
-              <div
-                key={index}
-                className="relative flex min-h-20 w-full items-start justify-start 
+            {invention.data?.workInfoOnInventionPatent.patentRelateToSearchResultOnInventionPatents.map(
+              (search, index) => (
+                <div
+                  key={index}
+                  className="relative flex min-h-20 w-full items-start justify-start 
                    gap-2 rounded-md bg-[#D6E4FF] p-2 pl-5"
-              >
-                <button
-                  onClick={() =>
-                    handleDeleteSearchWork({ searchInventionId: search.id })
-                  }
-                  type="button"
-                  className="absolute right-2 top-2 flex items-center justify-center gap-2 rounded-md
-                   bg-red-600 px-2 text-white transition duration-100 hover:bg-red-700 active:scale-105"
                 >
-                  <MdDelete />
-                  ลบ
-                </button>
+                  <button
+                    onClick={() =>
+                      handleDeleteSearchWork({ searchInventionId: search.id })
+                    }
+                    type="button"
+                    className="absolute right-2 top-2 flex items-center justify-center gap-2 rounded-md
+                   bg-red-600 px-2 text-white transition duration-100 hover:bg-red-700 active:scale-105"
+                  >
+                    <MdDelete />
+                    ลบ
+                  </button>
 
-                {search.type === "สิทธิบัตรหรืออนุสิทธิบัตร" && (
-                  <ul>
-                    <div className="w-max rounded-lg  bg-main-color px-3 py-1 font-semibold text-white">
-                      {search.type}
-                    </div>
-                    <li className="mt-5">
-                      ชื่อที่แสดงถึงการประดิษฐ์ : {search.nameInovation}
-                    </li>
-                    <li>เลขที่คำขอ/เลขที่สิทธิบัตร :{search.numberRequest}</li>
-                    <li>ประเทศ : {search.country}</li>
-                  </ul>
-                )}
-                {search.type === "วารสารวิชาการ" && (
-                  <ul>
-                    <div className="w-max rounded-lg  bg-main-color px-3 py-1 font-semibold text-white">
-                      {search.type}
-                    </div>
-                    <li className="mt-5">
-                      ชื่อที่แสดงถึงการประดิษฐ์ : {search.nameInovation}{" "}
-                    </li>
-                    <li>ชื่อวารสาร :{search.nameJournal}</li>
-                    <li>
-                      วันที่เผยแพร่ :{" "}
-                      {moment(search.releaseDate).format("DD/MM/YYYY")}
-                    </li>
-                  </ul>
-                )}
-                {search.type === "อื่น ๆ" && (
-                  <ul>
-                    <div className="w-max rounded-lg  bg-main-color px-3 py-1 font-semibold text-white">
-                      {search.type}
-                    </div>
-                    <li className="mt-5">
-                      ชื่อที่แสดงถึงการประดิษฐ์ : {search.nameInovation}{" "}
-                    </li>
-                    <li>ชื่อแหล่งข้อมูล :{search.source}</li>
-                    <li>
-                      วันที่เผยแพร่ :{" "}
-                      {moment(search.releaseDate).format("DD/MM/YYYY")}
-                    </li>
-                  </ul>
-                )}
-              </div>
-            ))}
+                  {search.type === "สิทธิบัตรหรืออนุสิทธิบัตร" && (
+                    <ul>
+                      <div className="w-max rounded-lg  bg-main-color px-3 py-1 font-semibold text-white">
+                        {search.type}
+                      </div>
+                      <li className="mt-5">
+                        ชื่อที่แสดงถึงการประดิษฐ์ : {search.nameInovation}
+                      </li>
+                      <li>
+                        เลขที่คำขอ/เลขที่สิทธิบัตร :{search.numberRequest}
+                      </li>
+                      <li>ประเทศ : {search.country}</li>
+                    </ul>
+                  )}
+                  {search.type === "วารสารวิชาการ" && (
+                    <ul>
+                      <div className="w-max rounded-lg  bg-main-color px-3 py-1 font-semibold text-white">
+                        {search.type}
+                      </div>
+                      <li className="mt-5">
+                        ชื่อที่แสดงถึงการประดิษฐ์ : {search.nameInovation}{" "}
+                      </li>
+                      <li>ชื่อวารสาร :{search.nameJournal}</li>
+                      <li>
+                        วันที่เผยแพร่ :{" "}
+                        {moment(search.releaseDate).format("DD/MM/YYYY")}
+                      </li>
+                    </ul>
+                  )}
+                  {search.type === "อื่น ๆ" && (
+                    <ul>
+                      <div className="w-max rounded-lg  bg-main-color px-3 py-1 font-semibold text-white">
+                        {search.type}
+                      </div>
+                      <li className="mt-5">
+                        ชื่อที่แสดงถึงการประดิษฐ์ : {search.nameInovation}{" "}
+                      </li>
+                      <li>ชื่อแหล่งข้อมูล :{search.source}</li>
+                      <li>
+                        วันที่เผยแพร่ :{" "}
+                        {moment(search.releaseDate).format("DD/MM/YYYY")}
+                      </li>
+                    </ul>
+                  )}
+                </div>
+              ),
+            )}
           </div>
         </div>
       </div>

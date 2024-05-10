@@ -6,6 +6,7 @@ import {
   Websites,
 } from "../data/invention";
 import {
+  DocumentType,
   FileWorkType,
   MenuSearchWorks,
   StatusPartner,
@@ -164,9 +165,7 @@ export type CompanyInterestedOnSupportingDataInventionPatent = {
   coordinator: string;
   phone: string;
   inventionPatentId: string;
-  inventionPatent: InventionPatent;
   supportingDataOnInventionPatentId: string;
-  supportingDataOnInventionPatent: SupportingDataOnInventionPatent;
   userId: string;
 };
 
@@ -179,6 +178,5 @@ export type FileOnInventionPatent = {
   url: string;
   size: number;
   inventionPatentId: string;
-  inventionPatent: InventionPatent;
   userId: string;
 };

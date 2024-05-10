@@ -1,29 +1,26 @@
 import React from "react";
-import { FileWorkType } from "../../../../models";
+import { DocumentType, FileWorkType } from "../../../../models";
 import { BsFileEarmarkCode } from "react-icons/bs";
 import { GrFormView } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 
-type FileOnWorkInventionProps = {
+type FileOnInventionProps = {
   file: {
     id?: string | undefined;
     url: string;
-    name?: FileWorkType | undefined;
+    documentType: DocumentType | undefined;
     type?: string | undefined;
     file?: File | undefined;
   };
   handleDeleteFile: ({
     url,
-    fileOnWorkId,
+    fileOnInventionId,
   }: {
     url: string;
-    fileOnWorkId?: string;
+    fileOnInventionId?: string;
   }) => Promise<void>;
 };
-function FileOnWorkInvention({
-  file,
-  handleDeleteFile,
-}: FileOnWorkInventionProps) {
+function FileOnInvention({ file, handleDeleteFile }: FileOnInventionProps) {
   const fileName = file?.url?.split("/").pop();
 
   return (
@@ -50,7 +47,7 @@ function FileOnWorkInvention({
         <button
           type="button"
           onClick={() =>
-            handleDeleteFile({ url: file.url, fileOnWorkId: file.id })
+            handleDeleteFile({ url: file.url, fileOnInventionId: file.id })
           }
           className=" z-10 flex cursor-pointer 
    items-center justify-center gap-2 rounded-md bg-red-500 p-1  text-xl text-white"
@@ -62,4 +59,4 @@ function FileOnWorkInvention({
   );
 }
 
-export default FileOnWorkInvention;
+export default FileOnInvention;
