@@ -3,7 +3,7 @@ import Head from "next/head";
 import React, { useCallback, useState } from "react";
 import { nrruInventionSection } from "../../../data/PatentSection";
 import NrruInventionForm1 from "../../../components/nrru/invention-patent/NrruInventionForm1";
-import NrruInventionForm2 from "../../../components/nrru/invention-patent/NrruInventionForm2";
+import NrruInventionForm2 from "../../../components/nrru/invention-patent/NrruInventionForm2/NrruInventionForm2";
 import NrruInventionForm3 from "../../../components/nrru/invention-patent/NrruInventionForm3";
 import NrruInventionForm4 from "../../../components/nrru/invention-patent/NrruInventionForm4";
 import NrruInventionForm5 from "../../../components/nrru/invention-patent/NrruInventionForm5";
