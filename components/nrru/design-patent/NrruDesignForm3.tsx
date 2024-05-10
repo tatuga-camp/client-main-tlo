@@ -3,14 +3,24 @@ import React from "react";
 import {
   Button,
   FieldError,
+  Checkbox,
+  CheckboxGroup,
   Form,
   Input,
   Label,
   TextField,
+  Radio,
+  RadioGroup,
 } from "react-aria-components";
 import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import { FiPlusCircle } from "react-icons/fi";
-import Checkbox from "@mui/material/Checkbox";
+import { IoIosCheckbox } from "react-icons/io";
+import {
+  MdCheckBoxOutlineBlank,
+  MdOutlineRadioButtonChecked,
+  MdOutlineRadioButtonUnchecked,
+} from "react-icons/md";
+import { menuNrruDesign3 } from "@/data/menuDesign";
 
 const NrruDesignForm3 = () => {
   return (
@@ -20,29 +30,43 @@ const NrruDesignForm3 = () => {
         <section className="flex flex-col items-start justify-center gap-3 md:gap-5  lg:flex-row">
           <section className="flex items-center gap-3">
             <Number number={1} />
-            <p className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
-              ระยะเวลาในการประดิษฐ์/การวิจัย :
+            <p className="my-2 text-[0.8rem] font-semibold md:min-w-[25rem] md:text-base">
+              ระยะเวลาในการออกแบบผลิตภัณฑ์/การวิจัย :
             </p>
           </section>
           <div className="flex w-full flex-col gap-3 pl-7 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <TextField className={"flex w-full min-w-60 items-center gap-3 "}>
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
-                placeholder="จำนวนปี"
-              />
+            <TextField
+              isRequired
+              className={"flex w-full min-w-60 items-center gap-3 "}
+            >
+              <section className="flex flex-col">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
+                  placeholder="จำนวนปี"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
+
               <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-24">
                 ปี
               </Label>
             </TextField>
-            <TextField className={"flex w-full min-w-60 items-center gap-3 "}>
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
-                placeholder="จำนวนเดือน"
-              />
+            <TextField
+              isRequired
+              className={"flex w-full min-w-60 items-center gap-3 "}
+            >
+              <section className="flex flex-col">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
+                  placeholder="จำนวนเดือน"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
+
               <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-24">
                 เดือน
               </Label>
@@ -54,17 +78,23 @@ const NrruDesignForm3 = () => {
           <section className="flex items-center gap-3">
             <Number number={2} />
             <p className="my-2 text-[0.8rem] font-semibold md:min-w-96 md:text-base">
-              ค่าใช้จ่ายที่ใช้ในการออกแบบผลิตภัณฑ์/ดำเนินการวิจัย :
+              ค่าใช้จ่ายที่ใช้ในการประดิษฐ์ผลงาน/ดำเนินการวิจัย :
             </p>
           </section>
           <div className="flex w-full flex-col gap-3 pl-7 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <TextField className={"flex w-full min-w-60 items-center gap-3 "}>
-              <Input
-                name=""
-                type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
-                placeholder=""
-              />
+            <TextField
+              isRequired
+              className={"flex w-full min-w-60 items-center gap-3 "}
+            >
+              <section className="flex flex-col">
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
+                  placeholder=""
+                />
+                <FieldError className="text-xs text-red-700" />
+              </section>
               <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-24">
                 บาท
               </Label>
@@ -76,63 +106,61 @@ const NrruDesignForm3 = () => {
           <section className="flex items-center gap-3">
             <Number number={3} />
             <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              ข้อมูลประกอบการสืบค้นสิทธิบัตรเบื้องต้น
+              ผลงานนี้สามารถนำไปใช้ประโยชน์ในรูปแบบหรือลักษณะใด (ตอบได้มากกว่า 1
+              ข้อ)
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <section className="flex w-full flex-col  gap-3 md:pl-10">
-              <div className="grid grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:w-[80%] md:grid-cols-2 md:gap-3 md:pl-0 md:text-[0.9rem]">
-                {/* row1 */}
-                <section className=" flex items-center gap-2 ">
-                  <div>
-                    <Checkbox inputProps={{ "aria-label": "controlled" }} />
-                  </div>
-                  <p className="font-medium"> การใช้ประโยชน์เชิงวิชาการ</p>
-                </section>
-                <section className=" flex items-center gap-2">
-                  <div>
-                    <Checkbox inputProps={{ "aria-label": "controlled" }} />
-                  </div>
-                  <p className="font-medium"> การใช้ประโยชน์เชิงนโยบาย</p>
-                </section>
-                <section className=" flex items-center gap-2">
-                  <div>
-                    <Checkbox inputProps={{ "aria-label": "controlled" }} />
-                  </div>
-                  <p className="font-medium">การใช้ประโยชน์เชิงสาธารณะ</p>
-                </section>
-                <section className=" flex items-center gap-2">
-                  <div>
-                    <Checkbox inputProps={{ "aria-label": "controlled" }} />
-                  </div>
-                  <p className="font-medium"> การใช้ประโยชน์เชิงพาณิชย์</p>
-                </section>
-              </div>
-              <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
-                <div className="flex items-center gap-2">
-                  <div>
-                    <Checkbox inputProps={{ "aria-label": "controlled" }} />
-                  </div>
-                  <p className="font-medium md:text-[0.9rem]">
-                    การใช้ประโยชน์ด้านอื่นๆ (โปรดระบุ)
-                  </p>
-                </div>
+          <CheckboxGroup className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+            <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:grid-cols-2 md:gap-3 md:pl-0 md:text-base">
+              {/* row1 */}
 
-                <TextField className={"ml-3"}>
-                  <Input
-                    name=""
-                    type="text"
-                    className=" h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                    placeholder=""
-                  />
-                </TextField>
-              </section>
-              <button className=" flex w-full items-center justify-center gap-3  rounded-md bg-[#BED6FF] p-2 px-5 font-semibold duration-300 hover:bg-[#91B2EB]   md:w-72 md:gap-5">
-                <p>รูปแบบการใช้ประโยชน์ (คลิก)</p>
-              </button>
+              {menuNrruDesign3.map((item, index) => {
+                return (
+                  <Checkbox
+                    key={index}
+                    className={({ isPressed, isSelected }) =>
+                      isSelected ? "" : ""
+                    }
+                    value={item.title}
+                  >
+                    {({ isSelected }) => (
+                      <div className="flex items-center justify-start gap-2 ">
+                        <div className=" text-3xl">
+                          {isSelected ? (
+                            <IoIosCheckbox />
+                          ) : (
+                            <MdCheckBoxOutlineBlank />
+                          )}
+                        </div>
+                        <span className="font-medium">{item.title}</span>
+                      </div>
+                    )}
+                  </Checkbox>
+                );
+              })}
+            </div>
+            <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
+              <div className="flex items-center gap-2">
+                <div>
+                  <Checkbox />
+                </div>
+                <p className="text-[0.8rem] font-medium md:text-base">
+                  การใช้ประโยชน์ด้านอื่นๆ (โปรดระบุ)
+                </p>
+              </div>
+
+              <TextField className={"ml-3"}>
+                <Input
+                  name=""
+                  type="text"
+                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                  placeholder="โปรดระบุ"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </TextField>
             </section>
-          </div>
+          </CheckboxGroup>
         </section>
         {/* ข้อ 4*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
@@ -156,38 +184,57 @@ const NrruDesignForm3 = () => {
             </section>
             <section className="flex w-full items-center justify-between rounded-md border-[1px] border-solid border-[#BED6FF] p-2 ">
               <div className="flex w-full flex-col gap-3 pl-0 text-[0.75rem] md:gap-2 md:pl-0 md:text-[0.85rem] lg:flex-row">
-                <TextField className={"flex w-full items-center gap-2 "}>
+                <TextField
+                  isRequired
+                  className={"flex w-full items-center gap-2 "}
+                >
                   <Label className=" text-[var(--primary-blue) min-w-20 font-medium md:min-w-44">
                     1) ชื่อหน่วยงาน/บริษัทที่สนใจ :
                   </Label>
-                  <Input
-                    name=""
-                    type="text"
-                    className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
-                    placeholder="กรอกข้อมูล"
-                  />
+                  <section className="flex flex-col">
+                    <Input
+                      name=""
+                      type="text"
+                      className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
+                      placeholder="กรอกข้อมูล"
+                    />
+                    <FieldError className="text-xs text-red-700" />
+                  </section>
                 </TextField>
-                <TextField className={"flex w-full  items-center gap-2 "}>
+                <TextField
+                  isRequired
+                  className={"flex w-full  items-center gap-2 "}
+                >
                   <Label className=" text-[var(--primary-blue) min-w-20 font-medium md:min-w-14">
                     ชื่อผู้ประสาน :
                   </Label>
-                  <Input
-                    name=""
-                    type="text"
-                    className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
-                    placeholder="กรอกข้อมูล"
-                  />
+                  <section className="flex flex-col">
+                    <Input
+                      name=""
+                      type="text"
+                      className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
+                      placeholder="กรอกข้อมูล"
+                    />
+                    <FieldError className="text-xs text-red-700" />
+                  </section>
                 </TextField>
-                <TextField className={"flex w-full  items-center gap-2 "}>
+                <TextField
+                  isRequired
+                  className={"flex w-full  items-center gap-2 "}
+                >
                   <Label className=" text-[var(--primary-blue) min-w-20 font-medium md:min-w-14">
                     เบอร์ติดต่อ :
                   </Label>
-                  <Input
-                    name=""
-                    type="text"
-                    className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
-                    placeholder="กรอกข้อมูล"
-                  />
+                  <section className="flex flex-col">
+                    <Input
+                      name=""
+                      type="text"
+                      className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
+                      placeholder="กรอกข้อมูล"
+                    />
+
+                    <FieldError className="text-xs text-red-700" />
+                  </section>
                 </TextField>
               </div>
             </section>
@@ -203,35 +250,53 @@ const NrruDesignForm3 = () => {
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-10 md:text-base">
-            <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
-              <div className="flex items-center gap-2">
-                <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
-                </div>
-                <p className="text-[0.8rem] font-medium md:text-base">ยินยอม</p>
-              </div>
-            </section>
-            <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
-              <div className="flex items-center gap-2">
-                <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
-                </div>
-                <p className="text-[0.8rem] font-medium md:text-base">
-                  ไม่ยินยอม
-                </p>
-              </div>
-
-              <TextField className={"ml-3"}>
-                <Input
-                  name=""
-                  type="text"
-                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                  placeholder="กรุณาระบุเหตุผล"
-                />
-              </TextField>
-            </section>
-          </div>
+          <RadioGroup className="my-3 flex flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row">
+            <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-0 md:text-base">
+              <Radio value={"1"} className="flex items-center">
+                {({ isSelected }) => (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="text-2xl">
+                      {isSelected ? (
+                        <MdOutlineRadioButtonChecked />
+                      ) : (
+                        <MdOutlineRadioButtonUnchecked />
+                      )}
+                    </div>
+                    <span className="font-medium">ยินยอม</span>
+                  </div>
+                )}
+              </Radio>
+              <Radio value={"2"} className="flex items-center">
+                {({ isSelected }) => (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="text-2xl">
+                      {isSelected ? (
+                        <MdOutlineRadioButtonChecked />
+                      ) : (
+                        <MdOutlineRadioButtonUnchecked />
+                      )}
+                    </div>
+                    <span className="font-medium md:min-w-[7rem]">
+                      ไม่ยินยอม
+                    </span>
+                    <TextField
+                      className={"flex w-full items-center gap-3 md:w-[70%]"}
+                    >
+                      <section className="flex w-full flex-col">
+                        <Input
+                          name=""
+                          type="text"
+                          className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                          placeholder="กรุณาระบุเหตุผล"
+                        />
+                        <FieldError className="text-xs text-red-700" />
+                      </section>
+                    </TextField>
+                  </div>
+                )}
+              </Radio>
+            </div>
+          </RadioGroup>
         </section>
       </Form>
     </div>
