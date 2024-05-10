@@ -339,7 +339,7 @@ const OutsiderInventionForm2 = () => {
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <section className="flex w-full items-center gap-3 md:pl-10">
               <p className="font-semibold md:min-w-52">
-                9.1 Keyword ที่ใช้ในการสืบค้น
+                7.1 Keyword ที่ใช้ในการสืบค้น
               </p>
               <TextField className={"w-full md:px-8"}>
                 <Input
@@ -352,7 +352,7 @@ const OutsiderInventionForm2 = () => {
             </section>
             <section className="flex w-full flex-col  gap-3 md:pl-10">
               <p className="font-semibold md:min-w-52">
-                9.2 เว็บไซต์/ฐานข้อมูลที่ใช้ในการสืบค้น
+                7.2 เว็บไซต์/ฐานข้อมูลที่ใช้ในการสืบค้น
               </p>
               <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:grid-cols-2 md:gap-3 md:pl-0 md:text-base">
                 {/* row1 */}
@@ -406,7 +406,7 @@ const OutsiderInventionForm2 = () => {
             </section>
             <section className="flex w-full items-center gap-3 md:pl-10">
               <p className="font-semibold md:min-w-52">
-                9.3 ผลของการสืบค้นพบว่า
+                7.3 ผลของการสืบค้นพบว่า
               </p>
               <TextField className={"w-full md:px-8"}>
                 <Input
@@ -419,7 +419,7 @@ const OutsiderInventionForm2 = () => {
             </section>
             <section className="flex w-full flex-col gap-3 md:pl-10">
               <p className="font-semibold md:min-w-52">
-                9.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น
+                7.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น
                 หรืองานที่ปรากฏอยู่ก่อน
               </p>
               <div className="flex flex-col items-center justify-center md:w-full">
