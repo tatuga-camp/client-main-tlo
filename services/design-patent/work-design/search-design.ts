@@ -1,12 +1,16 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
-import { PatentRelateToSearchResultOnDesignPatent } from "../../../models";
+import {
+  MenuSearchWorks,
+  PatentRelateToSearchResultOnDesignPatent,
+} from "../../../models";
 
 type RequestCreateSearchDesignPatentService = {
-  type: string;
+  type: MenuSearchWorks;
   nameInovation: string;
-  number: string;
+  numberRequest: string;
   nameJournal: string;
+  source: string;
   country: string;
   releaseDate: string;
   workInfoOnDesignPatentId: string;

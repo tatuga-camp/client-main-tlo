@@ -50,6 +50,7 @@ type RequestUpdateSupportInventionPatentService = {
     allowPublic?: string;
     reasonPublic?: string;
     otherBenefit?: string;
+    isComplete?: boolean;
   };
 };
 type ResponseUpdateSupportInventionPatentService =

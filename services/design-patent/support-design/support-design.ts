@@ -46,7 +46,9 @@ type RequestUpdateSupportDesignPatentService = {
     durationMonth?: string;
     cost?: number;
     benefit?: string[];
-    allowPublic?: boolean;
+    otherBenefit?: string;
+    allowPublic?: string;
+    isComplete?: boolean;
     reasonPublic?: string;
   };
 };

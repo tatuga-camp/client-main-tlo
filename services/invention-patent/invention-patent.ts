@@ -111,8 +111,25 @@ export async function GetInventionPatentService(
 }
 
 type ResponseCreateInventionPatentService = InventionPatent;
-
-export async function CreateInventionPatentService(): Promise<ResponseCreateInventionPatentService> {
+type RequestCreateInventionPatentService = {
+  personStatus?: string;
+  title?: string;
+  firstName?: string;
+  lastName?: string;
+  idCard?: string;
+  adressNumber?: string;
+  moo?: string;
+  road?: string;
+  tambon?: string;
+  amphure?: string;
+  provice?: string;
+  postcode?: string;
+  nationality?: string;
+  email?: string;
+};
+export async function CreateInventionPatentService(
+  input: RequestCreateInventionPatentService,
+): Promise<ResponseCreateInventionPatentService> {
   try {
     const cookies = parseCookies();
     const access_token = cookies.access_token;

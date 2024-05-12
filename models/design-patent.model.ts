@@ -1,4 +1,16 @@
-import { StatusPartner } from "./type.model";
+import {
+  FundingLists,
+  PublicType,
+  ResearchOwnershipSubmission,
+  ResearchType,
+  Websites,
+} from "../data/invention";
+import {
+  DocumentType,
+  FileWorkType,
+  MenuSearchWorks,
+  StatusPartner,
+} from "./type.model";
 
 export type DesignPatent = {
   id: string;
@@ -66,25 +78,33 @@ export type WorkInfoOnDesignPatent = {
   updateAt: string;
   thaiName: string;
   englishName: string;
-  beginWorkAt: string;
-  finishWorkAt: string;
-  benefit: string[];
-  funding: string;
-  yearFunding: string;
-  researchOwnershipSubmission: string;
-  signedDocument: string;
-  keywords: string;
-  website: string;
-  searchResult: string;
-  requestNumber: string;
-  requestDate: string;
-  requestCountry: string;
-  publicType: string;
-  publicDetail: string;
-  outstandingDetail: string[];
-  descriptionDetail: string;
-  marketDetail: string;
-  futureDetail: string;
+  beginWorkAt?: string;
+  finishWorkAt?: string;
+  benefit?: string[];
+  otherBenefit?: string;
+  funding?: FundingLists;
+  sourceFunding?: string;
+  yearFunding?: string;
+  researchOwnershipSubmission?: ResearchOwnershipSubmission;
+  agreementTitle?: string;
+  agreementInstitution?: string;
+  agreementYear?: string;
+  otherAgreement?: string;
+  researchResult?: ResearchType;
+  keywords?: string;
+  website?: Websites;
+  searchResult?: string;
+  isRequest?: string;
+  requestNumber?: string;
+  requestDate?: string;
+  requestCountry?: string;
+  publicType?: PublicType;
+  otherPublicType?: string;
+  publicDetail?: string;
+  outstandingDetail?: string;
+  descriptionDetail?: string;
+  futureDetail?: string;
+  isComplete: boolean;
   designPatentId: string;
   userId: string;
 };
@@ -93,24 +113,26 @@ export type PatentRelateToSearchResultOnDesignPatent = {
   id: string;
   createAt: string;
   updateAt: string;
-  type: string;
+  type: MenuSearchWorks;
   nameInovation: string;
-  number: string;
+  numberRequest: string;
   nameJournal: string;
   country: string;
+  source: string;
   releaseDate: string;
   designPatentId: string;
   workInfoOnDesignPatentId: string;
   userId: string;
 };
 
-export type FilePublicResearchOnDesignPatent = {
+export type FileOnWorkDesignPatent = {
   id: string;
   createAt: string;
   updateAt: string;
   type: string;
   url: string;
   size: number;
+  name: FileWorkType;
   designPatentId: string;
   designPatent: DesignPatent;
   workInfoOnDesignPatentId: string;
@@ -125,7 +147,9 @@ export type SupportingDataOnDesignPatent = {
   durationMonth: string;
   cost: number;
   benefit: string[];
-  allowPublic: boolean;
+  otherBenefit: string;
+  allowPublic: string;
+  isComplete: boolean;
   reasonPublic: string;
   designPatentId: string;
   userId: string;
