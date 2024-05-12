@@ -3,23 +3,143 @@ import Head from "next/head";
 import React, { useState } from "react";
 
 import NrruDesignForm1 from "@/components/nrru/design-patent/NrruDesignForm1";
-import NrruDesignForm2 from "@/components/nrru/design-patent/NrruDesignForm2";
-import NrruDesignForm3 from "@/components/nrru/design-patent/NrruDesignForm3";
-import NrruDesignForm4 from "@/components/nrru/design-patent/NrruDesignForm4";
+import NrruDesignForm2 from "@/components/nrru/design-patent/NrruDesignForm2/NrruDesignForm2";
+import NrruDesignForm3 from "@/components/nrru/design-patent/NrruDesignForm3/NrruDesignForm3";
+import NrruDesignForm4 from "@/components/nrru/design-patent/NrruDesignForm4/NrruDesignForm4";
 import NrruDesignForm5 from "@/components/nrru/design-patent/NrruDesignForm5";
 import { nrruDesignnSection } from "@/data/PatentSection";
+import { useRouter as NextuseRouter } from "next/router";
+import { useRouter } from "next-nprogress-bar";
+import { useQuery } from "@tanstack/react-query";
+import {
+  DeleteDesignPatentService,
+  GetDesignPatentService,
+} from "../../../services/design-patent/design-patent";
+import { ErrorMessages, User } from "../../../models";
+import Swal from "sweetalert2";
+import { MdDelete } from "react-icons/md";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetUserService } from "../../../services/user";
+import { describe } from "node:test";
 
-const Index = () => {
+const Index = ({ user }: { user: User }) => {
+  const router = NextuseRouter();
+  const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
+
+  const design = useQuery({
+    queryKey: ["design", { designId: router.query.designId as string }],
+    queryFn: () =>
+      GetDesignPatentService({
+        designPatentId: router.query.designId as string,
+      }),
+  });
 
   const previousSection = () => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
+      window.scroll(0, 0);
     }
   };
   const nextSection = () => {
-    if (currentSection < nrruDesignnSection.length - 1) {
-      setCurrentSection(currentSection + 1);
+    try {
+      if (currentSection < nrruDesignnSection.length - 1) {
+        handleValidateForm({ number: currentSection + 1 });
+        setCurrentSection(currentSection + 1);
+        window.scroll(0, 0);
+      }
+    } catch (error) {
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
+  };
+
+  const handleValidateForm = ({ number }: { number: number }) => {
+    let message: string;
+    if (number === 1 && design.data?.partnerInfoOnDesignPatents.length === 0) {
+      throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
+    } else if (
+      number === 2 &&
+      (design.data?.workInfoOnDesignPatent.isComplete === false ||
+        design.data?.partnerInfoOnDesignPatents.length === 0)
+    ) {
+      throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
+    } else if (
+      number === 3 &&
+      (!design.data?.workInfoOnDesignPatent.id ||
+        design.data?.partnerInfoOnDesignPatents.length === 0 ||
+        design.data?.supportingDataOnDesignPatent.isComplete === false)
+    ) {
+      throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
+    } else if (
+      number === 4 &&
+      (design.data?.fileOnDesignPatents.length === 0 ||
+        design.data?.supportingDataOnDesignPatent.isComplete === false ||
+        design.data?.workInfoOnDesignPatent.isComplete === false ||
+        design.data?.partnerInfoOnDesignPatents.length === 0)
+    ) {
+      throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");
+    }
+  };
+
+  const handleDeleteDesign = async ({ designId }: { designId: string }) => {
+    const replacedText = "ยืนยันการลบข้อมูล";
+    let content = document.createElement("div");
+    content.innerHTML =
+      "<div>กรุณาพิมพ์คำด้านล่าง </div> <strong>" +
+      replacedText +
+      "</strong> <div>เพื่อเป็นการยืนยันในการลบข้อมูล</div>";
+    const { value } = await Swal.fire({
+      title: "ยืนยันการลบข้อมูล",
+      input: "text",
+      footer:
+        "ข้อมูลทั้งหมดที่เกี่ยวข้องกับข้อมูลนี้จะถูกลบออกทั้งหมด และไม่สามารถกู้คืนได้อีก",
+      html: content,
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (value !== replacedText) {
+          return "คำที่พิมพ์ไม่ตรงกับคำที่ต้องการลบ กรุณาลองใหม่อีกครั้ง";
+        }
+      },
+    });
+    if (value) {
+      try {
+        Swal.fire({
+          title: "กำลังดำเนินการลบข้อมูล",
+          html: "กรุณารอสักครู่",
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        await DeleteDesignPatentService({
+          designPatentId: designId,
+        });
+        naviateRouter.push("/dashboard");
+        Swal.fire({
+          title: "ลบข้อมูลสำเร็จ",
+          icon: "success",
+        });
+      } catch (error) {
+        let result = error as ErrorMessages;
+        Swal.fire({
+          title: result.error ? result.error : "เกิดข้อผิดพลาด",
+          text: result.message.toString(),
+          footer: result.statusCode
+            ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+            : "",
+          icon: "error",
+        });
+      }
     }
   };
   return (
@@ -27,7 +147,7 @@ const Index = () => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <title>Design patent</title>
+        <title>แบบฟอร์มประกอบคำขอรับสิทธิบัตรการออกแบบผลิตภัณฑ์</title>
       </Head>
       <HomeLayout>
         <div className="flex h-full w-full flex-col items-center bg-[#F4F8FF] pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center">
@@ -39,12 +159,40 @@ const Index = () => {
               <p>สำหรับบุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา</p>
             </section>
 
+            <button
+              onClick={() =>
+                handleDeleteDesign({
+                  designId: router.query.designId as string,
+                })
+              }
+              className="flex items-center justify-center gap-2 rounded-lg bg-red-600 px-10 py-2
+             text-white drop-shadow-md transition hover:bg-red-700 active:scale-105"
+            >
+              ลบคำขอ
+              <MdDelete />
+            </button>
+
             <section className="flex w-full flex-wrap items-center justify-center gap-3">
               {nrruDesignnSection.map((item, index) => (
                 <button
                   key={index}
                   className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md duration-200 hover:text-blue-500 md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
-                  onClick={() => setCurrentSection(index)}
+                  onClick={() => {
+                    try {
+                      handleValidateForm({ number: index });
+                      setCurrentSection(index);
+                    } catch (error) {
+                      let result = error as ErrorMessages;
+                      Swal.fire({
+                        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+                        text: result.message.toString(),
+                        footer: result.statusCode
+                          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+                          : "",
+                        icon: "error",
+                      });
+                    }
+                  }}
                 >
                   <h2 className={`text-base font-semibold md:text-lg`}>
                     {item.section}
@@ -63,22 +211,22 @@ const Index = () => {
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
-                  <NrruDesignForm1 />
+                  <NrruDesignForm1 user={user} design={design} />
                 </div>
               )}
               {currentSection == 1 && (
                 <div>
-                  <NrruDesignForm2 />
+                  <NrruDesignForm2 design={design} />
                 </div>
               )}
               {currentSection == 2 && (
                 <div>
-                  <NrruDesignForm3 />
+                  <NrruDesignForm3 design={design} />
                 </div>
               )}
               {currentSection == 3 && (
                 <div>
-                  <NrruDesignForm4 />
+                  <NrruDesignForm4 design={design} />
                 </div>
               )}
               {currentSection == 4 && (
@@ -86,7 +234,7 @@ const Index = () => {
                   <p className="my-5 w-full items-center text-center  font-bold">
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
-                  <NrruDesignForm5 />
+                  <NrruDesignForm5 design={design} user={user} />
                 </div>
               )}
             </section>
@@ -120,3 +268,27 @@ const Index = () => {
 };
 
 export default Index;
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext,
+) => {
+  try {
+    const user = await GetUserService({
+      type: "SERVER-SIDE",
+      context: ctx,
+    });
+    return {
+      props: {
+        user,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      redirect: {
+        destination: "/auth/sign-in",
+        permanent: false,
+      },
+    };
+  }
+};

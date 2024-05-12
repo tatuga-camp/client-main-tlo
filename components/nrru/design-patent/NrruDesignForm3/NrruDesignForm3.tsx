@@ -1,44 +1,44 @@
 import Number from "@/components/Number";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
+  FieldError,
   Checkbox,
   CheckboxGroup,
-  FieldError,
   Form,
   Input,
   Label,
+  TextField,
   Radio,
   RadioGroup,
   TextArea,
-  TextField,
 } from "react-aria-components";
 import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import { FiPlusCircle } from "react-icons/fi";
-import CompanyInterest from "./CompanyInterest";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
-import { ErrorMessages } from "../../../../models";
-import Swal from "sweetalert2";
-import SnackbarLoading from "../../../Snackbars/SnackBarLoading";
-import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
-import { InputNumber } from "primereact/inputnumber";
-import { supportBenefits } from "../../../../data/invention";
+import { IoIosCheckbox } from "react-icons/io";
 import {
   MdCheckBoxOutlineBlank,
   MdOutlineRadioButtonChecked,
   MdOutlineRadioButtonUnchecked,
 } from "react-icons/md";
-import { IoIosCheckbox } from "react-icons/io";
-import Link from "next/link";
-import { UpdateSupportInventionPatentService } from "../../../../services/invention-patent/support-invention/support-invention";
+import { menuNrruDesign3 } from "@/data/menuDesign";
 import { UseQueryResult } from "@tanstack/react-query";
-import { ResponseGetInventionPatentService } from "../../../../services/invention-patent/invention-patent";
+import { ResponseGetDesignPatentService } from "../../../../services/design-patent/design-patent";
+import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
+import SnackbarLoading from "../../../Snackbars/SnackBarLoading";
+import { UpdateSupportDesignPatentService } from "../../../../services/design-patent/support-design/support-design";
+import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
+import { ErrorMessages } from "../../../../models";
+import Swal from "sweetalert2";
+import CompanyInterest from "./CompanyInterest";
+import Link from "next/link";
+import { supportBenefits } from "../../../../data/invention";
+import { InputNumber } from "primereact/inputnumber";
 
-type NrruInventionForm3Props = {
-  invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
+type NrruDesignForm3Props = {
+  design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
-
-const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
+const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -56,17 +56,13 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
     otherBenefit?: string;
   }>(() => {
     return {
-      durationYear:
-        invention.data?.supportingDataOnInventionPatent.durationYear,
-      durationMonth:
-        invention.data?.supportingDataOnInventionPatent.durationMonth,
-      cost: invention.data?.supportingDataOnInventionPatent.cost,
-      benefit: invention.data?.supportingDataOnInventionPatent.benefit,
-      allowPublic: invention.data?.supportingDataOnInventionPatent.allowPublic,
-      reasonPublic:
-        invention.data?.supportingDataOnInventionPatent.reasonPublic,
-      otherBenefit:
-        invention.data?.supportingDataOnInventionPatent.otherBenefit,
+      durationYear: design.data?.supportingDataOnDesignPatent.durationYear,
+      durationMonth: design.data?.supportingDataOnDesignPatent.durationMonth,
+      cost: design.data?.supportingDataOnDesignPatent.cost,
+      benefit: design.data?.supportingDataOnDesignPatent.benefit,
+      allowPublic: design.data?.supportingDataOnDesignPatent.allowPublic,
+      reasonPublic: design.data?.supportingDataOnDesignPatent.reasonPublic,
+      otherBenefit: design.data?.supportingDataOnDesignPatent.otherBenefit,
     };
   });
 
@@ -94,9 +90,9 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
           action: <SnackbarLoading />,
         };
       });
-      await UpdateSupportInventionPatentService({
+      await UpdateSupportDesignPatentService({
         query: {
-          supportInventionId: invention.data?.supportingDataOnInventionPatent
+          supportDesignId: design.data?.supportingDataOnDesignPatent
             .id as string,
         },
         body: {
@@ -111,7 +107,7 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
         },
       });
 
-      await invention.refetch();
+      await design.refetch();
       setSnackBarData(() => {
         return {
           open: true,
@@ -319,7 +315,7 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
         </CheckboxGroup>
 
         {/* ข้อ 4*/}
-        <CompanyInterest invention={invention} />
+        <CompanyInterest design={design} />
 
         {/* ข้อ 5*/}
         <RadioGroup
@@ -389,7 +385,7 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
                   name="reasonPublic"
                   required={supportData?.allowPublic === "ไม่ยินยอม"}
                   className="no-re min-h-52   w-full	 resize-none
-                 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+               rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
                   placeholder="กรุณาระบุเหตุผลที่ไม่ยินยอมประชาสัมพันธ์ผลงาน"
                 />
                 <FieldError className="text-xs text-red-700" />
@@ -403,4 +399,4 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
   );
 };
 
-export default NrruInventionForm3;
+export default NrruDesignForm3;
