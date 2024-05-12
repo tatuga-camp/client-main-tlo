@@ -20,7 +20,7 @@ const Index = ({ user }: { user: User }) => {
         showConfirmButton: false,
         allowOutsideClick: false,
       });
-      const create = await CreateInventionPatentService();
+      const create = await CreateInventionPatentService({});
       router.push(
         `/${user.type === "INTERNAL" ? "nrru" : "outsider"}/invention-patent/${create.id}`,
       );

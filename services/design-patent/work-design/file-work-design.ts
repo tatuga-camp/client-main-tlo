@@ -1,16 +1,16 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
-import { FilePublicResearchOnDesignPatent } from "../../../models";
+import { FileOnWorkDesignPatent, FileWorkType } from "../../../models";
 
 type RequestCreateFileWorkDesignPatentService = {
   type: string;
   url: string;
   size: number;
+  name: FileWorkType;
   workInfoOnDesignPatentId: string;
   designPatentId: string;
 };
-type ResponseCreateFileWorkDesignPatentService =
-  FilePublicResearchOnDesignPatent;
+type ResponseCreateFileWorkDesignPatentService = FileOnWorkDesignPatent;
 
 export async function CreateFileWorkDesignPatentService(
   input: RequestCreateFileWorkDesignPatentService,
@@ -20,7 +20,7 @@ export async function CreateFileWorkDesignPatentService(
     const access_token = cookies.access_token;
     const fileWork = await axios({
       method: "POST",
-      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-research-designs`,
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-work-designs`,
       data: {
         ...input,
       },
@@ -36,20 +36,20 @@ export async function CreateFileWorkDesignPatentService(
   }
 }
 
-type RequestDeleteWorkDesignPatentService = {
-  fileResearchOnDesignPatentId: string;
+type RequestDeleteFileWorkDesignPatentService = {
+  fileWorkDesignId: string;
 };
-type ResponseDeleteWorkDesignPatentService = { message: string };
+type ResponseDeleteFileWorkDesignPatentService = { message: string };
 
-export async function DeleteWorkDesignPatentService(
-  input: RequestDeleteWorkDesignPatentService,
-): Promise<ResponseDeleteWorkDesignPatentService> {
+export async function DeleteFileWorkDesignPatentService(
+  input: RequestDeleteFileWorkDesignPatentService,
+): Promise<ResponseDeleteFileWorkDesignPatentService> {
   try {
     const cookies = parseCookies();
     const access_token = cookies.access_token;
     const fileWork = await axios({
       method: "DELETE",
-      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-research-designs/${input.fileResearchOnDesignPatentId}`,
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-work-designs/${input.fileWorkDesignId}`,
       headers: {
         Authorization: "Bearer " + access_token,
         "Content-Type": "application/json",

@@ -1,6 +1,13 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
 import { WorkInfoOnDesignPatent, WorkType } from "../../../models";
+import {
+  FundingLists,
+  PublicType,
+  ResearchOwnershipSubmission,
+  ResearchType,
+  Websites,
+} from "../../../data/invention";
 
 type RequestCreateWorkDesignPatentService = {
   thaiName: string;
@@ -62,22 +69,30 @@ type RequestUpdateWorkDesignPatentService = {
     beginWorkAt?: string;
     finishWorkAt?: string;
     benefit?: string[];
-    funding?: string;
+    otherBenefit?: string;
+    funding?: FundingLists;
+    sourceFunding?: string;
     yearFunding?: string;
-    researchOwnershipSubmission?: string;
-    signedDocument?: string;
+    researchOwnershipSubmission?: ResearchOwnershipSubmission;
+    agreementTitle?: string;
+    agreementInstitution?: string;
+    agreementYear?: string;
+    otherAgreement?: string;
+    researchResult?: ResearchType;
     keywords?: string;
-    website?: string;
+    website?: Websites;
     searchResult?: string;
+    isRequest?: string;
     requestNumber?: string;
     requestDate?: string;
     requestCountry?: string;
-    publicType?: string;
+    publicType?: PublicType;
+    otherPublicType?: string;
     publicDetail?: string;
-    outstandingDetail?: string[];
+    outstandingDetail?: string;
     descriptionDetail?: string;
-    marketDetail?: string;
     futureDetail?: string;
+    isComplete?: boolean;
   };
 };
 type ResponseUpdateWorkDesignPatentService = WorkInfoOnDesignPatent;

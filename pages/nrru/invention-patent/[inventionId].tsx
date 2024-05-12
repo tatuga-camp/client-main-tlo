@@ -77,14 +77,14 @@ const Index = ({ user }: { user: User }) => {
       number === 3 &&
       (!invention.data?.workInfoOnInventionPatent.id ||
         invention.data?.partnerInfoOnInventionPatents.length === 0 ||
-        !invention.data?.supportingDataOnInventionPatent.id)
+        invention.data?.supportingDataOnInventionPatent.isComplete === false)
     ) {
       throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
     } else if (
       number === 4 &&
       (invention.data?.fileOnInventionPatents.length === 0 ||
-        !invention.data?.supportingDataOnInventionPatent.id ||
-        !invention.data?.workInfoOnInventionPatent.id ||
+        invention.data?.supportingDataOnInventionPatent.isComplete === false ||
+        invention.data?.workInfoOnInventionPatent.isComplete === false ||
         invention.data?.partnerInfoOnInventionPatents.length === 0)
     ) {
       throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");

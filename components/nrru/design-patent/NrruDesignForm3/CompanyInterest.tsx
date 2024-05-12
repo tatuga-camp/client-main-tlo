@@ -4,22 +4,20 @@ import { FiPlusCircle } from "react-icons/fi";
 import { FieldError, Input, Label, TextField } from "react-aria-components";
 import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import Swal from "sweetalert2";
-import {
-  CompanyInterestedOnSupportingDataInventionPatent,
-  ErrorMessages,
-} from "../../../../models";
-import {
-  CreateCompanyInventionPatentService,
-  DeleteCompanyInventionPatentService,
-} from "../../../../services/invention-patent/support-invention/company-interested-invention";
+import { ErrorMessages } from "../../../../models";
+
 import { UseQueryResult, useQueryClient } from "@tanstack/react-query";
-import { ResponseGetInventionPatentService } from "../../../../services/invention-patent/invention-patent";
 import { MdDelete } from "react-icons/md";
+import {
+  CreateCompanyDesignPatentService,
+  DeleteCompanyDesignPatentService,
+} from "../../../../services/design-patent/support-design/company-interested-design";
+import { ResponseGetDesignPatentService } from "../../../../services/design-patent/design-patent";
 
 type CompanyInterestProps = {
-  invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
+  design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
-function CompanyInterest({ invention }: CompanyInterestProps) {
+function CompanyInterest({ design }: CompanyInterestProps) {
   const queryClient = useQueryClient();
   const [companyInterestCreate, setCompanyInterestCreate] = useState<{
     name?: string;
@@ -36,6 +34,9 @@ function CompanyInterest({ invention }: CompanyInterestProps) {
 
   const handleAddCompanyInterest = async () => {
     try {
+      if (!design.data) {
+        throw new Error("โปรดลองใหม่อีกครั้ง");
+      }
       Swal.fire({
         title: "กำลังสร้างข้อมูล",
         willOpen: () => {
@@ -49,28 +50,30 @@ function CompanyInterest({ invention }: CompanyInterestProps) {
       ) {
         throw new Error("กรุณากรอกข้อมูลให้ครบ");
       }
-      const create = await CreateCompanyInventionPatentService({
+      const create = await CreateCompanyDesignPatentService({
         name: companyInterestCreate?.name,
         coordinator: companyInterestCreate?.coordinator,
         phone: companyInterestCreate?.phone.replace(/-/g, ""),
-        inventionPatentId: invention.data?.id as string,
-        supportingDataOnInventionPatentId: invention.data
-          ?.supportingDataOnInventionPatent.id as string,
+        designPatentId: design.data?.id as string,
+        supportingDataOnDesignPatentId: design.data
+          ?.supportingDataOnDesignPatent.id as string,
       });
-      queryClient.setQueryData(
-        ["invention", { inventionId: invention.data?.id }],
-        {
-          ...invention.data,
-          supportingDataOnInventionPatent: {
-            ...invention.data?.supportingDataOnInventionPatent,
-            companyInterestedOnSupportingDataInventionPatents: [
-              ...(invention.data?.supportingDataOnInventionPatent
-                .companyInterestedOnSupportingDataInventionPatents ?? []),
-              create,
-            ],
-          },
+
+      const updateDesign: ResponseGetDesignPatentService = {
+        ...design.data,
+        supportingDataOnDesignPatent: {
+          ...design.data.supportingDataOnDesignPatent,
+          companyInterestedOnSupportingDataDesignPatents: [
+            ...(design.data.supportingDataOnDesignPatent
+              .companyInterestedOnSupportingDataDesignPatents ?? []),
+            create,
+          ],
         },
-      );
+      };
+
+      queryClient.setQueryData(["design", { designId: design.data?.id }], {
+        ...updateDesign,
+      });
       setCompanyInterestCreate(() => {
         return {
           name: "",
@@ -98,31 +101,33 @@ function CompanyInterest({ invention }: CompanyInterestProps) {
 
   const handleDeleteCompanyInterest = async (id: string) => {
     try {
+      if (!design.data) {
+        throw new Error("โปรดลองใหม่อีกครั้ง");
+      }
       Swal.fire({
         title: "กำลังลบข้อมูล",
         willOpen: () => {
           Swal.showLoading();
         },
       });
-      await DeleteCompanyInventionPatentService({
+      await DeleteCompanyDesignPatentService({
         companyInterestedId: id,
       });
       const unDelete =
-        invention.data?.supportingDataOnInventionPatent.companyInterestedOnSupportingDataInventionPatents.filter(
+        design.data?.supportingDataOnDesignPatent.companyInterestedOnSupportingDataDesignPatents.filter(
           (company) => company.id !== id,
         );
-      queryClient.setQueryData(
-        ["invention", { inventionId: invention.data?.id }],
-        {
-          ...invention.data,
-          supportingDataOnInventionPatent: {
-            ...invention.data?.supportingDataOnInventionPatent,
-            companyInterestedOnSupportingDataInventionPatents: [
-              ...(unDelete ?? []),
-            ],
-          },
+
+      const updateDesign: ResponseGetDesignPatentService = {
+        ...design.data,
+        supportingDataOnDesignPatent: {
+          ...design.data.supportingDataOnDesignPatent,
+          companyInterestedOnSupportingDataDesignPatents: [...(unDelete ?? [])],
         },
-      );
+      };
+      queryClient.setQueryData(["design", { designId: design.data?.id }], {
+        ...updateDesign,
+      });
       Swal.fire({
         title: "ลบข้อมูลสำเร็จ",
         text: "ลบข้อมูลสำเร็จ",
@@ -216,7 +221,7 @@ function CompanyInterest({ invention }: CompanyInterestProps) {
         </section>
       </div>
       <ul className="flex w-full flex-col gap-2">
-        {invention.data?.supportingDataOnInventionPatent.companyInterestedOnSupportingDataInventionPatents.map(
+        {design.data?.supportingDataOnDesignPatent.companyInterestedOnSupportingDataDesignPatents.map(
           (company, index) => {
             return (
               <li
