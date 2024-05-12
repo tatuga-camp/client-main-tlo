@@ -152,6 +152,7 @@ export type SupportingDataOnInventionPatent = {
   benefit: string[];
   otherBenefit: string;
   allowPublic: string;
+  isComplete: boolean;
   reasonPublic: string;
   inventionPatentId: string;
   userId: string;

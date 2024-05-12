@@ -8,9 +8,9 @@ import {
   PartnerInfoOnDesignPatent,
   SupportingDataOnDesignPatent,
   WorkInfoOnDesignPatent,
-  FilePublicResearchOnDesignPatent,
   PatentRelateToSearchResultOnDesignPatent,
   User,
+  FileOnWorkDesignPatent,
 } from "../../models";
 
 type RequestGetDesignPatentsService = {
@@ -78,10 +78,10 @@ type RequestGetDesignPatentService = {
   designPatentId: string;
 };
 
-type ResponseGetDesignPatentService = DesignPatent & {
+export type ResponseGetDesignPatentService = DesignPatent & {
   partnerInfoOnDesignPatents: PartnerInfoOnDesignPatent[];
   workInfoOnDesignPatent: WorkInfoOnDesignPatent & {
-    filePublicResearchOnDesignPatents: FilePublicResearchOnDesignPatent[];
+    fileWorkDesigns: FileOnWorkDesignPatent[];
     patentRelateToSearchResultOnDesignPatents: PatentRelateToSearchResultOnDesignPatent[];
   };
   supportingDataOnDesignPatent: SupportingDataOnDesignPatent & {
@@ -89,6 +89,7 @@ type ResponseGetDesignPatentService = DesignPatent & {
   };
   fileOnDesignPatents: FileOnDesignPatent[];
 };
+
 export async function GetDesignPatentService(
   input: RequestGetDesignPatentService,
 ): Promise<ResponseGetDesignPatentService> {
@@ -174,6 +175,7 @@ type RequestUpdateDesignPatentService = {
     postcode?: string;
     nationality?: string;
     email?: string;
+    isComplete?: boolean;
   };
 };
 
