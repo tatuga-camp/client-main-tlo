@@ -15,7 +15,7 @@ import {
   TextArea,
 } from "react-aria-components";
 import { FiPlusCircle } from "react-icons/fi";
-import { menuDesignForm2, menuWebDesign } from "@/data/menuDesign";
+import { menuDesignForm2, menuWebDesign } from "@/data/menu";
 import { IoIosCheckbox } from "react-icons/io";
 import {
   MdCheckBoxOutlineBlank,

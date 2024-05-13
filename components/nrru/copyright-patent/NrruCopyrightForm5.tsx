@@ -13,7 +13,7 @@ import { FiPlusCircle } from "react-icons/fi";
 import Checkbox from "@mui/material/Checkbox";
 import { IoTrashOutline } from "react-icons/io5";
 
-const NrruLicenseForm5 = () => {
+const NrruCopyrightForm5 = () => {
   return (
     <div className=" min-w-[58rem] rounded-md  border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:w-full md:p-10">
       <div className="flex w-full flex-col gap-3">
@@ -126,20 +126,8 @@ const NrruLicenseForm5 = () => {
         <section className="my-5 flex w-full flex-col items-center gap-3 text-[]">
           <div className="flex  w-[70%] items-center gap-5">
             <span className="flex gap-3">
-              <h1 className="font-semibold">ชื่อภาษาไทย :</h1>{" "}
+              <h1 className="font-semibold">ชื่อผลงาน :</h1>{" "}
               <p className="text-[#97B8F3]">ชื่อผลงานภาษาไทย</p>
-            </span>
-            <span className="flex gap-3">
-              <h1 className="font-semibold">ชื่อภาษาอังกฤษ :</h1>{" "}
-              <p className="text-[#97B8F3]">Name of the innovation</p>
-            </span>
-          </div>
-          <div className="flex  w-[70%] items-center gap-5">
-            <span className="flex gap-3">
-              <h1 className="font-semibold">
-                ประเภทสิทธิบัตรที่จะขอรับความคุ้มครอง:
-              </h1>{" "}
-              <p className="text-[#97B8F3]">สิทธิบัตรการประดิษฐ์</p>
             </span>
             <span className="flex gap-3">
               <h1 className="font-semibold">ปีที่ทำการประดิษฐ์ :</h1>{" "}
@@ -148,113 +136,82 @@ const NrruLicenseForm5 = () => {
           </div>
           <div className="flex  w-[70%] items-center gap-5">
             <span className="flex gap-3">
-              <h1 className="font-semibold">ทุนอุดหนุน:</h1>{" "}
+              <h1 className="font-semibold">ประเภทของงานอันมีลิขสิทธิ์:</h1>{" "}
+              <p className="text-[#97B8F3]">ประเภทของงานอันมีลิขสิทธิ์</p>
+            </span>
+          </div>
+          <div className="flex  w-[70%] items-center gap-5">
+            <span className="flex gap-3">
+              <h1 className="font-semibold">สิ่งที่ได้:</h1>{" "}
               <p className="text-[#97B8F3]">
-                ทุนอุดหนุนเงินรายได้/กองทุนวิจัย มหาวิทยาลัยราชภัฏนครราชสีมา
-                ปีงบประมาณ 2560
+                ระบบการทำงาน, สื่อการสอน, องค์ความร
               </p>
             </span>
           </div>
           <div className="flex  w-[70%] items-center gap-5">
             <span className="flex gap-3">
-              <h1 className="font-semibold">ข้อตกลงหรือสัญญา:</h1>{" "}
-              <p className="text-[#97B8F3]">ไม่มี </p>
+              <h1 className="font-semibold">ลักษณะการสร้างสรรค์:</h1>{" "}
+              <p className="text-[#97B8F3]">ข้อมูลลักษณะการสร้างสรรค์ </p>
             </span>
+          </div>
+          <div className="flex  w-[70%] items-center gap-5">
+            <span className="flex gap-3">
+              <h1 className="font-semibold">สิ่งที่ได้จากการสร้างสรรค์:</h1>{" "}
+              <p className="text-[#97B8F3]">ตัวผลิตภัณฑ์ โปรแกรมคอมพิวเตอร์</p>
+            </span>
+          </div>
+          <div className="flex  w-[70%] items-center gap-5">
+            <span className="flex gap-3">
+              <h1 className="font-semibold">ทุนอุดหนุน:</h1>{" "}
+              <p className="text-[#97B8F3]">
+                ทุนอุดหนุนงบประมาณแผ่นดิน มหาวิทยาลัยราชภัฏนครราชสีมา
+              </p>
+            </span>
+          </div>
+          <div className="flex  w-[70%] items-center gap-5">
             <span className="flex gap-3">
               <h1 className="font-semibold">
-                ผลการวิจัย ผลการทดสอบ หรือผลการทดลอง:
+                การยื่นขอความเป็นเจ้าของผลงานวิจัยและนวัตกรรมกับแหล่งให้ทุน:
               </h1>{" "}
+              <p className="text-[#97B8F3]">-</p>
+            </span>
+          </div>
+          <div className="flex  w-[70%] items-center gap-5">
+            <span className="flex gap-3">
+              <h1 className="font-semibold">การจัดทำสื่อสำหรับคนพิการ:</h1>{" "}
               <p className="text-[#97B8F3]">ไม่มี</p>
             </span>
           </div>
           <div className="flex  w-[70%] items-center gap-5">
             <span className="flex gap-3">
-              <h1 className="font-semibold">Keyword ในการค้นหา:</h1>{" "}
-              <p className="text-[#97B8F3]">
-                Gamification, English Learning, TESOL, EFL
-              </p>
-            </span>
-          </div>
-          <div className="flex  w-[70%] items-center gap-5">
-            <span className="flex gap-3">
-              <h1 className="font-semibold">ฐานข้อมูลในการสืบค้น:</h1>{" "}
-              <p className="text-[#97B8F3]">www.ipthailand.go.th</p>
-            </span>
-          </div>
-          <div className="flex  w-[70%] items-center gap-5">
-            <span className="flex gap-3">
-              <h1 className="font-semibold">ผลของการสืบค้น:</h1>{" "}
-              <p className="text-[#97B8F3]">
-                เหมือนหรือคล้ายกับงานที่ปรากฏอยู่ก่อนแล้ว
-              </p>
-            </span>
-          </div>
-          <div className="flex  w-[70%] items-center gap-5">
-            <span className="flex gap-3">
               <h1 className="font-semibold">
-                สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้อง:
-              </h1>{" "}
-              <p className="text-[#97B8F3]">
-                (วารสารวิชาการ) ชื่อที่แสดงถึงการประดิษฐ์, ชื่อวารสาร,
-                วันที่เผยแพร่ / ( สิทธิบัตรหรืออนุสิทธิบัตร)
-                ชื่อที่แสดงถึงการประดิษฐ์, เลขที่คำขอ/เลขที่สิทธิบัตร, ประเทศ
-              </p>
-            </span>
-          </div>
-          <div className="flex  w-[70%] items-center gap-5">
-            <span className="flex gap-3">
-              <h1 className="font-semibold">
-                การประดิษฐ์นี้เคยนำไปยื่นขอรับสิทธิบัตรหรืออนุสิทธิบัตรหรือไม:
+                การแจ้ง/จดทะเบียนลิขสิทธิ์ในต่างประเทศ:
               </h1>{" "}
               <p className="text-[#97B8F3]">ไม่เคย</p>
             </span>
           </div>
           <div className="flex  w-[70%] items-center gap-5">
             <span className="flex gap-3">
-              <h1 className="font-semibold">
-                การเปิดเผยสาระสำคัญของการประดิษฐ์/การเผยแพร่ผลงาน:
-              </h1>{" "}
-              <p className="text-[#97B8F3]">
-                ยังไม่เปิดเผยการประดิษฐ์/เผยแพร่ผลงาน
-              </p>
+              <h1 className="font-semibold">การโฆษณางาน:</h1>{" "}
+              <p className="text-[#97B8F3]">ยังไม่ได้โฆษณา</p>
             </span>
           </div>
           <div className="flex  w-[70%] items-center gap-5">
             <span className="flex gap-3">
               <h1 className="font-semibold">
-                ข้อดีและลักษณะเฉพาะของการประดิษฐ์/งานวิจัยน:
+                การอนุญาตให้ใช้สิทธิ์/โอนลิขสิทธิ:
               </h1>{" "}
               <p className="text-[#97B8F3]">
-                ......................................
+                ไม่เคยอนุญาตให้ใช้สิทธิ์/โอนลิขสิทธ์
               </p>
             </span>
           </div>
           <div className="flex  w-[70%] items-center gap-5">
             <span className="flex gap-3">
-              <h1 className="font-semibold">
-                ข้อด้อยหรือข้อจำกัดของการประดิษฐ์/งานวิจัยนี้:
-              </h1>{" "}
+              <h1 className="font-semibold">รายละเอียดผลงานโดยย่อ:</h1>{" "}
               <p className="text-[#97B8F3]">
-                ......................................
+                .......................................................................................................
               </p>
-            </span>
-          </div>
-          <div className="flex  w-[70%] items-center gap-5">
-            <span className="flex gap-3">
-              <h1 className="font-semibold">
-                ผลิตภัณฑ์/การประดิษฐ์/ผลงานที่ใกล้เคียงที่มีอยู่แล้วในตลาด:
-              </h1>{" "}
-              <p className="text-[#97B8F3]">
-                ......................................
-              </p>
-            </span>
-          </div>
-          <div className="flex  w-[70%] items-center gap-5">
-            <span className="flex gap-3">
-              <h1 className="font-semibold">
-                แผนการพัฒนาวิจัย/ต่อยอดการประดิษฐ์นี้ (ถ้ามี):
-              </h1>{" "}
-              <p className="text-[#97B8F3]">-</p>
             </span>
           </div>
         </section>
@@ -265,7 +222,7 @@ const NrruLicenseForm5 = () => {
         <section className="my-5 flex w-full flex-col items-center gap-3 text-[]">
           <div className="flex  w-[70%] items-center gap-5">
             <span className="flex gap-3">
-              <h1 className="font-semibold">ระยะเวลาในการประดิษฐ์/การวิจัย:</h1>{" "}
+              <h1 className="font-semibold">ระยะเวลาในการออกแบบ/การวิจัย:</h1>{" "}
               <p className="text-[#97B8F3]">2 ปี 4 เดือน</p>
             </span>
           </div>
@@ -291,7 +248,7 @@ const NrruLicenseForm5 = () => {
             <span className="flex gap-3">
               <h1 className="font-semibold">
                 หน่วยงาน/บริษัทที่สนใจ หรือคาดว่าจะสนใจ
-                หรือเกี่ยวข้องกับการประดิษฐ์:
+                หรือเกี่ยวข้องกับการออกแบบผลิตภัณฑ์:
               </h1>{" "}
               <p className="text-[#97B8F3]">
                 ชื่อบริษัท, ชื่อผู้ประสานงาน, เบอร์โทร
@@ -312,4 +269,4 @@ const NrruLicenseForm5 = () => {
   );
 };
 
-export default NrruLicenseForm5;
+export default NrruCopyrightForm5;

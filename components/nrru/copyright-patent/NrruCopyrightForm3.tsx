@@ -22,7 +22,7 @@ import {
 } from "react-icons/md";
 import { menuNrruDesign3 } from "@/data/menu";
 
-const NrruDesignForm3 = () => {
+const NrruCopyrightForm3 = () => {
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
       <Form className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 ">
@@ -308,4 +308,4 @@ const NrruDesignForm3 = () => {
   );
 };
 
-export default NrruDesignForm3;
+export default NrruCopyrightForm3;

@@ -16,7 +16,7 @@ import {
 } from "react-aria-components";
 import { Calendar } from "primereact/calendar";
 import { FiPlusCircle } from "react-icons/fi";
-import { menuDesignForm2, menuWebDesign } from "@/data/menuDesign";
+import { menuDesignForm2, menuWebDesign } from "@/data/menu";
 import { IoIosCheckbox } from "react-icons/io";
 import {
   MdCheckBoxOutlineBlank,
@@ -223,11 +223,12 @@ const NrruDesignForm2 = () => {
                   ปีงบประมาณ
                 </Label>
                 <section className="flex flex-col">
-                  <Input
-                    name=""
-                    type="text"
-                    className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
-                    placeholder="ปี 2567"
+                  <Calendar
+                    required
+                    locale="th"
+                    view="year"
+                    placeholder="ปี 2024"
+                    dateFormat="yy"
                   />
                   <FieldError className="text-xs text-red-700" />
                 </section>
