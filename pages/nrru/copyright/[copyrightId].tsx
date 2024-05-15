@@ -1,12 +1,12 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
 import React, { useState } from "react";
-import { nrruLicenseSection } from "../../../../data/PatentSection";
-import NrruLicenseForm1 from "@/components/nrru/license-patent/NrruLicenseForm1";
-import NrruLicenseForm2 from "@/components/nrru/license-patent/NrruLicenseForm2";
-import NrruLicenseForm3 from "@/components/nrru/license-patent/NrruLicenseForm3";
-import NrruLicensForm4 from "@/components/nrru/license-patent/NrruLicenseForm4";
-import NrruLicenseForm5 from "@/components/nrru/license-patent/NrruLicensForm5";
+import { nrruCopyrightSection } from "../../../data/PatentSection";
+import NrruCopyrightForm1 from "@/components/nrru/copyright/NrruCopyrightForm1";
+import NrruCopyrightForm2 from "@/components/nrru/copyright/NrruCopyrightForm2";
+import NrruCopyrightForm3 from "@/components/nrru/copyright/NrruCopyrightForm3";
+import NrruCopyrightForm4 from "@/components/nrru/copyright/NrruCopyrightForm4";
+import NrruCopyrightForm5 from "@/components/nrru/copyright/NrruCopyrightForm5";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -17,7 +17,7 @@ const Index = () => {
     }
   };
   const nextSection = () => {
-    if (currentSection < nrruLicenseSection.length - 1) {
+    if (currentSection < nrruCopyrightSection.length - 1) {
       setCurrentSection(currentSection + 1);
     }
   };
@@ -39,21 +39,22 @@ const Index = () => {
             </section>
 
             <section className="flex w-full flex-wrap items-center justify-center gap-3">
-              {nrruLicenseSection.map((item, index) => (
-                <div
+              {nrruCopyrightSection.map((item, index) => (
+                <button
                   key={index}
-                  className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
+                  className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md duration-200 hover:text-blue-500 md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
+                  onClick={() => setCurrentSection(index)}
                 >
                   <h2 className={`text-base font-semibold md:text-lg`}>
                     {item.section}
                   </h2>
                   <p className={`text-xs md:text-[0.9rem]`}>{item.title}</p>
-                </div>
+                </button>
               ))}
             </section>
             <section className="my-4 w-full md:pl-16">
               <div className="max-w-[28rem] bg-[var(--secondary-yellow)] p-2 text-center  font-bold shadow-md">
-                <p>{nrruLicenseSection[currentSection].title} </p>
+                <p>{nrruCopyrightSection[currentSection].title} </p>
               </div>
             </section>
           </header>
@@ -61,22 +62,22 @@ const Index = () => {
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
-                  <NrruLicenseForm1 />
+                  <NrruCopyrightForm1 />
                 </div>
               )}
               {currentSection == 1 && (
                 <div>
-                  <NrruLicenseForm2 />
+                  <NrruCopyrightForm2 />
                 </div>
               )}
               {currentSection == 2 && (
                 <div>
-                  <NrruLicenseForm3 />
+                  <NrruCopyrightForm3 />
                 </div>
               )}
               {currentSection == 3 && (
                 <div>
-                  <NrruLicensForm4 />
+                  <NrruCopyrightForm4 />
                 </div>
               )}
               {currentSection == 4 && (
@@ -84,11 +85,11 @@ const Index = () => {
                   <p className="my-5 w-full items-center text-center  font-bold">
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
-                  <NrruLicenseForm5 />
+                  <NrruCopyrightForm5 />
                 </div>
               )}
             </section>
-            {currentSection === nrruLicenseSection.length - 1 && (
+            {currentSection === nrruCopyrightSection.length - 1 && (
               <button className="mt-5 w-44 rounded-md bg-[#10316B] px-3 py-2 font-semibold text-white">
                 ส่งคำขอ
               </button>
@@ -105,7 +106,7 @@ const Index = () => {
               <button
                 className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
                 onClick={nextSection}
-                disabled={currentSection === nrruLicenseSection.length - 1}
+                disabled={currentSection === nrruCopyrightSection.length - 1}
               >
                 ถัดไป
               </button>

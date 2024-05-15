@@ -44,7 +44,7 @@ const nrruDesignnSection = [
   },
 ];
 
-const nrruLicenseSection = [
+const nrruCopyrightSection = [
   {
     section: "ส่วนที่ 1",
     title: "ข้อมูลทั่วไปของผู้สร้างสรรค์ผลงาน",
@@ -105,7 +105,7 @@ const outsiderDesignSection = [
   },
 ];
 
-const outsiderLicenseSection = [
+const outsiderCopyrightSection = [
   {
     section: "ส่วนที่ 1",
     title: "ข้อมูลทั่วไปของเจ้าของลิขสิทธิ์และผู้สร้างสรรค์ผลงาน",
@@ -146,9 +146,9 @@ const trademark = [
 export {
   nrruInventionSection,
   nrruDesignnSection,
-  nrruLicenseSection,
+  nrruCopyrightSection,
   outsiderInventionSection,
   outsiderDesignSection,
-  outsiderLicenseSection,
+  outsiderCopyrightSection,
   trademark,
 };
