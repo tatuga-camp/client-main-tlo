@@ -52,3 +52,9 @@ export const menuNrruCopyright8 = [
     {title: 'สื่ออิเล็กทรอนิกส์ตามมาตรฐานสากล'},
 ]
 
+export const menuTrademark2 = [
+    {title: ' เครื่องหมายการค้า/บริการ'},
+    {title: 'เครื่องหมายรับรอง'},
+    {title: 'เครื่องหมายร่วม'},
+]
+
