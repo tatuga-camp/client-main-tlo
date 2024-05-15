@@ -2,11 +2,11 @@ import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
 import React, { useState } from "react";
 import { nrruCopyrightSection } from "../../../data/PatentSection";
-import NrruCopyrightForm1 from "@/components/nrru/copyright-patent/NrruCopyrightForm1";
-import NrruCopyrightForm2 from "@/components/nrru/copyright-patent/NrruCopyrightForm2";
-import NrruCopyrightForm3 from "@/components/nrru/copyright-patent/NrruCopyrightForm3";
-import NrruCopyrightForm4 from "@/components/nrru/copyright-patent/NrruCopyrightForm4";
-import NrruCopyrightForm5 from "@/components/nrru/copyright-patent/NrruCopyrightForm5";
+import NrruCopyrightForm1 from "@/components/nrru/copyright/NrruCopyrightForm1";
+import NrruCopyrightForm2 from "@/components/nrru/copyright/NrruCopyrightForm2";
+import NrruCopyrightForm3 from "@/components/nrru/copyright/NrruCopyrightForm3";
+import NrruCopyrightForm4 from "@/components/nrru/copyright/NrruCopyrightForm4";
+import NrruCopyrightForm5 from "@/components/nrru/copyright/NrruCopyrightForm5";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
