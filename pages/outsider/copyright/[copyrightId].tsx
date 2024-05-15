@@ -2,10 +2,10 @@ import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
 import React, { useState } from "react";
 import { outsiderCopyrightSection } from "../../../data/PatentSection";
-import OutsiderCopyrightForm4 from "@/components/outsider/copyright-patent/OutsiderCopyrightForm4";
-import OutsiderCopyrightForm3 from "@/components/outsider/copyright-patent/OutsiderCopyrightForm3";
-import OutsiderCopyrightForm2 from "@/components/outsider/copyright-patent/OutsiderCopyrightForm2";
-import OutsiderCopyrightForm1 from "@/components/outsider/copyright-patent/OutsiderCopyrightForm1";
+import OutsiderCopyrightForm4 from "@/components/outsider/copyright/OutsiderCopyrightForm4";
+import OutsiderCopyrightForm3 from "@/components/outsider/copyright/OutsiderCopyrightForm3";
+import OutsiderCopyrightForm2 from "@/components/outsider/copyright/OutsiderCopyrightForm2";
+import OutsiderCopyrightForm1 from "@/components/outsider/copyright/OutsiderCopyrightForm1";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
