@@ -1,23 +1,139 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
 import React, { useState } from "react";
-import { trademark } from "../../../data/PatentSection";
+import { trademarkSection } from "../../../data/PatentSection";
 import TrademarkForm1 from "@/components/nrru/trademark/TrademarkForm1";
 import TrademarkForm2 from "@/components/nrru/trademark/TrademarkForm2";
 import TrademarkForm3 from "@/components/nrru/trademark/TrademarkForm3";
 import TrademarkForm4 from "@/components/nrru/trademark/TrademarkForm4";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetUserService } from "../../../services/user";
+import { ErrorMessages, User } from "../../../models";
+import { useRouter } from "next-nprogress-bar";
+import { useRouter as NextuseRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import {
+  DeleteTrademarkervice,
+  GetTrademarkervice,
+} from "../../../services/trademark/trademark";
+import Swal from "sweetalert2";
+import { MdDelete } from "react-icons/md";
 
-const Index = () => {
+const Index = ({ user }: { user: User }) => {
+  const router = NextuseRouter();
+  const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
+
+  const trademark = useQuery({
+    queryKey: [
+      "trademark",
+      { trademarkId: router.query.trademarkId as string },
+    ],
+    queryFn: () =>
+      GetTrademarkervice({
+        trademarkId: router.query.trademarkId as string,
+      }),
+  });
 
   const previousSection = () => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
+      window.scroll(0, 0);
     }
   };
   const nextSection = () => {
-    if (currentSection < trademark.length - 1) {
-      setCurrentSection(currentSection + 1);
+    try {
+      if (currentSection < trademarkSection.length - 1) {
+        handleValidateForm({ number: currentSection + 1 });
+        setCurrentSection(currentSection + 1);
+        window.scroll(0, 0);
+      }
+    } catch (error) {
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
+  };
+
+  const handleValidateForm = ({ number }: { number: number }) => {
+    if (number === 1 && trademark.data?.partnerOnTrademarks.length === 0) {
+      throw new Error("กรุณากรอกข้อมูลทั่วไป ให้ครบถ้วน");
+    } else if (
+      number === 2 &&
+      (trademark.data?.partnerOnTrademarks.length === 0 ||
+        !trademark.data?.titleTrademark)
+    ) {
+      throw new Error("กรุณากรอกข้อรายละเอียดของเครื่องหมาย ให้ครบถ้วน");
+    } else if (
+      number === 3 &&
+      (trademark.data?.partnerOnTrademarks.length === 0 ||
+        trademark.data?.fileOnTrademarks.length === 0)
+    ) {
+      throw new Error("กรุณากรอกข้อมูลเอกสารแนบ ให้ครบถ้วน");
+    }
+  };
+
+  const handleDeleteTrademark = async ({
+    trademarkId,
+  }: {
+    trademarkId: string;
+  }) => {
+    const replacedText = "ยืนยันการลบข้อมูล";
+    let content = document.createElement("div");
+    content.innerHTML =
+      "<div>กรุณาพิมพ์คำด้านล่าง </div> <strong>" +
+      replacedText +
+      "</strong> <div>เพื่อเป็นการยืนยันในการลบข้อมูล</div>";
+    const { value } = await Swal.fire({
+      title: "ยืนยันการลบข้อมูล",
+      input: "text",
+      footer:
+        "ข้อมูลทั้งหมดที่เกี่ยวข้องกับข้อมูลนี้จะถูกลบออกทั้งหมด และไม่สามารถกู้คืนได้อีก",
+      html: content,
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (value !== replacedText) {
+          return "คำที่พิมพ์ไม่ตรงกับคำที่ต้องการลบ กรุณาลองใหม่อีกครั้ง";
+        }
+      },
+    });
+    if (value) {
+      try {
+        Swal.fire({
+          title: "กำลังดำเนินการลบข้อมูล",
+          html: "กรุณารอสักครู่",
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        await DeleteTrademarkervice({
+          trademarkId: trademarkId,
+        });
+        naviateRouter.push("/dashboard");
+        Swal.fire({
+          title: "ลบข้อมูลสำเร็จ",
+          icon: "success",
+        });
+      } catch (error) {
+        let result = error as ErrorMessages;
+        Swal.fire({
+          title: result.error ? result.error : "เกิดข้อผิดพลาด",
+          text: result.message.toString(),
+          footer: result.statusCode
+            ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+            : "",
+          icon: "error",
+        });
+      }
     }
   };
   return (
@@ -25,7 +141,7 @@ const Index = () => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <title>License patent</title>
+        <title>แบบฟอร์มประกอบคำขอจดทะเบียนเครื่องหมายการค้า</title>
       </Head>
       <HomeLayout>
         <div className="flex h-full w-full flex-col items-center bg-[#F4F8FF] pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center">
@@ -33,13 +149,39 @@ const Index = () => {
             <h2 className="text-center text-2xl font-bold md:text-3xl">
               แบบฟอร์มประกอบคำขอจดทะเบียนเครื่องหมายการค้า
             </h2>
-
+            <button
+              onClick={() =>
+                handleDeleteTrademark({
+                  trademarkId: router.query.trademarkId as string,
+                })
+              }
+              className="flex items-center justify-center gap-2 rounded-lg bg-red-600 px-10 py-2
+             text-white drop-shadow-md transition hover:bg-red-700 active:scale-105"
+            >
+              ลบคำขอ
+              <MdDelete />
+            </button>
             <section className="flex w-full flex-wrap items-center justify-center gap-3">
-              {trademark.map((item, index) => (
+              {trademarkSection.map((item, index) => (
                 <button
                   key={index}
                   className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md duration-200 hover:text-blue-500 md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
-                  onClick={() => setCurrentSection(index)}
+                  onClick={() => {
+                    try {
+                      handleValidateForm({ number: index });
+                      setCurrentSection(index);
+                    } catch (error) {
+                      let result = error as ErrorMessages;
+                      Swal.fire({
+                        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+                        text: result.message.toString(),
+                        footer: result.statusCode
+                          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+                          : "",
+                        icon: "error",
+                      });
+                    }
+                  }}
                 >
                   <h2 className={`text-base font-semibold md:text-lg`}>
                     {item.section}
@@ -50,7 +192,7 @@ const Index = () => {
             </section>
             <section className="my-4 w-full md:pl-16">
               <div className="max-w-[28rem] bg-[var(--secondary-yellow)] p-2 text-center  font-bold shadow-md">
-                <p>{trademark[currentSection].title} </p>
+                <p>{trademarkSection[currentSection].title} </p>
               </div>
             </section>
           </header>
@@ -58,30 +200,26 @@ const Index = () => {
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
-                  <TrademarkForm1 />
+                  <TrademarkForm1 user={user} trademark={trademark} />
                 </div>
               )}
               {currentSection == 1 && (
                 <div>
-                  <TrademarkForm2 />
+                  <TrademarkForm2 trademark={trademark} />
                 </div>
               )}
               {currentSection == 2 && (
                 <div>
-                  <TrademarkForm3 />
+                  <TrademarkForm3 trademark={trademark} />
                 </div>
               )}
               {currentSection == 3 && (
                 <div>
-                  <TrademarkForm4 />
+                  <TrademarkForm4 user={user} trademark={trademark} />
                 </div>
               )}
             </section>
-            {currentSection === trademark.length - 1 && (
-              <button className="mt-5 w-44 rounded-md bg-[#10316B] px-3 py-2 font-semibold text-white">
-                ส่งคำขอ
-              </button>
-            )}
+
             <section className=" my-5 flex items-center justify-center gap-3">
               <button
                 className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
@@ -94,7 +232,7 @@ const Index = () => {
               <button
                 className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
                 onClick={nextSection}
-                disabled={currentSection === trademark.length - 1}
+                disabled={currentSection === trademarkSection.length - 1}
               >
                 ถัดไป
               </button>
@@ -107,3 +245,26 @@ const Index = () => {
 };
 
 export default Index;
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext,
+) => {
+  try {
+    const user = await GetUserService({
+      type: "SERVER-SIDE",
+      context: ctx,
+    });
+    return {
+      props: {
+        user,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      redirect: {
+        destination: "/auth/sign-in",
+        permanent: false,
+      },
+    };
+  }
+};
