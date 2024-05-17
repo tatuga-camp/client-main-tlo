@@ -46,8 +46,10 @@ type RequestUpdateSupportCopyrightService = {
     durationMonth?: string;
     cost?: number;
     benefit?: string[];
-    allowPublic?: boolean;
+    otherBenefit?: string;
+    allowPublic?: string;
     reasonPublic?: string;
+    isComplete?: boolean;
   };
 };
 type ResponseUpdateSupportCopyrightService = SupportingDataOnCopyright;

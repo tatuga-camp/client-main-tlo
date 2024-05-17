@@ -1,28 +1,17 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
 import { WorkInfoOnCopyright } from "../../../models";
+import {
+  IsMarketingLists,
+  SignedDocumentDetailLists,
+  TranferPermissionDurationOptions,
+  TranferPermissionOptions,
+  TranferPermissionQualityOptions,
+  WorkQualityOptions,
+} from "../../../data/copyright";
+import { ResearchOwnershipSubmission } from "../../../data/invention";
 
 type RequestCreateWorkCopyrightService = {
-  name: string;
-  workType: string[];
-  finishWorkAt: string;
-  workQuality: string[];
-  benefit: string[];
-  funding: string;
-  yearFunding: string;
-  researchOwnershipSubmission: string;
-  isAccessibleMedia: boolean;
-  typeAccessibleMedia: string[];
-  signedDocument: string;
-  isMarketing: boolean;
-  marketingDate: string;
-  marketingCountry: string;
-  isTranferPermission: boolean;
-  tranferPermissionDetail: string;
-  tranferPermissionDate: string;
-  tranferPermissionQuality: string;
-  tranferPermissionDuration: string;
-  workDescription: string;
   copyrightId: string;
 };
 type ResponseCreateWorkCopyrightService = WorkInfoOnCopyright;
@@ -57,25 +46,33 @@ type RequestUpdateWorkCopyrightService = {
   };
   body: {
     name?: string;
-    workType?: string[];
+    workType?: string;
     finishWorkAt?: string;
-    workQuality?: string[];
+    workQuality?: WorkQualityOptions;
+    workQualityPartDetail?: string;
+    hireWork?: string;
+    otherWorkQuality?: string;
     benefit?: string[];
+    otherBenefit?: string;
     funding?: string;
+    sourceFunding?: string;
     yearFunding?: string;
-    researchOwnershipSubmission?: string;
-    isAccessibleMedia?: boolean;
-    typeAccessibleMedia?: string[];
-    signedDocument?: string;
-    isMarketing?: boolean;
+    researchOwnershipSubmission?: ResearchOwnershipSubmission;
+    typeAccessibleMedia?: string;
+    signedDocument?: SignedDocumentDetailLists;
+    signedDocumentDetail?: string;
+    isMarketing?: IsMarketingLists;
     marketingDate?: string;
     marketingCountry?: string;
-    isTranferPermission?: boolean;
+    tranferPermission?: TranferPermissionOptions;
     tranferPermissionDetail?: string;
     tranferPermissionDate?: string;
-    tranferPermissionQuality?: string;
-    tranferPermissionDuration?: string;
+    tranferPermissionQuality?: TranferPermissionQualityOptions;
+    tranferPermissionQualityDetail?: string;
+    tranferPermissionDuration?: TranferPermissionDurationOptions;
+    tranferPermissionDurationDetail?: string;
     workDescription?: string;
+    isComplete?: boolean;
   };
 };
 type ResponseUpdateWorkCopyrightService = WorkInfoOnCopyright;
