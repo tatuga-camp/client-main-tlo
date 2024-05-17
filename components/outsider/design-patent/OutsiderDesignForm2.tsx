@@ -153,14 +153,22 @@ const OutsiderDesignForm2 = () => {
             })}
           </div>
           <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
-            <div className="flex items-center gap-2">
-              <div>
-                <Checkbox />
-              </div>
-              <p className="text-[0.8rem] font-medium md:text-base">
-                อื่นๆ (โปรดระบุ)
-              </p>
-            </div>
+            <Checkbox
+              className={({ isPressed, isSelected }) => (isSelected ? "" : "")}
+            >
+              {({ isSelected }) => (
+                <div className="flex items-center justify-start gap-2 ">
+                  <div className=" text-3xl">
+                    {isSelected ? (
+                      <IoIosCheckbox />
+                    ) : (
+                      <MdCheckBoxOutlineBlank />
+                    )}
+                  </div>
+                  <span className="font-medium">อื่นๆ (โปรดระบุ)</span>
+                </div>
+              )}
+            </Checkbox>
 
             <TextField className={"ml-3"}>
               <Input
@@ -761,26 +769,16 @@ const OutsiderDesignForm2 = () => {
                       )}
                     </div>
                     <span className="font-medium md:min-w-[7rem]">
-                      ยังไม่เปิดเผยการประดิษฐ์/เผยแพร่ผลงาน :
+                      ยังไม่เปิดเผยการประดิษฐ์/เผยแพร่ผลงาน
                     </span>
                   </div>
                 )}
               </Radio>
             </RadioGroup>
-            <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
-              <div className="flex items-center gap-2">
-                <div>
-                  <Checkbox />
-                </div>
-                <p className="text-[0.8rem] font-medium md:text-base">
-                  ยังไม่เปิดเผยการประดิษฐ์/เผยแพร่ผลงาน
-                </p>
-              </div>
-            </section>
           </div>
         </section>
 
-        {/* ข้อ 10*/}
+        {/* ข้อ 8*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={8} />

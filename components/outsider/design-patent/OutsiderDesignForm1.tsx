@@ -2,6 +2,7 @@ import Number from "@/components/Number";
 import React from "react";
 import {
   Button,
+  Checkbox,
   FieldError,
   Form,
   Input,
@@ -13,7 +14,9 @@ import { FiPlusCircle } from "react-icons/fi";
 import ProviceCombobox from "@/components/Combobox/proviceCombobox";
 import AmphureCombobox from "@/components/Combobox/amphureCombobox";
 import TambonCombobox from "@/components/Combobox/tambonCombobox";
-import Checkbox from "@mui/material/Checkbox";
+
+import { IoIosCheckbox } from "react-icons/io";
+import { MdCheckBoxOutlineBlank } from "react-icons/md";
 
 const OutsiderDesignForm1 = () => {
   return (
@@ -294,27 +297,43 @@ const OutsiderDesignForm1 = () => {
           </section>
 
           <section className="flex flex-col gap-3 md:ml-10">
-            <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
-              <div className="flex items-center gap-2">
-                <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
+            <Checkbox
+              className={({ isPressed, isSelected }) => (isSelected ? "" : "")}
+            >
+              {({ isSelected }) => (
+                <div className="flex items-center justify-start gap-2 ">
+                  <div className=" text-3xl">
+                    {isSelected ? (
+                      <IoIosCheckbox />
+                    ) : (
+                      <MdCheckBoxOutlineBlank />
+                    )}
+                  </div>
+                  <span className="font-medium">
+                    ชื่อและที่อยู่เดียวกันกับผู้ขอ
+                  </span>
                 </div>
-                <p className="text-[0.8rem] font-medium md:text-base">
-                  ชื่อและที่อยู่เดียวกันกับผู้ขอ
-                </p>
-              </div>
-            </section>
+              )}
+            </Checkbox>
+            <Checkbox
+              className={({ isPressed, isSelected }) => (isSelected ? "" : "")}
+            >
+              {({ isSelected }) => (
+                <div className="flex items-center justify-start gap-2 ">
+                  <div className=" text-3xl">
+                    {isSelected ? (
+                      <IoIosCheckbox />
+                    ) : (
+                      <MdCheckBoxOutlineBlank />
+                    )}
+                  </div>
+                  <span className="font-medium">
+                    คนละชื่อและที่อยู่กับผู้ขอ
+                  </span>
+                </div>
+              )}
+            </Checkbox>
 
-            <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
-              <div className="flex items-center gap-2">
-                <div>
-                  <Checkbox inputProps={{ "aria-label": "controlled" }} />
-                </div>
-                <p className="text-[0.8rem] font-medium md:text-base">
-                  คนละชื่อและที่อยู่กับผู้ขอ
-                </p>
-              </div>
-            </section>
             <div className="flex w-full flex-col gap-5 md:-ml-10">
               <section className="flex flex-col items-start justify-center gap-3 md:gap-5">
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">

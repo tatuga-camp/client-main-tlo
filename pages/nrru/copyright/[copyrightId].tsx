@@ -7,6 +7,7 @@ import NrruCopyrightForm2 from "@/components/nrru/copyright-patent/NrruCopyright
 import NrruCopyrightForm3 from "@/components/nrru/copyright-patent/NrruCopyrightForm3";
 import NrruCopyrightForm4 from "@/components/nrru/copyright-patent/NrruCopyrightForm4";
 import NrruCopyrightForm5 from "@/components/nrru/copyright-patent/NrruCopyrightForm5";
+import NrruCopyrightForm6 from "@/components/nrru/copyright-patent/NrruCopyrightForm6";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -38,7 +39,7 @@ const Index = () => {
               <p>สำหรับบุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา</p>
             </section>
 
-            <section className="flex w-full flex-wrap items-center justify-center gap-3">
+            <section className="flex w-full flex-wrap items-center justify-center gap-3 md:w-[70%]">
               {nrruCopyrightSection.map((item, index) => (
                 <button
                   key={index}
@@ -86,6 +87,11 @@ const Index = () => {
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
                   <NrruCopyrightForm5 />
+                </div>
+              )}
+              {currentSection == 5 && (
+                <div>
+                  <NrruCopyrightForm6 />
                 </div>
               )}
             </section>

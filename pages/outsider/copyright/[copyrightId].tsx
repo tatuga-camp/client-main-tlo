@@ -6,6 +6,7 @@ import OutsiderCopyrightForm4 from "@/components/outsider/copyright-patent/Outsi
 import OutsiderCopyrightForm3 from "@/components/outsider/copyright-patent/OutsiderCopyrightForm3";
 import OutsiderCopyrightForm2 from "@/components/outsider/copyright-patent/OutsiderCopyrightForm2";
 import OutsiderCopyrightForm1 from "@/components/outsider/copyright-patent/OutsiderCopyrightForm1";
+import OutsiderCopyrightForm5 from "@/components/outsider/copyright-patent/OutsiderCopyrightForm5";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -77,6 +78,11 @@ const Index = () => {
               {currentSection == 3 && (
                 <div>
                   <OutsiderCopyrightForm4 />
+                </div>
+              )}
+              {currentSection == 4 && (
+                <div>
+                  <OutsiderCopyrightForm5 />
                 </div>
               )}
             </section>

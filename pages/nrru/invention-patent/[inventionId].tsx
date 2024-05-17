@@ -14,6 +14,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { GetInventionPatentService } from "../../../services/invention-patent/invention-patent";
 import Swal from "sweetalert2";
+import NrruInventionForm6ver1 from "@/components/nrru/invention-patent/NrruInventionForm6ver1";
+import NrruInventionForm6ver2 from "@/components/nrru/invention-patent/NrruInventionForm6ver2";
 
 const Index = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -85,6 +87,11 @@ const Index = ({ user }: { user: User }) => {
     }
   };
 
+  const [patentType, setPatentType] = useState("สิทธิบัตรการประดิษฐ์");
+  const handlePatentTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPatentType(e.target.value);
+  };
+
   return (
     <>
       <Head>
@@ -102,7 +109,7 @@ const Index = ({ user }: { user: User }) => {
               <p>สำหรับบุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา</p>
             </section>
 
-            <section className="flex w-full flex-wrap items-center justify-center gap-3">
+            <section className="flex w-full flex-wrap items-center justify-center gap-3 md:w-[70%]">
               {nrruInventionSection.map((item, index) => (
                 <div
                   onClick={() => {
@@ -138,6 +145,15 @@ const Index = ({ user }: { user: User }) => {
             </section>
           </header>
           <main className="mt-5 flex w-full flex-col items-center">
+            <label>
+              ประเภทสิทธิบัตร:
+              <select value={patentType} onChange={handlePatentTypeChange}>
+                <option value="สิทธิบัตรการประดิษฐ์">
+                  สิทธิบัตรการประดิษฐ์
+                </option>
+                <option value="อนุสิทธิบัตร">อนุสิทธิบัตร</option>
+              </select>
+            </label>
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
@@ -167,6 +183,14 @@ const Index = ({ user }: { user: User }) => {
                   </p>
 
                   <NrruInventionForm5 />
+                </div>
+              )}
+              {currentSection === 5 && (
+                <div>
+                  {patentType === "สิทธิบัตรการประดิษฐ์" && (
+                    <NrruInventionForm6ver1 />
+                  )}
+                  {patentType === "อนุสิทธิบัตร" && <NrruInventionForm6ver2 />}
                 </div>
               )}
             </section>

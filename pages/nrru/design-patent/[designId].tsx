@@ -8,6 +8,7 @@ import NrruDesignForm3 from "@/components/nrru/design-patent/NrruDesignForm3";
 import NrruDesignForm4 from "@/components/nrru/design-patent/NrruDesignForm4";
 import NrruDesignForm5 from "@/components/nrru/design-patent/NrruDesignForm5";
 import { nrruDesignnSection } from "@/data/PatentSection";
+import NrruDesignForm6 from "@/components/nrru/design-patent/NrruDesignForm6";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -39,7 +40,7 @@ const Index = () => {
               <p>สำหรับบุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา</p>
             </section>
 
-            <section className="flex w-full flex-wrap items-center justify-center gap-3">
+            <section className="flex w-full flex-wrap items-center justify-center gap-3 md:w-[70%]">
               {nrruDesignnSection.map((item, index) => (
                 <button
                   key={index}
@@ -87,6 +88,11 @@ const Index = () => {
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
                   <NrruDesignForm5 />
+                </div>
+              )}
+              {currentSection == 5 && (
+                <div>
+                  <NrruDesignForm6 />
                 </div>
               )}
             </section>

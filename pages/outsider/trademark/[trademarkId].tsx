@@ -6,6 +6,7 @@ import TrademarkForm1 from "@/components/nrru/trademark/TrademarkForm1";
 import TrademarkForm2 from "@/components/nrru/trademark/TrademarkForm2";
 import TrademarkForm3 from "@/components/nrru/trademark/TrademarkForm3";
 import TrademarkForm4 from "@/components/nrru/trademark/TrademarkForm4";
+import TrademarkForm5 from "@/components/nrru/trademark/TrademarkForm5";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -74,6 +75,11 @@ const Index = () => {
               {currentSection == 3 && (
                 <div>
                   <TrademarkForm4 />
+                </div>
+              )}
+              {currentSection == 4 && (
+                <div>
+                  <TrademarkForm5 />
                 </div>
               )}
             </section>
