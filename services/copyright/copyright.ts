@@ -75,7 +75,7 @@ type RequestGetCopyrightService = {
   copyrightId: string;
 };
 
-type ResponseGetCopyrightService = Copyright & {
+export type ResponseGetCopyrightService = Copyright & {
   partnerInfoOnCopyrights: PartnerInfoOnCopyright[];
   workInfoOnCopyright: WorkInfoOnCopyright & {
     fileWorkInfoOnCopyrights: FileWorkInfoOnCopyright[];

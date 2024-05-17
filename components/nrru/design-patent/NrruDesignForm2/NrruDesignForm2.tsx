@@ -16,7 +16,6 @@ import {
 } from "react-aria-components";
 import { Calendar } from "primereact/calendar";
 import { FiPlusCircle } from "react-icons/fi";
-import { menuDesignForm2, menuWebDesign } from "@/data/menuDesign";
 import { IoIosCheckbox } from "react-icons/io";
 import {
   MdCheckBoxOutlineBlank,
@@ -57,6 +56,7 @@ import Swal from "sweetalert2";
 import { DeleteFileWorkInventionPatentService } from "../../../../services/invention-patent/work-invention/file-work-invention";
 import { Dropdown } from "primereact/dropdown";
 import FileOnWorkDesign from "./FileOnWorkDesign";
+import { menuDesignForm2 } from "../../../../data/menu";
 
 type NrruDesignForm2Props = {
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;

@@ -48,8 +48,8 @@ function Index({ user }: { user: User }) {
   const [requests, setRequests] = useState<{
     inventions: (InventionPatent & { type: "invention-patent" })[] | [];
     designs: (DesignPatent & { type: "design-patent" })[] | [];
-    copyrights: (Copyright & { type: "copyrights" })[] | [];
-    trademarks: (Trademark & { type: "trademarks" })[] | [];
+    copyrights: (Copyright & { type: "copyright" })[] | [];
+    trademarks: (Trademark & { type: "trademark" })[] | [];
   }>({
     inventions: [],
     designs: [],
@@ -125,15 +125,15 @@ function Index({ user }: { user: User }) {
           copyrights: copyrights.data.data.map((copyright) => {
             return {
               ...copyright,
-              type: "copyrights",
+              type: "copyright",
             };
-          }) as (Copyright & { type: "copyrights" })[],
+          }) as (Copyright & { type: "copyright" })[],
           trademarks: trademarks.data.data.map((trademark) => {
             return {
               ...trademark,
-              type: "trademarks",
+              type: "trademark",
             };
-          }) as (Trademark & { type: "trademarks" })[],
+          }) as (Trademark & { type: "trademark" })[],
         };
       });
     }
@@ -218,7 +218,7 @@ function Index({ user }: { user: User }) {
                       | "เครื่องหมายการค้า";
 
                     switch (item.type) {
-                      case "copyrights":
+                      case "copyright":
                         title = "ลิขสิทธิ์";
                         break;
                       case "invention-patent":
@@ -227,7 +227,7 @@ function Index({ user }: { user: User }) {
                       case "design-patent":
                         title = "สิทธิบัตรการออกแบบผลิตภัณฑ์";
                         break;
-                      case "trademarks":
+                      case "trademark":
                         title = "เครื่องหมายการค้า";
                         break;
                     }

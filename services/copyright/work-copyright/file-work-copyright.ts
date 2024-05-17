@@ -1,11 +1,12 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
-import { FileWorkInfoOnCopyright } from "../../../models";
+import { FileWorkInfoOnCopyright, FileWorkType } from "../../../models";
 
 type RequestCreateFileWorkCopyrightService = {
   type: string;
   url: string;
   size: number;
+  name: FileWorkType;
   workInfoOnCopyrightId: string;
   copyrightId: string;
 };
@@ -35,20 +36,20 @@ export async function CreateFileWorkCopyrightService(
   }
 }
 
-type RequestDeleteWorkCopyrightService = {
-  fileResearchDesignId: string;
+type RequestDeleteFileWorkCopyrightService = {
+  fileWorkCopyrightId: string;
 };
-type ResponseDeleteWorkCopyrightService = { message: string };
+type ResponseDeleteFileWorkCopyrightService = { message: string };
 
-export async function DeleteWorkCopyrightService(
-  input: RequestDeleteWorkCopyrightService,
-): Promise<ResponseDeleteWorkCopyrightService> {
+export async function DeleteFileWorkCopyrightService(
+  input: RequestDeleteFileWorkCopyrightService,
+): Promise<ResponseDeleteFileWorkCopyrightService> {
   try {
     const cookies = parseCookies();
     const access_token = cookies.access_token;
     const work = await axios({
       method: "DELETE",
-      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-work-copyrights/${input.fileResearchDesignId}`,
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/file-work-copyrights/${input.fileWorkCopyrightId}`,
       headers: {
         Authorization: "Bearer " + access_token,
         "Content-Type": "application/json",

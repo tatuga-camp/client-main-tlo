@@ -1,3 +1,14 @@
+import {
+  IsMarketingLists,
+  SignedDocumentDetailLists,
+  TranferPermissionDurationOptions,
+  TranferPermissionOptions,
+  TranferPermissionQualityOptions,
+  WorkQualityOptions,
+} from "../data/copyright";
+import { ResearchOwnershipSubmission } from "../data/invention";
+import { DocumentType, FileWorkType } from "./type.model";
+
 export type Copyright = {
   id: string;
   createAt: string;
@@ -62,25 +73,33 @@ export type WorkInfoOnCopyright = {
   createAt: string;
   updateAt: string;
   name: string;
-  workType: string[];
-  finishWorkAt: string;
-  workQuality: string[];
-  benefit: string[];
-  funding: string;
-  yearFunding: string;
-  researchOwnershipSubmission: string;
-  isAccessibleMedia: boolean;
-  typeAccessibleMedia: string[];
-  signedDocument: string;
-  isMarketing: boolean;
-  marketingDate: string;
-  marketingCountry: string;
-  isTranferPermission: boolean;
-  tranferPermissionDetail: string;
-  tranferPermissionDate: string;
-  tranferPermissionQuality: string;
-  tranferPermissionDuration: string;
-  workDescription: string;
+  workType: string;
+  finishWorkAt?: string;
+  workQuality?: WorkQualityOptions;
+  workQualityPartDetail?: string;
+  hireWork?: string;
+  otherWorkQuality?: string;
+  benefit?: string[];
+  otherBenefit?: string;
+  funding?: string;
+  sourceFunding?: string;
+  yearFunding?: string;
+  researchOwnershipSubmission?: ResearchOwnershipSubmission;
+  typeAccessibleMedia?: string;
+  signedDocument?: SignedDocumentDetailLists;
+  signedDocumentDetail?: string;
+  isMarketing?: IsMarketingLists;
+  marketingDate?: string;
+  marketingCountry?: string;
+  tranferPermission?: TranferPermissionOptions;
+  tranferPermissionDetail?: string;
+  tranferPermissionDate?: string;
+  tranferPermissionQuality?: TranferPermissionQualityOptions;
+  tranferPermissionQualityDetail?: string;
+  tranferPermissionDuration?: TranferPermissionDurationOptions;
+  tranferPermissionDurationDetail?: string;
+  workDescription?: string;
+  isComplete: boolean;
   copyrightId: string;
   userId: string;
 };
@@ -92,6 +111,8 @@ export type FileWorkInfoOnCopyright = {
   type: string;
   url: string;
   size: number;
+  name: FileWorkType;
+
   copyrightId: string;
   workInfoOnCopyrightId: string;
   userId: string;
@@ -105,8 +126,10 @@ export type SupportingDataOnCopyright = {
   durationMonth: string;
   cost: number;
   benefit: string[];
-  allowPublic: boolean;
+  otherBenefit: string;
+  allowPublic: string;
   reasonPublic: string;
+  isComplete: boolean;
   copyrightId: string;
   userId: string;
 };
