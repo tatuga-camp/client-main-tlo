@@ -14,35 +14,247 @@ import {
   TextArea,
   TextField,
 } from "react-aria-components";
-import { Calendar } from "primereact/calendar";
-import { FiPlusCircle } from "react-icons/fi";
-import {
-  menuDesignForm2,
-  menuNrruCopyright2,
-  menuTrademark2,
-  menuWebDesign,
-} from "@/data/menu";
-import { IoIosCheckbox } from "react-icons/io";
+
 import {
   MdCheckBoxOutlineBlank,
   MdOutlineRadioButtonChecked,
   MdOutlineRadioButtonUnchecked,
 } from "react-icons/md";
 import { HiOutlinePhotograph } from "react-icons/hi";
+import {
+  AllowColorProtectionOptions,
+  allowColorProtectionOptions,
+  allowMarketingOptions,
+  allowPublicOptions,
+  allowShapeProtectionOptions,
+  menuTrademark2,
+} from "../../../data/trademark";
+import {
+  ResponseGetTrademarkService,
+  UpdateTrademarkervice,
+} from "../../../services/trademark/trademark";
+import { UseQueryResult } from "@tanstack/react-query";
+import SnackbarSaveData from "../../Snackbars/SnackbarSaveData";
+import { DocumentType, ErrorMessages } from "../../../models";
+import FileOnTrademark from "./FileOnTrademark";
+import SnackbarLoading from "../../Snackbars/SnackBarLoading";
+import {
+  CreateFileTrademarkervice,
+  DeleteFileTrademarkervice,
+} from "../../../services/trademark/file-trademark";
+import SnackbarNoSaveData from "../../Snackbars/SnackBarNoSaveData";
+import Swal from "sweetalert2";
+import {
+  GetSignURLService,
+  UploadSignURLService,
+} from "../../../services/google-storage";
 
-const TrademarkForm2 = () => {
-  const [activeContent, setActiveContent] = useState(1);
+type TrademarkForm2Props = {
+  trademark: UseQueryResult<ResponseGetTrademarkService, Error>;
+};
+const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
+  const [snackBarData, setSnackBarData] = useState<{
+    open: boolean;
+    action: React.ReactNode;
+  }>({
+    open: false,
+    action: <></>,
+  });
+  const [trademarkData, setTrademarkData] = useState<{
+    titleTrademark?: string;
+    trademarkType?: string;
+    pronunciation?: string;
+    meaning?: string;
+    productDetail?: string;
+    otopType?: string;
+    otopNumber?: string;
+    allowColorProtection?: AllowColorProtectionOptions;
+    colorProtectionDetail?: string;
+    allowShapeProtection?: string;
+    allowMarketing?: string;
+    allowPublic?: string;
+  }>(() => {
+    return {
+      titleTrademark: trademark.data?.titleTrademark,
+      trademarkType: trademark.data?.trademarkType,
+      pronunciation: trademark.data?.pronunciation,
+      meaning: trademark.data?.meaning,
+      productDetail: trademark.data?.productDetail,
+      otopType: trademark.data?.otopType,
+      otopNumber: trademark.data?.otopNumber,
+      allowColorProtection: trademark.data
+        ?.allowColorProtection as AllowColorProtectionOptions,
+      colorProtectionDetail: trademark.data?.colorProtectionDetail,
+      allowShapeProtection: trademark.data?.allowShapeProtection,
+      allowMarketing: trademark.data?.allowMarketing,
+      allowPublic: trademark.data?.allowPublic,
+    };
+  });
+  const [files, setFiles] = useState<
+    {
+      id?: string;
+      url: string;
+      documentType: DocumentType;
+      type?: string;
+      file?: File;
+    }[]
+  >([]);
 
-  const handleClick = (
-    e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>,
-    contentNumber: number,
+  const handleChangeWorkData = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    e.preventDefault();
-    setActiveContent(contentNumber);
+    setSnackBarData(() => {
+      return {
+        open: true,
+        action: <SnackbarSaveData />,
+      };
+    });
+    const { name, value } = e.target;
+    setTrademarkData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const handleChangeRaio = ({ e, name }: { e: string; name: string }) => {
+    setSnackBarData(() => {
+      return {
+        open: true,
+        action: <SnackbarSaveData />,
+      };
+    });
+    setTrademarkData((prev) => {
+      return {
+        ...prev,
+        [name]: e,
+      };
+    });
+  };
+
+  const handleDeleteFile = async ({
+    url,
+    fileOnTrademarkId,
+  }: {
+    url: string;
+    fileOnTrademarkId?: string;
+  }) => {
+    try {
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarLoading />,
+        };
+      });
+      if (fileOnTrademarkId) {
+        await DeleteFileTrademarkervice({
+          fileTrademarkId: fileOnTrademarkId,
+        });
+        setFiles((prev) => {
+          return [...prev?.filter((file) => file.url !== url)];
+        });
+      } else {
+        setFiles((prev) => {
+          return [...prev?.filter((file) => file.url !== url)];
+        });
+      }
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarNoSaveData />,
+        };
+      });
+    } catch (error) {
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarSaveData />,
+        };
+      });
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
+  };
+
+  const handleUpdateTrademark = async (e: React.FormEvent) => {
+    try {
+      if (!trademark.data?.id) {
+        throw new Error("ไม่พบข้อมูลการจดทะเบียน");
+      }
+      e.preventDefault();
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarLoading />,
+        };
+      });
+      const filterFiles = files?.filter((file) => !file.id);
+      if (filterFiles && filterFiles?.length > 0) {
+        for (const file of filterFiles) {
+          const getSignURL = await GetSignURLService({
+            fileName: file.file?.name as string,
+            fileType: file.file?.type as string,
+          });
+
+          await UploadSignURLService({
+            contentType: file.file?.type as string,
+            file: file.file as File,
+            signURL: getSignURL.signURL,
+          });
+
+          await CreateFileTrademarkervice({
+            type: file.file?.type as string,
+            url: getSignURL.originalURL,
+            documentType: file.documentType,
+            size: file.file?.size as number,
+            trademarkId: trademark.data?.id as string,
+          });
+        }
+      }
+      await UpdateTrademarkervice({
+        query: {
+          trademarkId: trademark.data.id as string,
+        },
+        body: {
+          ...trademarkData,
+        },
+      });
+      await trademark.refetch();
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarNoSaveData />,
+        };
+      });
+    } catch (error) {
+      console.error(error);
+      setSnackBarData(() => {
+        return {
+          open: true,
+          action: <SnackbarSaveData />,
+        };
+      });
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
+  };
+
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
-      <Form className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 ">
+      <Form
+        onSubmit={handleUpdateTrademark}
+        className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
+      >
         {/* ข้อ 1*/}
         <section className="flex flex-col items-start justify-center gap-3 md:gap-5  lg:flex-row">
           <section className="flex items-center gap-3">
@@ -58,7 +270,9 @@ const TrademarkForm2 = () => {
             >
               <section className="flex flex-col">
                 <Input
-                  name=""
+                  value={trademarkData?.titleTrademark}
+                  name="titleTrademark"
+                  onChange={handleChangeWorkData}
                   type="text"
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
                   placeholder="กรอกชื่อภาษาไทย"
@@ -71,13 +285,21 @@ const TrademarkForm2 = () => {
         </section>
 
         {/* ข้อ 2*/}
-        <RadioGroup className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={2} />
-            <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
-              ประเภทของงานอันมีลิขสิทธิ์
-            </Label>
-          </section>
+        <RadioGroup
+          isRequired
+          value={trademarkData?.trademarkType}
+          onChange={(e) => handleChangeRaio({ e: e, name: "trademarkType" })}
+          className="flex flex-col items-start justify-center gap-2 md:gap-5 "
+        >
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={2} />
+              <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
+                ประเภทของงานอันมีลิขสิทธิ์
+              </Label>
+            </section>
+            <FieldError className="text-xs text-red-700" />
+          </div>
           <Button className=" ml-5 flex items-center justify-center  gap-3 rounded-md bg-[#BED6FF] p-2 px-5 text-[0.8rem] font-semibold duration-300 hover:bg-[#91B2EB] md:ml-10 md:gap-5 md:text-base">
             <p>การเลือกประเภทเครื่องหมายการค้า (คลิก)</p>
           </Button>
@@ -122,14 +344,49 @@ const TrademarkForm2 = () => {
               </Label>
             </TextField>
             <section className="flex flex-col gap-3">
-              <FileTrigger>
+              <FileTrigger
+                allowsMultiple
+                onSelect={(e) => {
+                  if (!e) return null;
+                  setSnackBarData(() => {
+                    return {
+                      open: true,
+                      action: <SnackbarSaveData />,
+                    };
+                  });
+                  const files: FileList = e;
+                  Array.from(files).forEach((file) => {
+                    const url = URL.createObjectURL(file);
+                    const reader = new FileReader();
+
+                    setFiles((prev) => {
+                      return [
+                        ...prev,
+                        { file: file, url: url, documentType: "TRADEMARK" },
+                      ];
+                    });
+
+                    reader.readAsDataURL(file);
+                  });
+                }}
+              >
                 <Button className="w-44 rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md md:w-52">
                   อัพโหลดไฟล์ .pdf/.jpg
                 </Button>
               </FileTrigger>
-              <div className="flex h-44 w-44 items-center justify-center rounded-md border-2 border-solid border-[#BED6FF] text-4xl">
-                <HiOutlinePhotograph />
-              </div>
+            </section>
+            <section className="grid grid-cols-3 gap-2 2xl:grid-cols-4">
+              {...files
+                ?.filter((file) => file.documentType === "TRADEMARK")
+                .map((file) => {
+                  return (
+                    <FileOnTrademark
+                      file={file}
+                      key={file.url}
+                      handleDeleteFile={handleDeleteFile}
+                    />
+                  );
+                })}
             </section>
           </div>
         </section>
@@ -153,7 +410,10 @@ const TrademarkForm2 = () => {
               </Label>
               <section className="flex flex-col">
                 <Input
-                  name=""
+                  required
+                  value={trademarkData?.pronunciation}
+                  name="pronunciation"
+                  onChange={handleChangeWorkData}
                   type="text"
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
                   placeholder="โปรดระบุ"
@@ -171,7 +431,10 @@ const TrademarkForm2 = () => {
               </Label>
               <section className="flex flex-col">
                 <Input
-                  name=""
+                  value={trademarkData?.meaning}
+                  name="meaning"
+                  onChange={handleChangeWorkData}
+                  required
                   type="text"
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
                   placeholder="โปรดระบุ"
@@ -202,7 +465,9 @@ const TrademarkForm2 = () => {
             >
               <section className="flex flex-col">
                 <Input
-                  name=""
+                  value={trademarkData?.productDetail}
+                  name="productDetail"
+                  onChange={handleChangeWorkData}
                   type="text"
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
                   placeholder="โปรดระบุ"
@@ -232,7 +497,9 @@ const TrademarkForm2 = () => {
               </Label>
               <section className="flex flex-col">
                 <Input
-                  name=""
+                  value={trademarkData?.otopType}
+                  name="otopType"
+                  onChange={handleChangeWorkData}
                   type="text"
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
                   placeholder="SMEs"
@@ -250,7 +517,9 @@ const TrademarkForm2 = () => {
               </Label>
               <section className="flex flex-col">
                 <Input
-                  name=""
+                  value={trademarkData?.otopNumber}
+                  name="otopNumber"
+                  onChange={handleChangeWorkData}
                   type="text"
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
                   placeholder="โปรดระบุ"
@@ -263,96 +532,113 @@ const TrademarkForm2 = () => {
         </section>
 
         {/* ข้อ 7*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={7} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              การขอจดทะเบียนเครื่องหมายที่มีลักษณะเป็นกลุ่มของสี
-            </p>
-          </section>
+        <RadioGroup
+          value={trademarkData?.allowColorProtection}
+          isRequired
+          onChange={(e) =>
+            handleChangeRaio({ e, name: "allowColorProtection" })
+          }
+          className="flex flex-col items-start justify-center gap-2 md:gap-5 "
+        >
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={7} />
+              <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+                การขอจดทะเบียนเครื่องหมายที่มีลักษณะเป็นกลุ่มของสี
+              </Label>
+            </section>
+            <FieldError className="text-xs text-red-700" />
+          </div>
 
           <p className="text-[0.8rem] md:-mt-5 md:ml-10 md:text-base">
             กลุ่มของสี หมายถึง การรวมกันของสีตั้งแต่ 2 สี ขึ้นไป
             และแสดงโดยลักษณะพิเศษ เช่น ภาพลวดลายที่เป็นสีต่าง ๆ
           </p>
 
-          <RadioGroup className="my-3 flex flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row">
-            <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-10 md:text-base">
-              <section className="flex flex-col gap-3 ">
-                <Radio value={"2"} className="flex w-full items-center">
-                  {({ isSelected }) => (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="text-2xl">
-                        {isSelected ? (
-                          <MdOutlineRadioButtonChecked />
-                        ) : (
-                          <MdOutlineRadioButtonUnchecked />
-                        )}
-                      </div>
-                      <span className="font-medium md:min-w-[25rem]">
-                        ไม่ขอรับความคุ้มครอง
-                      </span>
-                    </div>
-                  )}
-                </Radio>
-              </section>
-
-              <section className="flex flex-col gap-3 ">
-                <Radio value={"3"} className="flex w-full items-center">
-                  {({ isSelected }) => (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="text-2xl">
-                        {isSelected ? (
-                          <MdOutlineRadioButtonChecked />
-                        ) : (
-                          <MdOutlineRadioButtonUnchecked />
-                        )}
-                      </div>
-                      <span className="font-medium md:min-w-[25rem]">
-                        ขอรับความคุ้มครอง
-                        (ให้บรรยายลักษณะกลุ่มของสีและระบุสีให้ชัดเจน
-                      </span>
-                    </div>
-                  )}
-                </Radio>
-                <TextField
-                  className={
-                    "flex w-full items-center gap-3 md:ml-8 md:w-[70%]"
-                  }
+          <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-10 md:text-base">
+            {allowColorProtectionOptions.map((item, index) => {
+              return (
+                <Radio
+                  key={index}
+                  value={item}
+                  className="flex w-full items-center"
                 >
-                  <section className="flex w-full flex-col">
-                    <Input
-                      name=""
-                      type="text"
-                      className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                      placeholder="ไม่มีหนังสือตกลงฯ"
-                    />
-                    <FieldError className="text-xs text-red-700" />
-                  </section>
-                </TextField>
+                  {({ isSelected }) => (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="text-2xl">
+                        {isSelected ? (
+                          <MdOutlineRadioButtonChecked />
+                        ) : (
+                          <MdOutlineRadioButtonUnchecked />
+                        )}
+                      </div>
+                      <span className="font-medium md:min-w-[25rem]">
+                        {item}
+                      </span>
+                    </div>
+                  )}
+                </Radio>
+              );
+            })}
+
+            <TextField
+              isRequired={
+                trademarkData?.allowColorProtection ===
+                "ขอรับความคุ้มครอง (ให้บรรยายลักษณะกลุ่มของสีและระบุสีให้ชัดเจน )"
+              }
+              isDisabled={
+                trademarkData?.allowColorProtection !==
+                "ขอรับความคุ้มครอง (ให้บรรยายลักษณะกลุ่มของสีและระบุสีให้ชัดเจน )"
+              }
+              className={"flex w-full items-center gap-3 md:ml-8 md:w-[70%]"}
+            >
+              <section className="flex w-full flex-col">
+                <Input
+                  value={trademarkData?.colorProtectionDetail}
+                  name="colorProtectionDetail"
+                  onChange={handleChangeWorkData}
+                  type="text"
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  placeholder="ไม่มีหนังสือตกลงฯ"
+                />
+                <FieldError className="text-xs text-red-700" />
               </section>
-            </div>
-          </RadioGroup>
-        </section>
+            </TextField>
+          </div>
+        </RadioGroup>
 
         {/* ข้อ 8*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={8} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              การขอจดทะเบียนเครื่องหมายที่มีลักษณะเป็นรูปร่างหรือรูปทรงของวัตถุ
-            </p>
-          </section>
+        <RadioGroup
+          isRequired
+          value={trademarkData?.allowShapeProtection}
+          onChange={(e) =>
+            handleChangeRaio({ e, name: "allowShapeProtection" })
+          }
+          className="flex flex-col items-start justify-center gap-2 md:gap-5 "
+        >
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={8} />
+              <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+                การขอจดทะเบียนเครื่องหมายที่มีลักษณะเป็นรูปร่างหรือรูปทรงของวัตถุ
+              </Label>
+            </section>
+            <FieldError className="text-xs text-red-700" />
+          </div>
 
           <p className="text-[0.8rem] md:-mt-5 md:ml-10 md:text-base">
             รูปร่างหรือรูปทรงของวัตถุ หมายถึง เครื่องหมายที่แสดงด้านกว้าง
             ด้านยาว ด้านลึก หรือสามมิติ
           </p>
 
-          <RadioGroup className="my-3 flex flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row">
-            <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-10 md:text-base">
-              <section className="flex flex-col gap-3 ">
-                <Radio value={"2"} className="flex w-full items-center">
+          <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-10 md:text-base">
+            {allowShapeProtectionOptions.map((item, index) => {
+              return (
+                <Radio
+                  key={index}
+                  value={item}
+                  className="flex w-full items-center"
+                >
                   {({ isSelected }) => (
                     <div className="flex items-center justify-center gap-2">
                       <div className="text-2xl">
@@ -363,49 +649,41 @@ const TrademarkForm2 = () => {
                         )}
                       </div>
                       <span className="font-medium md:min-w-[25rem]">
-                        ไม่ขอรับความคุ้มครอง
+                        {item}
                       </span>
                     </div>
                   )}
                 </Radio>
-              </section>
-
-              <section className="flex flex-col gap-3 ">
-                <Radio value={"3"} className="flex w-full items-center">
-                  {({ isSelected }) => (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="text-2xl">
-                        {isSelected ? (
-                          <MdOutlineRadioButtonChecked />
-                        ) : (
-                          <MdOutlineRadioButtonUnchecked />
-                        )}
-                      </div>
-                      <span className="font-medium md:min-w-[25rem]">
-                        ขอรับความคุ้มครอง (ให้แสดงภาพด้านอื่น ๆ
-                        ของเครื่องหมายลงในภาพเครื่องหมายข้อ 3 ด้วย)
-                      </span>
-                    </div>
-                  )}
-                </Radio>
-              </section>
-            </div>
-          </RadioGroup>
-        </section>
+              );
+            })}
+          </div>
+        </RadioGroup>
 
         {/* ข้อ 9*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={9} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              การใช้เครื่องหมายโดยการจำหน่าย เผยแพร่ หรือโฆษณาก่อนยื่นคำขอนี้
-            </p>
-          </section>
+        <RadioGroup
+          isRequired
+          value={trademarkData?.allowMarketing}
+          onChange={(e) => handleChangeRaio({ e, name: "allowMarketing" })}
+          className="flex flex-col items-start justify-center gap-2 md:gap-5 "
+        >
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={9} />
+              <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+                การใช้เครื่องหมายโดยการจำหน่าย เผยแพร่ หรือโฆษณาก่อนยื่นคำขอนี้
+              </Label>
+            </section>
+            <FieldError className="text-xs text-red-700" />
+          </div>
 
-          <RadioGroup className="my-3 flex flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row">
-            <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-10 md:text-base">
-              <section className="flex flex-col gap-3 ">
-                <Radio value={"2"} className="flex w-full items-center">
+          <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-10 md:text-base">
+            {allowMarketingOptions.map((item, index) => {
+              return (
+                <Radio
+                  key={index}
+                  value={item}
+                  className="flex w-full items-center"
+                >
                   {({ isSelected }) => (
                     <div className="flex items-center justify-center gap-2">
                       <div className="text-2xl">
@@ -416,49 +694,42 @@ const TrademarkForm2 = () => {
                         )}
                       </div>
                       <span className="font-medium md:min-w-[25rem]">
-                        ได้ใช้หรืออนุญาตให้ใช้
+                        {item}
                       </span>
                     </div>
                   )}
                 </Radio>
-              </section>
-
-              <section className="flex flex-col gap-3 ">
-                <Radio value={"3"} className="flex w-full items-center">
-                  {({ isSelected }) => (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="text-2xl">
-                        {isSelected ? (
-                          <MdOutlineRadioButtonChecked />
-                        ) : (
-                          <MdOutlineRadioButtonUnchecked />
-                        )}
-                      </div>
-                      <span className="font-medium md:min-w-[25rem]">
-                        ไม่เคยใช้หรืออนุญาตให้ใช้
-                      </span>
-                    </div>
-                  )}
-                </Radio>
-              </section>
-            </div>
-          </RadioGroup>
-        </section>
+              );
+            })}
+          </div>
+        </RadioGroup>
 
         {/* ข้อ 10*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={10} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              การขอให้ถือว่าวันที่ยื่นคําขอนอกราชอาณาจักรครั้งแรกเป็นวันยื่นคําขอในราชอาณาจักร/การขอใหถือวาวันที่นําสินคาที่ใชเครื่องหมายการคาออกแสดงในงานแสดงสินคา
-              ระหว่างประเทศ
-            </p>
-          </section>
+        <RadioGroup
+          isRequired
+          value={trademarkData?.allowPublic}
+          onChange={(e) => handleChangeRaio({ e, name: "allowPublic" })}
+          className="flex flex-col items-start justify-center gap-2 md:gap-5 "
+        >
+          <div className="flex flex-col gap-1">
+            <section className="flex items-center gap-3">
+              <Number number={10} />
+              <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+                การขอให้ถือว่าวันที่ยื่นคําขอนอกราชอาณาจักรครั้งแรกเป็นวันยื่นคําขอในราชอาณาจักร/การขอใหถือวาวันที่นําสินคาที่ใชเครื่องหมายการคาออกแสดงในงานแสดงสินคา
+                ระหว่างประเทศ
+              </Label>
+            </section>
+            <FieldError className="text-xs text-red-700" />
+          </div>
 
-          <RadioGroup className="my-3 flex flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row">
-            <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-10 md:text-base">
-              <section className="flex flex-col gap-3 ">
-                <Radio value={"1"} className="flex w-full items-center">
+          <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-10 md:text-base">
+            {allowPublicOptions.map((item, index) => {
+              return (
+                <Radio
+                  key={index}
+                  value={item}
+                  className="flex w-full items-center"
+                >
                   {({ isSelected }) => (
                     <div className="flex items-center justify-center gap-2">
                       <div className="text-2xl">
@@ -469,52 +740,16 @@ const TrademarkForm2 = () => {
                         )}
                       </div>
                       <span className="font-medium md:min-w-[25rem]">
-                        ไม่ขอรับความคุมครอง
+                        {item}
                       </span>
                     </div>
                   )}
                 </Radio>
-              </section>
-
-              <section className="flex flex-col gap-3 ">
-                <Radio value={"2"} className="flex w-full items-center">
-                  {({ isSelected }) => (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="text-2xl">
-                        {isSelected ? (
-                          <MdOutlineRadioButtonChecked />
-                        ) : (
-                          <MdOutlineRadioButtonUnchecked />
-                        )}
-                      </div>
-                      <span className="font-medium md:min-w-[25rem]">
-                        ขอถือสิทธิและได้ยื่นคําขอพร้อมเอกสารหลักฐาน
-                      </span>
-                    </div>
-                  )}
-                </Radio>
-              </section>
-              <section className="flex flex-col gap-3 ">
-                <Radio value={"3"} className="flex w-full items-center">
-                  {({ isSelected }) => (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="text-2xl">
-                        {isSelected ? (
-                          <MdOutlineRadioButtonChecked />
-                        ) : (
-                          <MdOutlineRadioButtonUnchecked />
-                        )}
-                      </div>
-                      <span className="font-medium md:min-w-[25rem]">
-                        ขอถือสิทธิและได้ยื่นหนังสือขอผอนผันการส่งเอกสารหลักฐาน
-                      </span>
-                    </div>
-                  )}
-                </Radio>
-              </section>
-            </div>
-          </RadioGroup>
-        </section>
+              );
+            })}
+          </div>
+        </RadioGroup>
+        {snackBarData.open && snackBarData.action}
       </Form>
     </div>
   );

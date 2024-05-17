@@ -558,7 +558,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
             <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-10 md:text-base">
               {workQualityOptions.map((quality) => {
                 return (
-                  <section className="flex flex-col gap-3 ">
+                  <section key={quality} className="flex flex-col gap-3 ">
                     <Radio value={quality} className="flex w-full items-center">
                       {({ isSelected }) => (
                         <div className="flex items-center justify-center gap-2">
@@ -1013,7 +1013,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
           <div className="flex w-full flex-col  gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-0 md:text-base">
             {signedDocumentDetailLists.map((item, index) => {
               return (
-                <Radio value={item} className="flex items-center">
+                <Radio key={index} value={item} className="flex items-center">
                   {({ isSelected }) => (
                     <div className="flex items-center justify-center gap-2">
                       <div className="text-2xl">
@@ -1173,7 +1173,11 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
           >
             {tranferPermissionOptions.map((item, index) => {
               return (
-                <Radio value={item} className="flex w-full items-center">
+                <Radio
+                  key={index}
+                  value={item}
+                  className="flex w-full items-center"
+                >
                   {({ isSelected }) => (
                     <div className="flex flex-col justify-center gap-2  md:flex-row md:items-center">
                       <div className="flex w-full gap-2 text-2xl md:items-center">

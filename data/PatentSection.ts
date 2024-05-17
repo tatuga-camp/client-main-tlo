@@ -124,7 +124,7 @@ const outsiderCopyrightSection = [
   },
 ];
 
-const trademark = [
+const trademarkSection = [
   {
     section: "ส่วนที่ 1",
     title: "ข้อมูลทั่วไปของเจ้าของ",
@@ -150,5 +150,5 @@ export {
   outsiderInventionSection,
   outsiderDesignSection,
   outsiderCopyrightSection,
-  trademark,
+  trademarkSection,
 };

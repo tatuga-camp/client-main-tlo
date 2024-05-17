@@ -6,6 +6,7 @@ export type DocumentType =
   | "OWNER"
   | "OTOP"
   | "REQUEST"
+  | "TRADEMARK"
   | "OTHERS";
 export type UserRole = "ADMIN" | "USER";
 export type UserType = "EXTERNAL" | "INTERNAL";
