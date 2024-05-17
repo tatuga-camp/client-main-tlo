@@ -21,23 +21,24 @@ import {
   MdOutlineRadioButtonChecked,
   MdOutlineRadioButtonUnchecked,
 } from "react-icons/md";
+import { menuNrruDesign3 } from "@/data/menu";
+import CompanyInterest from "./CompanyInterest";
 import { UseQueryResult } from "@tanstack/react-query";
-import { ResponseGetDesignPatentService } from "../../../../services/design-patent/design-patent";
+import { ResponseGetCopyrightService } from "../../../../services/copyright/copyright";
 import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import SnackbarLoading from "../../../Snackbars/SnackBarLoading";
-import { UpdateSupportDesignPatentService } from "../../../../services/design-patent/support-design/support-design";
+import { UpdateSupportCopyrightService } from "../../../../services/copyright/support-copyright/support-copyright";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
 import { ErrorMessages } from "../../../../models";
 import Swal from "sweetalert2";
-import CompanyInterest from "./CompanyInterest";
 import Link from "next/link";
 import { supportBenefits } from "../../../../data/invention";
 import { InputNumber } from "primereact/inputnumber";
 
-type NrruDesignForm3Props = {
-  design: UseQueryResult<ResponseGetDesignPatentService, Error>;
+type NrruCopyrightForm3Props = {
+  copyright: UseQueryResult<ResponseGetCopyrightService, Error>;
 };
-const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
+const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -55,13 +56,13 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
     otherBenefit?: string;
   }>(() => {
     return {
-      durationYear: design.data?.supportingDataOnDesignPatent.durationYear,
-      durationMonth: design.data?.supportingDataOnDesignPatent.durationMonth,
-      cost: design.data?.supportingDataOnDesignPatent.cost,
-      benefit: design.data?.supportingDataOnDesignPatent.benefit,
-      allowPublic: design.data?.supportingDataOnDesignPatent.allowPublic,
-      reasonPublic: design.data?.supportingDataOnDesignPatent.reasonPublic,
-      otherBenefit: design.data?.supportingDataOnDesignPatent.otherBenefit,
+      durationYear: copyright.data?.supportingDataOnCopyright.durationYear,
+      durationMonth: copyright.data?.supportingDataOnCopyright.durationMonth,
+      cost: copyright.data?.supportingDataOnCopyright.cost,
+      benefit: copyright.data?.supportingDataOnCopyright.benefit,
+      allowPublic: copyright.data?.supportingDataOnCopyright.allowPublic,
+      reasonPublic: copyright.data?.supportingDataOnCopyright.reasonPublic,
+      otherBenefit: copyright.data?.supportingDataOnCopyright.otherBenefit,
     };
   });
 
@@ -89,9 +90,9 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
           action: <SnackbarLoading />,
         };
       });
-      await UpdateSupportDesignPatentService({
+      await UpdateSupportCopyrightService({
         query: {
-          supportDesignId: design.data?.supportingDataOnDesignPatent
+          supportCopyrightId: copyright.data?.supportingDataOnCopyright
             .id as string,
         },
         body: {
@@ -106,7 +107,7 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
         },
       });
 
-      await design.refetch();
+      await copyright.refetch();
       setSnackBarData(() => {
         return {
           open: true,
@@ -298,7 +299,7 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
                     value={supportData?.otherBenefit}
                     type="text"
                     className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                    placeholder=""
+                    placeholder="โปรดระบุอื่นๆ"
                   />
                 </TextField>
               </section>
@@ -312,9 +313,9 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
             </section>
           </div>
         </CheckboxGroup>
-
         {/* ข้อ 4*/}
-        <CompanyInterest design={design} />
+
+        <CompanyInterest copyright={copyright} />
 
         {/* ข้อ 5*/}
         <RadioGroup
@@ -398,4 +399,4 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
   );
 };
 
-export default NrruDesignForm3;
+export default NrruCopyrightForm3;
