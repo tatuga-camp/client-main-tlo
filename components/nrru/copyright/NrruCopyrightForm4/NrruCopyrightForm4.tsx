@@ -147,6 +147,7 @@ const NrruCopyrightForm4 = ({ copyright }: NrruCopyrightFormProps) => {
         setFiles((prev) => {
           return [...prev?.filter((file) => file.url !== url)];
         });
+        await copyright.refetch();
       } else {
         setFiles((prev) => {
           return [...prev?.filter((file) => file.url !== url)];

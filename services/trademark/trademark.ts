@@ -71,7 +71,7 @@ type RequestGetTrademarkService = {
   trademarkId: string;
 };
 
-type ResponseGetTrademarkService = Trademark & {
+export type ResponseGetTrademarkService = Trademark & {
   partnerOnTrademarks: PartnerInfoOnTrademark[];
   fileOnTrademarks: FileOnTrademark[];
 };
@@ -100,48 +100,16 @@ export async function GetTrademarkervice(
   }
 }
 
-type RequestCreateTrademarkService = {
-  personStatus?: string;
-  titleName?: string;
-  firstName?: string;
-  lastName?: string;
-  idCard?: string;
-  adressNumber?: string;
-  moo?: string;
-  road?: string;
-  tambon?: string;
-  amphure?: string;
-  provice?: string;
-  postcode?: string;
-  nationality?: string;
-  email?: string;
-
-  titleTrademark: string;
-  trademarkType: string;
-  trademarkPicture: string;
-  pronunciation: string;
-  meaning: string;
-  productDetail: string;
-  otopType: string;
-  otopNumber: string;
-  isAllowColorProtection: boolean;
-  colorProtectionDetail: string;
-  isAllowShapeProtection: boolean;
-  isAllowMarketing: boolean;
-  allowOtherProtection: string;
-};
 type ResponseCreateTrademarkService = Trademark;
 
-export async function CreateTrademarkervice(
-  input: RequestCreateTrademarkService,
-): Promise<ResponseCreateTrademarkService> {
+export async function CreateTrademarkervice(): Promise<ResponseCreateTrademarkService> {
   try {
     const cookies = parseCookies();
     const access_token = cookies.access_token;
     const trademark = await axios({
       method: "POST",
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/trademarks`,
-      data: { ...input },
+
       headers: {
         Authorization: "Bearer " + access_token,
         "Content-Type": "application/json",
@@ -187,6 +155,7 @@ type RequestUpdateTrademarkService = {
     isAllowShapeProtection?: boolean;
     isAllowMarketing?: boolean;
     allowOtherProtection?: string;
+    isComplete?: boolean;
   };
 };
 
