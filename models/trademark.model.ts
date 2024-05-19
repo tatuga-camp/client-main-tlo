@@ -1,4 +1,4 @@
-import { DocumentType, StatusPartner } from "./type.model";
+import { DocumentType, StatusPartner, UserType } from "./type.model";
 
 export type Trademark = {
   id: string;
@@ -31,6 +31,7 @@ export type Trademark = {
   allowShapeProtection: string;
   allowMarketing: string;
   allowPublic: string;
+  userType: UserType;
   isComplete: boolean;
   userId: string;
 };
