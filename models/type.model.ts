@@ -17,3 +17,5 @@ export type MenuSearchWorks =
   | "สิทธิบัตรหรืออนุสิทธิบัตร"
   | "วารสารวิชาการ"
   | "อื่น ๆ";
+
+export type StatusLists = "PENDING" | "INPROGRESS" | "APPROVED" | "REJECTED";
