@@ -6,7 +6,6 @@ import NrruInventionForm1 from "../../../components/nrru/invention-patent/NrruIn
 import NrruInventionForm2 from "../../../components/nrru/invention-patent/NrruInventionForm2/NrruInventionForm2";
 import NrruInventionForm3 from "../../../components/nrru/invention-patent/NrruInventionForm3/NrruInventionForm3";
 import NrruInventionForm4 from "../../../components/nrru/invention-patent/NrruInventionForm4/NrruInventionForm4";
-import NrruInventionForm5 from "../../../components/nrru/invention-patent/NrruInventionForm5";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { GetUserService } from "../../../services/user";
 import { ErrorMessages, User } from "../../../models";
@@ -19,11 +18,14 @@ import {
 import Swal from "sweetalert2";
 import { MdDelete } from "react-icons/md";
 import { useRouter } from "next-nprogress-bar";
+import NrruInventionForm6ver1 from "@/components/nrru/invention-patent/NrruInventionForm6ver1";
+import NrruInventionForm6ver2 from "@/components/nrru/invention-patent/NrruInventionForm6ver2";
+import NrruInventionForm5 from "../../../components/nrru/invention-patent/NrruInventionForm5";
 
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
-
+  const [patentType, setPatentType] = useState("สิทธิบัตรการประดิษฐ์");
   const [currentSection, setCurrentSection] = useState(0);
 
   const invention = useQuery({
@@ -75,7 +77,7 @@ const Index = ({ user }: { user: User }) => {
       throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
     } else if (
       number === 3 &&
-      (!invention.data?.workInfoOnInventionPatent.id ||
+      (invention.data?.workInfoOnInventionPatent.isComplete === false ||
         invention.data?.partnerInfoOnInventionPatents.length === 0 ||
         invention.data?.supportingDataOnInventionPatent.isComplete === false)
     ) {
@@ -148,6 +150,9 @@ const Index = ({ user }: { user: User }) => {
       }
     }
   };
+  const handlePatentTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPatentType(e.target.value);
+  };
 
   return (
     <>
@@ -178,7 +183,7 @@ const Index = ({ user }: { user: User }) => {
               <MdDelete />
             </button>
 
-            <section className="flex w-full flex-wrap items-center justify-center gap-3">
+            <section className="flex w-full flex-wrap items-center justify-center gap-3 md:w-[70%]">
               {nrruInventionSection.map((item, index) => (
                 <div
                   onClick={() => {
@@ -214,6 +219,15 @@ const Index = ({ user }: { user: User }) => {
             </section>
           </header>
           <main className="mt-5 flex w-full flex-col items-center">
+            <label>
+              ประเภทสิทธิบัตร:
+              <select value={patentType} onChange={handlePatentTypeChange}>
+                <option value="สิทธิบัตรการประดิษฐ์">
+                  สิทธิบัตรการประดิษฐ์
+                </option>
+                <option value="อนุสิทธิบัตร">อนุสิทธิบัตร</option>
+              </select>
+            </label>
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
@@ -241,12 +255,18 @@ const Index = ({ user }: { user: User }) => {
                     {" "}
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
-
-                  <NrruInventionForm5 user={user} invention={invention} />
+                  <NrruInventionForm5 invention={invention} user={user} />
+                </div>
+              )}
+              {currentSection === 5 && (
+                <div>
+                  {patentType === "สิทธิบัตรการประดิษฐ์" && (
+                    <NrruInventionForm6ver1 />
+                  )}
+                  {patentType === "อนุสิทธิบัตร" && <NrruInventionForm6ver2 />}
                 </div>
               )}
             </section>
-
             <section className=" my-5 flex items-center justify-center gap-3">
               <button
                 className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"

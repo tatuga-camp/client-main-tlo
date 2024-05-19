@@ -1,4 +1,3 @@
-import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
 import React, { useState } from "react";
 import { outsiderCopyrightSection } from "../../../data/PatentSection";
@@ -6,6 +5,8 @@ import OutsiderCopyrightForm4 from "@/components/outsider/copyright/OutsiderCopy
 import OutsiderCopyrightForm3 from "@/components/outsider/copyright/OutsiderCopyrightForm3";
 import OutsiderCopyrightForm2 from "@/components/outsider/copyright/OutsiderCopyrightForm2";
 import OutsiderCopyrightForm1 from "@/components/outsider/copyright/OutsiderCopyrightForm1";
+import HomeLayout from "../../../layouts/homepageLayout";
+import OutsiderCopyrightForm5 from "../../../components/outsider/copyright/OutsiderCopyrightForm5";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -77,6 +78,11 @@ const Index = () => {
               {currentSection == 3 && (
                 <div>
                   <OutsiderCopyrightForm4 />
+                </div>
+              )}
+              {currentSection == 4 && (
+                <div>
+                  <OutsiderCopyrightForm5 />
                 </div>
               )}
             </section>
