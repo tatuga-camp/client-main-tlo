@@ -7,7 +7,7 @@ import {
   WorkQualityOptions,
 } from "../data/copyright";
 import { ResearchOwnershipSubmission } from "../data/invention";
-import { DocumentType, FileWorkType } from "./type.model";
+import { DocumentType, FileWorkType, UserType } from "./type.model";
 
 export type Copyright = {
   id: string;
@@ -28,6 +28,7 @@ export type Copyright = {
   nationality?: string;
   email?: string;
   isComplete: boolean;
+  userType: UserType;
   numberRequest?: string;
   userId: string;
 };

@@ -10,6 +10,7 @@ import {
   FileWorkType,
   MenuSearchWorks,
   StatusPartner,
+  UserType,
 } from "./type.model";
 
 export type DesignPatent = {
@@ -31,6 +32,7 @@ export type DesignPatent = {
   nationality?: string | null;
   email?: string | null;
   numberRequest?: string | null;
+  userType: UserType;
   isComplete: boolean;
   userId: string;
 };

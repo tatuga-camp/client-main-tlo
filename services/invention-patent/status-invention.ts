@@ -5,7 +5,7 @@ import { StatusInventionPatent } from "../../models";
 type RequestGetStatusInventionPatentsService = {
   inventionPatentId: string;
 };
-type ResponseGetStatusInventionPatentsService = StatusInventionPatent[];
+export type ResponseGetStatusInventionPatentsService = StatusInventionPatent[];
 
 export async function GetStatusInventionPatentsService(
   input: RequestGetStatusInventionPatentsService,
