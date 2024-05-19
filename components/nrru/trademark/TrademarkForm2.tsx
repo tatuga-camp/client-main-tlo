@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -99,6 +99,21 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
       file?: File;
     }[]
   >([]);
+
+  useEffect(() => {
+    setFiles(() => {
+      return (
+        trademark.data?.fileOnTrademarks?.map((file) => {
+          return {
+            id: file.id,
+            url: file.url,
+            documentType: file.documentType,
+            type: file.type,
+          };
+        }) ?? []
+      );
+    });
+  }, [trademark.data]);
 
   const handleChangeWorkData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

@@ -33,7 +33,7 @@ type FileOnWorkInventionProps = {
 const NrruInventionForm5 = ({ invention, user }: FileOnWorkInventionProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const handleSummitInvetion = async () => {
+  const handleUpdateInvention = async () => {
     try {
       setIsLoading(true);
       Swal.fire({
@@ -75,14 +75,23 @@ const NrruInventionForm5 = ({ invention, user }: FileOnWorkInventionProps) => {
       <NrruInventionForm2 invention={invention} />
       <NrruInventionForm3 invention={invention} />
       <NrruInventionForm4 invention={invention} />
-      <button
-        disabled={isLoading}
-        onClick={handleSummitInvetion}
-        className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-[#10316B] px-3 py-2
-         font-semibold text-white  drop-shadow-lg transition duration-100 hover:bg-[#19106b] active:ring-2"
-      >
-        ฉันยืนยันข้อมูลถูกต้องและ ต้องการส่งคำขอ
-      </button>
+      {invention.data?.isComplete === false ? (
+        <button
+          disabled={isLoading}
+          onClick={handleUpdateInvention}
+          className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-[#10316B] px-3 py-2
+       font-semibold text-white  drop-shadow-lg transition duration-100 hover:bg-[#19106b] active:ring-2"
+        >
+          ฉันยืนยันข้อมูลถูกต้องและ ต้องการส่งคำขอ
+        </button>
+      ) : (
+        <div
+          className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-green-500 px-3 py-2
+       font-semibold text-white  drop-shadow-lg "
+        >
+          คำขอของคุณได้รับการส่งเรียบร้อยแล้ว
+        </div>
+      )}
     </div>
   );
 };

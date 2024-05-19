@@ -74,14 +74,23 @@ const NrruCopyrightForm5 = ({ copyright, user }: NrruCopyrightForm5Props) => {
       <NrruCopyrightForm2 copyright={copyright} />
       <NrruCopyrightForm3 copyright={copyright} />
       <NrruCopyrightForm4 copyright={copyright} />
-      <button
-        disabled={isLoading}
-        onClick={handleUpdateCopyright}
-        className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-[#10316B] px-3 py-2
+      {copyright.data?.isComplete === false ? (
+        <button
+          disabled={isLoading}
+          onClick={handleUpdateCopyright}
+          className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-[#10316B] px-3 py-2
        font-semibold text-white  drop-shadow-lg transition duration-100 hover:bg-[#19106b] active:ring-2"
-      >
-        ฉันยืนยันข้อมูลถูกต้องและ ต้องการส่งคำขอ
-      </button>
+        >
+          ฉันยืนยันข้อมูลถูกต้องและ ต้องการส่งคำขอ
+        </button>
+      ) : (
+        <div
+          className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-green-500 px-3 py-2
+       font-semibold text-white  drop-shadow-lg "
+        >
+          คำขอของคุณได้รับการส่งเรียบร้อยแล้ว
+        </div>
+      )}
     </div>
   );
 };

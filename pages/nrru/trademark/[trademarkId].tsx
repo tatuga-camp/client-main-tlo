@@ -73,6 +73,9 @@ const Index = ({ user }: { user: User }) => {
     } else if (
       number === 3 &&
       (trademark.data?.partnerOnTrademarks.length === 0 ||
+        trademark.data?.fileOnTrademarks.find(
+          (file) => file.documentType === "IDCARD",
+        ) === undefined ||
         trademark.data?.fileOnTrademarks.length === 0)
     ) {
       throw new Error("กรุณากรอกข้อมูลเอกสารแนบ ให้ครบถ้วน");
