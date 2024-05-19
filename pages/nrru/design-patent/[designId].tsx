@@ -21,6 +21,7 @@ import { MdDelete } from "react-icons/md";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { GetUserService } from "../../../services/user";
 import { describe } from "node:test";
+import NrruDesignForm6 from "../../../components/nrru/design-patent/NrruDesignForm6";
 
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
@@ -172,7 +173,7 @@ const Index = ({ user }: { user: User }) => {
               <MdDelete />
             </button>
 
-            <section className="flex w-full flex-wrap items-center justify-center gap-3">
+            <section className="flex w-full flex-wrap items-center justify-center gap-3 md:w-[70%]">
               {nrruDesignnSection.map((item, index) => (
                 <button
                   key={index}
@@ -237,12 +238,13 @@ const Index = ({ user }: { user: User }) => {
                   <NrruDesignForm5 design={design} user={user} />
                 </div>
               )}
+              {currentSection == 5 && (
+                <div>
+                  <NrruDesignForm6 />
+                </div>
+              )}
             </section>
-            {currentSection === nrruDesignnSection.length - 1 && (
-              <button className="mt-5 w-44 rounded-md bg-[#10316B] px-3 py-2 font-semibold text-white">
-                ส่งคำขอ
-              </button>
-            )}
+
             <section className=" my-5 flex items-center justify-center gap-3">
               <button
                 className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
