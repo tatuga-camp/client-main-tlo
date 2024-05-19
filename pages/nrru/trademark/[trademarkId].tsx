@@ -18,6 +18,7 @@ import {
 } from "../../../services/trademark/trademark";
 import Swal from "sweetalert2";
 import { MdDelete } from "react-icons/md";
+import TrademarkForm5 from "@/components/nrru/trademark/TrademarkForm5";
 
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
@@ -219,6 +220,11 @@ const Index = ({ user }: { user: User }) => {
               {currentSection == 3 && (
                 <div>
                   <TrademarkForm4 user={user} trademark={trademark} />
+                </div>
+              )}
+              {currentSection == 4 && (
+                <div>
+                  <TrademarkForm5 />
                 </div>
               )}
             </section>
