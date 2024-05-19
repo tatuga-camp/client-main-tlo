@@ -6,6 +6,8 @@ import OutsiderInventionForm1 from "@/components/outsider/invention-patent/Outsi
 import OutsiderInventionForm2 from "@/components/outsider/invention-patent/OutsiderInventionForm2";
 import OutsiderInventionForm3 from "@/components/outsider/invention-patent/OutsiderInventionForm3";
 import OutsiderInventionForm4 from "@/components/outsider/invention-patent/OutsiderInventionForm4";
+import OutsiderInventionForm5ver1 from "@/components/outsider/invention-patent/OutsiderInventionForm5ver1";
+import OutsiderInventionForm5ver2 from "@/components/outsider/invention-patent/OutsiderInventionForm5ver2";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -19,6 +21,11 @@ const Index = () => {
     if (currentSection < outsiderInventionSection.length - 1) {
       setCurrentSection(currentSection + 1);
     }
+  };
+
+  const [patentType, setPatentType] = useState("สิทธิบัตรการประดิษฐ์");
+  const handlePatentTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPatentType(e.target.value);
   };
   return (
     <>
@@ -39,15 +46,16 @@ const Index = () => {
 
             <section className="flex w-full flex-wrap items-center justify-center gap-3">
               {outsiderInventionSection.map((item, index) => (
-                <div
+                <button
                   key={index}
-                  className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
+                  className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md duration-200 hover:text-blue-500 md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
+                  onClick={() => setCurrentSection(index)}
                 >
                   <h2 className={`text-base font-semibold md:text-lg`}>
                     {item.section}
                   </h2>
                   <p className={`text-xs md:text-[0.9rem]`}>{item.title}</p>
-                </div>
+                </button>
               ))}
             </section>
             <section className="my-4 w-full md:pl-16">
@@ -57,6 +65,15 @@ const Index = () => {
             </section>
           </header>
           <main className="mt-5 flex w-full flex-col items-center">
+            <label>
+              ประเภทสิทธิบัตร:
+              <select value={patentType} onChange={handlePatentTypeChange}>
+                <option value="สิทธิบัตรการประดิษฐ์">
+                  สิทธิบัตรการประดิษฐ์
+                </option>
+                <option value="อนุสิทธิบัตร">อนุสิทธิบัตร</option>
+              </select>
+            </label>
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
@@ -81,6 +98,17 @@ const Index = () => {
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
                   <OutsiderInventionForm4 />
+                </div>
+              )}
+
+              {currentSection === 4 && (
+                <div>
+                  {patentType === "สิทธิบัตรการประดิษฐ์" && (
+                    <OutsiderInventionForm5ver1 />
+                  )}
+                  {patentType === "อนุสิทธิบัตร" && (
+                    <OutsiderInventionForm5ver2 />
+                  )}
                 </div>
               )}
             </section>

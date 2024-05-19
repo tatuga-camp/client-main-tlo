@@ -19,6 +19,10 @@ const nrruInventionSection = [
     section: "ส่วนที่ 5",
     title: "สรุปเอกสารคำขอ",
   },
+  {
+    section: "ส่วนที่ 6",
+    title: "สถานะคำขอ",
+  },
 ] as const;
 
 const nrruDesignnSection = [
@@ -41,6 +45,10 @@ const nrruDesignnSection = [
   {
     section: "ส่วนที่ 5",
     title: "สรุปเอกสารคำขอ",
+  },
+  {
+    section: "ส่วนที่ 6",
+    title: "สถานะคำขอ",
   },
 ];
 
@@ -65,6 +73,10 @@ const nrruCopyrightSection = [
     section: "ส่วนที่ 5",
     title: "สรุปเอกสารคำขอ",
   },
+  {
+    section: "ส่วนที่ 6",
+    title: "สถานะคำขอ",
+  },
 ];
 
 const outsiderInventionSection = [
@@ -83,6 +95,10 @@ const outsiderInventionSection = [
   {
     section: "ส่วนที่ 4",
     title: "สรุปเอกสารคำขอ",
+  },
+  {
+    section: "ส่วนที่ 5",
+    title: "สถานะคำขอ",
   },
 ];
 
@@ -103,6 +119,10 @@ const outsiderDesignSection = [
     section: "ส่วนที่ 4",
     title: "สรุปเอกสารคำขอ",
   },
+  {
+    section: "ส่วนที่ 5",
+    title: "สถานะคำขอ",
+  },
 ];
 
 const outsiderCopyrightSection = [
@@ -122,6 +142,10 @@ const outsiderCopyrightSection = [
     section: "ส่วนที่ 4",
     title: "สรุปเอกสารคำขอ",
   },
+  {
+    section: "ส่วนที่ 5",
+    title: "สถานะคำขอ",
+  },
 ];
 
 const trademarkSection = [
@@ -140,6 +164,10 @@ const trademarkSection = [
   {
     section: "ส่วนที่ 4",
     title: "สรุปเอกสารคำขอ",
+  },
+  {
+    section: "ส่วนที่ 5",
+    title: "สถานะคำขอ",
   },
 ];
 

@@ -19,6 +19,7 @@ import {
 } from "../../../services/copyright/copyright";
 import Swal from "sweetalert2";
 import { MdDelete } from "react-icons/md";
+import NrruCopyrightForm6 from "../../../components/nrru/copyright/NrruCopyrightForm6";
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
@@ -175,7 +176,7 @@ const Index = ({ user }: { user: User }) => {
               <MdDelete />
             </button>
 
-            <section className="flex w-full flex-wrap items-center justify-center gap-3">
+            <section className="flex w-full flex-wrap items-center justify-center gap-3 md:w-[70%]">
               {nrruCopyrightSection.map((item, index) => (
                 <button
                   key={index}
@@ -238,6 +239,11 @@ const Index = ({ user }: { user: User }) => {
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
                   <NrruCopyrightForm5 user={user} copyright={copyright} />
+                </div>
+              )}
+              {currentSection == 5 && (
+                <div>
+                  <NrruCopyrightForm6 />
                 </div>
               )}
             </section>
