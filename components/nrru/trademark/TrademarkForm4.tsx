@@ -19,7 +19,7 @@ type TrademarkForm4Props = {
 const TrademarkForm4 = ({ trademark, user }: TrademarkForm4Props) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const handleUpdateCopyright = async () => {
+  const handleUpdateTrademark = async () => {
     try {
       setIsLoading(true);
       Swal.fire({
@@ -35,6 +35,7 @@ const TrademarkForm4 = ({ trademark, user }: TrademarkForm4Props) => {
           isComplete: true,
         },
       });
+
       router.push("/dashboard");
       Swal.fire({
         title: "ส่งคำขอสำเร็จ",
@@ -60,14 +61,23 @@ const TrademarkForm4 = ({ trademark, user }: TrademarkForm4Props) => {
       <TrademarkForm1 user={user} trademark={trademark} />
       <TrademarkForm2 trademark={trademark} />
       <TrademarkForm3 trademark={trademark} />
-      <button
-        disabled={isLoading}
-        onClick={handleUpdateCopyright}
-        className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-[#10316B] px-3 py-2
-     font-semibold text-white  drop-shadow-lg transition duration-100 hover:bg-[#19106b] active:ring-2"
-      >
-        ฉันยืนยันข้อมูลถูกต้องและ ต้องการส่งคำขอ
-      </button>
+      {trademark.data?.isComplete === false ? (
+        <button
+          disabled={isLoading}
+          onClick={handleUpdateTrademark}
+          className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-[#10316B] px-3 py-2
+       font-semibold text-white  drop-shadow-lg transition duration-100 hover:bg-[#19106b] active:ring-2"
+        >
+          ฉันยืนยันข้อมูลถูกต้องและ ต้องการส่งคำขอ
+        </button>
+      ) : (
+        <div
+          className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-green-500 px-3 py-2
+       font-semibold text-white  drop-shadow-lg "
+        >
+          คำขอของคุณได้รับการส่งเรียบร้อยแล้ว
+        </div>
+      )}
     </div>
   );
 };
