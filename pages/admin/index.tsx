@@ -2,11 +2,17 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import React from "react";
 import { GetUserService } from "../../services/user";
 import AdminLayout from "../../layouts/adminLayout";
+import RequestSummary from "../../components/Tables/requestSummary";
+import { User } from "../../models";
 
-function Index() {
+function Index({ user }: { user: User }) {
   return (
     <AdminLayout>
-      <div className="min-h-screen"></div>
+      <div className="flex min-h-screen flex-col items-center">
+        <main className="w-10/12">
+          <RequestSummary user={user} />
+        </main>
+      </div>
     </AdminLayout>
   );
 }
@@ -16,11 +22,11 @@ export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext,
 ) => {
   try {
-    const userServer = await GetUserService({
+    const user = await GetUserService({
       type: "SERVER-SIDE",
       context: ctx,
     });
-    if (userServer.role !== "ADMIN") {
+    if (user.role !== "ADMIN") {
       return {
         redirect: {
           destination: "/",
@@ -30,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async (
     }
     return {
       props: {
-        userServer,
+        user,
       },
     };
   } catch (error) {

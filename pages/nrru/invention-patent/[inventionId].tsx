@@ -18,14 +18,12 @@ import {
 import Swal from "sweetalert2";
 import { MdDelete } from "react-icons/md";
 import { useRouter } from "next-nprogress-bar";
-import NrruInventionForm6ver1 from "@/components/nrru/invention-patent/NrruInventionForm6ver1";
-import NrruInventionForm6ver2 from "@/components/nrru/invention-patent/NrruInventionForm6ver2";
 import NrruInventionForm5 from "../../../components/nrru/invention-patent/NrruInventionForm5";
+import InventionStatus from "../../../components/Status/InventionStatus";
 
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
-  const [patentType, setPatentType] = useState("สิทธิบัตรการประดิษฐ์");
   const [currentSection, setCurrentSection] = useState(0);
 
   const invention = useQuery({
@@ -150,9 +148,6 @@ const Index = ({ user }: { user: User }) => {
       }
     }
   };
-  const handlePatentTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPatentType(e.target.value);
-  };
 
   return (
     <>
@@ -219,15 +214,6 @@ const Index = ({ user }: { user: User }) => {
             </section>
           </header>
           <main className="mt-5 flex w-full flex-col items-center">
-            <label>
-              ประเภทสิทธิบัตร:
-              <select value={patentType} onChange={handlePatentTypeChange}>
-                <option value="สิทธิบัตรการประดิษฐ์">
-                  สิทธิบัตรการประดิษฐ์
-                </option>
-                <option value="อนุสิทธิบัตร">อนุสิทธิบัตร</option>
-              </select>
-            </label>
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
@@ -258,12 +244,9 @@ const Index = ({ user }: { user: User }) => {
                   <NrruInventionForm5 invention={invention} user={user} />
                 </div>
               )}
-              {currentSection === 5 && (
+              {currentSection === 5 && invention.data && (
                 <div>
-                  {patentType === "สิทธิบัตรการประดิษฐ์" && (
-                    <NrruInventionForm6ver1 />
-                  )}
-                  {patentType === "อนุสิทธิบัตร" && <NrruInventionForm6ver2 />}
+                  <InventionStatus inventionId={invention.data.id} />
                 </div>
               )}
             </section>

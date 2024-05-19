@@ -6,14 +6,14 @@ import {
 } from "react-icons/ri";
 import { TbCircleFilled } from "react-icons/tb";
 
-const NrruInventionForm6ver2 = () => {
+const NrruCopyrightForm6 = () => {
   return (
     <div className="  w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       <div className="flex w-full flex-col items-center gap-3">
         <h1 className="text-xl font-semibold lg:text-2xl ">
           เลขที่คำขอ: 13604015
         </h1>
-        <h1 className="font-semibold lg:text-xl">ประเภท : อนุสิทธิบัตร</h1>
+        <h1 className="font-semibold lg:text-xl">ประเภท : ลิขสิทธิ์</h1>
         <section className="mt-5 w-10/12 text-start text-xs lg:text-base">
           <p>
             <span className="font-semibold">ชื่อสิ่งประดิษฐ์/การออกแบบ : </span>{" "}
@@ -113,70 +113,6 @@ const NrruInventionForm6ver2 = () => {
             </button>
           </div>
 
-          <div className="relative flex  h-[12.5rem] min-w-[6rem] flex-col items-center gap-3 lg:min-w-[8rem]">
-            <span className="relative z-10 rounded-full bg-white text-[3rem]  text-slate-300 ">
-              <RiCheckboxBlankCircleLine />
-              {/* <div className="absolute left-[2.2rem] top-5 h-[0.3rem] w-[9rem] bg-[#2166DD]"></div> */}
-            </span>
-            <section className="flex flex-col items-center gap-1">
-              {/* <p className="lg:text-[0.85rem] text-[0.65rem] font-semibold text-green-500">
-                สำเร็จ
-              </p> */}
-              <h1 className="text-[0.7rem] font-bold text-slate-400 lg:text-[0.9rem]">
-                รับเอกสารคำขอ
-              </h1>
-              <p className="text-xs text-slate-400">กรมทรัพย์สินทางปัญญา</p>
-              <p className="text-xs text-slate-400">ได้รับเอกสารคำขอ</p>
-            </section>
-            <button className="absolute bottom-0 rounded-md bg-[#BED6FF] px-3 py-2 text-[0.65rem] font-semibold duration-200 hover:bg-blue-300 lg:text-[0.85rem]">
-              อัพเดทข้อมูล
-            </button>
-          </div>
-
-          <div className="relative flex  h-[12.5rem] min-w-[6rem] flex-col items-center gap-3 lg:min-w-[8rem]">
-            <span className="relative z-10 rounded-full bg-white text-[3rem]  text-slate-300 ">
-              <RiCheckboxBlankCircleLine />
-              {/* <div className="absolute left-[2.2rem] top-5 h-[0.3rem] w-[9rem] bg-[#2166DD]"></div> */}
-            </span>
-            <section className="flex flex-col items-center gap-1 text-center">
-              {/* <p className="lg:text-[0.85rem] text-[0.65rem] font-semibold text-green-500">
-                สำเร็จ
-              </p> */}
-              <h1 className="text-[0.7rem] font-bold text-slate-400 lg:text-[0.9rem]">
-                ออกอนุสิทธิบัตรและประกาศโฆษณา
-              </h1>
-              <p className="text-xs text-slate-400">กรมทรัพย์สินทางปัญญา</p>
-              <p className="text-xs text-slate-400">
-                ออกอนุสิทธิบัตรและประกาศโฆษณา
-              </p>
-            </section>
-            <button className="absolute bottom-0 rounded-md bg-[#BED6FF] px-3 py-2 text-[0.65rem] font-semibold duration-200 hover:bg-blue-300 lg:text-[0.85rem]">
-              อัพเดทข้อมูล
-            </button>
-          </div>
-
-          <div className="relative flex  h-[12.5rem] min-w-[6rem] flex-col items-center gap-3 lg:min-w-[8rem]">
-            <span className="relative z-10 rounded-full bg-white text-[3rem]  text-slate-300 ">
-              <RiCheckboxBlankCircleLine />
-              {/* <div className="absolute left-[2.2rem] top-5 h-[0.3rem] w-[9rem] bg-[#2166DD]"></div> */}
-            </span>
-            <section className="flex flex-col items-center gap-1 text-center">
-              {/* <p className="lg:text-[0.85rem] text-[0.65rem] font-semibold text-green-500">
-                สำเร็จ
-              </p> */}
-              <h1 className="text-[0.7rem] font-bold text-slate-400 lg:text-[0.9rem]">
-                ยื่นคำขอชำระค่าธรรมเนียม
-              </h1>
-              <p className="text-xs text-slate-400"> เจ้าหน้าที่ TLO</p>
-              <p className="text-xs text-slate-400">
-                ยื่นคำขอชำระค่าธรรมเนียมรายปี
-              </p>
-            </section>
-            <button className="absolute bottom-0 rounded-md bg-[#BED6FF] px-3 py-2 text-[0.65rem] font-semibold duration-200 hover:bg-blue-300 lg:text-[0.85rem]">
-              อัพเดทข้อมูล
-            </button>
-          </div>
-
           {/* Last process*/}
           <div className="relative flex  h-[12.5rem] min-w-[6rem] flex-col items-center gap-3 lg:min-w-[8rem]">
             <span className="z-10 rounded-full bg-white text-[3rem]  text-slate-300 ">
@@ -187,11 +123,11 @@ const NrruInventionForm6ver2 = () => {
                 สำเร็จ
               </p> */}
               <h1 className="text-[0.7rem] font-bold text-slate-400 lg:text-[0.9rem]">
-                ยื่นคำขอชำระค่าต่ออายุอนุสิทธิบัตร
+                ออกหนังสือรับรอง
               </h1>
-              <p className="text-xs text-slate-400">เจ้าหน้าที่ TLO </p>
+              <p className="text-xs text-slate-400">กรมทรัพย์สินทางปัญญา </p>
               <p className="text-xs text-slate-400">
-                ยื่นคำขอชำระค่าธรรมเนียมต่ออายุอนุสิทธิบัตร
+                ออกหนังสือรับรองการจดแจ้งข้อมูลลิขสิทธิ์
               </p>
             </section>
             <button className="absolute bottom-0 rounded-md bg-[#BED6FF] px-3 py-2 text-[0.65rem] font-semibold duration-200 hover:bg-blue-300 lg:text-[0.85rem]">
@@ -199,11 +135,11 @@ const NrruInventionForm6ver2 = () => {
             </button>
           </div>
 
-          <div className="absolute left-10 top-10 h-[0.3rem] w-[70rem] bg-slate-300 lg:w-[75rem]"></div>
+          <div className="absolute left-10 top-10 h-[0.3rem] w-[40rem] bg-slate-300 lg:w-[45rem]"></div>
         </div>
       </div>
     </div>
   );
 };
 
-export default NrruInventionForm6ver2;
+export default NrruCopyrightForm6;

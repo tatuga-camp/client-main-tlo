@@ -9,7 +9,9 @@ import {
   DocumentType,
   FileWorkType,
   MenuSearchWorks,
+  StatusLists,
   StatusPartner,
+  UserType,
   WorkType,
 } from "./type.model";
 
@@ -32,6 +34,7 @@ export type InventionPatent = {
   nationality?: string | null;
   email?: string | null;
   numberRequest?: string | null;
+  userType: UserType;
   isComplete: boolean;
   userId: string;
 };
@@ -40,8 +43,10 @@ export type StatusInventionPatent = {
   id: string;
   createAt: string;
   updateAt: string;
-  status: string;
-  note?: string | null;
+  title: string;
+  status: StatusLists;
+  note: string;
+  order: number;
   userId: string;
   inventionPatentId: string;
 };
