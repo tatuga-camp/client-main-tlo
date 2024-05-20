@@ -155,6 +155,7 @@ type RequestUpdateInventionPatentService = {
   body: {
     personStatus?: string;
     title?: string;
+    fullName?: string;
     firstName?: string;
     lastName?: string;
     idCard?: string;
@@ -164,6 +165,7 @@ type RequestUpdateInventionPatentService = {
     tambon?: string;
     amphure?: string;
     province?: string;
+    phone?: string;
     postalCode?: string;
     nationality?: string;
     email?: string;

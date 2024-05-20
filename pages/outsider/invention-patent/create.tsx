@@ -1,16 +1,11 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
+import Link from "next/link";
 import React, { useState } from "react";
-import { outsiderInventionSection } from "../../../data/PatentSection";
-import OutsiderInventionForm1 from "@/components/outsider/invention-patent/OutsiderInventionForm1";
-import OutsiderInventionForm2 from "@/components/outsider/invention-patent/OutsiderInventionForm2";
-import OutsiderInventionForm3 from "@/components/outsider/invention-patent/OutsiderInventionForm3";
-import OutsiderInventionForm4 from "@/components/outsider/invention-patent/OutsiderInventionForm4";
 import { ErrorMessages, User } from "../../../models";
-import { useRouter } from "next-nprogress-bar";
 import Swal from "sweetalert2";
 import { CreateInventionPatentService } from "../../../services/invention-patent/invention-patent";
-import Link from "next/link";
+import { useRouter } from "next-nprogress-bar";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { GetUserService } from "../../../services/user";
 
@@ -25,7 +20,7 @@ const Index = ({ user }: { user: User }) => {
         showConfirmButton: false,
         allowOutsideClick: false,
       });
-      const create = await CreateInventionPatentService();
+      const create = await CreateInventionPatentService({});
       router.push(
         `/${user.type === "INTERNAL" ? "nrru" : "outsider"}/invention-patent/${create.id}`,
       );
@@ -69,8 +64,8 @@ const Index = ({ user }: { user: User }) => {
               <Link
                 href="/dashboard"
                 className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)]
-               px-3 py-2 font-semibold drop-shadow-md transition duration-100 hover:bg-main-color hover:text-white active:scale-105
-               "
+                 px-3 py-2 font-semibold drop-shadow-md transition duration-100 hover:bg-main-color hover:text-white active:scale-105
+                 "
               >
                 ย้อนกลับ
               </Link>
@@ -78,8 +73,8 @@ const Index = ({ user }: { user: User }) => {
               <button
                 onClick={handleCreateInvention}
                 className="w-max rounded-md border-2 border-solid border-[var(--primary-blue)]
-               px-3 py-2 font-semibold drop-shadow-md transition duration-100 hover:bg-main-color hover:text-white active:scale-105
-               "
+                 px-3 py-2 font-semibold drop-shadow-md transition duration-100 hover:bg-main-color hover:text-white active:scale-105
+                 "
               >
                 ดำเนินการต่อ
               </button>
