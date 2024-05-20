@@ -1,16 +1,18 @@
 import React from "react";
 import { RiCheckboxCircleFill } from "react-icons/ri";
-import { StatusInventionPatent } from "../../models";
+import { SelectStatus, StatusInventionPatent, User } from "../../../models";
 import moment from "moment";
 
 function SuccessfulStatus({
   status,
   setTriggerUpdateStatus,
   setSelectStatus,
+  user,
 }: {
-  status: StatusInventionPatent;
+  user?: User;
+  status: SelectStatus;
   setSelectStatus: React.Dispatch<
-    React.SetStateAction<StatusInventionPatent | undefined>
+    React.SetStateAction<SelectStatus | undefined>
   >;
   setTriggerUpdateStatus: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -35,16 +37,28 @@ function SuccessfulStatus({
           {moment(status.updateAt).format("HH:mm")}
         </p>
       </section>
-      <button
-        onClick={() => {
-          setTriggerUpdateStatus(true);
-          setSelectStatus(status);
-        }}
-        className="absolute bottom-0 w-full rounded-md bg-[#BED6FF] px-3 py-2 text-[0.65rem]
+      {user?.role === "ADMIN" ? (
+        <button
+          onClick={() => {
+            setTriggerUpdateStatus(true);
+            setSelectStatus(status);
+          }}
+          className="absolute bottom-0 w-full rounded-md bg-[#BED6FF] px-3 py-2 text-[0.65rem]
        font-semibold duration-200 hover:bg-blue-300 lg:text-[0.85rem]"
-      >
-        อัพเดทข้อมูล
-      </button>
+        >
+          อัพเดทข้อมูล
+        </button>
+      ) : (
+        <button
+          onClick={() => {
+            setTriggerUpdateStatus(true);
+            setSelectStatus(status);
+          }}
+          className="absolute bottom-0 w-full rounded-md bg-[var(--secondary-yellow)] px-3 py-2 text-[0.65rem] font-semibold duration-200 hover:bg-yellow-400 lg:text-[0.85rem]"
+        >
+          ตรวจสอบ
+        </button>
+      )}
     </div>
   );
 }

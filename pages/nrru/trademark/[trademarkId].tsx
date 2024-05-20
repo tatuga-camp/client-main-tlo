@@ -18,7 +18,7 @@ import {
 } from "../../../services/trademark/trademark";
 import Swal from "sweetalert2";
 import { MdDelete } from "react-icons/md";
-import TrademarkForm5 from "@/components/nrru/trademark/TrademarkForm5";
+import TrademarkStatus from "../../../components/Status/trademarkStatus";
 
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
@@ -222,9 +222,12 @@ const Index = ({ user }: { user: User }) => {
                   <TrademarkForm4 user={user} trademark={trademark} />
                 </div>
               )}
-              {currentSection == 4 && (
+              {currentSection == 4 && trademark.data && (
                 <div>
-                  <TrademarkForm5 />
+                  <TrademarkStatus
+                    user={user}
+                    trademarkId={trademark.data.id}
+                  />
                 </div>
               )}
             </section>

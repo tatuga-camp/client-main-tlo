@@ -1,11 +1,22 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
-import { StatusCopyright } from "../../models";
+import {
+  Copyright,
+  PartnerInfoOnCopyright,
+  StatusCopyright,
+  WorkInfoOnCopyright,
+} from "../../models";
 
 type RequestGetStatusCopyrightsService = {
   copyrightId: string;
 };
-type ResponseGetStatusCopyrightsService = StatusCopyright[];
+type ResponseGetStatusCopyrightsService = {
+  status: StatusCopyright[];
+  copyright: Copyright & {
+    workInfoOnCopyright: WorkInfoOnCopyright;
+    partnerInfoOnCopyrights: PartnerInfoOnCopyright[];
+  };
+};
 
 export async function GetStatusCopyrightsService(
   input: RequestGetStatusCopyrightsService,

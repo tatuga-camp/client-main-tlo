@@ -21,7 +21,7 @@ import { MdDelete } from "react-icons/md";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { GetUserService } from "../../../services/user";
 import { describe } from "node:test";
-import NrruDesignForm6 from "../../../components/nrru/design-patent/NrruDesignForm6";
+import DesignStatus from "../../../components/Status/designStatus";
 
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
@@ -240,7 +240,10 @@ const Index = ({ user }: { user: User }) => {
               )}
               {currentSection == 5 && (
                 <div>
-                  <NrruDesignForm6 />
+                  <DesignStatus
+                    user={user}
+                    designId={design.data?.id as string}
+                  />
                 </div>
               )}
             </section>

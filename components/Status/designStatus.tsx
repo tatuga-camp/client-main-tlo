@@ -1,45 +1,32 @@
-import { useQuery } from "@tanstack/react-query";
 import React, { FormEvent, useEffect, useState } from "react";
+import { ErrorMessages, SelectStatus, StatusLists, User } from "../../models";
+import { useQuery } from "@tanstack/react-query";
 import {
-  RiCheckboxBlankCircleLine,
-  RiCheckboxCircleFill,
-} from "react-icons/ri";
-import { TbCircleFilled } from "react-icons/tb";
-import {
-  GetStatusInventionPatentsService,
-  UpdateStatusInventionPatentService,
-} from "../../services/invention-patent/status-invention";
-import SuccessfulStatus from "./statusLists/successfulStatus";
-import PendingStatus from "./statusLists/pendingStatus";
-import InprogressStatus from "./statusLists/inprogressStatus";
-import UpdateStatus from "../Forms/updateStatus";
-import {
-  GetInventionPatentService,
-  UpdateInventionPatentService,
-} from "../../services/invention-patent/invention-patent";
-import {
-  ErrorMessages,
-  SelectStatus,
-  StatusInventionPatent,
-  StatusLists,
-  User,
-} from "../../models";
-import { Button, Form, Input } from "react-aria-components";
+  GetStatusDesignPatentsService,
+  UpdateStatusDesignPatentService,
+} from "../../services/design-patent/status-design";
 import Swal from "sweetalert2";
+import { UpdateDesignPatentService } from "../../services/design-patent/design-patent";
+import UpdateStatus from "../Forms/updateStatus";
+import { Button, Form, Input } from "react-aria-components";
+import SuccessfulStatus from "./statusLists/successfulStatus";
+import InprogressStatus from "./statusLists/inprogressStatus";
+import PendingStatus from "./statusLists/pendingStatus";
 
-type InventionStatusProps = {
-  inventionId: string;
+type DesignStatusProps = {
+  designId: string;
   user?: User;
 };
-function InventionStatus({ inventionId, user }: InventionStatusProps) {
+
+function DesignStatus({ designId, user }: DesignStatusProps) {
   const [numberRequest, setNumberRequest] = useState<string>();
   const [triggerUpdateStatus, setTriggerUpdateStatus] = useState(false);
   const [selectStatus, setSelectStatus] = useState<SelectStatus>();
   const status = useQuery({
-    queryKey: ["invention-status", { inventionId: inventionId }],
+    queryKey: ["design-status", { designId: designId }],
     queryFn: () =>
-      GetStatusInventionPatentsService({
-        inventionPatentId: inventionId,
+      GetStatusDesignPatentsService({
+        designPatentId: designId,
       }),
     staleTime: 1000 * 10,
     refetchInterval: 1000 * 10,
@@ -47,7 +34,7 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
 
   useEffect(() => {
     if (status.isSuccess) {
-      setNumberRequest(status.data?.invention.numberRequest ?? "");
+      setNumberRequest(status.data?.design.numberRequest ?? "");
     }
   }, [status.data]);
 
@@ -70,9 +57,9 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
           Swal.showLoading();
         },
       });
-      await UpdateInventionPatentService({
+      await UpdateDesignPatentService({
         query: {
-          inventionPatentId: status.data?.invention.id as string,
+          designPatentId: status.data?.design.id as string,
         },
         body: {
           numberRequest: numberRequest,
@@ -129,9 +116,9 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
           Swal.showLoading();
         },
       });
-      await UpdateStatusInventionPatentService({
+      await UpdateStatusDesignPatentService({
         query: {
-          statusInventionId: statusId,
+          statusDesignId: statusId,
         },
         body: {
           status: statusValue,
@@ -164,8 +151,8 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
     <div className="  w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       {triggerUpdateStatus && selectStatus && (
         <UpdateStatus
-          handleUpdateStatus={handleUpdateStatus}
           user={user}
+          handleUpdateStatus={handleUpdateStatus}
           selectStatus={selectStatus}
           setTrigger={setTriggerUpdateStatus}
         />
@@ -199,14 +186,14 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
         <section className="mt-5 w-10/12 text-start text-xs lg:text-base">
           <p>
             <span className="font-semibold">ชื่อสิ่งประดิษฐ์/การออกแบบ : </span>{" "}
-            {status.data?.invention.workInfoOnInventionPatent.thaiName} /{" "}
-            {status.data?.invention.workInfoOnInventionPatent.englishName}
+            {status.data?.design.workInfoOnDesignPatent.thaiName} /{" "}
+            {status.data?.design.workInfoOnDesignPatent.englishName}
           </p>
         </section>
         <section className="flex w-10/12 flex-col gap-2 text-xs md:flex-row md:justify-between lg:text-base">
           <p>
             <span className="font-semibold">ชื่อผู้สิ่งประดิษฐ์/ออกแบบ :</span>{" "}
-            {status.data?.invention.partnerInfoOnInventionPatents
+            {status.data?.design.partnerInfoOnDesignPatents
               .map((partner) => {
                 return `${partner.title} ${partner.firstName} ${partner.lastName}`;
               })
@@ -214,7 +201,7 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
           </p>
           <p>
             <span className="font-semibold">สังกัด : </span>{" "}
-            {status.data?.invention.partnerInfoOnInventionPatents
+            {status.data?.design.partnerInfoOnDesignPatents
               .map((partner) => {
                 return `${partner.major} ${partner.faculty} ${partner.department}`;
               })
@@ -245,9 +232,9 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
               } else if (list.status === "PENDING") {
                 return (
                   <PendingStatus
+                    user={user}
                     setSelectStatus={setSelectStatus}
                     status={list}
-                    user={user}
                     setTriggerUpdateStatus={setTriggerUpdateStatus}
                   />
                 );
@@ -262,4 +249,4 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
   );
 }
 
-export default InventionStatus;
+export default DesignStatus;

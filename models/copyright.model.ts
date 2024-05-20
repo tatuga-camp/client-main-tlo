@@ -7,7 +7,12 @@ import {
   WorkQualityOptions,
 } from "../data/copyright";
 import { ResearchOwnershipSubmission } from "../data/invention";
-import { DocumentType, FileWorkType, UserType } from "./type.model";
+import {
+  DocumentType,
+  FileWorkType,
+  StatusLists,
+  UserType,
+} from "./type.model";
 
 export type Copyright = {
   id: string;
@@ -37,8 +42,10 @@ export type StatusCopyright = {
   id: string;
   createAt: string;
   updateAt: string;
-  status: string;
-  note?: string | null;
+  title: string;
+  status: StatusLists;
+  note: string;
+  order: number;
   userId: string;
   copyrightId: string;
 };

@@ -151,6 +151,7 @@ type RequestUpdateCopyrightService = {
     nationality?: string;
     email?: string;
     isComplete?: boolean;
+    numberRequest?: string;
   };
 };
 

@@ -81,6 +81,8 @@ function RequestSummary({ user }: { user?: User }) {
         searchField: searchField.actual,
         limit: 3,
       }),
+    staleTime: 1000 * 10,
+    refetchInterval: 1000 * 10,
   });
 
   const copyrights = useQuery({
@@ -91,6 +93,8 @@ function RequestSummary({ user }: { user?: User }) {
         searchField: searchField.actual,
         limit: 3,
       }),
+    staleTime: 1000 * 10,
+    refetchInterval: 1000 * 10,
   });
 
   const trademarks = useQuery({
@@ -101,6 +105,8 @@ function RequestSummary({ user }: { user?: User }) {
         searchField: searchField.actual,
         limit: 3,
       }),
+    staleTime: 1000 * 10,
+    refetchInterval: 1000 * 10,
   });
 
   useEffect(() => {
@@ -226,7 +232,10 @@ function RequestSummary({ user }: { user?: User }) {
   }, [searchField]);
   return (
     <>
-      <Element name="request">
+      <Element
+        name="request"
+        className="flex w-7/12 justify-center font-Anuphan"
+      >
         <div className="mt-12 flex w-full flex-col items-center gap-8">
           <h1 className="w-full  bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold hover:drop-shadow-md md:text-xl">
             ตรวจสอบสถานะคำขอ
@@ -236,9 +245,9 @@ function RequestSummary({ user }: { user?: User }) {
                 border-[1.5px] border-solid border-[#BED6FF] bg-white p-4 text-xs md:gap-8 md:p-12 md:text-base "
           >
             {/* Select */}
-            <div className="flex w-[90%] flex-col gap-3 md:w-[80%] md:flex-row md:gap-10 ">
-              <div className="flex w-full items-center  gap-3 md:w-[50%] md:gap-5 ">
-                <label className="font-semibold">ประเภท</label>
+            <div className="flex w-full flex-col gap-3 md:flex-row md:gap-10 ">
+              <div className="flex w-full items-center  gap-3  md:gap-5 ">
+                <label className="w-20 font-semibold">ประเภท</label>
                 <Select
                   defaultValue={menuTypes.find((type) => type.value === "all")}
                   onChange={(e) => {
@@ -248,7 +257,7 @@ function RequestSummary({ user }: { user?: User }) {
                     }
                   }}
                   options={menuTypes}
-                  className="w-72"
+                  className="w-full"
                   placeholder={<div>เลือกประเภท</div>}
                   styles={{
                     control: (base, state) => ({
@@ -273,7 +282,7 @@ function RequestSummary({ user }: { user?: User }) {
                   }}
                 />
               </div>
-              <div className="flex w-full items-center gap-5 md:w-[50%]">
+              {/* <div className="flex w-full items-center gap-5 md:w-[50%]">
                 <label className="font-semibold">ปีงบประมาณ</label>
                 <Select
                   options={fakeOptions}
@@ -301,11 +310,11 @@ function RequestSummary({ user }: { user?: User }) {
                     },
                   }}
                 />
-              </div>
+              </div> */}
             </div>
             {/* Search */}
-            <div className="flex w-[90%] items-center justify-center gap-2 md:w-[80%] md:gap-5">
-              <div className="text-base md:text-xl">
+            <div className="flex w-full items-center justify-center gap-2 md:gap-5">
+              <div className="w-20 text-base md:text-xl">
                 <LuSearch />
               </div>
 
@@ -334,7 +343,7 @@ function RequestSummary({ user }: { user?: User }) {
         <div className="max-h-96 w-10/12 overflow-auto">
           <table className="w-max min-w-full border-separate border-spacing-1 rounded-md bg-white p-1 text-center text-[0.7rem] md:border-spacing-2 md:p-4 md:text-base">
             <thead className="">
-              <tr className="sticky top-2">
+              <tr className="sticky top-2 z-20">
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">
                   รายชื่อผู้ยื่น
                 </th>
@@ -345,11 +354,22 @@ function RequestSummary({ user }: { user?: User }) {
               </tr>
             </thead>
 
-            <tbody>
-              {inventions.isFetching ||
-              designs.isFetching ||
-              trademarks.isFetching ||
-              copyrights.isFetching
+            <tbody className="relative">
+              {(inventions.isFetching ||
+                designs.isFetching ||
+                trademarks.isFetching ||
+                copyrights.isFetching) && (
+                <div
+                  className="absolute bottom-0 left-0 right-0 top-0 z-40 flex h-full w-full
+               animate-pulse items-center justify-center bg-gray-200"
+                >
+                  <div className="h-14 w-14 animate-spin rounded-full border-8 border-gray-300 border-t-blue-600" />
+                </div>
+              )}
+              {inventions.isLoading ||
+              designs.isLoading ||
+              trademarks.isLoading ||
+              copyrights.isLoading
                 ? [...Array(5)].map((_, index) => (
                     <tr key={index} className="animate-pulse">
                       <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-200 p-2"></td>

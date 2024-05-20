@@ -8,8 +8,8 @@ import { User } from "../../models";
 function Index({ user }: { user: User }) {
   return (
     <AdminLayout>
-      <div className="flex min-h-screen flex-col items-center">
-        <main className="w-10/12">
+      <div className="font-Anuphan">
+        <main className="flex w-full flex-col items-center justify-center ">
           <RequestSummary user={user} />
         </main>
       </div>

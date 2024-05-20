@@ -1,11 +1,18 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
-import { StatusTrademark } from "../../models";
+import {
+  PartnerInfoOnTrademark,
+  StatusTrademark,
+  Trademark,
+} from "../../models";
 
 type RequestGetStatusTrademarksService = {
   trademarkId: string;
 };
-type ResponseGetStatusTrademarksService = StatusTrademark[];
+type ResponseGetStatusTrademarksService = {
+  status: StatusTrademark[];
+  trademark: Trademark & { partnerInfoOnTrademarks: PartnerInfoOnTrademark[] };
+};
 
 export async function GetStatusTrademarksService(
   input: RequestGetStatusTrademarksService,

@@ -1,45 +1,31 @@
-import { useQuery } from "@tanstack/react-query";
 import React, { FormEvent, useEffect, useState } from "react";
+import { ErrorMessages, SelectStatus, StatusLists, User } from "../../models";
+import { useQuery } from "@tanstack/react-query";
 import {
-  RiCheckboxBlankCircleLine,
-  RiCheckboxCircleFill,
-} from "react-icons/ri";
-import { TbCircleFilled } from "react-icons/tb";
-import {
-  GetStatusInventionPatentsService,
-  UpdateStatusInventionPatentService,
-} from "../../services/invention-patent/status-invention";
-import SuccessfulStatus from "./statusLists/successfulStatus";
-import PendingStatus from "./statusLists/pendingStatus";
-import InprogressStatus from "./statusLists/inprogressStatus";
-import UpdateStatus from "../Forms/updateStatus";
-import {
-  GetInventionPatentService,
-  UpdateInventionPatentService,
-} from "../../services/invention-patent/invention-patent";
-import {
-  ErrorMessages,
-  SelectStatus,
-  StatusInventionPatent,
-  StatusLists,
-  User,
-} from "../../models";
-import { Button, Form, Input } from "react-aria-components";
+  GetStatusTrademarksService,
+  UpdateStatusTrademarkervice,
+} from "../../services/trademark/status-trademark";
 import Swal from "sweetalert2";
+import { UpdateTrademarkervice } from "../../services/trademark/trademark";
+import UpdateStatus from "../Forms/updateStatus";
+import { Button, Form, Input } from "react-aria-components";
+import SuccessfulStatus from "./statusLists/successfulStatus";
+import InprogressStatus from "./statusLists/inprogressStatus";
+import PendingStatus from "./statusLists/pendingStatus";
 
-type InventionStatusProps = {
-  inventionId: string;
+type TrademarkStatusProps = {
   user?: User;
+  trademarkId: string;
 };
-function InventionStatus({ inventionId, user }: InventionStatusProps) {
+function TrademarkStatus({ trademarkId, user }: TrademarkStatusProps) {
   const [numberRequest, setNumberRequest] = useState<string>();
   const [triggerUpdateStatus, setTriggerUpdateStatus] = useState(false);
   const [selectStatus, setSelectStatus] = useState<SelectStatus>();
   const status = useQuery({
-    queryKey: ["invention-status", { inventionId: inventionId }],
+    queryKey: ["trademark-status", { trademarkId: trademarkId }],
     queryFn: () =>
-      GetStatusInventionPatentsService({
-        inventionPatentId: inventionId,
+      GetStatusTrademarksService({
+        trademarkId: trademarkId,
       }),
     staleTime: 1000 * 10,
     refetchInterval: 1000 * 10,
@@ -47,7 +33,7 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
 
   useEffect(() => {
     if (status.isSuccess) {
-      setNumberRequest(status.data?.invention.numberRequest ?? "");
+      setNumberRequest(status.data?.trademark.numberRequest ?? "");
     }
   }, [status.data]);
 
@@ -70,9 +56,9 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
           Swal.showLoading();
         },
       });
-      await UpdateInventionPatentService({
+      await UpdateTrademarkervice({
         query: {
-          inventionPatentId: status.data?.invention.id as string,
+          trademarkId: status.data?.trademark.id as string,
         },
         body: {
           numberRequest: numberRequest,
@@ -129,9 +115,9 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
           Swal.showLoading();
         },
       });
-      await UpdateStatusInventionPatentService({
+      await UpdateStatusTrademarkervice({
         query: {
-          statusInventionId: statusId,
+          statusTrademarkId: statusId,
         },
         body: {
           status: statusValue,
@@ -159,13 +145,12 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
       });
     }
   };
-
   return (
     <div className="  w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       {triggerUpdateStatus && selectStatus && (
         <UpdateStatus
-          handleUpdateStatus={handleUpdateStatus}
           user={user}
+          handleUpdateStatus={handleUpdateStatus}
           selectStatus={selectStatus}
           setTrigger={setTriggerUpdateStatus}
         />
@@ -199,24 +184,23 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
         <section className="mt-5 w-10/12 text-start text-xs lg:text-base">
           <p>
             <span className="font-semibold">ชื่อสิ่งประดิษฐ์/การออกแบบ : </span>{" "}
-            {status.data?.invention.workInfoOnInventionPatent.thaiName} /{" "}
-            {status.data?.invention.workInfoOnInventionPatent.englishName}
+            {status.data?.trademark.titleTrademark}
           </p>
         </section>
         <section className="flex w-10/12 flex-col gap-2 text-xs md:flex-row md:justify-between lg:text-base">
           <p>
             <span className="font-semibold">ชื่อผู้สิ่งประดิษฐ์/ออกแบบ :</span>{" "}
-            {status.data?.invention.partnerInfoOnInventionPatents
+            {status.data?.trademark.partnerInfoOnTrademarks
               .map((partner) => {
                 return `${partner.title} ${partner.firstName} ${partner.lastName}`;
               })
               .join(", ")}
           </p>
           <p>
-            <span className="font-semibold">สังกัด : </span>{" "}
-            {status.data?.invention.partnerInfoOnInventionPatents
+            <span className="font-semibold">อาชีพ : </span>{" "}
+            {status.data?.trademark.partnerInfoOnTrademarks
               .map((partner) => {
-                return `${partner.major} ${partner.faculty} ${partner.department}`;
+                return `${partner.career}`;
               })
               .join(", ")}
           </p>
@@ -262,4 +246,4 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
   );
 }
 
-export default InventionStatus;
+export default TrademarkStatus;

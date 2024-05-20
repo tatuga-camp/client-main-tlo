@@ -19,7 +19,7 @@ import {
 } from "../../../services/copyright/copyright";
 import Swal from "sweetalert2";
 import { MdDelete } from "react-icons/md";
-import NrruCopyrightForm6 from "../../../components/nrru/copyright/NrruCopyrightForm6";
+import CopyrightStatus from "../../../components/Status/copyrightStatus";
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
@@ -213,27 +213,27 @@ const Index = ({ user }: { user: User }) => {
           </header>
           <main className="mt-5 flex w-full flex-col items-center">
             <section className="w-[87%]">
-              {currentSection == 0 && (
+              {currentSection === 0 && (
                 <div>
                   <NrruCopyrightForm1 user={user} copyright={copyright} />
                 </div>
               )}
-              {currentSection == 1 && (
+              {currentSection === 1 && (
                 <div>
                   <NrruCopyrightForm2 copyright={copyright} />
                 </div>
               )}
-              {currentSection == 2 && (
+              {currentSection === 2 && (
                 <div>
                   <NrruCopyrightForm3 copyright={copyright} />
                 </div>
               )}
-              {currentSection == 3 && (
+              {currentSection === 3 && (
                 <div>
                   <NrruCopyrightForm4 copyright={copyright} />
                 </div>
               )}
-              {currentSection == 4 && (
+              {currentSection === 4 && (
                 <div>
                   <p className="my-5 w-full items-center text-center  font-bold">
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
@@ -241,9 +241,12 @@ const Index = ({ user }: { user: User }) => {
                   <NrruCopyrightForm5 user={user} copyright={copyright} />
                 </div>
               )}
-              {currentSection == 5 && (
+              {currentSection === 5 && copyright.data && (
                 <div>
-                  <NrruCopyrightForm6 />
+                  <CopyrightStatus
+                    user={user}
+                    copyrightId={copyright.data.id}
+                  />
                 </div>
               )}
             </section>
