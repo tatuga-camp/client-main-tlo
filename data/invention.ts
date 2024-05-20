@@ -1,4 +1,16 @@
-import { title } from "process";
+export type PartnerStatus =
+  | "บุคคลธรรมดา"
+  | "นิติบุคคล"
+  | "หน่วยงานรัฐ"
+  | "มูลนิธิ"
+  | "อื่น ๆ";
+export const partnerStatus = [
+  "บุคคลธรรมดา",
+  "นิติบุคคล",
+  "หน่วยงานรัฐ",
+  "มูลนิธิ",
+  "อื่น ๆ",
+];
 
 export const menuBenefits = [
   {

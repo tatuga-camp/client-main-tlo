@@ -192,7 +192,11 @@ function TrademarkStatus({ trademarkId, user }: TrademarkStatusProps) {
             <span className="font-semibold">ชื่อผู้สิ่งประดิษฐ์/ออกแบบ :</span>{" "}
             {status.data?.trademark.partnerInfoOnTrademarks
               .map((partner) => {
-                return `${partner.title} ${partner.firstName} ${partner.lastName}`;
+                return (
+                  <span key={partner.id}>
+                    {partner.title} ${partner.firstName} ${partner.lastName}
+                  </span>
+                );
               })
               .join(", ")}
           </p>
@@ -200,7 +204,7 @@ function TrademarkStatus({ trademarkId, user }: TrademarkStatusProps) {
             <span className="font-semibold">อาชีพ : </span>{" "}
             {status.data?.trademark.partnerInfoOnTrademarks
               .map((partner) => {
-                return `${partner.career}`;
+                return <span key={partner.id}>{partner.career}</span>;
               })
               .join(", ")}
           </p>
@@ -213,6 +217,7 @@ function TrademarkStatus({ trademarkId, user }: TrademarkStatusProps) {
                   <SuccessfulStatus
                     setSelectStatus={setSelectStatus}
                     status={list}
+                    key={list.id}
                     user={user}
                     setTriggerUpdateStatus={setTriggerUpdateStatus}
                   />
@@ -220,6 +225,7 @@ function TrademarkStatus({ trademarkId, user }: TrademarkStatusProps) {
               } else if (list.status === "INPROGRESS") {
                 return (
                   <InprogressStatus
+                    key={list.id}
                     setSelectStatus={setSelectStatus}
                     status={list}
                     user={user}
@@ -231,6 +237,7 @@ function TrademarkStatus({ trademarkId, user }: TrademarkStatusProps) {
                   <PendingStatus
                     setSelectStatus={setSelectStatus}
                     status={list}
+                    key={list.id}
                     user={user}
                     setTriggerUpdateStatus={setTriggerUpdateStatus}
                   />
