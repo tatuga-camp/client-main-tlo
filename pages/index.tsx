@@ -41,7 +41,10 @@ export default function Home() {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <title>หน้าหลัก</title>
+        <title>
+          งานทรัพย์สินทางปัญญา กองพัฒนาพิเศษ สำนักงานอธิการบดี
+          มหาวิทยาลัยราชภัฏนครราชสีมา
+        </title>
       </Head>
       <HomeLayout>
         <div className="flex h-full w-full flex-col items-center bg-[#F4F8FF] pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center ">
@@ -69,7 +72,7 @@ export default function Home() {
                 href="/dashboard"
                 className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] duration-300 hover:scale-110 hover:bg-yellow-500 hover:drop-shadow-md md:px-4 md:py-2 md:text-xl"
               >
-                สำรวจ
+                เข้าสู่หน้าหลัก
               </LinkNextJS>
             </section>
           </header>

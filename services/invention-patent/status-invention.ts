@@ -1,11 +1,22 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
-import { StatusInventionPatent } from "../../models";
+import {
+  InventionPatent,
+  PartnerInfoOnInventionPatent,
+  StatusInventionPatent,
+  WorkInfoOnInventionPatent,
+} from "../../models";
 
 type RequestGetStatusInventionPatentsService = {
   inventionPatentId: string;
 };
-export type ResponseGetStatusInventionPatentsService = StatusInventionPatent[];
+export type ResponseGetStatusInventionPatentsService = {
+  status: StatusInventionPatent[];
+  invention: InventionPatent & {
+    workInfoOnInventionPatent: WorkInfoOnInventionPatent;
+    partnerInfoOnInventionPatents: PartnerInfoOnInventionPatent[];
+  };
+};
 
 export async function GetStatusInventionPatentsService(
   input: RequestGetStatusInventionPatentsService,

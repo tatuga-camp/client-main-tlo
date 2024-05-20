@@ -1,4 +1,9 @@
-import { DocumentType, StatusPartner, UserType } from "./type.model";
+import {
+  DocumentType,
+  StatusLists,
+  StatusPartner,
+  UserType,
+} from "./type.model";
 
 export type Trademark = {
   id: string;
@@ -38,10 +43,12 @@ export type Trademark = {
 
 export type StatusTrademark = {
   id: string;
-  createAt: Date;
-  updateAt: Date;
-  status: string;
-  note?: string | null;
+  createAt: string;
+  updateAt: string;
+  title: string;
+  status: StatusLists;
+  note: string;
+  order: number;
   userId: string;
   trademarkId: string;
 };

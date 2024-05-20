@@ -246,7 +246,10 @@ const Index = ({ user }: { user: User }) => {
               )}
               {currentSection === 5 && invention.data && (
                 <div>
-                  <InventionStatus inventionId={invention.data.id} />
+                  <InventionStatus
+                    user={user}
+                    inventionId={invention.data.id}
+                  />
                 </div>
               )}
             </section>

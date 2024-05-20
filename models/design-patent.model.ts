@@ -9,6 +9,7 @@ import {
   DocumentType,
   FileWorkType,
   MenuSearchWorks,
+  StatusLists,
   StatusPartner,
   UserType,
 } from "./type.model";
@@ -41,8 +42,10 @@ export type StatusDesignPatent = {
   id: string;
   createAt: string;
   updateAt: string;
-  status: string;
-  note?: string | null;
+  title: string;
+  status: StatusLists;
+  note: string;
+  order: number;
   userId: string;
   designPatentId: string;
 };

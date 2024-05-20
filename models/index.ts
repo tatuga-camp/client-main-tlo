@@ -7,3 +7,4 @@ export * from "./design-patent.model";
 export * from "./trademark.model";
 export * from "./error.model";
 export * from "./thai-data.model";
+export * from "./status.mode";
