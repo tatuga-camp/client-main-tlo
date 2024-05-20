@@ -195,7 +195,11 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
             <span className="font-semibold">ชื่อผู้สิ่งประดิษฐ์/ออกแบบ :</span>{" "}
             {status.data?.design.partnerInfoOnDesignPatents
               .map((partner) => {
-                return `${partner.title} ${partner.firstName} ${partner.lastName}`;
+                return (
+                  <span key={partner.id}>
+                    {partner.title} ${partner.firstName} ${partner.lastName}
+                  </span>
+                );
               })
               .join(", ")}
           </p>
@@ -203,7 +207,11 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
             <span className="font-semibold">สังกัด : </span>{" "}
             {status.data?.design.partnerInfoOnDesignPatents
               .map((partner) => {
-                return `${partner.major} ${partner.faculty} ${partner.department}`;
+                return (
+                  <span key={partner.id}>
+                    {partner.major} ${partner.faculty} ${partner.department}
+                  </span>
+                );
               })
               .join(", ")}
           </p>
@@ -214,6 +222,7 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
               if (list.status === "APPROVED") {
                 return (
                   <SuccessfulStatus
+                    key={list.id}
                     setSelectStatus={setSelectStatus}
                     status={list}
                     user={user}
@@ -223,6 +232,7 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
               } else if (list.status === "INPROGRESS") {
                 return (
                   <InprogressStatus
+                    key={list.id}
                     setSelectStatus={setSelectStatus}
                     status={list}
                     user={user}
@@ -232,6 +242,7 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
               } else if (list.status === "PENDING") {
                 return (
                   <PendingStatus
+                    key={list.id}
                     user={user}
                     setSelectStatus={setSelectStatus}
                     status={list}
