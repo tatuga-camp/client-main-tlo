@@ -1,32 +1,155 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
-import React, { useState } from "react";
-import { outsiderInventionSection } from "../../../data/PatentSection";
-import OutsiderInventionForm1 from "@/components/outsider/invention-patent/OutsiderInventionForm1";
-import OutsiderInventionForm2 from "@/components/outsider/invention-patent/OutsiderInventionForm2";
-import OutsiderInventionForm3 from "@/components/outsider/invention-patent/OutsiderInventionForm3";
-import OutsiderInventionForm4 from "@/components/outsider/invention-patent/OutsiderInventionForm4";
-import OutsiderInventionForm5ver1 from "@/components/outsider/invention-patent/OutsiderInventionForm5ver1";
-import OutsiderInventionForm5ver2 from "@/components/outsider/invention-patent/OutsiderInventionForm5ver2";
+import React, { useCallback, useState } from "react";
+import { nrruInventionSection } from "../../../data/PatentSection";
 
-const Index = () => {
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetUserService } from "../../../services/user";
+import { ErrorMessages, User } from "../../../models";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter as NextuseRouter } from "next/router";
+import {
+  DeleteInventionPatentService,
+  GetInventionPatentService,
+} from "../../../services/invention-patent/invention-patent";
+import Swal from "sweetalert2";
+import { MdDelete } from "react-icons/md";
+import { useRouter } from "next-nprogress-bar";
+import InventionStatus from "../../../components/Status/InventionStatus";
+import NrruInventionForm1 from "../../../components/outsider/invention-patent/NrruInventionForm1/NrruInventionForm1";
+import NrruInventionForm2 from "../../../components/outsider/invention-patent/NrruInventionForm2/NrruInventionForm2";
+import NrruInventionForm3 from "../../../components/outsider/invention-patent/NrruInventionForm3/NrruInventionForm3";
+import NrruInventionForm4 from "../../../components/outsider/invention-patent/NrruInventionForm4/NrruInventionForm4";
+import NrruInventionForm5 from "../../../components/outsider/invention-patent/NrruInventionForm5";
+
+const Index = ({ user }: { user: User }) => {
+  const router = NextuseRouter();
+  const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
+
+  const invention = useQuery({
+    queryKey: ["invention", { inventionId: router.query.inventionId }],
+    queryFn: () =>
+      GetInventionPatentService({
+        inventionPatentId: router.query.inventionId as string,
+      }),
+  });
 
   const previousSection = () => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
+      window.scroll(0, 0);
     }
   };
   const nextSection = () => {
-    if (currentSection < outsiderInventionSection.length - 1) {
-      setCurrentSection(currentSection + 1);
+    try {
+      if (currentSection < nrruInventionSection.length - 1) {
+        handleValidateForm({ number: currentSection + 1 });
+        setCurrentSection(currentSection + 1);
+        window.scroll(0, 0);
+      }
+    } catch (error) {
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
     }
   };
 
-  const [patentType, setPatentType] = useState("สิทธิบัตรการประดิษฐ์");
-  const handlePatentTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPatentType(e.target.value);
+  const handleValidateForm = ({ number }: { number: number }) => {
+    let message: string;
+    if (
+      number === 1 &&
+      invention.data?.partnerInfoOnInventionPatents.length === 0
+    ) {
+      throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
+    } else if (
+      number === 2 &&
+      (invention.data?.workInfoOnInventionPatent.isComplete === false ||
+        invention.data?.partnerInfoOnInventionPatents.length === 0)
+    ) {
+      throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
+    } else if (
+      number === 3 &&
+      (invention.data?.workInfoOnInventionPatent.isComplete === false ||
+        invention.data?.partnerInfoOnInventionPatents.length === 0 ||
+        invention.data?.supportingDataOnInventionPatent.isComplete === false)
+    ) {
+      throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
+    } else if (
+      number === 4 &&
+      (invention.data?.fileOnInventionPatents.length === 0 ||
+        invention.data?.supportingDataOnInventionPatent.isComplete === false ||
+        invention.data?.workInfoOnInventionPatent.isComplete === false ||
+        invention.data?.partnerInfoOnInventionPatents.length === 0)
+    ) {
+      throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");
+    }
   };
+
+  const handleDeleteInvention = async ({
+    inventionId,
+  }: {
+    inventionId: string;
+  }) => {
+    const replacedText = "ยืนยันการลบข้อมูล";
+    let content = document.createElement("div");
+    content.innerHTML =
+      "<div>กรุณาพิมพ์คำด้านล่าง </div> <strong>" +
+      replacedText +
+      "</strong> <div>เพื่อเป็นการยืนยันในการลบข้อมูล</div>";
+    const { value } = await Swal.fire({
+      title: "ยืนยันการลบข้อมูล",
+      input: "text",
+      footer:
+        "ข้อมูลทั้งหมดที่เกี่ยวข้องกับข้อมูลนี้จะถูกลบออกทั้งหมด และไม่สามารถกู้คืนได้อีก",
+      html: content,
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (value !== replacedText) {
+          return "คำที่พิมพ์ไม่ตรงกับคำที่ต้องการลบ กรุณาลองใหม่อีกครั้ง";
+        }
+      },
+    });
+    if (value) {
+      try {
+        Swal.fire({
+          title: "กำลังดำเนินการลบข้อมูล",
+          html: "กรุณารอสักครู่",
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        await DeleteInventionPatentService({
+          inventionPatentId: inventionId,
+        });
+        naviateRouter.push("/dashboard");
+        Swal.fire({
+          title: "ลบข้อมูลสำเร็จ",
+          icon: "success",
+        });
+      } catch (error) {
+        let result = error as ErrorMessages;
+        Swal.fire({
+          title: result.error ? result.error : "เกิดข้อผิดพลาด",
+          text: result.message.toString(),
+          footer: result.statusCode
+            ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+            : "",
+          icon: "error",
+        });
+      }
+    }
+  };
+
   return (
     <>
       <Head>
@@ -43,80 +166,94 @@ const Index = () => {
             <section className="max-w-[32rem] bg-[var(--secondary-yellow)] p-3 text-center text-base font-bold shadow-md md:text-xl">
               <p>สำหรับบุคคลภายนอก</p>
             </section>
+            <button
+              onClick={() =>
+                handleDeleteInvention({
+                  inventionId: router.query.inventionId as string,
+                })
+              }
+              className="flex items-center justify-center gap-2 rounded-lg bg-red-600 px-10 py-2
+             text-white drop-shadow-md transition hover:bg-red-700 active:scale-105"
+            >
+              ลบคำขอ
+              <MdDelete />
+            </button>
 
-            <section className="flex w-full flex-wrap items-center justify-center gap-3">
-              {outsiderInventionSection.map((item, index) => (
-                <button
+            <section className="flex w-full flex-wrap items-center justify-center gap-3 md:w-[70%]">
+              {nrruInventionSection.map((item, index) => (
+                <div
+                  onClick={() => {
+                    try {
+                      handleValidateForm({ number: index });
+                      setCurrentSection(index);
+                    } catch (error) {
+                      let result = error as ErrorMessages;
+                      Swal.fire({
+                        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+                        text: result.message.toString(),
+                        footer: result.statusCode
+                          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+                          : "",
+                        icon: "error",
+                      });
+                    }
+                  }}
                   key={index}
-                  className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md duration-200 hover:text-blue-500 md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
-                  onClick={() => setCurrentSection(index)}
+                  className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
                 >
                   <h2 className={`text-base font-semibold md:text-lg`}>
                     {item.section}
                   </h2>
                   <p className={`text-xs md:text-[0.9rem]`}>{item.title}</p>
-                </button>
+                </div>
               ))}
             </section>
             <section className="my-4 w-full md:pl-16">
               <div className="max-w-[28rem] bg-[var(--secondary-yellow)] p-2 text-center  font-bold shadow-md">
-                <p>{outsiderInventionSection[currentSection].title} </p>
+                <p>{nrruInventionSection[currentSection].title} </p>
               </div>
             </section>
           </header>
           <main className="mt-5 flex w-full flex-col items-center">
-            <label>
-              ประเภทสิทธิบัตร:
-              <select value={patentType} onChange={handlePatentTypeChange}>
-                <option value="สิทธิบัตรการประดิษฐ์">
-                  สิทธิบัตรการประดิษฐ์
-                </option>
-                <option value="อนุสิทธิบัตร">อนุสิทธิบัตร</option>
-              </select>
-            </label>
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
-                  <OutsiderInventionForm1 />
+                  <NrruInventionForm1 invention={invention} user={user} />
                 </div>
               )}
               {currentSection == 1 && (
                 <div>
-                  <OutsiderInventionForm2 />
+                  <NrruInventionForm2 invention={invention} />
                 </div>
               )}
               {currentSection == 2 && (
                 <div>
-                  <OutsiderInventionForm3 />
+                  <NrruInventionForm3 invention={invention} />
                 </div>
               )}
-
               {currentSection == 3 && (
+                <div>
+                  <NrruInventionForm4 invention={invention} />
+                </div>
+              )}
+              {currentSection == 4 && (
                 <div>
                   <p className="my-5 w-full items-center text-center  font-bold">
                     {" "}
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
-                  <OutsiderInventionForm4 />
+                  <NrruInventionForm5 invention={invention} user={user} />
                 </div>
               )}
-
-              {currentSection === 4 && (
+              {currentSection === 5 && invention.data && (
                 <div>
-                  {patentType === "สิทธิบัตรการประดิษฐ์" && (
-                    <OutsiderInventionForm5ver1 />
-                  )}
-                  {patentType === "อนุสิทธิบัตร" && (
-                    <OutsiderInventionForm5ver2 />
-                  )}
+                  <InventionStatus
+                    user={user}
+                    inventionId={invention.data.id}
+                  />
                 </div>
               )}
             </section>
-            {currentSection === outsiderInventionSection.length - 1 && (
-              <button className="mt-5 w-44 rounded-md bg-[#10316B] px-3 py-2 font-semibold text-white">
-                ส่งคำขอ
-              </button>
-            )}
             <section className=" my-5 flex items-center justify-center gap-3">
               <button
                 className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
@@ -129,9 +266,7 @@ const Index = () => {
               <button
                 className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
                 onClick={nextSection}
-                disabled={
-                  currentSection === outsiderInventionSection.length - 1
-                }
+                disabled={currentSection === nrruInventionSection.length - 1}
               >
                 ถัดไป
               </button>
@@ -144,3 +279,26 @@ const Index = () => {
 };
 
 export default Index;
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext,
+) => {
+  try {
+    const user = await GetUserService({
+      type: "SERVER-SIDE",
+      context: ctx,
+    });
+    return {
+      props: {
+        user,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      redirect: {
+        destination: "/auth/sign-in",
+        permanent: false,
+      },
+    };
+  }
+};
