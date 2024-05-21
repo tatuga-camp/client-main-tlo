@@ -4,16 +4,16 @@ import React, { useState } from "react";
 import { nrruDesignnSection } from "../../../data/PatentSection";
 
 import Link from "next/link";
+import { useRouter } from "next-nprogress-bar";
+import Swal from "sweetalert2";
+import { CreateDesignPatentService } from "../../../services/design-patent/design-patent";
+import { ErrorMessages, User } from "../../../models";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { GetUserService } from "../../../services/user";
-import Swal from "sweetalert2";
-import { ErrorMessages, User } from "../../../models";
-import { useRouter } from "next-nprogress-bar";
-import { CreateTrademarkervice } from "../../../services/trademark/trademark";
 
 const Index = ({ user }: { user: User }) => {
   const router = useRouter();
-  const handleCreateTrademark = async () => {
+  const handleCreateDesign = async () => {
     try {
       Swal.fire({
         title: "กำลังดำเนินการ",
@@ -22,9 +22,9 @@ const Index = ({ user }: { user: User }) => {
         showConfirmButton: false,
         allowOutsideClick: false,
       });
-      const create = await CreateTrademarkervice();
+      const create = await CreateDesignPatentService({});
       router.push(
-        `/${user.type === "INTERNAL" ? "nrru" : "outsider"}/trademark/${create.id}`,
+        `/${user.type === "INTERNAL" ? "nrru" : "outsider"}/design-patent/${create.id}`,
       );
       Swal.fire({
         title: "กำลังเปลี่ยนเส้นทาง",
@@ -49,16 +49,16 @@ const Index = ({ user }: { user: User }) => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <title>แบบฟอร์มประกอบคำขอจดทะเบียนเครื่องหมายการค้า</title>
+        <title>แบบฟอร์มประกอบคำขอรับสิทธิบัตรการออกแบบผลิตภัณฑ์</title>
       </Head>
       <HomeLayout>
         <div className="flex h-full min-h-screen w-full flex-col items-center bg-[#F4F8FF] pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center">
           <header className="mt-10 flex w-[90%] flex-col items-center gap-5 md:mt-5 md:w-full">
             <h2 className="text-center text-2xl font-bold md:text-3xl">
-              แบบฟอร์มประกอบคำขอจดทะเบียนเครื่องหมายการค้า
+              แบบฟอร์มประกอบคำขอรับสิทธิบัตรการออกแบบผลิตภัณฑ์
             </h2>
             <section className="max-w-[32rem] bg-[var(--secondary-yellow)] p-3 text-center text-base font-bold shadow-md md:text-xl">
-              <p>สำหรับบุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา</p>
+              <p>สำหรับบุคคลภายนอก</p>
             </section>
           </header>
           <main className="mt-5 flex w-full flex-col items-center">
@@ -73,7 +73,7 @@ const Index = ({ user }: { user: User }) => {
               </Link>
 
               <button
-                onClick={handleCreateTrademark}
+                onClick={handleCreateDesign}
                 className="w-max rounded-md border-2 border-solid border-[var(--primary-blue)]
                  px-3 py-2 font-semibold drop-shadow-md transition duration-100 hover:bg-main-color hover:text-white active:scale-105
                  "
@@ -89,7 +89,6 @@ const Index = ({ user }: { user: User }) => {
 };
 
 export default Index;
-
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext,
 ) => {

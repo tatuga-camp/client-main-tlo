@@ -163,16 +163,18 @@ type RequestUpdateDesignPatentService = {
   body: {
     personStatus?: string;
     title?: string;
+    fullName?: string;
     firstName?: string;
     lastName?: string;
     idCard?: string;
-    adressNumber?: string;
+    addressNumber?: string;
     moo?: string;
     road?: string;
     tambon?: string;
     amphure?: string;
-    provice?: string;
-    postcode?: string;
+    province?: string;
+    phone?: string;
+    postalCode?: string;
     nationality?: string;
     email?: string;
     isComplete?: boolean;

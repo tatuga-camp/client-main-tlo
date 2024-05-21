@@ -36,9 +36,16 @@ const NrruDesignForm5 = ({ design, user }: NrruDesignForm5Props) => {
     try {
       setIsLoading(true);
       Swal.fire({
-        title: "ส่งคำขอสำเร็จ",
-        text: "ระบบกำลังดำเนินการตรวจสอบข้อมูล",
-        icon: "success",
+        title: "กำลังส่งคำขอ",
+        text: "กรุณารอสักครู่",
+        icon: "info",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
       });
       await UpdateDesignPatentService({
         query: {
@@ -48,6 +55,7 @@ const NrruDesignForm5 = ({ design, user }: NrruDesignForm5Props) => {
           isComplete: true,
         },
       });
+      await design.refetch();
       router.push("/dashboard");
       Swal.fire({
         title: "ส่งคำขอสำเร็จ",

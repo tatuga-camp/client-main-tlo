@@ -58,7 +58,7 @@ const Index = ({ user }: { user: User }) => {
               แบบฟอร์มประกอบคำขอจดทะเบียนเครื่องหมายการค้า
             </h2>
             <section className="max-w-[32rem] bg-[var(--secondary-yellow)] p-3 text-center text-base font-bold shadow-md md:text-xl">
-              <p>สำหรับบุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา</p>
+              <p>สำหรับบุคคลภายนอก</p>
             </section>
           </header>
           <main className="mt-5 flex w-full flex-col items-center">

@@ -1,25 +1,38 @@
-import { UseQueryResult } from "@tanstack/react-query";
+import Number from "@/components/Number";
 import React, { useState } from "react";
-import { HiOutlinePhotograph } from "react-icons/hi";
 import {
-  ResponseGetTrademarkService,
-  UpdateTrademarkervice,
-} from "../../../services/trademark/trademark";
+  Button,
+  FieldError,
+  Form,
+  Input,
+  Label,
+  TextField,
+} from "react-aria-components";
+import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
+import { FiPlusCircle } from "react-icons/fi";
+import Checkbox from "@mui/material/Checkbox";
+import { IoTrashOutline } from "react-icons/io5";
 import { ErrorMessages, User } from "../../../models";
+import { UseQueryResult } from "@tanstack/react-query";
+import {
+  ResponseGetDesignPatentService,
+  UpdateDesignPatentService,
+} from "../../../services/design-patent/design-patent";
 import { useRouter } from "next-nprogress-bar";
 import Swal from "sweetalert2";
-import TrademarkForm1 from "./TrademarkForm1";
-import TrademarkForm2 from "./TrademarkForm2";
-import TrademarkForm3 from "./TrademarkForm3";
+import NrruDesignForm1 from "./NrruDesignForm1/NrruDesignForm1";
+import NrruDesignForm2 from "./NrruDesignForm2/NrruDesignForm2";
+import NrruDesignForm3 from "./NrruDesignForm3/NrruDesignForm3";
+import NrruDesignForm4 from "./NrruDesignForm4/NrruDesignForm4";
 
-type TrademarkForm4Props = {
-  trademark: UseQueryResult<ResponseGetTrademarkService, Error>;
+type NrruDesignForm5Props = {
+  design: UseQueryResult<ResponseGetDesignPatentService, Error>;
   user: User;
 };
-const TrademarkForm4 = ({ trademark, user }: TrademarkForm4Props) => {
+const NrruDesignForm5 = ({ design, user }: NrruDesignForm5Props) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const handleUpdateTrademark = async () => {
+  const handleUpdateDesign = async () => {
     try {
       setIsLoading(true);
       Swal.fire({
@@ -34,15 +47,15 @@ const TrademarkForm4 = ({ trademark, user }: TrademarkForm4Props) => {
           Swal.showLoading();
         },
       });
-      await UpdateTrademarkervice({
+      await UpdateDesignPatentService({
         query: {
-          trademarkId: trademark.data?.id as string,
+          designPatentId: design.data?.id as string,
         },
         body: {
           isComplete: true,
         },
       });
-      await trademark.refetch();
+      await design.refetch();
       router.push("/dashboard");
       Swal.fire({
         title: "ส่งคำขอสำเร็จ",
@@ -65,13 +78,14 @@ const TrademarkForm4 = ({ trademark, user }: TrademarkForm4Props) => {
   };
   return (
     <div className="flex flex-col gap-5">
-      <TrademarkForm1 user={user} trademark={trademark} />
-      <TrademarkForm2 trademark={trademark} />
-      <TrademarkForm3 trademark={trademark} />
-      {trademark.data?.isComplete === false ? (
+      <NrruDesignForm1 user={user} design={design} />
+      <NrruDesignForm2 design={design} />
+      <NrruDesignForm3 design={design} />
+      <NrruDesignForm4 design={design} />
+      {design.data?.isComplete === false ? (
         <button
           disabled={isLoading}
-          onClick={handleUpdateTrademark}
+          onClick={handleUpdateDesign}
           className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-[#10316B] px-3 py-2
        font-semibold text-white  drop-shadow-lg transition duration-100 hover:bg-[#19106b] active:ring-2"
         >
@@ -89,4 +103,4 @@ const TrademarkForm4 = ({ trademark, user }: TrademarkForm4Props) => {
   );
 };
 
-export default TrademarkForm4;
+export default NrruDesignForm5;

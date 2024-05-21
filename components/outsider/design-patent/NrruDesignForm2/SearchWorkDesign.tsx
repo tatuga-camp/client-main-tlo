@@ -2,24 +2,20 @@ import { UseQueryResult, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Label, TextField } from "react-aria-components";
 import { FiPlusCircle } from "react-icons/fi";
-import { ResponseGetInventionPatentService } from "../../../../services/invention-patent/invention-patent";
 import { Calendar } from "primereact/calendar";
-import {
-  ErrorMessages,
-  MenuSearchWorks,
-  PatentRelateToSearchResultOnInventionPatent,
-} from "../../../../models";
+import { ErrorMessages, MenuSearchWorks } from "../../../../models";
 import Swal from "sweetalert2";
-import {
-  CreateSearchInventionPatentService,
-  DeleteSearchInventionPatentService,
-} from "../../../../services/invention-patent/work-invention/search-inventions";
+
 import { MdDelete } from "react-icons/md";
 import moment from "moment";
+import { ResponseGetDesignPatentService } from "../../../../services/design-patent/design-patent";
+import {
+  CreateSearchDesignPatentService,
+  DeleteSearchDesignPatentService,
+} from "../../../../services/design-patent/work-design/search-design";
 
-type SearchWorkInventionProps = {
-  invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
-  number: number;
+type SearchWorkDesignProps = {
+  design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
 const menuSearchWorks = [
   {
@@ -41,7 +37,7 @@ const menuSearchWorks = [
     inputThree: "country",
   },
 ];
-function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
+function SearchWorkDesign({ design }: SearchWorkDesignProps) {
   const queryClient = useQueryClient();
 
   const [activeContent, setActiveContent] = useState<MenuSearchWorks>(
@@ -76,6 +72,9 @@ function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
 
   const handleCreateSearchWork = async () => {
     try {
+      if (!design.data) {
+        throw new Error("ข้อมูลไม่โหลดสมบูรณ์ กรุณาลองใหม่อีกครั้ง");
+      }
       if (!searchWorkData) {
         throw new Error("กรุณากรอกข้อมูลให้ครบถ้วน");
       }
@@ -85,32 +84,35 @@ function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
           Swal.showLoading();
         },
       });
-      const create = await CreateSearchInventionPatentService({
-        type: searchWorkData?.type as string,
+      const create = await CreateSearchDesignPatentService({
+        type: searchWorkData?.type as MenuSearchWorks,
         nameInovation: searchWorkData?.name as string,
         numberRequest: searchWorkData?.numberRequest as string,
         nameJournal: searchWorkData?.nameJournal as string,
         country: searchWorkData?.country as string,
         releaseDate: searchWorkData?.releaseDate as string,
         source: searchWorkData?.source as string,
-        workInfoOnInventionPatentId: invention.data?.workInfoOnInventionPatent
+        workInfoOnDesignPatentId: design.data?.workInfoOnDesignPatent
           .id as string,
-        inventionPatentId: invention.data?.id as string,
+        designPatentId: design.data?.id as string,
       });
-      queryClient.setQueryData(
-        ["invention", { inventionId: invention.data?.id }],
-        {
-          ...invention.data,
-          workInfoOnInventionPatent: {
-            ...invention.data?.workInfoOnInventionPatent,
-            patentRelateToSearchResultOnInventionPatents: [
-              ...(invention.data?.workInfoOnInventionPatent
-                .patentRelateToSearchResultOnInventionPatents ?? []),
-              create,
-            ],
-          },
+
+      let updateDesgin: ResponseGetDesignPatentService = {
+        ...design.data,
+        workInfoOnDesignPatent: {
+          ...design.data?.workInfoOnDesignPatent,
+          patentRelateToSearchResultOnDesignPatents: [
+            ...(design.data?.workInfoOnDesignPatent
+              .patentRelateToSearchResultOnDesignPatents ?? []),
+            create,
+          ],
         },
-      );
+      };
+
+      queryClient.setQueryData(["design", { designId: design.data.id }], {
+        ...updateDesgin,
+      });
+
       setSearchWorkData((prev) => {
         delete prev?.releaseDate;
         return {
@@ -140,34 +142,38 @@ function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
   };
 
   const handleDeleteSearchWork = async ({
-    searchInventionId,
+    searchDesignId,
   }: {
-    searchInventionId: string;
+    searchDesignId: string;
   }) => {
     try {
+      if (!design.data) {
+        throw new Error("ข้อมูลไม่โหลดสมบูรณ์ กรุณาลองใหม่อีกครั้ง");
+      }
       Swal.fire({
         title: "กำลังลบข้อมูล",
         willOpen: () => {
           Swal.showLoading();
         },
       });
-      await DeleteSearchInventionPatentService({
-        searchInventionId: searchInventionId,
+      await DeleteSearchDesignPatentService({
+        searchDesignId: searchDesignId,
       });
       const unDelete =
-        invention.data?.workInfoOnInventionPatent.patentRelateToSearchResultOnInventionPatents?.filter(
-          (search) => search.id !== searchInventionId,
+        design.data?.workInfoOnDesignPatent.patentRelateToSearchResultOnDesignPatents?.filter(
+          (search) => search.id !== searchDesignId,
         );
-      queryClient.setQueryData(
-        ["invention", { inventionId: invention.data?.id }],
-        {
-          ...invention.data,
-          workInfoOnInventionPatent: {
-            ...invention.data?.workInfoOnInventionPatent,
-            patentRelateToSearchResultOnInventionPatents: [...(unDelete ?? [])],
-          },
+      let updateDesgin: ResponseGetDesignPatentService = {
+        ...design.data,
+        workInfoOnDesignPatent: {
+          ...design.data?.workInfoOnDesignPatent,
+          patentRelateToSearchResultOnDesignPatents: [...(unDelete ?? [])],
         },
-      );
+      };
+
+      queryClient.setQueryData(["design", { designId: design.data.id }], {
+        ...updateDesgin,
+      });
 
       Swal.fire({
         title: "ลบข้อมูลสำเร็จ",
@@ -192,7 +198,7 @@ function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
       className="flex w-full flex-col gap-3 md:pl-10"
     >
       <Label className="font-semibold md:min-w-52">
-        {number}.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น
+        5.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น
         หรืองานที่ปรากฏอยู่ก่อน
       </Label>
       <div className="flex flex-col items-center justify-center md:w-full">
@@ -421,7 +427,7 @@ function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
         <div className="mt-5 flex w-full flex-col items-center justify-center gap-3">
           <h3 className="font-semibold">ข้อมูลที่เพิ่มล่าสุด</h3>
           <div className="grid w-full grid-cols-3 gap-5">
-            {invention.data?.workInfoOnInventionPatent.patentRelateToSearchResultOnInventionPatents.map(
+            {design.data?.workInfoOnDesignPatent.patentRelateToSearchResultOnDesignPatents.map(
               (search, index) => (
                 <div
                   key={index}
@@ -430,7 +436,7 @@ function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
                 >
                   <button
                     onClick={() =>
-                      handleDeleteSearchWork({ searchInventionId: search.id })
+                      handleDeleteSearchWork({ searchDesignId: search.id })
                     }
                     type="button"
                     className="absolute right-2 top-2 flex items-center justify-center gap-2 rounded-md
@@ -494,4 +500,4 @@ function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
   );
 }
 
-export default SearchWorkInvention;
+export default SearchWorkDesign;

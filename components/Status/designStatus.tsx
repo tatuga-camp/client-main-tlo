@@ -193,28 +193,26 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
         <section className="flex w-10/12 flex-col gap-2 text-xs md:flex-row md:justify-between lg:text-base">
           <p>
             <span className="font-semibold">ชื่อผู้สิ่งประดิษฐ์/ออกแบบ :</span>{" "}
-            {status.data?.design.partnerInfoOnDesignPatents
-              .map((partner) => {
+            {status.data?.design.partnerInfoOnDesignPatents.map((partner) => {
+              return (
+                <span key={partner.id}>
+                  {partner.title} {partner.firstName} {partner.lastName}
+                </span>
+              );
+            })}
+          </p>
+          {status.data?.design.userType === "INTERNAL" && (
+            <p>
+              <span className="font-semibold">สังกัด : </span>{" "}
+              {status.data?.design.partnerInfoOnDesignPatents.map((partner) => {
                 return (
                   <span key={partner.id}>
-                    {partner.title} ${partner.firstName} ${partner.lastName}
+                    {partner.major} {partner.faculty} {partner.department}
                   </span>
                 );
-              })
-              .join(", ")}
-          </p>
-          <p>
-            <span className="font-semibold">สังกัด : </span>{" "}
-            {status.data?.design.partnerInfoOnDesignPatents
-              .map((partner) => {
-                return (
-                  <span key={partner.id}>
-                    {partner.major} ${partner.faculty} ${partner.department}
-                  </span>
-                );
-              })
-              .join(", ")}
-          </p>
+              })}
+            </p>
+          )}
         </section>
         <div className="w-full overflow-x-auto">
           <div className="relative my-8 flex w-[18rem] min-w-max gap-16 py-5 ">
