@@ -206,28 +206,30 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
         <section className="flex w-10/12 flex-col gap-2 text-xs md:flex-row md:justify-between lg:text-base">
           <p>
             <span className="font-semibold">ชื่อผู้สิ่งประดิษฐ์/ออกแบบ :</span>{" "}
-            {status.data?.invention.partnerInfoOnInventionPatents
-              .map((partner) => {
+            {status.data?.invention.partnerInfoOnInventionPatents.map(
+              (partner) => {
                 return (
                   <span key={partner.id}>
-                    {partner.title} ${partner.firstName} ${partner.lastName}
+                    {partner.title} {partner.firstName} {partner.lastName}
                   </span>
                 );
-              })
-              .join(", ")}
+              },
+            )}
           </p>
-          <p>
-            <span className="font-semibold">สังกัด : </span>{" "}
-            {status.data?.invention.partnerInfoOnInventionPatents
-              .map((partner) => {
-                return (
-                  <span key={partner.id}>
-                    {partner.major} ${partner.faculty} ${partner.department}
-                  </span>
-                );
-              })
-              .join(", ")}
-          </p>
+          {status.data?.invention.userType === "INTERNAL" && (
+            <p>
+              <span className="font-semibold">สังกัด : </span>{" "}
+              {status.data?.invention.partnerInfoOnInventionPatents.map(
+                (partner) => {
+                  return (
+                    <span key={partner.id}>
+                      {partner.major} {partner.faculty} {partner.department}
+                    </span>
+                  );
+                },
+              )}
+            </p>
+          )}
         </section>
         <div className="w-full overflow-x-auto">
           <div className="relative my-8 flex w-[18rem] min-w-max gap-16 py-5 ">

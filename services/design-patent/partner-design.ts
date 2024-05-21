@@ -17,10 +17,10 @@ type RequestCreatePartnerDesignPatentService = {
   postalCode: string;
   phone: string;
   status: StatusPartner;
-  major: string;
-  faculty: string;
-  department: string;
-  university: string;
+  major?: string;
+  faculty?: string;
+  department?: string;
+  university?: string;
   participationRate: number;
   designPatentId: string;
 };

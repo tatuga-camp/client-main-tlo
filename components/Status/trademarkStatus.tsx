@@ -190,23 +190,19 @@ function TrademarkStatus({ trademarkId, user }: TrademarkStatusProps) {
         <section className="flex w-10/12 flex-col gap-2 text-xs md:flex-row md:justify-between lg:text-base">
           <p>
             <span className="font-semibold">ชื่อผู้สิ่งประดิษฐ์/ออกแบบ :</span>{" "}
-            {status.data?.trademark.partnerInfoOnTrademarks
-              .map((partner) => {
-                return (
-                  <span key={partner.id}>
-                    {partner.title} ${partner.firstName} ${partner.lastName}
-                  </span>
-                );
-              })
-              .join(", ")}
+            {status.data?.trademark.partnerInfoOnTrademarks.map((partner) => {
+              return (
+                <span key={partner.id}>
+                  {partner.title} {partner.firstName} {partner.lastName}
+                </span>
+              );
+            })}
           </p>
           <p>
             <span className="font-semibold">อาชีพ : </span>{" "}
-            {status.data?.trademark.partnerInfoOnTrademarks
-              .map((partner) => {
-                return <span key={partner.id}>{partner.career}</span>;
-              })
-              .join(", ")}
+            {status.data?.trademark.partnerInfoOnTrademarks.map((partner) => {
+              return <span key={partner.id}>{partner.career}</span>;
+            })}
           </p>
         </section>
         <div className="w-full overflow-x-auto">
