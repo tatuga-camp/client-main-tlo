@@ -11,8 +11,8 @@ export const statusOptions = [
     label: "ดำเนินการเสร็จสิ้น",
     value: "APPROVED",
   },
-  {
-    label: "ยกเลิกการดำเนินการ",
-    value: "REJECTED",
-  },
+  // {
+  //   label: "ยกเลิกการดำเนินการ",
+  //   value: "REJECTED",
+  // },
 ];

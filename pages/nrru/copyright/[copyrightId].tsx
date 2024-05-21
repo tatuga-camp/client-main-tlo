@@ -63,7 +63,6 @@ const Index = ({ user }: { user: User }) => {
   };
 
   const handleValidateForm = ({ number }: { number: number }) => {
-    console.log("number", number);
     if (number === 1 && copyright.data?.partnerInfoOnCopyrights.length === 0) {
       throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
     } else if (
@@ -87,6 +86,15 @@ const Index = ({ user }: { user: User }) => {
         copyright.data?.partnerInfoOnCopyrights.length === 0)
     ) {
       throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");
+    } else if (
+      number === 5 &&
+      (copyright.data?.fileOnCopyrights.length === 0 ||
+        copyright.data?.supportingDataOnCopyright.isComplete === false ||
+        copyright.data?.workInfoOnCopyright.isComplete === false ||
+        copyright.data?.partnerInfoOnCopyrights.length === 0 ||
+        copyright.data?.isComplete === false)
+    ) {
+      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 5");
     }
   };
 
