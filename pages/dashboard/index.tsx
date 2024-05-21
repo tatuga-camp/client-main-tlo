@@ -94,6 +94,7 @@ function Index({ user }: { user: User }) {
 
   useEffect(() => {
     inventions.refetch();
+    copyrights.refetch();
     designs.refetch();
     trademarks.refetch();
   }, []);

@@ -110,6 +110,13 @@ function RequestSummary({ user }: { user?: User }) {
   });
 
   useEffect(() => {
+    inventions.refetch();
+    copyrights.refetch();
+    designs.refetch();
+    trademarks.refetch();
+  }, []);
+
+  useEffect(() => {
     if (inventions.data && designs.data && trademarks.data && copyrights.data) {
       const pages = [
         inventions.data.meta.total,

@@ -87,6 +87,15 @@ const Index = ({ user }: { user: User }) => {
         design.data?.partnerInfoOnDesignPatents.length === 0)
     ) {
       throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");
+    } else if (
+      number === 5 &&
+      (design.data?.fileOnDesignPatents.length === 0 ||
+        design.data?.supportingDataOnDesignPatent.isComplete === false ||
+        design.data?.workInfoOnDesignPatent.isComplete === false ||
+        design.data?.partnerInfoOnDesignPatents.length === 0 ||
+        design.data?.isComplete === false)
+    ) {
+      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 5");
     }
   };
 
