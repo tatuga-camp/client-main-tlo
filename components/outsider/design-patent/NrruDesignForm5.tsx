@@ -80,7 +80,6 @@ const NrruDesignForm5 = ({ design, user }: NrruDesignForm5Props) => {
     <div className="flex flex-col gap-5">
       <NrruDesignForm1 user={user} design={design} />
       <NrruDesignForm2 design={design} />
-      <NrruDesignForm3 design={design} />
       <NrruDesignForm4 design={design} />
       {design.data?.isComplete === false ? (
         <button
