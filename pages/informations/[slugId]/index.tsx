@@ -82,7 +82,7 @@ const Index = () => {
             </div>
 
             {/* Description */}
-            <div className="w-[90%] text-xs md:w-[78%] md:text-base">
+            <div className="w-[90%] text-xs  md:w-[78%] md:text-base">
               <p>{information.discription}</p>
             </div>
           </div>
