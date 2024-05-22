@@ -8,10 +8,11 @@ import {
 import Swal from "sweetalert2";
 import { UpdateCopyrightService } from "../../services/copyright/copyright";
 import UpdateStatus from "../Forms/updateStatus";
-import { Button, Form, Input } from "react-aria-components";
+import { Button, Form, Input, Label, TextField } from "react-aria-components";
 import SuccessfulStatus from "./statusLists/successfulStatus";
 import InprogressStatus from "./statusLists/inprogressStatus";
 import PendingStatus from "./statusLists/pendingStatus";
+import { Calendar } from "primereact/calendar";
 
 type CopyrightStatusProps = {
   copyrightId: string;
@@ -19,6 +20,7 @@ type CopyrightStatusProps = {
 };
 function CopyrightStatus({ copyrightId, user }: CopyrightStatusProps) {
   const [numberRequest, setNumberRequest] = useState<string>();
+  const [requestDate, setRequestDate] = useState<string>();
   const [triggerUpdateStatus, setTriggerUpdateStatus] = useState(false);
   const [selectStatus, setSelectStatus] = useState<SelectStatus>();
   const status = useQuery({
@@ -34,6 +36,7 @@ function CopyrightStatus({ copyrightId, user }: CopyrightStatusProps) {
   useEffect(() => {
     if (status.isSuccess) {
       setNumberRequest(status.data?.copyright.numberRequest ?? "");
+      setRequestDate(status.data?.copyright.requestDate ?? "");
     }
   }, [status.data]);
 
@@ -56,12 +59,24 @@ function CopyrightStatus({ copyrightId, user }: CopyrightStatusProps) {
           Swal.showLoading();
         },
       });
+      let body = {
+        numberRequest: numberRequest,
+        requestDate: requestDate,
+      };
+
+      if (!requestDate) {
+        delete body.requestDate;
+      }
+      if (!numberRequest) {
+        delete body.numberRequest;
+      }
+
       await UpdateCopyrightService({
         query: {
           copyrightId: status.data?.copyright.id as string,
         },
         body: {
-          numberRequest: numberRequest,
+          ...body,
         },
       });
 
@@ -159,17 +174,34 @@ function CopyrightStatus({ copyrightId, user }: CopyrightStatusProps) {
       <div className="flex w-full flex-col items-center gap-3">
         <Form
           onSubmit={handleUpdateNumnerRequest}
-          className="flex w-max items-center gap-2 text-xl font-semibold lg:text-2xl "
+          className="flex w-max items-end  gap-2 text-xl font-semibold lg:text-2xl "
         >
-          <span className="w-60">เลขที่คำขอ:</span>
-          <Input
-            disabled={user?.role !== "ADMIN"}
-            onChange={(e) => setNumberRequest(e.target.value)}
-            value={numberRequest}
-            placeholder={numberRequest === "" ? "กรุณากรอกเลขที่คำขอ" : ""}
-            type="text"
-            className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 text-lg md:h-10 md:min-w-80 md:pl-4 "
-          />
+          <TextField>
+            <Label className="text-lg">เลขที่คำขอ:</Label>
+            <Input
+              disabled={user?.role !== "ADMIN"}
+              onChange={(e) => setNumberRequest(e.target.value)}
+              value={numberRequest}
+              placeholder={numberRequest === "" ? "กรุณากรอกเลขที่คำขอ" : ""}
+              type="text"
+              className=" h-12 w-full rounded-md bg-slate-300 p-1 pl-3 text-lg  md:min-w-80 md:pl-4 "
+            />
+          </TextField>
+          <TextField>
+            <Label className="text-lg">วันยื่นคำขอ:</Label>
+            <div className="w-40 rounded-lg bg-slate-300 p-1">
+              <Calendar
+                value={requestDate ? new Date(requestDate) : null}
+                onChange={(e) => {
+                  setRequestDate(e.value?.toISOString());
+                }}
+                disabled={user?.role !== "ADMIN"}
+                className="h-10"
+                locale="th"
+                placeholder="ระบุวันที่ยื่นคำขอ"
+              />
+            </div>
+          </TextField>
           {user?.role === "ADMIN" && (
             <Button
               type="submit"

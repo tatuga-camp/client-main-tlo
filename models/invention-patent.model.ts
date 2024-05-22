@@ -36,6 +36,7 @@ export type InventionPatent = {
   nationality?: string;
   email?: string;
   numberRequest?: string | null;
+  requestDate?: string;
   userType: UserType;
   isComplete: boolean;
   userId: string;

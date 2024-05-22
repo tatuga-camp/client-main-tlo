@@ -155,6 +155,7 @@ type RequestUpdateTrademarkService = {
     isAllowShapeProtection?: boolean;
     isAllowMarketing?: boolean;
     numberRequest?: string;
+    requestDate?: string;
     allowOtherProtection?: string;
     isComplete?: boolean;
   };
