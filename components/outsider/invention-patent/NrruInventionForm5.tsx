@@ -82,7 +82,6 @@ const NrruInventionForm5 = ({ invention, user }: FileOnWorkInventionProps) => {
     <div className="flex flex-col gap-5">
       <NrruInventionForm1 invention={invention} user={user} />
       <NrruInventionForm2 invention={invention} />
-      <NrruInventionForm3 invention={invention} />
       <NrruInventionForm4 invention={invention} />
       {invention.data?.isComplete === false ? (
         <button

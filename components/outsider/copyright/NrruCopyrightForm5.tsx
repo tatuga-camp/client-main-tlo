@@ -80,7 +80,6 @@ const NrruCopyrightForm5 = ({ copyright, user }: NrruCopyrightForm5Props) => {
     <div className="flex flex-col gap-5">
       <NrruCopyrightForm1 user={user} copyright={copyright} />
       <NrruCopyrightForm2 copyright={copyright} />
-      <NrruCopyrightForm3 copyright={copyright} />
       <NrruCopyrightForm4 copyright={copyright} />
       {copyright.data?.isComplete === false ? (
         <button
