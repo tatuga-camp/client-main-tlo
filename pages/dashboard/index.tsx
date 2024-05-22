@@ -202,7 +202,7 @@ function Index({ user }: { user: User }) {
             >
               <thead className="">
                 <tr className="sticky top-2 bg-white">
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">วันที่ส่งขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">วันยื่นคำขอ</th>
                   <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
                   <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
                   <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
@@ -236,9 +236,9 @@ function Index({ user }: { user: User }) {
                     return (
                       <tr key={item.id} className="hover:bg-gray-200">
                         <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                          {moment(item.createAt).format(
-                            "DD/MM/YYYY - HH:MM:SS",
-                          ) ?? "ไม่มีวันที่ส่งขอ"}
+                          {item.requestDate
+                            ? moment(item.requestDate).format("DD/MM/YYYY")
+                            : "ไม่มีพบวันยื่นคำขอ"}
                         </td>
                         <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                           {item.numberRequest ?? "ไม่มีหมายเลขคำขอ"}
@@ -246,21 +246,25 @@ function Index({ user }: { user: User }) {
                         <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                           {title}
                         </td>
-                        <td
-                          className={`rounded-md border-[1px] border-solid border-[#BED6FF] ${
-                            item.isComplete === true
-                              ? "bg-white"
-                              : "bg-red-500 text-white"
-                          }  p-2 hover:bg-main-color hover:text-white`}
-                        >
+                        <td>
                           {item.isComplete === true ? (
                             <Link
+                              className={`rounded-md border-[1px] border-solid border-[#BED6FF] ${
+                                item.isComplete === true
+                                  ? "bg-white"
+                                  : "bg-red-500 text-white"
+                              }  p-2 hover:bg-main-color hover:text-white`}
                               href={`${user.type === "INTERNAL" ? "nrru" : "outsider"}/${item.type}/${item.id}`}
                             >
                               ตรวจสอบ
                             </Link>
                           ) : (
                             <Link
+                              className={`rounded-md border-[1px] border-solid border-[#BED6FF] ${
+                                item.isComplete === false
+                                  ? "bg-red-500 text-white"
+                                  : "bg-white"
+                              }  p-2 hover:bg-main-color hover:text-white`}
                               href={`${user.type === "INTERNAL" ? "nrru" : "outsider"}/${item.type}/${item.id}`}
                             >
                               ไม่สมบูรณ์ กรอกข้อมูลไม่ครบ

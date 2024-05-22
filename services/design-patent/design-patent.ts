@@ -178,6 +178,7 @@ type RequestUpdateDesignPatentService = {
     nationality?: string;
     email?: string;
     isComplete?: boolean;
+    requestDate?: string;
     numberRequest?: string;
   };
 };

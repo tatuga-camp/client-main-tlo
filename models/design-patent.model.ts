@@ -36,6 +36,7 @@ export type DesignPatent = {
   email?: string;
   numberRequest?: string | null;
   userType: UserType;
+  requestDate?: string;
   isComplete: boolean;
   userId: string;
 };

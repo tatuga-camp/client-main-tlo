@@ -170,6 +170,7 @@ type RequestUpdateInventionPatentService = {
     nationality?: string;
     email?: string;
     isComplete?: boolean;
+    requestDate?: string;
     numberRequest?: string;
   };
 };

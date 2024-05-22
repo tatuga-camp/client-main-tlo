@@ -36,6 +36,7 @@ export type Copyright = {
   email?: string;
   isComplete: boolean;
   userType: UserType;
+  requestDate?: string;
   numberRequest?: string;
   userId: string;
 };

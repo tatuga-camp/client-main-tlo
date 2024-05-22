@@ -153,6 +153,7 @@ type RequestUpdateCopyrightService = {
     phone?: string;
     email?: string;
     isComplete?: boolean;
+    requestDate?: string;
     numberRequest?: string;
   };
 };
