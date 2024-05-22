@@ -355,17 +355,6 @@ function RequestSummary({ user }: { user?: User }) {
             </thead>
 
             <tbody className="relative">
-              {(inventions.isFetching ||
-                designs.isFetching ||
-                trademarks.isFetching ||
-                copyrights.isFetching) && (
-                <div
-                  className="absolute bottom-0 left-0 right-0 top-0 z-40 flex h-full w-full
-               animate-pulse items-center justify-center bg-gray-200"
-                >
-                  <div className="h-14 w-14 animate-spin rounded-full border-8 border-gray-300 border-t-blue-600" />
-                </div>
-              )}
               {inventions.isLoading ||
               designs.isLoading ||
               trademarks.isLoading ||
