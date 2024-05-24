@@ -4,8 +4,46 @@ import React, { useState } from "react";
 import { nrruDesignnSection } from "../../../data/PatentSection";
 
 import Link from "next/link";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetUserService } from "../../../services/user";
+import { ErrorMessages, User } from "../../../models";
+import { useRouter } from "next-nprogress-bar";
+import Swal from "sweetalert2";
+import { CreateCopyrightService } from "../../../services/copyright/copyright";
 
-const Index = () => {
+const Index = ({ user }: { user: User }) => {
+  const router = useRouter();
+  const handleCreateCopyright = async () => {
+    try {
+      Swal.fire({
+        title: "กำลังดำเนินการ",
+        text: "กรุณารอสักครู่",
+        icon: "info",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+      });
+      const create = await CreateCopyrightService();
+      router.push(
+        `/${user.type === "INTERNAL" ? "nrru" : "outsider"}/copyright/${create.id}`,
+      );
+      Swal.fire({
+        title: "กำลังเปลี่ยนเส้นทาง",
+        text: "กรุณารอสักครู่",
+        icon: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
+  };
   return (
     <>
       <Head>
@@ -35,6 +73,7 @@ const Index = () => {
               </Link>
 
               <button
+                onClick={handleCreateCopyright}
                 className="w-max rounded-md border-2 border-solid border-[var(--primary-blue)]
                  px-3 py-2 font-semibold drop-shadow-md transition duration-100 hover:bg-main-color hover:text-white active:scale-105
                  "
@@ -50,3 +89,26 @@ const Index = () => {
 };
 
 export default Index;
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext,
+) => {
+  try {
+    const user = await GetUserService({
+      type: "SERVER-SIDE",
+      context: ctx,
+    });
+    return {
+      props: {
+        user,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      redirect: {
+        destination: "/auth/sign-in",
+        permanent: false,
+      },
+    };
+  }
+};

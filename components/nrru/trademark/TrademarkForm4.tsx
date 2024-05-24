@@ -23,9 +23,16 @@ const TrademarkForm4 = ({ trademark, user }: TrademarkForm4Props) => {
     try {
       setIsLoading(true);
       Swal.fire({
-        title: "ส่งคำขอสำเร็จ",
-        text: "ระบบกำลังดำเนินการตรวจสอบข้อมูล",
-        icon: "success",
+        title: "กำลังส่งคำขอ",
+        text: "กรุณารอสักครู่",
+        icon: "info",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
       });
       await UpdateTrademarkervice({
         query: {
@@ -35,7 +42,7 @@ const TrademarkForm4 = ({ trademark, user }: TrademarkForm4Props) => {
           isComplete: true,
         },
       });
-
+      await trademark.refetch();
       router.push("/dashboard");
       Swal.fire({
         title: "ส่งคำขอสำเร็จ",

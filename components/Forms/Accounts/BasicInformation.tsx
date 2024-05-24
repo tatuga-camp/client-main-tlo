@@ -448,46 +448,58 @@ function BasicInformation({ user }: BasicInformationProps) {
         <FieldError className="text-xs text-red-600" />
       </TextField>
 
-      <TextField type="text" isRequired className="mt-10 flex  flex-col gap-1">
-        <Label className="font-semibold text-[var(--primary-blue)]">
-          หน่วยงาน/สังกัด
-        </Label>
-        <Input
-          onChange={handleChangeUserForm}
-          value={userForm?.department}
-          name="department"
+      {user.data.type === "INTERNAL" && (
+        <TextField
           type="text"
-          className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-          placeholder="กรุณาเลือกหน่วยงาน/สังกัด"
-        />
-        <FieldError className="text-xs text-red-600" />
-      </TextField>
-      <TextField type="text" isRequired className=" flex flex-col gap-1">
-        <Label className="font-semibold text-[var(--primary-blue)]">คณะ</Label>
-        <Input
-          onChange={handleChangeUserForm}
-          value={userForm?.faculty}
-          name="faculty"
-          type="text"
-          className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-          placeholder="รหัสผ่าน"
-        />
-        <FieldError className="text-xs text-red-600" />
-      </TextField>
-      <TextField type="text" isRequired className=" flex flex-col gap-1">
-        <Label className="font-semibold text-[var(--primary-blue)]">
-          สาขาวิชา
-        </Label>
-        <Input
-          onChange={handleChangeUserForm}
-          value={userForm?.major}
-          name="major"
-          type="text"
-          className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-          placeholder="สาขาวิชา"
-        />
-        <FieldError className="text-xs text-red-600" />
-      </TextField>
+          isRequired
+          className="mt-10 flex  flex-col gap-1"
+        >
+          <Label className="font-semibold text-[var(--primary-blue)]">
+            หน่วยงาน/สังกัด
+          </Label>
+          <Input
+            onChange={handleChangeUserForm}
+            value={userForm?.department}
+            name="department"
+            type="text"
+            className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
+            placeholder="กรุณาเลือกหน่วยงาน/สังกัด"
+          />
+          <FieldError className="text-xs text-red-600" />
+        </TextField>
+      )}
+      {user.data.type === "INTERNAL" && (
+        <TextField type="text" isRequired className=" flex flex-col gap-1">
+          <Label className="font-semibold text-[var(--primary-blue)]">
+            คณะ
+          </Label>
+          <Input
+            onChange={handleChangeUserForm}
+            value={userForm?.faculty}
+            name="faculty"
+            type="text"
+            className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
+            placeholder="คณะ"
+          />
+          <FieldError className="text-xs text-red-600" />
+        </TextField>
+      )}
+      {user.data.type === "INTERNAL" && (
+        <TextField isRequired className=" flex flex-col gap-1">
+          <Label className="font-semibold text-[var(--primary-blue)]">
+            สาขาวิชา
+          </Label>
+          <Input
+            onChange={handleChangeUserForm}
+            value={userForm?.major}
+            name="major"
+            type="text"
+            className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
+            placeholder="สาขาวิชา"
+          />
+          <FieldError className="text-xs text-red-600" />
+        </TextField>
+      )}
 
       <div className="mt-5 flex justify-center gap-6">
         <Button

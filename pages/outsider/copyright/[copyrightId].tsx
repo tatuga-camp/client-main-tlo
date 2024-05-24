@@ -1,24 +1,149 @@
+import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
 import React, { useState } from "react";
 import { outsiderCopyrightSection } from "../../../data/PatentSection";
-import OutsiderCopyrightForm4 from "@/components/outsider/copyright/OutsiderCopyrightForm4";
-import OutsiderCopyrightForm3 from "@/components/outsider/copyright/OutsiderCopyrightForm3";
-import OutsiderCopyrightForm2 from "@/components/outsider/copyright/OutsiderCopyrightForm2";
-import OutsiderCopyrightForm1 from "@/components/outsider/copyright/OutsiderCopyrightForm1";
-import HomeLayout from "../../../layouts/homepageLayout";
-import OutsiderCopyrightForm5 from "../../../components/outsider/copyright/OutsiderCopyrightForm5";
-
-const Index = () => {
+import NrruCopyrightForm2 from "@/components/outsider/copyright/NrruCopyrightForm2/NrruCopyrightForm2";
+import NrruCopyrightForm3 from "@/components/outsider/copyright/NrruCopyrightForm3/NrruCopyrightForm3";
+import NrruCopyrightForm4 from "@/components/outsider/copyright/NrruCopyrightForm4/NrruCopyrightForm4";
+import NrruCopyrightForm5 from "@/components/outsider/copyright/NrruCopyrightForm5";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetUserService } from "../../../services/user";
+import { ErrorMessages, User } from "../../../models";
+import { useRouter as NextuseRouter } from "next/router";
+import { useRouter } from "next-nprogress-bar";
+import { useQuery } from "@tanstack/react-query";
+import {
+  DeleteCopyrightService,
+  GetCopyrightService,
+} from "../../../services/copyright/copyright";
+import Swal from "sweetalert2";
+import { MdDelete } from "react-icons/md";
+import CopyrightStatus from "../../../components/Status/copyrightStatus";
+import NrruCopyrightForm1 from "../../../components/outsider/copyright/NrruCopyrightForm1/NrruCopyrightForm1";
+const Index = ({ user }: { user: User }) => {
+  const router = NextuseRouter();
+  const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
+
+  const copyright = useQuery({
+    queryKey: [
+      "copyright",
+      { copyrightId: router.query.copyrightId as string },
+    ],
+    queryFn: () =>
+      GetCopyrightService({
+        copyrightId: router.query.copyrightId as string,
+      }),
+  });
 
   const previousSection = () => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
+      window.scroll(0, 0);
     }
   };
   const nextSection = () => {
-    if (currentSection < outsiderCopyrightSection.length - 1) {
-      setCurrentSection(currentSection + 1);
+    try {
+      if (currentSection < outsiderCopyrightSection.length - 1) {
+        handleValidateForm({ number: currentSection + 1 });
+        setCurrentSection(currentSection + 1);
+        window.scroll(0, 0);
+      }
+    } catch (error) {
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
+  };
+
+  const handleValidateForm = ({ number }: { number: number }) => {
+    if (number === 1 && copyright.data?.partnerInfoOnCopyrights.length === 0) {
+      throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
+    } else if (
+      number === 2 &&
+      (copyright.data?.workInfoOnCopyright.isComplete === false ||
+        copyright.data?.partnerInfoOnCopyrights.length === 0)
+    ) {
+      throw new Error("กรุณากรอกข้อมูลผลงานที่สร้างสรรค์ ให้ครบถ้วน");
+    } else if (
+      number === 3 &&
+      (!copyright.data?.workInfoOnCopyright.id ||
+        copyright.data?.partnerInfoOnCopyrights.length === 0 ||
+        copyright.data?.fileOnCopyrights.length === 0)
+    ) {
+      throw new Error("กรุณาข้อมูลเอกสารแนบคำขอ ให้ครบถ้วน");
+    } else if (
+      number === 4 &&
+      (copyright.data?.fileOnCopyrights.length === 0 ||
+        copyright.data?.isComplete === false ||
+        copyright.data?.workInfoOnCopyright.isComplete === false ||
+        copyright.data?.partnerInfoOnCopyrights.length === 0)
+    ) {
+      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 4");
+    }
+  };
+
+  const handleDeleteDesign = async ({
+    copyrightId,
+  }: {
+    copyrightId: string;
+  }) => {
+    const replacedText = "ยืนยันการลบข้อมูล";
+    let content = document.createElement("div");
+    content.innerHTML =
+      "<div>กรุณาพิมพ์คำด้านล่าง </div> <strong>" +
+      replacedText +
+      "</strong> <div>เพื่อเป็นการยืนยันในการลบข้อมูล</div>";
+    const { value } = await Swal.fire({
+      title: "ยืนยันการลบข้อมูล",
+      input: "text",
+      footer:
+        "ข้อมูลทั้งหมดที่เกี่ยวข้องกับข้อมูลนี้จะถูกลบออกทั้งหมด และไม่สามารถกู้คืนได้อีก",
+      html: content,
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (value !== replacedText) {
+          return "คำที่พิมพ์ไม่ตรงกับคำที่ต้องการลบ กรุณาลองใหม่อีกครั้ง";
+        }
+      },
+    });
+    if (value) {
+      try {
+        Swal.fire({
+          title: "กำลังดำเนินการลบข้อมูล",
+          html: "กรุณารอสักครู่",
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        await DeleteCopyrightService({
+          copyrightId: copyrightId,
+        });
+        naviateRouter.push("/dashboard");
+        Swal.fire({
+          title: "ลบข้อมูลสำเร็จ",
+          icon: "success",
+        });
+      } catch (error) {
+        let result = error as ErrorMessages;
+        Swal.fire({
+          title: result.error ? result.error : "เกิดข้อผิดพลาด",
+          text: result.message.toString(),
+          footer: result.statusCode
+            ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+            : "",
+          icon: "error",
+        });
+      }
     }
   };
   return (
@@ -26,7 +151,7 @@ const Index = () => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <title>License patent</title>
+        <title>แบบฟอร์มประกอบคำขอจดแจ้งข้อมูลลิขสิทธ์</title>
       </Head>
       <HomeLayout>
         <div className="flex h-full w-full flex-col items-center bg-[#F4F8FF] pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center">
@@ -37,13 +162,40 @@ const Index = () => {
             <section className="max-w-[32rem] bg-[var(--secondary-yellow)] p-3 text-center text-base font-bold shadow-md md:text-xl">
               <p>สำหรับบุคคลภายนอก</p>
             </section>
+            <button
+              onClick={() =>
+                handleDeleteDesign({
+                  copyrightId: router.query.copyrightId as string,
+                })
+              }
+              className="flex items-center justify-center gap-2 rounded-lg bg-red-600 px-10 py-2
+             text-white drop-shadow-md transition hover:bg-red-700 active:scale-105"
+            >
+              ลบคำขอ
+              <MdDelete />
+            </button>
 
-            <section className="flex w-full flex-wrap items-center justify-center gap-3">
+            <section className="flex w-full flex-wrap items-center justify-center gap-3 md:w-[70%]">
               {outsiderCopyrightSection.map((item, index) => (
                 <button
                   key={index}
                   className={`flex h-24 w-40 flex-col items-center justify-center p-5 text-center shadow-md duration-200 hover:text-blue-500 md:h-28 md:w-52 md:gap-2 ${currentSection === index ? "bg-[var(--primary-blue)] text-white" : "bg-white text-[#83AAED]"}`}
-                  onClick={() => setCurrentSection(index)}
+                  onClick={() => {
+                    try {
+                      handleValidateForm({ number: index });
+                      setCurrentSection(index);
+                    } catch (error) {
+                      let result = error as ErrorMessages;
+                      Swal.fire({
+                        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+                        text: result.message.toString(),
+                        footer: result.statusCode
+                          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+                          : "",
+                        icon: "error",
+                      });
+                    }
+                  }}
                 >
                   <h2 className={`text-base font-semibold md:text-lg`}>
                     {item.section}
@@ -60,37 +212,40 @@ const Index = () => {
           </header>
           <main className="mt-5 flex w-full flex-col items-center">
             <section className="w-[87%]">
-              {currentSection == 0 && (
+              {currentSection === 0 && (
                 <div>
-                  <OutsiderCopyrightForm1 />
+                  <NrruCopyrightForm1 user={user} copyright={copyright} />
                 </div>
               )}
-              {currentSection == 1 && (
+              {currentSection === 1 && (
                 <div>
-                  <OutsiderCopyrightForm2 />
+                  <NrruCopyrightForm2 copyright={copyright} />
                 </div>
               )}
-              {currentSection == 2 && (
+
+              {currentSection === 2 && (
                 <div>
-                  <OutsiderCopyrightForm3 />
+                  <NrruCopyrightForm4 copyright={copyright} />
                 </div>
               )}
-              {currentSection == 3 && (
+              {currentSection === 3 && (
                 <div>
-                  <OutsiderCopyrightForm4 />
+                  <p className="my-5 w-full items-center text-center  font-bold">
+                    กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
+                  </p>
+                  <NrruCopyrightForm5 user={user} copyright={copyright} />
                 </div>
               )}
-              {currentSection == 4 && (
+              {currentSection === 4 && copyright.data && (
                 <div>
-                  <OutsiderCopyrightForm5 />
+                  <CopyrightStatus
+                    user={user}
+                    copyrightId={copyright.data.id}
+                  />
                 </div>
               )}
             </section>
-            {currentSection === outsiderCopyrightSection.length - 1 && (
-              <button className="mt-5 w-44 rounded-md bg-[#10316B] px-3 py-2 font-semibold text-white">
-                ส่งคำขอ
-              </button>
-            )}
+
             <section className=" my-5 flex items-center justify-center gap-3">
               <button
                 className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
@@ -118,3 +273,26 @@ const Index = () => {
 };
 
 export default Index;
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext,
+) => {
+  try {
+    const user = await GetUserService({
+      type: "SERVER-SIDE",
+      context: ctx,
+    });
+    return {
+      props: {
+        user,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      redirect: {
+        destination: "/auth/sign-in",
+        permanent: false,
+      },
+    };
+  }
+};

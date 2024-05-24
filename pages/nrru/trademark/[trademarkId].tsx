@@ -80,6 +80,16 @@ const Index = ({ user }: { user: User }) => {
         trademark.data?.fileOnTrademarks.length === 0)
     ) {
       throw new Error("กรุณากรอกข้อมูลเอกสารแนบ ให้ครบถ้วน");
+    } else if (
+      number === 4 &&
+      (trademark.data?.partnerOnTrademarks.length === 0 ||
+        trademark.data?.fileOnTrademarks.find(
+          (file) => file.documentType === "IDCARD",
+        ) === undefined ||
+        trademark.data?.fileOnTrademarks.length === 0 ||
+        trademark.data?.isComplete === false)
+    ) {
+      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 4");
     }
   };
 
@@ -153,6 +163,9 @@ const Index = ({ user }: { user: User }) => {
             <h2 className="text-center text-2xl font-bold md:text-3xl">
               แบบฟอร์มประกอบคำขอจดทะเบียนเครื่องหมายการค้า
             </h2>
+            <section className="max-w-[32rem] bg-[var(--secondary-yellow)] p-3 text-center text-base font-bold shadow-md md:text-xl">
+              <p>สำหรับบุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา</p>
+            </section>
             <button
               onClick={() =>
                 handleDeleteTrademark({

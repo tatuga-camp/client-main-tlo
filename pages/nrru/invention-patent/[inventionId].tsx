@@ -88,6 +88,15 @@ const Index = ({ user }: { user: User }) => {
         invention.data?.partnerInfoOnInventionPatents.length === 0)
     ) {
       throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");
+    } else if (
+      number === 5 &&
+      (invention.data?.fileOnInventionPatents.length === 0 ||
+        invention.data?.supportingDataOnInventionPatent.isComplete === false ||
+        invention.data?.workInfoOnInventionPatent.isComplete === false ||
+        invention.data?.partnerInfoOnInventionPatents.length === 0 ||
+        invention.data?.isComplete === false)
+    ) {
+      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 5");
     }
   };
 
