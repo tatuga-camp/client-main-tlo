@@ -57,6 +57,9 @@ const Index = ({ user }: { user: User }) => {
             <h2 className="text-center text-2xl font-bold md:text-3xl">
               แบบฟอร์มประกอบคำขอจดทะเบียนเครื่องหมายการค้า
             </h2>
+            <section className="max-w-[32rem] bg-[var(--secondary-yellow)] p-3 text-center text-base font-bold shadow-md md:text-xl">
+              <p>สำหรับบุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา</p>
+            </section>
           </header>
           <main className="mt-5 flex w-full flex-col items-center">
             <section className=" my-5 flex items-center justify-center gap-3">

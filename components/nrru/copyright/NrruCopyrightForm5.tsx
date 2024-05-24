@@ -36,9 +36,16 @@ const NrruCopyrightForm5 = ({ copyright, user }: NrruCopyrightForm5Props) => {
     try {
       setIsLoading(true);
       Swal.fire({
-        title: "ส่งคำขอสำเร็จ",
-        text: "ระบบกำลังดำเนินการตรวจสอบข้อมูล",
-        icon: "success",
+        title: "กำลังส่งคำขอ",
+        text: "กรุณารอสักครู่",
+        icon: "info",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
       });
       await UpdateCopyrightService({
         query: {
@@ -48,6 +55,7 @@ const NrruCopyrightForm5 = ({ copyright, user }: NrruCopyrightForm5Props) => {
           isComplete: true,
         },
       });
+      await copyright.refetch();
       router.push("/dashboard");
       Swal.fire({
         title: "ส่งคำขอสำเร็จ",

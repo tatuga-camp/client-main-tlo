@@ -110,6 +110,13 @@ function RequestSummary({ user }: { user?: User }) {
   });
 
   useEffect(() => {
+    inventions.refetch();
+    copyrights.refetch();
+    designs.refetch();
+    trademarks.refetch();
+  }, []);
+
+  useEffect(() => {
     if (inventions.data && designs.data && trademarks.data && copyrights.data) {
       const pages = [
         inventions.data.meta.total,
@@ -342,12 +349,12 @@ function RequestSummary({ user }: { user?: User }) {
       <div className="mt-12 flex w-full flex-col items-center gap-8">
         <div className="max-h-96 w-10/12 overflow-auto">
           <table className="w-max min-w-full border-separate border-spacing-1 rounded-md bg-white p-1 text-center text-[0.7rem] md:border-spacing-2 md:p-4 md:text-base">
-            <thead className="">
+            <thead>
               <tr className="sticky top-2 z-20">
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">
                   รายชื่อผู้ยื่น
                 </th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">วันที่ส่งขอ</th>
+                <th className=" rounded-md bg-[#BED6FF] p-2 ">วันยื่นคำขอ</th>
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
@@ -403,9 +410,9 @@ function RequestSummary({ user }: { user?: User }) {
                             {item.user.lastName}
                           </td>
                           <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                            {moment(item.createAt).format(
-                              "DD/MM/YYYY - HH:MM:SS",
-                            ) ?? "ไม่มีวันที่ส่งขอ"}
+                            {item.requestDate
+                              ? moment(item.requestDate).format("DD/MM/YYYY")
+                              : "ไม่มีพบวันยื่นคำขอ"}
                           </td>
                           <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                             {item.numberRequest ?? "ไม่มีหมายเลขคำขอ"}
@@ -413,8 +420,13 @@ function RequestSummary({ user }: { user?: User }) {
                           <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                             {title}
                           </td>
-                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:bg-main-color hover:text-white">
-                            <LinkNextJS href={url}>ตรวจสอบ</LinkNextJS>
+                          <td>
+                            <LinkNextJS
+                              className="h-10 w-40 rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:bg-main-color hover:text-white"
+                              href={url}
+                            >
+                              ตรวจสอบ
+                            </LinkNextJS>
                           </td>
                         </tr>
                       );

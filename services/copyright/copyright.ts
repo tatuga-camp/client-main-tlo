@@ -136,6 +136,7 @@ type RequestUpdateCopyrightService = {
     copyrightId: string;
   };
   body: {
+    fullName?: string;
     personStatus?: string;
     title?: string;
     firstName?: string;
@@ -149,8 +150,10 @@ type RequestUpdateCopyrightService = {
     province?: string;
     postalCode?: string;
     nationality?: string;
+    phone?: string;
     email?: string;
     isComplete?: boolean;
+    requestDate?: string;
     numberRequest?: string;
   };
 };

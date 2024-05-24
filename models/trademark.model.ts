@@ -37,6 +37,7 @@ export type Trademark = {
   allowMarketing: string;
   allowPublic: string;
   userType: UserType;
+  requestDate?: string;
   isComplete: boolean;
   userId: string;
 };

@@ -47,7 +47,9 @@ function Setting({ userServer }: { userServer: User }) {
           >
             <h2 className="text-base md:text-xl">ตั้งค่าโปรไฟล์</h2>
             <h2 className="text-sm md:text-lg">
-              บุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา
+              {user.data.type === "INTERNAL"
+                ? "บุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา"
+                : "บุคคลทั่วไป"}
             </h2>
           </section>
         </header>
