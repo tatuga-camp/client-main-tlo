@@ -4,12 +4,14 @@ import { GetUserService } from "../../services/user";
 import AdminLayout from "../../layouts/adminLayout";
 import RequestSummary from "../../components/Tables/requestSummary";
 import { User } from "../../models";
+import SummaryData from "@/components/Tables/SummaryData";
 
 function Index({ user }: { user: User }) {
   return (
     <AdminLayout>
       <div className="font-Anuphan">
         <main className="flex w-full flex-col items-center justify-center ">
+          <SummaryData />
           <RequestSummary user={user} />
         </main>
       </div>
