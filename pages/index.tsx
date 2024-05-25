@@ -228,15 +228,36 @@ export default function Home() {
                 </h2>
                 <div className="flex  w-full justify-center bg-[url('/knowledge.png')] py-10 md:bg-none md:py-0">
                   <div className="flex h-full w-[85%] flex-col gap-2 text-[0.8rem]  md:w-full md:text-base">
-                    <button className="h-full w-full  bg-[#10316B] bg-opacity-70 p-5 text-white duration-300 hover:bg-opacity-100">
+                    <a
+                      href="https://www.ipthailand.go.th/th/dip-law-2.html"
+                      target="_blank"
+                      className="h-full w-full  bg-[#10316B] bg-opacity-70 p-5 text-center text-white duration-300 hover:bg-opacity-100"
+                    >
                       กฏหมายทรัพย์สินทางปัญญา
-                    </button>
-                    <button className="h-full w-full  bg-[#10316B] bg-opacity-70 p-5 text-white duration-300 hover:bg-opacity-100">
-                      ขั้นตอนการขอความคุ้มครองด้านทรัย์สินทางปัญญา
-                    </button>
-                    <button className="h-full w-full  bg-[#10316B] bg-opacity-70 p-5 text-white duration-300 hover:bg-opacity-100">
+                    </a>
+                    <a
+                      href="/pdf/stepRequestCopyright.pdf"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      className="h-full w-full bg-[#10316B]  bg-opacity-70 p-5 text-center text-white duration-300 hover:bg-opacity-100"
+                    >
+                      ขั้นตอนการจดแจ้งข้อมูลลิขสิทธิ์
+                    </a>
+                    <a
+                      href="/pdf/stepRequestInvention.pdf"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      className="h-full w-full bg-[#10316B]  bg-opacity-70 p-5 text-center text-white duration-300 hover:bg-opacity-100"
+                    >
+                      ขั้นนตอนการจดทะเบียนสิทธิบัตร/อนุสิทธิบัตร
+                    </a>
+                    <a
+                      href="https://www.ipthailand.go.th/th/dip-law-2.html"
+                      target="_blank"
+                      className="h-full w-full bg-[#10316B]  bg-opacity-70 p-5 text-center text-white duration-300 hover:bg-opacity-100"
+                    >
                       ค่าธรรมเนียม
-                    </button>
+                    </a>
                     <button className="h-full w-full  bg-[#10316B] bg-opacity-70 p-5 text-white duration-300 hover:bg-opacity-100">
                       จำนวนทรัพย์สินทางปัญญา
                     </button>
