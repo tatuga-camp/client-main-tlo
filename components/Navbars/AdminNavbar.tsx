@@ -40,7 +40,7 @@ const AdminNavbar = ({ setTriggerSidebar }: AdminNavbarProps) => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 flex  min-h-16 w-full items-center justify-between bg-white p-2 font-Anuphan drop-shadow-md">
+    <nav className="sticky top-0 z-40 flex  min-h-16 w-full items-center justify-between bg-white p-2 font-Anuphan drop-shadow-md">
       {/* Logo */}
 
       <button

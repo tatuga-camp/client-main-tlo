@@ -36,7 +36,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-30 flex  min-h-16 w-full items-center justify-between bg-white p-2 font-Anuphan drop-shadow-md">
+    <nav
+      className="sticky top-0 z-30 flex  min-h-16 w-full items-center justify-between 
+    bg-white p-2 font-Anuphan drop-shadow-md"
+    >
       {/* Logo */}
 
       <Link href="/" className="ml-3 w-[5rem] md:ml-10 md:w-[6.25rem]">

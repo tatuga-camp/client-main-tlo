@@ -14,9 +14,23 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { IoCreate } from "react-icons/io5";
+import CreateNews from "../../../components/Forms/News/createNews";
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { GetNewsByPageService } from "../../../services/news/news";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 function ManageNews() {
+  const news = useQuery({
+    queryKey: ["news"],
+    queryFn: () =>
+      GetNewsByPageService({
+        page: 1,
+        limit: 10,
+        searchField: "",
+      }),
+  });
   return (
     <>
       <Head>
@@ -24,15 +38,27 @@ function ManageNews() {
         <meta charSet="UTF-8" />
         <title>ข่าวประชาสัมพันธ์</title>
       </Head>
+
       <AdminLayout>
-        <div className="flex h-full w-full flex-col items-center bg-[#F4F8FF] pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center">
+        <div
+          className="flex h-full w-full flex-col items-center bg-[#F4F8FF] 
+        pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center"
+        >
           <header className="flex w-full flex-col items-center gap-10">
-            <div className="mt-16 w-[70%] bg-[var(--secondary-yellow)] p-2 text-center font-semibold ">
+            <div
+              className="mt-16 w-[70%]  bg-[var(--secondary-yellow)] p-2 
+            text-center font-semibold "
+            >
               ข่าวประชาสัมพันธ์
             </div>
-            <button className="w-[50%] rounded-md bg-[#BED6FF] p-2 font-semibold drop-shadow-md ">
-              สร้างโพสต์ใหม่
-            </button>
+            <Link
+              href={"/admin/manage-news/create"}
+              className="flex w-96 items-center justify-center gap-2 rounded-md
+               bg-[#BED6FF] p-2 font-semibold drop-shadow-md
+             transition  duration-100 hover:bg-[#87aced] active:scale-105 "
+            >
+              สร้างโพสต์ใหม่ <IoCreate />
+            </Link>
           </header>
           <main className="mt-5 flex w-full flex-col items-center">
             <section className="mt-10 flex w-[70%] flex-col gap-2 ">
