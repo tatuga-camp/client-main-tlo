@@ -74,9 +74,8 @@ function ManageNews() {
                 <h1 className="font-semibold">คำอธิบาย</h1>
               </section>
               <div>
-                <Editor
+                {/* <Editor
                   apiKey="your-api-key"
-                  onInit={(_evt, editor) => (editorRef.current = editor)}
                   initialValue="<p>This is the initial content of the editor.</p>"
                   init={{
                     height: 500,
@@ -109,7 +108,7 @@ function ManageNews() {
                     content_style:
                       "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                   }}
-                />
+                /> */}
               </div>
 
               <section className="flex w-full flex-col gap-5 md:flex-row">
