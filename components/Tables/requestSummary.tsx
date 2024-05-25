@@ -241,7 +241,7 @@ function RequestSummary({ user }: { user?: User }) {
     <>
       <Element
         name="request"
-        className="flex w-7/12 justify-center font-Anuphan"
+        className="flex w-10/12 justify-center font-Anuphan"
       >
         <div className="mt-12 flex w-full flex-col items-center gap-8">
           <h1 className="w-full  bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold hover:drop-shadow-md md:text-xl">
@@ -249,10 +249,11 @@ function RequestSummary({ user }: { user?: User }) {
           </h1>
           <section
             className="flex w-full flex-col items-center justify-center gap-4 rounded-md 
-                border-[1.5px] border-solid border-[#BED6FF] bg-white p-4 text-xs md:gap-8 md:p-12 md:text-base "
+                border-[1.5px] border-solid border-[#BED6FF] bg-white p-4 text-xs 
+                md:gap-8 md:p-12 md:text-base "
           >
             {/* Select */}
-            <div className="flex w-full flex-col gap-3 md:flex-row md:gap-10 ">
+            <div className="relative z-30 flex w-full flex-col gap-3 md:flex-row md:gap-10 ">
               <div className="flex w-full items-center  gap-3  md:gap-5 ">
                 <label className="w-20 font-semibold">ประเภท</label>
                 <Select
@@ -264,7 +265,7 @@ function RequestSummary({ user }: { user?: User }) {
                     }
                   }}
                   options={menuTypes}
-                  className="w-full"
+                  className=" w-full"
                   placeholder={<div>เลือกประเภท</div>}
                   styles={{
                     control: (base, state) => ({
@@ -347,10 +348,13 @@ function RequestSummary({ user }: { user?: User }) {
       </Element>
 
       <div className="mt-12 flex w-full flex-col items-center gap-8">
-        <div className="max-h-96 w-10/12 overflow-auto">
-          <table className="w-max min-w-full border-separate border-spacing-1 rounded-md bg-white p-1 text-center text-[0.7rem] md:border-spacing-2 md:p-4 md:text-base">
+        <div className="relative max-h-96 w-10/12 overflow-auto">
+          <table
+            className="w-max min-w-full border-separate border-spacing-1 rounded-md bg-white
+           p-1 text-center text-[0.7rem]  md:border-spacing-2 md:p-4 md:text-base"
+          >
             <thead>
-              <tr className="sticky top-2 z-20">
+              <tr className="sticky top-2 z-10">
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">
                   รายชื่อผู้ยื่น
                 </th>
