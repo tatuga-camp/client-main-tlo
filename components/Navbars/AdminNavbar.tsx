@@ -59,7 +59,7 @@ const AdminNavbar = ({ setTriggerSidebar }: AdminNavbarProps) => {
           hover:bg-main-color hover:text-white"
           >
             <MdAdminPanelSettings />
-            ผู้ดูแลระบบ
+            <span className="hidden md:block">ผู้ดูแลระบบ</span>
           </Link>
         )}
         {/* Links */}

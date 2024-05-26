@@ -194,7 +194,7 @@ function SearchWorkInvention({ invention }: SearchWorkInventionProps) {
         9.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น
         หรืองานที่ปรากฏอยู่ก่อน
       </Label>
-      <div className="flex flex-col items-center justify-center md:w-full">
+      <div className="flex flex-col items-center justify-center md:-ml-10 md:w-full lg:ml-0">
         <section className="flex w-full flex-col gap-2 md:flex-row">
           {menuSearchWorks.map((menu, index) => (
             <button

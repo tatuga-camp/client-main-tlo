@@ -152,7 +152,7 @@ function CompanyInterest({ invention }: CompanyInterestProps) {
       </section>
 
       <div className="=text-[0.8rem] flex w-full flex-col flex-wrap gap-3 md:flex-row md:gap-5 md:text-base">
-        <section className="flex w-11/12 flex-col justify-between md:flex-row md:items-center ">
+        <section className="flex w-11/12 flex-col justify-between text-xs md:flex-row md:items-center md:text-base ">
           <p>
             (กรุณาระบุชื่อบริษัท ชื่อผู้ประสานงาน
             เบอร์โทรศัพท์ของหน่วยงาน/ผู้ที่สนใจ)

@@ -147,17 +147,17 @@ function CompanyInterest({ design }: CompanyInterestProps) {
   };
   console.log(companyInterestCreate);
   return (
-    <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+    <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
       <section className="flex items-center gap-3">
         <Number number={4} />
-        <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+        <p className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
           หน่วยงาน/บริษัทที่สนใจ หรือคาดว่าจะสนใจ
           หรือเกี่ยวข้องกับการประดิษฐ์/ผลงานนี้
         </p>
       </section>
 
-      <div className="=text-[0.8rem] flex w-full flex-col flex-wrap gap-3 md:flex-row md:gap-5 md:text-base">
-        <section className="flex w-11/12 flex-col justify-between md:flex-row md:items-center ">
+      <div className="=text-[0.8rem] flex w-full flex-col flex-wrap gap-3 lg:flex-row lg:gap-5 lg:text-base">
+        <section className="flex w-11/12 flex-col justify-between lg:flex-row lg:items-center ">
           <p>
             (กรุณาระบุชื่อบริษัท ชื่อผู้ประสานงาน
             เบอร์โทรศัพท์ของหน่วยงาน/ผู้ที่สนใจ)
@@ -165,15 +165,15 @@ function CompanyInterest({ design }: CompanyInterestProps) {
           <button
             onClick={handleAddCompanyInterest}
             type="button"
-            className="my-3 flex w-48 items-center justify-center gap-3 rounded-md bg-[#9747FF] p-2 text-xs font-semibold text-white duration-300 hover:bg-purple-700 md:px-3 md:py-2 md:text-base "
+            className="my-3 flex w-48 items-center justify-center gap-3 rounded-md bg-[#9747FF] p-2 text-xs font-semibold text-white duration-300 hover:bg-purple-700 lg:px-3 lg:py-2 lg:text-base "
           >
             <FiPlusCircle /> <p>เพิ่มข้อมูล</p>
           </button>
         </section>
         <section className="flex w-11/12 items-center justify-between rounded-md border-[1px] border-solid border-[#BED6FF] p-2 ">
-          <div className="flex w-full flex-col gap-3 pl-0 text-[0.75rem] md:gap-2 md:pl-0 md:text-[0.85rem] lg:flex-row">
+          <div className="flex w-full flex-col gap-3 pl-0 text-[0.75rem] lg:flex-row lg:gap-2 lg:pl-0 lg:text-[0.85rem]">
             <TextField className={"flex  items-center gap-2 "}>
-              <Label className=" text-[var(--primary-blue) min-w-20 font-medium md:min-w-44">
+              <Label className=" text-[var(--primary-blue) min-w-20 font-medium ">
                 1) ชื่อหน่วยงาน/บริษัทที่สนใจ :
               </Label>
               <Input
@@ -181,12 +181,12 @@ function CompanyInterest({ design }: CompanyInterestProps) {
                 value={companyInterestCreate?.name}
                 onChange={handleChange}
                 type="text"
-                className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
+                className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 lg:h-10  lg:pl-4 "
                 placeholder="กรอกข้อมูล"
               />
             </TextField>
             <TextField className={"flex   items-center gap-2 "}>
-              <Label className=" text-[var(--primary-blue) min-w-20 font-medium md:min-w-14">
+              <Label className=" text-[var(--primary-blue) min-w-20 font-medium lg:min-w-14">
                 ชื่อผู้ประสาน :
               </Label>
               <Input
@@ -194,12 +194,12 @@ function CompanyInterest({ design }: CompanyInterestProps) {
                 value={companyInterestCreate?.coordinator}
                 onChange={handleChange}
                 type="text"
-                className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
+                className="h-8 w-auto rounded-md bg-slate-300 p-1 pl-3 lg:h-10  lg:pl-4 "
                 placeholder="กรอกข้อมูล"
               />
             </TextField>
             <TextField className={"flex  items-center gap-2 "}>
-              <Label className=" text-[var(--primary-blue) min-w-20 font-medium md:min-w-14">
+              <Label className=" text-[var(--primary-blue) min-w-20 font-medium lg:min-w-14">
                 เบอร์ติดต่อ :
               </Label>
               <div className="flex flex-col gap-1">
@@ -207,7 +207,7 @@ function CompanyInterest({ design }: CompanyInterestProps) {
                   name="phone"
                   onChange={handleChange}
                   value={companyInterestCreate?.phone}
-                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                   placeholder="กรอกหมายเลขโทรศัพท์"
                   maxLength={10}
                   inputMode="numeric"
@@ -229,40 +229,40 @@ function CompanyInterest({ design }: CompanyInterestProps) {
                 className="flex w-11/12 items-center justify-between rounded-md
              border-[1px] border-solid border-[#BED6FF] bg-[#BED6FF] p-2 "
               >
-                <div className="flex w-full flex-col gap-3 pl-0 text-[0.75rem] md:gap-2 md:pl-0 md:text-[0.85rem] lg:flex-row">
+                <div className="flex w-full flex-col gap-3 pl-0 text-[0.75rem] lg:flex-row lg:gap-2 lg:pl-0 lg:text-[0.85rem]">
                   <TextField className={"flex  items-center gap-2 "}>
-                    <Label className=" text-[var(--primary-blue) min-w-20 font-medium md:min-w-44">
+                    <Label className=" text-[var(--primary-blue) min-w-20 font-medium lg:min-w-44">
                       ชื่อหน่วยงาน/บริษัทที่สนใจ :
                     </Label>
                     <Input
                       disabled
                       value={company.name}
                       type="text"
-                      className="h-8 w-auto rounded-md bg-white p-1 pl-3 md:h-10  md:pl-4 "
+                      className="h-8 w-auto rounded-md bg-white p-1 pl-3 lg:h-10  lg:pl-4 "
                       placeholder="กรอกข้อมูล"
                     />
                   </TextField>
                   <TextField className={"flex   items-center gap-2 "}>
-                    <Label className=" text-[var(--primary-blue) min-w-20 font-medium md:min-w-14">
+                    <Label className=" text-[var(--primary-blue) min-w-20 font-medium lg:min-w-14">
                       ชื่อผู้ประสาน :
                     </Label>
                     <Input
                       disabled
                       value={company.coordinator}
                       type="text"
-                      className="h-8 w-auto rounded-md bg-white p-1 pl-3 md:h-10  md:pl-4 "
+                      className="h-8 w-auto rounded-md bg-white p-1 pl-3 lg:h-10  lg:pl-4 "
                       placeholder="กรอกข้อมูล"
                     />
                   </TextField>
                   <TextField className={"flex items-center  gap-2 "}>
-                    <Label className=" text-[var(--primary-blue) min-w-20 font-medium md:min-w-14">
+                    <Label className=" text-[var(--primary-blue) min-w-20 font-medium lg:min-w-14">
                       เบอร์ติดต่อ :
                     </Label>
                     <div className="flex flex-col gap-1">
                       <InputMask
                         disabled
                         value={company.phone}
-                        className="h-8 w-full rounded-md bg-white p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-full rounded-md bg-white p-1 pl-3 lg:h-10 lg:pl-4 "
                         placeholder="กรอกหมายเลขโทรศัพท์"
                         maxLength={10}
                         inputMode="numeric"

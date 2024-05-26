@@ -189,7 +189,7 @@ function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
   return (
     <Form
       onSubmit={handleCreateSearchWork}
-      className="flex w-full flex-col gap-3 md:pl-10"
+      className="flex w-full flex-col gap-3 lg:pl-10"
     >
       <Label className="font-semibold md:min-w-52">
         {number}.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น

@@ -485,9 +485,9 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
               </h1>
               <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
                 <NumberTitle number={1} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
+                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:gap-5 md:text-base lg:flex-row">
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
+                    className={"flex w-full  items-center gap-3 md:w-[50%]"}
                   >
                     <Label className=" text-[var(--primary-blue) min-w-20 font-semibold md:min-w-24">
                       คำนำหน้าชื่อ
@@ -504,7 +504,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                           handleChangePartnerData({ e, id: partner.id })
                         }
                         type="text"
-                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-20 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-32 md:pl-4 "
                         placeholder="คำนำหน้า"
                       />
                       <FieldError className="text-xs text-red-700" />
@@ -513,7 +513,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                   <TextField
                     className={"flex w-full items-center gap-3 md:w-[50%]"}
                   >
-                    <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
+                    <Label className="min-w-10 font-semibold text-[var(--primary-blue)] ">
                       ชื่อ
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -528,7 +528,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                         }
                         name="firstName"
                         type="text"
-                        className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                        className="h-8 w-40 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-48  md:p-2 md:pl-4"
                         placeholder="ชื่อจริง"
                       />
 
@@ -553,7 +553,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                         }
                         name="lastName"
                         type="text"
-                        className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                        className="h-8 w-40 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-48  md:p-2 md:pl-4"
                         placeholder="นามสกุล"
                       />
                       <FieldError className="text-xs text-red-700" />
@@ -567,7 +567,9 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                 <NumberTitle number={2} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[60%] "}
+                    className={
+                      "flex w-full flex-col gap-3 md:w-[60%] md:flex-row md:items-center "
+                    }
                   >
                     <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-44">
                       เลขบัตรประจำตัวประชาชน
@@ -583,7 +585,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                           handleChangePartnerData({ e, id: partner.id })
                         }
                         name="idCard"
-                        className="h-8 w-72 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-56 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60 md:pl-4 "
                         placeholder="กรอกหมายเลขบัตรประชาชน"
                         maxLength={13}
                         inputMode="numeric"
@@ -600,28 +602,34 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
               <section className="flex items-start justify-start  gap-3  md:gap-5">
                 <NumberTitle number={3} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:flex-wrap md:gap-5 md:text-base">
-                  <TextField className={"flex  items-center gap-3  "}>
+                  <TextField
+                    className={
+                      "flex flex-col gap-3 md:flex-row md:items-center  "
+                    }
+                  >
                     <p className="font-semibold">ที่อยู่ (ตามบัตรประชาชน)</p>
-                    <Label className=" text-[var(--primary-blue) font-medium ">
-                      บ้านเลขที่
-                    </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
-                        value={
-                          partnerData.find((item) => item.id === partner.id)
-                            ?.houseNumber
-                        }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        name="houseNumber"
-                        type="text"
-                        className="h-8 w-40  max-w-20 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                        placeholder="บ้านเลขที่"
-                      />
-                      <FieldError className="text-xs text-red-700" />
-                    </div>
+                    <section className="flex items-center gap-5">
+                      <Label className=" text-[var(--primary-blue) font-medium ">
+                        บ้านเลขที่
+                      </Label>
+                      <div className="flex flex-col gap-1">
+                        <Input
+                          required
+                          value={
+                            partnerData.find((item) => item.id === partner.id)
+                              ?.houseNumber
+                          }
+                          onChange={(e) =>
+                            handleChangePartnerData({ e, id: partner.id })
+                          }
+                          name="houseNumber"
+                          type="text"
+                          className="h-8 w-40  max-w-20 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                          placeholder="บ้านเลขที่"
+                        />
+                        <FieldError className="text-xs text-red-700" />
+                      </div>
+                    </section>
                   </TextField>
                   <TextField className={"flex  items-center gap-3  "}>
                     <Label className=" text-[var(--primary-blue) font-medium ">
@@ -667,7 +675,9 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                       <FieldError className="text-xs text-red-700" />
                     </div>
                   </TextField>
-                  <TextField className={"flex w-72  items-center gap-3  "}>
+                  <TextField
+                    className={"flex w-56 items-center  gap-3 md:w-72  "}
+                  >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       จังหวัด
                     </Label>
@@ -681,7 +691,9 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                       arrayId={partner.id}
                     />
                   </TextField>
-                  <TextField className={"flex w-72  items-center gap-3  "}>
+                  <TextField
+                    className={"flex w-56 items-center  gap-3 md:w-72  "}
+                  >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       อำเภอ
                     </Label>
@@ -699,7 +711,9 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                       arrayId={partner.id}
                     />
                   </TextField>
-                  <TextField className={"flex w-72  items-center gap-3  "}>
+                  <TextField
+                    className={"flex w-56 items-center  gap-3 md:w-72  "}
+                  >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       ตำบล
                     </Label>
@@ -763,7 +777,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                             handleChangePartnerData({ e, id: partner.id })
                           }
                           name="phone"
-                          className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                          className="h-8 w-32 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-44 md:pl-4 "
                           placeholder="กรอกหมายเลขโทรศัพท์"
                           maxLength={10}
                           inputMode="numeric"
@@ -783,7 +797,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                   <TextField
                     className={"flex w-full items-center gap-3 md:w-[40%] "}
                   >
-                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-20">
+                    <Label className=" text-[var(--primary-blue) min-w-12 font-semibold ">
                       E-mail
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -798,7 +812,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                         }
                         name="email"
                         type="email"
-                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-56 md:pl-4 "
                         placeholder="1360401295700"
                       />
                       <FieldError className="text-xs text-red-700" />

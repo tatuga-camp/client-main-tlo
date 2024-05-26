@@ -254,7 +254,7 @@ function RequestSummary({ user }: { user?: User }) {
             {/* Select */}
             <div className="flex w-full flex-col gap-3 md:flex-row md:gap-10 ">
               <div className="flex w-full items-center  gap-3  md:gap-5 ">
-                <label className="w-20 font-semibold">ประเภท</label>
+                <label className=" w-20 font-semibold">ประเภท</label>
                 <Select
                   defaultValue={menuTypes.find((type) => type.value === "all")}
                   onChange={(e) => {
@@ -264,7 +264,7 @@ function RequestSummary({ user }: { user?: User }) {
                     }
                   }}
                   options={menuTypes}
-                  className="w-full"
+                  className="z-20 w-full"
                   placeholder={<div>เลือกประเภท</div>}
                   styles={{
                     control: (base, state) => ({
@@ -273,6 +273,7 @@ function RequestSummary({ user }: { user?: User }) {
                       padding: "0.25rem 0.3rem",
                       borderRadius: "5px",
                       color: "blue",
+                      zIndex: 10,
                     }),
                     singleValue: (provided: any) => ({
                       ...provided,
@@ -347,14 +348,14 @@ function RequestSummary({ user }: { user?: User }) {
       </Element>
 
       <div className="mt-12 flex w-full flex-col items-center gap-8">
-        <div className="max-h-96 w-10/12 overflow-auto">
-          <table className="w-max min-w-full border-separate border-spacing-1 rounded-md bg-white p-1 text-center text-[0.7rem] md:border-spacing-2 md:p-4 md:text-base">
-            <thead>
-              <tr className="sticky top-2 z-20">
+        <div className="relative max-h-96 w-10/12 overflow-auto">
+          <table className="w-max min-w-full border-separate border-spacing-1 rounded-md bg-white p-1 text-center text-[0.7rem]  md:p-4 md:text-base">
+            <thead className="">
+              <tr className="sticky top-2 z-10 bg-white  p-5 ">
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">
                   รายชื่อผู้ยื่น
                 </th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">วันยื่นคำขอ</th>
+                <th className=" rounded-md bg-[#BED6FF] p-2">วันยื่นคำขอ</th>
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
@@ -420,11 +421,8 @@ function RequestSummary({ user }: { user?: User }) {
                           <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                             {title}
                           </td>
-                          <td>
-                            <LinkNextJS
-                              className="h-10 w-40 rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:bg-main-color hover:text-white"
-                              href={url}
-                            >
+                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:bg-main-color hover:text-white">
+                            <LinkNextJS className="" href={url}>
                               ตรวจสอบ
                             </LinkNextJS>
                           </td>

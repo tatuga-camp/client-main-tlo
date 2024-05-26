@@ -195,7 +195,7 @@ function SearchWorkDesign({ design }: SearchWorkDesignProps) {
   return (
     <Form
       onSubmit={handleCreateSearchWork}
-      className="flex w-full flex-col gap-3 md:pl-10"
+      className=" flex w-full flex-col gap-3 lg:pl-10"
     >
       <Label className="font-semibold md:min-w-52">
         7.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น

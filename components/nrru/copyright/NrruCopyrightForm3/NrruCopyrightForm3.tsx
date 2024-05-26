@@ -157,12 +157,12 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
                   onChange={handleChange}
                   value={supportData?.durationYear}
                   type="number"
-                  className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
+                  className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60  md:pl-4 "
                   placeholder="จำนวนปี"
                 />
                 <FieldError className="text-xs text-red-700" />
               </div>
-              <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-24">
+              <Label className=" text-[var(--primary-blue) min-w-10 font-medium lg:min-w-24">
                 ปี
               </Label>
             </TextField>
@@ -176,7 +176,7 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
                   min={0}
                   onChange={handleChange}
                   value={supportData?.durationMonth}
-                  className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
+                  className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60  md:pl-4 "
                   placeholder="จำนวนเดือน"
                 />
                 <FieldError className="text-xs text-red-700" />
@@ -198,7 +198,7 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
           <div className="flex w-full flex-col gap-3 pl-7 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <TextField
               isRequired
-              className={"flex w-full min-w-60 items-center gap-3 "}
+              className={"min-md:w-60 flex w-44 w-full items-center gap-3 "}
             >
               <div className="fex-col flex gap-1">
                 <InputNumber
@@ -218,7 +218,7 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
                       };
                     });
                   }}
-                  className="h-8 w-60 rounded-md bg-slate-300 p-1 text-[0.8rem]  md:h-10   md:text-base"
+                  className="h-8 w-44 rounded-md bg-slate-300 p-1 text-[0.8rem] md:h-10  md:w-60   md:text-base"
                   minFractionDigits={2}
                   maxFractionDigits={5}
                 />
@@ -252,7 +252,7 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
         >
           <section className="flex items-center gap-3">
             <Number number={3} />
-            <Label className="my-2 w-max text-[0.8rem] font-semibold md:text-base">
+            <Label className="my-2 w-60 text-[0.8rem] font-semibold md:w-full md:text-base">
               ผลงานนี้สามารถนำไปใช้ประโยชน์ในรูปแบบหรือลักษณะใด (ตอบได้มากกว่า 1
               ข้อ)
             </Label>
@@ -339,7 +339,7 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
         >
           <section className="flex items-center gap-3">
             <Number number={5} />
-            <Label className="my-2 w-max text-[0.8rem] font-semibold md:text-base">
+            <Label className="my-2 w-60 text-[0.8rem] font-semibold md:w-full md:text-base">
               การประชาสัมพันธ์ผลงานการประดิษฐ์นี้โดยมหาวิทยาลัย
             </Label>
             <FieldError className="w-max text-xs text-red-700" />
