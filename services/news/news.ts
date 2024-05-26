@@ -1,6 +1,6 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
-import { FileOnNews, News, Pagination } from "../../models";
+import { FileOnNews, News, Pagination, User } from "../../models";
 
 type RequestGetNewsByPageService = {
   page: number;
@@ -8,7 +8,9 @@ type RequestGetNewsByPageService = {
   searchField: string;
 };
 
-type ResponseGetNewsByPageService = Pagination<News & { files: FileOnNews[] }>;
+export type ResponseGetNewsByPageService = Pagination<
+  News & { files: FileOnNews[] }
+>;
 export async function GetNewsByPageService(
   input: RequestGetNewsByPageService,
 ): Promise<ResponseGetNewsByPageService> {
@@ -36,7 +38,10 @@ type RequestGetNewsByIdService = {
   newsId: string;
 };
 
-type ResponseGetNewsByIdService = News & { files: FileOnNews[] };
+export type ResponseGetNewsByIdService = News & {
+  files: FileOnNews[];
+  user: User;
+};
 export async function GetNewsByIdService(
   input: RequestGetNewsByIdService,
 ): Promise<ResponseGetNewsByIdService> {

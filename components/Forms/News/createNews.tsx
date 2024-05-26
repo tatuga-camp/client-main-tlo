@@ -25,9 +25,13 @@ import {
   UploadSignURLService,
 } from "../../../services/google-storage";
 import { CreateFileNewsService } from "../../../services/news/file-news";
-import { CreateNewsService } from "../../../services/news/news";
+import {
+  CreateNewsService,
+  UpdateNewsService,
+} from "../../../services/news/news";
 import { replaceBase64WithNewContentService } from "../../../services/replaceBase64";
 import { useRouter } from "next-nprogress-bar";
+import { Switch } from "@mui/material";
 
 function CreateNews() {
   const router = useRouter();
@@ -112,6 +116,15 @@ function CreateNews() {
         content: newsData?.description,
       });
 
+      await UpdateNewsService({
+        query: {
+          newsId: news.id as string,
+        },
+        body: {
+          content: replace.content,
+        },
+      });
+
       let uploadFiles: { file: File; url: string }[] = [];
       uploadFiles.push(...replace.files);
       for (const file of files) {
@@ -159,8 +172,6 @@ function CreateNews() {
     }
   };
 
-  console.log(newsData);
-
   return (
     <Form
       onSubmit={handleCreateNews}
@@ -188,10 +199,23 @@ function CreateNews() {
           <FieldError className="text-xs text-red-700" />
         </section>
       </TextField>
+
       <section className="flex w-full items-end justify-between">
-        <Label className="text-[0.8rem] font-semibold md:min-w-16 md:text-base">
-          เนื้อหาข่าว
-        </Label>
+        <div className="flex items-center gap-5">
+          {" "}
+          <Switch
+            checked={newsData.isPublic}
+            onChange={(e) =>
+              setNewsData((prev) => {
+                return {
+                  ...prev,
+                  isPublic: e.target.checked,
+                };
+              })
+            }
+          />
+          <label className="font-semibold">เผยแพร่</label>
+        </div>
 
         <section className="flex flex-row gap-3 md:ml-10">
           <p className="my-2 text-[0.8rem] font-semibold md:min-w-16 md:text-base">
@@ -280,10 +304,7 @@ function CreateNews() {
               const reader = new FileReader();
 
               setFiles((prev) => {
-                return [
-                  ...prev,
-                  { file: file, url: url, documentType: "IDCARD" },
-                ];
+                return [...prev, { file: file, url: url }];
               });
 
               reader.readAsDataURL(file);

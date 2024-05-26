@@ -21,6 +21,7 @@ import { IoIosCloseCircle } from "react-icons/io";
 import { MdOutlinePhoto, MdOutlinePhotoSizeSelectActual } from "react-icons/md";
 import fakeImageUpload from "@/data/fakeImageUpload";
 import { Editor } from "@tinymce/tinymce-react";
+import UpdateNews from "../../../components/Forms/News/updateNews";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 function ManageNews() {
@@ -45,97 +46,7 @@ function ManageNews() {
             </div>
           </header>
           <main className="mt-5 flex w-full flex-col items-center ">
-            <Form className="mt-8 flex w-[70%] flex-col  gap-5 ">
-              <TextField type="text" isRequired className="flex flex-col gap-3">
-                <Input
-                  name="text"
-                  type="text"
-                  className="w-full rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-3 pl-4"
-                  placeholder="Title"
-                />
-                <FieldError className="text-xs text-red-600" />
-              </TextField>
-              <section className="flex flex-col justify-between  md:flex-row-reverse md:items-center">
-                <div className="flex items-center gap-3">
-                  <Label className="min-w-32 font-semibold">
-                    กำหนดเวลาโพสต์
-                  </Label>
-                  <div className="w-40 rounded-lg border-[1px] border-solid border-[#BED6FF] bg-slate-300 p-[0.07rem] ">
-                    <Calendar
-                      required
-                      locale="th"
-                      placeholder="mm/dd/yyyy"
-                      yearNavigator={true}
-                      monthNavigator={true}
-                      dateFormat="mm/dd/yy"
-                    />
-                  </div>
-                </div>
-                <h1 className="font-semibold">คำอธิบาย</h1>
-              </section>
-              <div>
-                {/* <Editor
-                  apiKey="your-api-key"
-                  initialValue="<p>This is the initial content of the editor.</p>"
-                  init={{
-                    height: 500,
-                    menubar: false,
-                    plugins: [
-                      "advlist",
-                      "autolink",
-                      "lists",
-                      "link",
-                      "image",
-                      "charmap",
-                      "preview",
-                      "anchor",
-                      "searchreplace",
-                      "visualblocks",
-                      "code",
-                      "fullscreen",
-                      "insertdatetime",
-                      "media",
-                      "table",
-                      "code",
-                      "help",
-                      "wordcount",
-                    ],
-                    toolbar:
-                      "undo redo | blocks | " +
-                      "bold italic forecolor | alignleft aligncenter " +
-                      "alignright alignjustify | bullist numlist outdent indent | " +
-                      "removeformat | help",
-                    content_style:
-                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                  }}
-                /> */}
-              </div>
-
-              <section className="flex w-full flex-col gap-5 md:flex-row">
-                <FileTrigger>
-                  <button className="mb-5 flex h-12 w-36 items-center rounded-md bg-[var(--secondary-yellow)] px-8 py-3 drop-shadow-md">
-                    อัพโหลดไฟล์
-                  </button>
-                </FileTrigger>
-
-                <section className="grid grid-cols-1 gap-2 md:grid-cols-2">
-                  {fakeImageUpload.map((image, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between gap-5 rounded-md border-[1px] border-solid bg-white p-3"
-                    >
-                      <span className="flex items-center gap-3 text-xs text-[#4680e399] md:text-base">
-                        <MdOutlinePhoto />
-                        {image.id}
-                      </span>
-                      <button className="text-2xl text-red-500">
-                        <IoIosCloseCircle />
-                      </button>
-                    </div>
-                  ))}
-                </section>
-              </section>
-            </Form>
+            <UpdateNews />
           </main>
         </div>
       </AdminLayout>
