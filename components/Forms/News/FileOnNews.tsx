@@ -10,7 +10,7 @@ type FileOnNewsProps = {
     type?: string | undefined;
     file?: File | undefined;
   };
-  handleDeleteFile: ({
+  handleDeleteFile?: ({
     url,
     fileOnWorkId,
   }: {
@@ -24,7 +24,7 @@ function FileOnNews({ file, handleDeleteFile }: FileOnNewsProps) {
   return (
     <div
       key={file.url}
-      className="flex items-center justify-between rounded-md border-[1px] border-solid border-[#cbdbf9] bg-white p-2 md:min-w-72 "
+      className="flex w-full items-center justify-between rounded-md border-[1px] border-solid border-[#cbdbf9] bg-white p-2 "
     >
       <div className="flex justify-center gap-1">
         <div className="flex items-center justify-center text-black">
@@ -42,16 +42,18 @@ function FileOnNews({ file, handleDeleteFile }: FileOnNewsProps) {
         >
           <GrFormView />
         </div>
-        <button
-          type="button"
-          onClick={() =>
-            handleDeleteFile({ url: file.url, fileOnWorkId: file.id })
-          }
-          className=" z-10 flex cursor-pointer 
+        {handleDeleteFile && (
+          <button
+            type="button"
+            onClick={() =>
+              handleDeleteFile({ url: file.url, fileOnWorkId: file.id })
+            }
+            className=" z-10 flex cursor-pointer 
    items-center justify-center gap-2 rounded-md bg-red-500 p-1  text-xl text-white"
-        >
-          <MdDelete />
-        </button>
+          >
+            <MdDelete />
+          </button>
+        )}
       </div>
     </div>
   );

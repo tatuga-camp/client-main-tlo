@@ -1,50 +1,47 @@
-import { Editor } from "@tinymce/tinymce-react";
-import React, { FormEvent, useState } from "react";
+import { useRouter } from "next/router";
+import React, { FormEvent, useEffect, useState } from "react";
+import { ErrorMessages } from "../../../models";
+import Swal from "sweetalert2";
+import { filterBase64Image } from "../../../utilities/filterImageBase64";
+import {
+  GetNewsByIdService,
+  UpdateNewsService,
+} from "../../../services/news/news";
+import { replaceBase64WithNewContentService } from "../../../services/replaceBase64";
+import {
+  GetSignURLService,
+  UploadSignURLService,
+} from "../../../services/google-storage";
+import {
+  CreateFileNewsService,
+  DeleteFileNewsService,
+} from "../../../services/news/file-news";
+import { useQuery } from "@tanstack/react-query";
 import {
   Button,
   FieldError,
   FileTrigger,
   Form,
   Input,
-  Label,
+  Link,
   TextField,
 } from "react-aria-components";
 import { MdCancel } from "react-icons/md";
-import { filePickerCallback } from "../../../utilities/filePickerCallback";
-import Loading from "../../Loading/loadingSpinner";
-import LoadingSpinner from "../../Loading/loadingSpinner";
-import Link from "next/link";
-import { FiPlusCircle } from "react-icons/fi";
-import FileOnNews from "./FileOnNews";
-import { ErrorMessages } from "../../../models";
-import Swal from "sweetalert2";
-import { filterBase64Image } from "../../../utilities/filterImageBase64";
-import { Base64ToFile } from "../../../utilities/base64ToFile";
-import {
-  GetSignURLService,
-  UploadSignURLService,
-} from "../../../services/google-storage";
-import { CreateFileNewsService } from "../../../services/news/file-news";
-import {
-  CreateNewsService,
-  UpdateNewsService,
-} from "../../../services/news/news";
-import { replaceBase64WithNewContentService } from "../../../services/replaceBase64";
-import { useRouter } from "next-nprogress-bar";
 import { Switch } from "@mui/material";
+import LoadingSpinner from "../../Loading/loadingSpinner";
+import { Editor } from "@tinymce/tinymce-react";
+import { filePickerCallback } from "../../../utilities/filePickerCallback";
+import FileOnNews from "./FileOnNews";
 
-function CreateNews() {
+function UpdateNews() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [newsData, setNewsData] = useState<{
     title?: string;
     description?: string;
     date?: string;
-    isPublic: boolean;
-  }>({
-    isPublic: true,
-  });
-
+    isPublic?: boolean;
+  }>();
   const [files, setFiles] = useState<
     {
       id?: string;
@@ -53,6 +50,32 @@ function CreateNews() {
       file?: File;
     }[]
   >([]);
+
+  const news = useQuery({
+    queryKey: ["news", { newsId: router.query.newsId as string }],
+    queryFn: () =>
+      GetNewsByIdService({ newsId: router.query.newsId as string }),
+  });
+
+  useEffect(() => {
+    if (news.data) {
+      setNewsData({
+        title: news.data.title,
+        description: news.data.content,
+        date: new Date(news.data.releaseAt).toISOString().slice(0, 16),
+        isPublic: news.data.isPublic,
+      });
+      setFiles(
+        news.data.files.map((file) => {
+          return {
+            id: file.id,
+            url: file.url,
+            type: file.type,
+          };
+        }),
+      );
+    }
+  }, [news.data]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewsData({
@@ -69,8 +92,35 @@ function CreateNews() {
     fileOnNewsId?: string;
   }) => {
     try {
-      setFiles((prev) => {
-        return [...prev?.filter((file) => file.url !== url)];
+      Swal.fire({
+        title: "กำลังลบไฟล์",
+        text: "กรุณารอสักครู่",
+        icon: "info",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      if (fileOnNewsId) {
+        await DeleteFileNewsService({
+          fileId: fileOnNewsId,
+        });
+        setFiles((prev) => {
+          return [...prev?.filter((file) => file.url !== url)];
+        });
+      } else {
+        setFiles((prev) => {
+          return [...prev?.filter((file) => file.url !== url)];
+        });
+      }
+
+      Swal.fire({
+        title: "ลบไฟล์สำเร็จ",
+        text: "ระบบกำลังดำเนินการตรวจสอบข้อมูล",
+        icon: "success",
       });
     } catch (error) {
       let result = error as ErrorMessages;
@@ -85,7 +135,7 @@ function CreateNews() {
     }
   };
 
-  const handleCreateNews = async (e: FormEvent) => {
+  const handleUpdateNews = async (e: FormEvent) => {
     try {
       e.preventDefault();
       if (!newsData?.title || !newsData?.description || !newsData?.date) {
@@ -93,7 +143,7 @@ function CreateNews() {
       }
 
       Swal.fire({
-        title: "กำลังสร้างข่าว",
+        title: "กำลังอัพเดทข่าว",
         text: "กรุณารอสักครู่",
         icon: "info",
         showConfirmButton: false,
@@ -104,11 +154,9 @@ function CreateNews() {
           Swal.showLoading();
         },
       });
-      const news = await CreateNewsService({
-        title: newsData?.title as string,
-        isPublic: newsData?.isPublic,
-        releaseAt: new Date(newsData?.date).toISOString(),
-      });
+
+      const filterFiles = files?.filter((file) => !file.id);
+
       const imageBase64 = filterBase64Image(newsData?.description);
 
       const replace = await replaceBase64WithNewContentService({
@@ -118,16 +166,20 @@ function CreateNews() {
 
       await UpdateNewsService({
         query: {
-          newsId: news.id as string,
+          newsId: router.query.newsId as string,
         },
         body: {
+          title: newsData?.title,
+          releaseAt: new Date(newsData?.date).toISOString(),
+          isPublic: newsData?.isPublic,
           content: replace.content,
         },
       });
 
       let uploadFiles: { file: File; url: string }[] = [];
       uploadFiles.push(...replace.files);
-      for (const file of files) {
+
+      for (const file of filterFiles) {
         const getSignURL = await GetSignURLService({
           fileName: file.file?.name as string,
           fileType: file.file?.type as string,
@@ -146,16 +198,15 @@ function CreateNews() {
       await Promise.allSettled(
         uploadFiles.map((file) =>
           CreateFileNewsService({
-            newsId: news.id as string,
+            newsId: router.query.newsId as string,
             url: file.url,
             type: file.file.type,
             size: file.file.size,
           }),
         ),
       );
-      router.push("/admin/manage-news");
       Swal.fire({
-        title: "สร้างข่าวสำเร็จ",
+        title: "อัพเดทข่าวสำเร็จ",
         text: "ระบบกำลังดำเนินการตรวจสอบข้อมูล",
         icon: "success",
       });
@@ -174,14 +225,14 @@ function CreateNews() {
 
   return (
     <Form
-      onSubmit={handleCreateNews}
+      onSubmit={handleUpdateNews}
       className="relative flex h-max w-9/12 flex-col gap-5 rounded-md bg-background-color p-10 drop-shadow-xl "
     >
       <Link
         href={"/admin/manage-news"}
         className="absolute right-2 top-2 m-auto flex items-center
-         justify-center gap-2 rounded-md bg-red-300 px-3 py-1 text-red-600
-          transition duration-150 hover:bg-red-400 active:scale-105"
+     justify-center gap-2 rounded-md bg-red-300 px-3 py-1 text-red-600
+      transition duration-150 hover:bg-red-400 active:scale-105"
       >
         <MdCancel />
         ยกเลิก
@@ -204,7 +255,7 @@ function CreateNews() {
         <div className="flex items-center gap-5">
           {" "}
           <Switch
-            checked={newsData.isPublic}
+            checked={newsData?.isPublic}
             onChange={(e) =>
               setNewsData((prev) => {
                 return {
@@ -333,12 +384,12 @@ function CreateNews() {
       <Button
         type="submit"
         className="w-40 rounded-md bg-main-color px-3 py-3 font-semibold
-         text-white shadow-md transition duration-100 hover:drop-shadow-lg active:scale-105"
+     text-white shadow-md transition duration-100 hover:drop-shadow-lg active:scale-105"
       >
-        สร้างข่าว
+        อัพเดท
       </Button>
     </Form>
   );
 }
 
-export default CreateNews;
+export default UpdateNews;
