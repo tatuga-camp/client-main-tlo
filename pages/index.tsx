@@ -7,16 +7,10 @@ import { GiBrain } from "react-icons/gi";
 import { FaUserCircle } from "react-icons/fa";
 import { IoBulbOutline } from "react-icons/io5";
 import Image from "next/image";
-import CardInformation from "@/components/CardInformation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
-import { LuSearch } from "react-icons/lu";
-import Select from "react-select";
-import fakeInformations from "@/data/fakeInformation";
-import fakeOptions from "@/data/fakeOptions";
-import fakeSearchResult from "@/data/fakeSearchResult";
+import { Autoplay, Pagination } from "swiper/modules";
 import { PiUserCircleFill } from "react-icons/pi";
 import { GoGoal } from "react-icons/go";
 import { LiaClipboardListSolid } from "react-icons/lia";
@@ -34,8 +28,23 @@ import {
 
 import moment from "moment";
 import RequestSummary from "../components/Tables/requestSummary";
+import { useQuery } from "@tanstack/react-query";
+import { GetNewsByPageService } from "../services/news/news";
+import { useState } from "react";
+import NewsCard from "../components/Forms/News/newsCard";
+import NewsList from "../components/Tables/newsList";
 
 export default function Home() {
+  const [page, setPage] = useState(1);
+  const news = useQuery({
+    queryKey: ["news", { page: page }],
+    queryFn: () =>
+      GetNewsByPageService({
+        limit: 3,
+        page: page,
+        searchField: "",
+      }),
+  });
   return (
     <>
       <Head>
@@ -168,43 +177,27 @@ export default function Home() {
                 ข่าวประชาสัมพันธ์
               </h1>
 
-              {/* Desktop */}
-              <div className="-mt-10 hidden w-full md:flex md:flex-col">
-                {fakeInformations.map((information, index) => (
-                  <CardInformation
-                    key={index}
-                    title={information.title}
-                    date={information.date}
-                    info={information.info}
-                    image={information.image[0]}
-                    index={index}
-                    slugId={information.slugId}
-                  />
-                ))}
-              </div>
               {/* mobile (swiper) */}
-              <div className="w-full bg-[var(--primary-blue)] md:hidden ">
+              <div className="w-full bg-[var(--primary-blue)]  ">
                 <Swiper
+                  autoplay={{
+                    delay: 2500,
+                    disableOnInteraction: false,
+                  }}
                   slidesPerView={1}
                   pagination={true}
-                  modules={[Pagination]}
+                  modules={[Pagination, Autoplay]}
                   spaceBetween={30}
                 >
-                  {fakeInformations.map((information, index) => (
+                  {news.data?.data.map((list, index) => (
                     <SwiperSlide key={index}>
-                      <CardInformation
-                        title={information.title}
-                        date={information.date}
-                        info={information.info}
-                        image={information.image[0]}
-                        index={index}
-                        slugId={information.slugId}
-                      />
+                      <NewsCard news={list} index={index} />
                     </SwiperSlide>
                   ))}
                 </Swiper>
               </div>
             </Element>
+            <NewsList />
           </div>
           {/* ความรู้เกี่ยวกับงานทรัพย์สินทางปัญญา */}
           <div className="flex w-full justify-center gap-4 ">
