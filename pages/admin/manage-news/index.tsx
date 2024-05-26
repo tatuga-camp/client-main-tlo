@@ -1,12 +1,11 @@
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GetUserService } from "../../../services/user";
 import AdminLayout from "../../../layouts/adminLayout";
 import Head from "next/head";
 import { IoIosCloseCircle } from "react-icons/io";
-import { Switch } from "@mui/material";
+import { Pagination, Switch } from "@mui/material";
 import { GoPencil } from "react-icons/go";
-import fakeInformations from "@/data/fakeInformation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import { Navigation } from "swiper/modules";
@@ -17,20 +16,119 @@ import "swiper/css/scrollbar";
 import { IoCreate } from "react-icons/io5";
 import CreateNews from "../../../components/Forms/News/createNews";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { GetNewsByPageService } from "../../../services/news/news";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  DeleteNewsService,
+  GetNewsByPageService,
+  ResponseGetNewsByPageService,
+} from "../../../services/news/news";
+import moment from "moment";
+import parse from "html-react-parser";
+import { LuSearch } from "react-icons/lu";
+import Swal from "sweetalert2";
+import { ErrorMessages } from "../../../models";
+import FileOnNews from "../../../components/Forms/News/FileOnNews";
 
-const label = { inputProps: { "aria-label": "Switch demo" } };
 function ManageNews() {
+  const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
+  const [searchField, setSearchField] = useState({
+    delay: "",
+    actual: "",
+  });
   const news = useQuery({
-    queryKey: ["news"],
+    queryKey: ["news", { page: page, searchField: searchField.actual }],
     queryFn: () =>
       GetNewsByPageService({
-        page: 1,
-        limit: 10,
-        searchField: "",
+        page: page,
+        limit: 5,
+        searchField: searchField.actual,
       }),
   });
+
+  useEffect(() => {
+    news.refetch();
+  }, []);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      setSearchField((prev) => {
+        return {
+          ...prev,
+          actual: prev.delay,
+        };
+      });
+    }, 1500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchField]);
+
+  const handleDeleteNews = async ({ newsId }: { newsId: string }) => {
+    if (!news.data) {
+      throw new Error("โปรดรอสักครู่ และลองใหม่อีกครั้ง");
+    }
+    const replacedText = "ยืนยันการลบข้อมูล";
+    let content = document.createElement("div");
+    content.innerHTML =
+      "<div>กรุณาพิมพ์คำด้านล่าง </div> <strong>" +
+      replacedText +
+      "</strong> <div>เพื่อเป็นการยืนยันในการลบข้อมูล</div>";
+    const { value } = await Swal.fire({
+      title: "ยืนยันการลบข้อมูล",
+      input: "text",
+      footer:
+        "ข้อมูลทั้งหมดที่เกี่ยวข้องกับข้อมูลนี้จะถูกลบออกทั้งหมด และไม่สามารถกู้คืนได้อีก",
+      html: content,
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (value !== replacedText) {
+          return "คำที่พิมพ์ไม่ตรงกับคำที่ต้องการลบ กรุณาลองใหม่อีกครั้ง";
+        }
+      },
+    });
+    if (value) {
+      try {
+        Swal.fire({
+          title: "กำลังดำเนินการลบข้อมูล",
+          html: "กรุณารอสักครู่",
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        await DeleteNewsService({
+          newsId: newsId,
+        });
+
+        const updateNews: ResponseGetNewsByPageService = {
+          data: news.data?.data.filter((news) => news.id !== newsId),
+          meta: news.data?.meta,
+        };
+
+        await queryClient.setQueryData(
+          ["news", { page: page, searchField: searchField.actual }],
+          updateNews,
+        );
+
+        Swal.fire({
+          title: "ลบข้อมูลสำเร็จ",
+          icon: "success",
+        });
+      } catch (error) {
+        let result = error as ErrorMessages;
+        Swal.fire({
+          title: result.error ? result.error : "เกิดข้อผิดพลาด",
+          text: result.message.toString(),
+          footer: result.statusCode
+            ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+            : "",
+          icon: "error",
+        });
+      }
+    }
+  };
   return (
     <>
       <Head>
@@ -60,92 +158,120 @@ function ManageNews() {
               สร้างโพสต์ใหม่ <IoCreate />
             </Link>
           </header>
-          <main className="mt-5 flex w-full flex-col items-center">
-            <section className="mt-10 flex w-[70%] flex-col gap-2 ">
-              <h1 className="mb-5 font-semibold">ฉบับร่าง</h1>
-              <div className="flex items-center justify-between rounded-md border-[1px] border-solid bg-white p-6">
-                <span className="text-xs font-semibold text-[#4680e399] underline md:text-base ">
-                  โครงการอบรมเรื่องสิทธิ์ของผู้สร้างสรรค์ในงานอันมีลิขสิทธิ์...
-                </span>
-                <button className="text-2xl text-red-500">
-                  <IoIosCloseCircle />
-                </button>
-              </div>
-              <div className="flex items-center justify-between rounded-md border-[1px] border-solid bg-white p-6">
-                <span className="text-xs font-semibold text-[#4680e399] underline md:text-base ">
-                  การจัดทำคำขอสิ่งบ่งชี้ทางภูมิศาสตร์ สินค้าผ้าไหมปักธงชัย
-                </span>
-                <button className="text-2xl text-red-500">
-                  <IoIosCloseCircle />
-                </button>
-              </div>
-            </section>
 
-            <section className="mt-10 flex w-[70%] flex-col gap-2  ">
-              <h1 className="mb-5 font-semibold">ที่เผยแพร่แล้ว</h1>
-              <div className="flex flex-col items-center justify-between rounded-md border-[1px] border-solid bg-white p-6 py-8">
-                <section className="flex  w-[95%] flex-col justify-between md:flex-row md:items-center">
-                  <div className="flex items-center gap-5">
-                    {" "}
-                    <Switch {...label} defaultChecked />
-                    <label className="font-semibold">เผยแพร่</label>
-                  </div>
-                  <div className=" ml-2 mt-5 flex flex-col gap-2 font-semibold text-[#6e98e199] md:ml-0 md:mt-0 md:flex-row md:items-center md:gap-5">
-                    <button className="flex items-center gap-2 duration-200 hover:text-[#5372a7]">
-                      <div className="text-xl">
-                        <GoPencil />
-                      </div>
-                      <p>แก้ไขโพสต์</p>
-                    </button>
-                    <button className="flex items-center gap-2 duration-200 hover:text-[#5372a7]">
-                      <div className="text-xl">
-                        <IoIosCloseCircle />
-                      </div>
+          <main className="mt-5 flex w-full flex-col items-center gap-5">
+            <div className="flex w-6/12 items-center justify-center gap-2 md:gap-5">
+              <div className="text-base md:text-xl">
+                <LuSearch />
+              </div>
 
-                      <p>ลบโพสต์</p>
-                    </button>
-                  </div>
-                </section>
-                <div className="flex w-[90%] flex-col gap-3 ">
-                  <h1 className="mt-10 text-start font-bold md:text-xl ">
-                    {fakeInformations[1].title}
-                  </h1>
-                  <p className="text-xs md:text-base">
-                    {fakeInformations[1].date}
-                  </p>
-                  <p className="text-xs font-medium md:text-base">
-                    By Thitiworada Hanthae{" "}
-                  </p>
-                </div>
-                <div className="my-5 flex w-full justify-center md:my-10 ">
-                  <Swiper
-                    slidesPerView={1}
-                    spaceBetween={30}
-                    modules={[Navigation]}
-                    navigation={true}
-                    className=" w-[90%]  md:w-[80%]"
-                  >
-                    {fakeInformations[1].image.map((image, index) => (
-                      <SwiperSlide key={index}>
-                        <div className=" flex h-[10rem] justify-center   md:h-[23rem] md:w-full">
-                          <div className="relative h-full w-[35rem] ">
-                            <Image
-                              src={image}
-                              fill
-                              className="overflow-hidden object-cover"
-                              alt={`Image ${index + 1}`}
-                            />
+              <input
+                type="text"
+                onChange={(e) => {
+                  setSearchField((prev) => {
+                    return {
+                      ...prev,
+                      delay: e.target.value,
+                    };
+                  });
+                  setPage(() => 1);
+                }}
+                value={searchField.delay}
+                placeholder="ค้นหาด้วยชื่อหรือเนื้อหาข่าว"
+                className="w-full rounded-md border-[1.5px] border-solid border-[#BED6FF] p-3 pl-2 placeholder:font-medium placeholder:text-[#2166DD] 
+                  md:p-2 md:pl-10"
+              />
+            </div>
+            <Pagination
+              page={page}
+              onChange={(e, page) => setPage(page)}
+              count={news.data?.meta.total || 1}
+              color="primary"
+            />
+            {news.isLoading ? (
+              <div>Loading...</div>
+            ) : (
+              news.data?.data.map((list) => {
+                return (
+                  <section className="flex w-9/12 flex-col items-center justify-between rounded-md border-[1px] border-solid bg-white p-6 py-8">
+                    <section className="flex  w-[95%] flex-col justify-between md:flex-row md:items-center">
+                      <div className="flex items-center gap-5">
+                        {" "}
+                        <Switch checked={list.isPublic} disabled />
+                        <label className="font-semibold">เผยแพร่</label>
+                      </div>
+                      <div className=" ml-2 mt-5 flex flex-col gap-2 font-semibold text-[#6e98e199] md:ml-0 md:mt-0 md:flex-row md:items-center md:gap-5">
+                        <Link
+                          href={`/admin/manage-news/${list.id}`}
+                          className="flex items-center gap-2 duration-200 hover:text-[#5372a7]"
+                        >
+                          <div className="text-xl">
+                            <GoPencil />
                           </div>
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </div>
-                <p className="mb-10 w-[90%] text-xs md:text-base">
-                  {fakeInformations[1].discription}
-                </p>
-              </div>
-            </section>
+                          <p>แก้ไขโพสต์</p>
+                        </Link>
+                        <button
+                          onClick={() => handleDeleteNews({ newsId: list.id })}
+                          className="flex items-center gap-2 duration-200 hover:text-[#5372a7]"
+                        >
+                          <div className="text-xl">
+                            <IoIosCloseCircle />
+                          </div>
+
+                          <p>ลบโพสต์</p>
+                        </button>
+                      </div>
+                    </section>
+                    <div className="flex w-[90%] flex-col gap-3 ">
+                      <h1 className="mt-10 text-start font-bold md:text-xl ">
+                        {list.title}
+                      </h1>
+                      <p className="text-xs md:text-base">
+                        {moment(list.releaseAt).format("DD/MM/YYYY HH:mm")}
+                      </p>
+                    </div>
+                    {list.files.filter((file) => file.type === "image/jpeg")
+                      .length > 0 && (
+                      <div className="my-5 flex w-full justify-center md:my-10 ">
+                        <Swiper
+                          slidesPerView={1}
+                          spaceBetween={30}
+                          modules={[Navigation]}
+                          navigation={true}
+                          className=" w-[90%]  md:w-[80%]"
+                        >
+                          {list.files
+                            .filter((file) => file.type === "image/jpeg")
+                            .map((image, index) => (
+                              <SwiperSlide key={index}>
+                                <div className=" flex h-[10rem] justify-center   md:h-[23rem] md:w-full">
+                                  <div className="relative h-full w-[35rem] ">
+                                    <Image
+                                      src={image.url}
+                                      fill
+                                      sizes="(max-width: 768px) 100vw, 33vw"
+                                      className="overflow-hidden object-cover"
+                                      alt={`Image ${index + 1}`}
+                                    />
+                                  </div>
+                                </div>
+                              </SwiperSlide>
+                            ))}
+                        </Swiper>
+                      </div>
+                    )}
+                    {list.content && (
+                      <p className="mb-10 w-[90%] ">{parse(list.content)}</p>
+                    )}
+                    <section className="grid w-full grid-cols-4 gap-5">
+                      {list.files.map((file) => {
+                        return <FileOnNews file={file} key={file.id} />;
+                      })}
+                    </section>
+                  </section>
+                );
+              })
+            )}
           </main>
         </div>
       </AdminLayout>

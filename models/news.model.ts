@@ -4,6 +4,7 @@ export type News = {
   updateAt: string;
   title: string;
   content: string;
+  releaseAt: string;
   isPublic: boolean;
 };
 
