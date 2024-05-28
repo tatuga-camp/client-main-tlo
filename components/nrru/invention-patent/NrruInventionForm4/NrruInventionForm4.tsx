@@ -232,7 +232,7 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
               </FileTrigger>
             </section>
           </div>
-          <section className="grid grid-cols-3 gap-2 2xl:grid-cols-4">
+          <section className="grid grid-cols-1 gap-2 lg:grid-cols-3 2xl:grid-cols-4">
             {...files
               ?.filter((file) => file.documentType === "IDCARD")
               .map((file) => {

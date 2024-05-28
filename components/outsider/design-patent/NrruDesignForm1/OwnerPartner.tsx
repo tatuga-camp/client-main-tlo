@@ -83,7 +83,7 @@ function OwnerPartner({
         ผู้ขอรับสิทธิบัตร/อนุสิทธิบัตร
       </h1>
       <div className="flex flex-col gap-1">
-        <div className="w-80 rounded-lg bg-slate-300 p-1">
+        <div className="w-56 rounded-lg bg-slate-300 p-1">
           <Dropdown
             required
             value={ownerData?.status}
@@ -92,7 +92,7 @@ function OwnerPartner({
             }
             options={partnerStatus}
             placeholder="เลือกสถานะ"
-            className="md:w-14rem w-full"
+            className="lg:w-14rem w-full"
           />
         </div>
 
@@ -102,13 +102,13 @@ function OwnerPartner({
           </span>
         )}
       </div>
-      <section className="flex items-start justify-start gap-3 md:items-center md:gap-5">
+      <section className="flex items-start justify-start gap-3 lg:items-center lg:gap-5">
         <NumberTitle number={1} />
         {(ownerData?.status === "นิติบุคคล" ||
           ownerData?.status === "มูลนิธิ" ||
           ownerData?.status === "หน่วยงานรัฐ") && (
           <TextField className={"flex w-full items-center gap-3 "}>
-            <Label className=" text-[var(--primary-blue) min-w-20 font-semibold md:min-w-24">
+            <Label className=" text-[var(--primary-blue) min-w-20 font-semibold lg:min-w-24">
               ชื่อของนิติบุคคลหรือหน่วยงานรัฐหรือมูลนิธ
             </Label>
             <div className="flex w-96 flex-col gap-1">
@@ -118,7 +118,7 @@ function OwnerPartner({
                 onChange={handleChangePartnerData}
                 value={ownerData?.fullName}
                 type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                 placeholder="ระบุชื่อ"
               />
               <FieldError className="text-xs text-red-700" />
@@ -128,9 +128,9 @@ function OwnerPartner({
         {(ownerData?.status === "บุคคลธรรมดา" ||
           ownerData?.status === "อื่น ๆ" ||
           !ownerData?.status) && (
-          <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
-            <TextField className={"flex w-full items-center gap-3 md:w-[50%]"}>
-              <Label className=" text-[var(--primary-blue) min-w-20 font-semibold md:min-w-24">
+          <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
+            <TextField className={"flex w-full items-center gap-3 lg:w-[50%]"}>
+              <Label className=" text-[var(--primary-blue) min-w-20 font-semibold lg:min-w-24">
                 คำนำหน้าชื่อ
               </Label>
               <div className="flex flex-col gap-1">
@@ -140,14 +140,14 @@ function OwnerPartner({
                   onChange={handleChangePartnerData}
                   value={ownerData?.title}
                   type="text"
-                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                   placeholder="คำนำหน้า"
                 />
                 <FieldError className="text-xs text-red-700" />
               </div>
             </TextField>
-            <TextField className={"flex w-full items-center gap-3 md:w-[50%]"}>
-              <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
+            <TextField className={"flex w-full items-center gap-3 lg:w-[50%]"}>
+              <Label className="min-w-8 font-semibold text-[var(--primary-blue)] ">
                 ชื่อ
               </Label>
               <div className="flex flex-col gap-1">
@@ -157,15 +157,15 @@ function OwnerPartner({
                   onChange={handleChangePartnerData}
                   name="firstName"
                   type="text"
-                  className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                  className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:w-44  lg:p-2 lg:pl-4"
                   placeholder="ชื่อจริง"
                 />
 
                 <FieldError className="text-xs text-red-700" />
               </div>
             </TextField>
-            <TextField className={"flex w-full items-center gap-3 md:w-[50%]"}>
-              <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
+            <TextField className={"flex w-full items-center gap-3 lg:w-[50%]"}>
+              <Label className="min-w-14 font-semibold text-[var(--primary-blue)] lg:min-w-16">
                 นามสกุล
               </Label>
               <div className="flex flex-col gap-1">
@@ -175,7 +175,7 @@ function OwnerPartner({
                   onChange={handleChangePartnerData}
                   name="lastName"
                   type="text"
-                  className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                  className="h-8 w-36 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:w-44  lg:p-2 lg:pl-4"
                   placeholder="นามสกุล"
                 />
                 <FieldError className="text-xs text-red-700" />
@@ -186,11 +186,15 @@ function OwnerPartner({
       </section>
 
       {/* ข้อ 2*/}
-      <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+      <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
         <NumberTitle number={2} />
-        <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
-          <TextField className={"flex w-full items-center gap-3 md:w-[60%] "}>
-            <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-max">
+        <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
+          <TextField
+            className={
+              "flex w-full flex-col gap-3 lg:w-[60%] lg:flex-row lg:items-center "
+            }
+          >
+            <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-max">
               เลขประจำตัวประชาชน/เลขทะเบียนนิติบุคคล/เลขประจำตัวผู้เสียภาษีอาการ
             </Label>
             <div className="flex flex-col gap-1">
@@ -199,7 +203,7 @@ function OwnerPartner({
                 value={ownerData?.idCard}
                 onChange={handleChangePartnerData}
                 name="idCard"
-                className="h-8 w-72 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                className="h-8 w-56 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:w-72 lg:pl-4 "
                 placeholder="กรอกหมายเลขบัตรประชาชน"
                 inputMode="numeric"
                 type="text"
@@ -212,28 +216,32 @@ function OwnerPartner({
       </section>
 
       {/* ข้อ 3*/}
-      <section className="flex items-start justify-start  gap-3  md:gap-5">
+      <section className="flex items-start justify-start  gap-3  lg:gap-5">
         <NumberTitle number={3} />
         <div className="flex w-full flex-wrap gap-5">
-          <TextField className={"flex  items-center gap-3  "}>
+          <TextField
+            className={"flex  flex-col gap-3 lg:flex-row lg:items-center  "}
+          >
             <p className="font-semibold">ที่อยู่ (ตามบัตรประชาชน)</p>
-            <Label className=" text-[var(--primary-blue) font-medium ">
-              บ้านเลขที่
-            </Label>
-            <div className="flex flex-col gap-1">
-              <Input
-                required
-                value={ownerData?.houseNumber}
-                onChange={handleChangePartnerData}
-                name="houseNumber"
-                type="text"
-                className="ounded-md h-8  w-40 bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                placeholder="บ้านเลขที่"
-              />
-              <FieldError className="text-xs text-red-700" />
-            </div>
+            <section className="flex items-center gap-5">
+              <Label className=" text-[var(--primary-blue) font-medium ">
+                บ้านเลขที่
+              </Label>
+              <div className="flex flex-col gap-1">
+                <Input
+                  required
+                  value={ownerData?.houseNumber}
+                  onChange={handleChangePartnerData}
+                  name="houseNumber"
+                  type="text"
+                  className="h-8 w-24  rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:w-40 lg:pl-4 "
+                  placeholder="บ้านเลขที่"
+                />
+                <FieldError className="text-xs text-red-700" />
+              </div>
+            </section>
           </TextField>
-          <TextField className={"flex  items-center gap-3  "}>
+          <TextField className={"flex items-end gap-3 lg:items-center  "}>
             <Label className=" text-[var(--primary-blue) font-medium ">
               หมู่ที่
             </Label>
@@ -244,7 +252,7 @@ function OwnerPartner({
                 onChange={handleChangePartnerData}
                 name="villageNumber"
                 type="text"
-                className="h-8 w-40   rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                className="h-8 w-40   rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                 placeholder="หมู่"
               />
               <FieldError className="text-xs text-red-700" />
@@ -261,13 +269,13 @@ function OwnerPartner({
                 onChange={handleChangePartnerData}
                 name="road"
                 type="text"
-                className="h-8 w-40  rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                className="h-8 w-40  rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                 placeholder="ถนน"
               />
               <FieldError className="text-xs text-red-700" />
             </div>
           </TextField>
-          <TextField className={"flex w-72  items-center gap-3  "}>
+          <TextField className={"flex w-56 items-center  gap-3 lg:w-72  "}>
             <Label className=" text-[var(--primary-blue) font-medium ">
               จังหวัด
             </Label>
@@ -277,7 +285,7 @@ function OwnerPartner({
               handleDataFromCombobox={handleDataFromCombobox}
             />
           </TextField>
-          <TextField className={"flex w-72  items-center gap-3  "}>
+          <TextField className={"flex w-56 items-center  gap-3 lg:w-72  "}>
             <Label className=" text-[var(--primary-blue) font-medium ">
               อำเภอ
             </Label>
@@ -288,7 +296,7 @@ function OwnerPartner({
               handleDataFromCombobox={handleDataFromCombobox}
             />
           </TextField>
-          <TextField className={"flex w-72  items-center gap-3  "}>
+          <TextField className={"flex w-56 items-center  gap-3 lg:w-72  "}>
             <Label className=" text-[var(--primary-blue) font-medium ">
               ตำบล
             </Label>
@@ -309,7 +317,7 @@ function OwnerPartner({
                 onChange={handleChangePartnerData}
                 name="zipCode"
                 type="text"
-                className="h-8 w-40 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                className="h-8 w-28 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:w-40 lg:pl-4 "
                 placeholder="36120"
               />
               <FieldError className="text-xs text-red-700" />
@@ -319,11 +327,11 @@ function OwnerPartner({
       </section>
 
       {/* ข้อ 6*/}
-      <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+      <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
         <NumberTitle number={4} />
-        <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
-          <TextField className={"flex w-full items-center gap-3 md:w-[40%] "}>
-            <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-36">
+        <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
+          <TextField className={"flex w-full items-center gap-3 lg:w-[40%] "}>
+            <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-36">
               หมายเลขโทรศัพท์
             </Label>
             <div className="flex flex-col gap-1">
@@ -333,7 +341,7 @@ function OwnerPartner({
                   value={ownerData?.phone}
                   onChange={handleChangePartnerData}
                   name="phone"
-                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                   placeholder="กรอกหมายเลขโทรศัพท์"
                   maxLength={10}
                   inputMode="numeric"
@@ -347,11 +355,11 @@ function OwnerPartner({
         </div>
       </section>
       {/* ข้อ 7*/}
-      <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+      <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
         <NumberTitle number={5} />
-        <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
-          <TextField className={"flex w-full items-center gap-3 md:w-[40%] "}>
-            <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-20">
+        <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
+          <TextField className={"flex w-full items-center gap-3 lg:w-[40%] "}>
+            <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-20">
               E-mail
             </Label>
             <div className="flex w-full flex-col gap-1">
@@ -361,7 +369,7 @@ function OwnerPartner({
                 required
                 name="email"
                 type="email"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                className="h-8 w-24 rounded-md bg-slate-300 p-1 pl-3 md:w-40 lg:h-10 lg:pl-4 "
                 placeholder="กรอก E-mail ของคุณ"
               />
               <FieldError className="text-xs text-red-700" />
@@ -370,11 +378,11 @@ function OwnerPartner({
         </div>
       </section>
       {/* ข้อ 8*/}
-      <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+      <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
         <NumberTitle number={6} />
-        <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
-          <TextField className={"flex w-full items-center gap-3 md:w-[30%] "}>
-            <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-20">
+        <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
+          <TextField className={"flex w-full items-center gap-3 lg:w-[30%] "}>
+            <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-20">
               สัญชาติ
             </Label>
             <div className="flex flex-col gap-1">
@@ -384,7 +392,7 @@ function OwnerPartner({
                 onChange={handleChangePartnerData}
                 name="nationality"
                 type="text"
-                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                 placeholder="ใส่สัญชาติ"
               />
               <FieldError className="text-xs text-red-700" />

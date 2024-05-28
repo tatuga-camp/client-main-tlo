@@ -54,12 +54,12 @@ const Navbar = () => {
         {user.data && user.data.role === "ADMIN" && (
           <Link
             href={"/admin"}
-            className="flex items-center justify-center gap-2 rounded-md p-2 text-lg
-         text-main-color ring-1 ring-main-color transition duration-150
-          hover:bg-main-color hover:text-white"
+            className="flex w-20 items-center justify-center gap-2 rounded-md p-2 text-lg text-main-color
+         ring-1 ring-main-color transition duration-150 hover:bg-main-color
+          hover:text-white md:w-40"
           >
             <MdAdminPanelSettings />
-            ผู้ดูแลระบบ
+            <span className="hidden md:block">ผู้ดูแลระบบ</span>
           </Link>
         )}
         {/* Links */}
@@ -72,7 +72,7 @@ const Navbar = () => {
                gap-1 rounded-lg  p-2 font-Anuphan  text-base font-semibold text-[var(--primary-blue)] text-main-color
                 ring-main-color hover:ring-1 md:mr-10 md:gap-3 md:text-xl"
                 >
-                  <div className="relative h-10 w-10 overflow-hidden rounded-full">
+                  <div className="relative h-6 w-6 overflow-hidden rounded-full md:h-10 md:w-10">
                     <Image
                       src={user.data.picture}
                       alt="profile picture"
@@ -80,8 +80,8 @@ const Navbar = () => {
                       className=" object-cover"
                     />
                   </div>
-                  <div className="flex max-w-40 items-center  gap-2 truncate  text-base md:max-w-96">
-                    <span>{user.data.title}</span>
+                  <div className="flex max-w-20 items-center  gap-2 truncate  text-base md:max-w-96">
+                    <span className="hidden md:block">{user.data.title}</span>
                     <span>{user.data.firstName}</span>
                     <span className="truncate">{user.data.lastName}</span>
                   </div>

@@ -42,11 +42,11 @@ function Setting({ userServer }: { userServer: User }) {
       <div className=" flex min-h-screen flex-col items-center gap-5 bg-background-color pb-5 pt-10  font-Anuphan">
         <header className="flex w-full flex-col items-center">
           <section
-            className="flex w-10/12 justify-between bg-second-color px-2 py-1 font-semibold text-main-color
-           drop-shadow-md"
+            className="flex w-10/12 flex-col items-center justify-center bg-second-color px-2 py-3  font-semibold text-main-color drop-shadow-md
+           md:flex-row md:items-start md:justify-start"
           >
-            <h2 className="text-base md:text-xl">ตั้งค่าโปรไฟล์</h2>
-            <h2 className="text-sm md:text-lg">
+            <h2 className="text-base md:ml-40 md:text-xl">ตั้งค่าโปรไฟล์</h2>
+            <h2 className="text-sm  md:ml-56 md:text-lg">
               {user.data.type === "INTERNAL"
                 ? "บุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา"
                 : "บุคคลทั่วไป"}

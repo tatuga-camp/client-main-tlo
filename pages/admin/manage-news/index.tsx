@@ -193,7 +193,10 @@ function ManageNews() {
             ) : (
               news.data?.data.map((list) => {
                 return (
-                  <section className="flex w-9/12 flex-col items-center justify-between rounded-md border-[1px] border-solid bg-white p-6 py-8">
+                  <section
+                    key={list.id}
+                    className="flex w-9/12 flex-col items-center justify-between rounded-md border-[1px] border-solid bg-white p-6 py-8"
+                  >
                     <section className="flex  w-[95%] flex-col justify-between md:flex-row md:items-center">
                       <div className="flex items-center gap-5">
                         {" "}

@@ -9,7 +9,7 @@ function SnackbarLoading() {
        drop-shadow-md"
     >
       <div className="flex items-center justify-center gap-2 text-base">
-        กำบันทึกข้อมูล..
+        กำลังบันทึกข้อมูล..
       </div>
     </div>
   );

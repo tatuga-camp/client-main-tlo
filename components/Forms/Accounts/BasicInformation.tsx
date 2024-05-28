@@ -339,7 +339,7 @@ function BasicInformation({ user }: BasicInformationProps) {
       <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
         <TextField type="text" isRequired className=" flex flex-col  gap-1">
           <div className="flex items-center gap-1">
-            <Label className="w-20 font-semibold text-[var(--primary-blue)]">
+            <Label className="w-24 font-semibold text-[var(--primary-blue)]">
               บ้านเลขที่
             </Label>
             <Input
