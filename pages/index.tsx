@@ -25,7 +25,6 @@ import {
   animateScroll as scroll,
   scrollSpy,
 } from "react-scroll";
-
 import moment from "moment";
 import RequestSummary from "../components/Tables/requestSummary";
 import { useQuery } from "@tanstack/react-query";

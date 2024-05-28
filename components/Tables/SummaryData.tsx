@@ -85,7 +85,7 @@ const sumData = (data: Data) => {
 const SummaryData = () => {
   const total = sumData(fakeBarChart.datasets[0].data);
   return (
-    <div className="flex w-10/12 flex-col items-center gap-5">
+    <div className="flex w-[80%] flex-col items-center gap-5">
       <div className="mt-16 w-full bg-[var(--secondary-yellow)] p-2 text-center text-xl font-semibold text-[var(--primary-blue)] ">
         ทรัพย์สินทางปัญญาที่ยื่นจด
       </div>

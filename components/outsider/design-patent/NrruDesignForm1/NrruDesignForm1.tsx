@@ -438,10 +438,10 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
   };
 
   return (
-    <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
+    <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       <Form
         onSubmit={handleUpdatePartners}
-        className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
+        className="mx-0 my-5 flex flex-col gap-5 lg:mx-5 lg:my-10 "
       >
         <OwnerPartner
           ownerData={ownerData}
@@ -458,13 +458,13 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               <h1 className="text-lg font-semibold underline underline-offset-2">
                 ผู้ประดิษฐ์
               </h1>
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
                 <NumberTitle number={1} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
+                <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
+                    className={"flex w-full items-center gap-3 lg:w-[50%]"}
                   >
-                    <Label className=" text-[var(--primary-blue) min-w-20 font-semibold md:min-w-24">
+                    <Label className=" text-[var(--primary-blue) min-w-20 font-semibold lg:min-w-24">
                       คำนำหน้าชื่อ
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -479,16 +479,16 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                           handleChangePartnerData({ e, id: partner.id })
                         }
                         type="text"
-                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-24 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:w-full lg:pl-4 "
                         placeholder="คำนำหน้า"
                       />
                       <FieldError className="text-xs text-red-700" />
                     </div>
                   </TextField>
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
+                    className={"flex w-full items-center gap-3 lg:w-[50%]"}
                   >
-                    <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
+                    <Label className="min-w-8 font-semibold text-[var(--primary-blue)] ">
                       ชื่อ
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -503,7 +503,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                         }
                         name="firstName"
                         type="text"
-                        className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                        className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:w-44  lg:p-2 lg:pl-4"
                         placeholder="ชื่อจริง"
                       />
 
@@ -511,9 +511,9 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                     </div>
                   </TextField>
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
+                    className={"flex w-full items-center gap-3 lg:w-[50%]"}
                   >
-                    <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
+                    <Label className="min-w-14 font-semibold text-[var(--primary-blue)] lg:min-w-16">
                       นามสกุล
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -528,7 +528,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                         }
                         name="lastName"
                         type="text"
-                        className="h-8 w-60 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                        className="h-8 w-40 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:w-44  lg:p-2 lg:pl-4"
                         placeholder="นามสกุล"
                       />
                       <FieldError className="text-xs text-red-700" />
@@ -538,13 +538,15 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               </section>
 
               {/* ข้อ 2*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
                 <NumberTitle number={2} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
+                <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[60%] "}
+                    className={
+                      "flex w-full flex-col gap-3 md:flex-row md:items-center lg:w-[60%] "
+                    }
                   >
-                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-44">
+                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-44">
                       เลขบัตรประจำตัวประชาชน
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -558,7 +560,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                           handleChangePartnerData({ e, id: partner.id })
                         }
                         name="idCard"
-                        className="h-8 w-72 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-56 rounded-md bg-slate-300 p-1 pl-3 md:w-72 lg:h-10 lg:pl-4 "
                         placeholder="กรอกหมายเลขบัตรประชาชน"
                         maxLength={13}
                         inputMode="numeric"
@@ -572,31 +574,37 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               </section>
 
               {/* ข้อ 3*/}
-              <section className="flex items-start justify-start  gap-3  md:gap-5">
+              <section className="flex items-start justify-start  gap-3  lg:gap-5">
                 <NumberTitle number={3} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:flex-wrap md:gap-5 md:text-base">
-                  <TextField className={"flex  items-center gap-3  "}>
+                <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:flex-wrap lg:gap-5 lg:text-base">
+                  <TextField
+                    className={
+                      "flex  flex-col gap-3 md:flex-row md:items-center  "
+                    }
+                  >
                     <p className="font-semibold">ที่อยู่ (ตามบัตรประชาชน)</p>
-                    <Label className=" text-[var(--primary-blue) font-medium ">
-                      บ้านเลขที่
-                    </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
-                        value={
-                          partnerData.find((item) => item.id === partner.id)
-                            ?.houseNumber
-                        }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        name="houseNumber"
-                        type="text"
-                        className="h-8 w-40  max-w-20 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                        placeholder="บ้านเลขที่"
-                      />
-                      <FieldError className="text-xs text-red-700" />
-                    </div>
+                    <section className="flex items-center gap-5">
+                      <Label className=" text-[var(--primary-blue) font-medium ">
+                        บ้านเลขที่
+                      </Label>
+                      <div className="flex flex-col gap-1">
+                        <Input
+                          required
+                          value={
+                            partnerData.find((item) => item.id === partner.id)
+                              ?.houseNumber
+                          }
+                          onChange={(e) =>
+                            handleChangePartnerData({ e, id: partner.id })
+                          }
+                          name="houseNumber"
+                          type="text"
+                          className="h-8 w-40  max-w-20 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
+                          placeholder="บ้านเลขที่"
+                        />
+                        <FieldError className="text-xs text-red-700" />
+                      </div>
+                    </section>
                   </TextField>
                   <TextField className={"flex  items-center gap-3  "}>
                     <Label className=" text-[var(--primary-blue) font-medium ">
@@ -614,7 +622,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                         }
                         name="villageNumber"
                         type="text"
-                        className="h-8 w-40  max-w-14 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-40  max-w-14 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                         placeholder="หมู่"
                       />
                       <FieldError className="text-xs text-red-700" />
@@ -636,13 +644,15 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                         }
                         name="road"
                         type="text"
-                        className="h-8 w-40   rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-40   rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                         placeholder="ถนน"
                       />
                       <FieldError className="text-xs text-red-700" />
                     </div>
                   </TextField>
-                  <TextField className={"flex w-72  items-center gap-3  "}>
+                  <TextField
+                    className={"flex w-44 items-center  gap-3 md:w-72  "}
+                  >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       จังหวัด
                     </Label>
@@ -656,7 +666,9 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                       arrayId={partner.id}
                     />
                   </TextField>
-                  <TextField className={"flex w-72  items-center gap-3  "}>
+                  <TextField
+                    className={"flex w-44 items-center  gap-3 md:w-72  "}
+                  >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       อำเภอ
                     </Label>
@@ -674,7 +686,9 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                       arrayId={partner.id}
                     />
                   </TextField>
-                  <TextField className={"flex w-72  items-center gap-3  "}>
+                  <TextField
+                    className={"flex w-44 items-center  gap-3 md:w-72  "}
+                  >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       ตำบล
                     </Label>
@@ -707,7 +721,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                         }
                         name="zipCode"
                         type="text"
-                        className="h-8 w-40 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-28 rounded-md bg-slate-300 p-1 pl-3 md:w-40 lg:h-10 lg:pl-4 "
                         placeholder="36120"
                       />
                       <FieldError className="text-xs text-red-700" />
@@ -717,13 +731,13 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               </section>
 
               {/* ข้อ 4*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
                 <NumberTitle number={4} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
+                <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[40%] "}
+                    className={"flex w-full items-center gap-3 lg:w-[40%] "}
                   >
-                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-36">
+                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-36">
                       หมายเลขโทรศัพท์
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -738,7 +752,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                             handleChangePartnerData({ e, id: partner.id })
                           }
                           name="phone"
-                          className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                          className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                           placeholder="กรอกหมายเลขโทรศัพท์"
                           maxLength={10}
                           inputMode="numeric"
@@ -752,13 +766,13 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                 </div>
               </section>
               {/* ข้อ 5*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
                 <NumberTitle number={5} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
+                <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[40%] "}
+                    className={"flex w-full items-center gap-3 lg:w-[40%] "}
                   >
-                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-20">
+                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-20">
                       E-mail
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -773,7 +787,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                         }
                         name="email"
                         type="email"
-                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                         placeholder="1360401295700"
                       />
                       <FieldError className="text-xs text-red-700" />
@@ -782,13 +796,13 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                 </div>
               </section>
               {/* ข้อ 6*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
                 <NumberTitle number={6} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
+                <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[30%] "}
+                    className={"flex w-full items-center gap-3 lg:w-[30%] "}
                   >
-                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-20">
+                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-20">
                       % ส่วนร่วม
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -803,7 +817,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                         }
                         name="participateRate"
                         type="text"
-                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
                         placeholder="40"
                       />
                       <FieldError className="text-xs text-red-700" />
@@ -816,7 +830,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                   type="button"
                   onPress={() => handleDeletePartner(partner.id)}
                   className="my-3 flex w-48 items-center justify-center gap-3 rounded-md bg-red-400 p-2 
-                text-xs font-semibold text-white duration-300 hover:bg-red-700 md:px-3 md:py-2 md:text-base "
+                text-xs font-semibold text-white duration-300 hover:bg-red-700 lg:px-3 lg:py-2 lg:text-base "
                 >
                   <MdDelete />
                   <p>ลบชื่อผู้ประดิษฐ์</p>
@@ -829,7 +843,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
         <Button
           type="button"
           onPress={handleAddMorePartner}
-          className="my-3 flex w-48 items-center justify-center gap-3 rounded-md bg-[#9747FF] p-2 text-xs font-semibold text-white duration-300 hover:bg-purple-700 md:px-3 md:py-2 md:text-base "
+          className="my-3 flex w-48 items-center justify-center gap-3 rounded-md bg-[#9747FF] p-2 text-xs font-semibold text-white duration-300 hover:bg-purple-700 lg:px-3 lg:py-2 lg:text-base "
         >
           <FiPlusCircle /> <p>เพิ่มชื่อผู้ประดิษฐ์</p>
         </Button>

@@ -375,7 +375,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
           </section>
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <TextField className={"flex w-full min-w-60 items-center gap-3 "}>
-              <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-40">
+              <Label className=" text-[var(--primary-blue) md:min-md:w-40 w-28 min-w-24 font-medium">
                 ชื่อภาษาไทย
               </Label>
               <div className="flex flex-col gap-1">
@@ -385,7 +385,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   name="thaiName"
                   onChange={handleChangeWorkData}
                   type="text"
-                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
+                  className="md:min-md:w-80 w-56md:pl-4 h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 "
                   placeholder="กรอกชื่อภาษาไทย"
                 />
                 <FieldError className="text-xs text-red-700" />
@@ -405,7 +405,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
               <Label className=" text-[var(--primary-blue) w-max font-semibold">
                 ปีที่เริ่มการออกแบบผลิตภัณฑ์
               </Label>
-              <div className="w-40 rounded-lg bg-slate-300 p-1">
+              <div className="w-24 rounded-lg bg-slate-300 p-1 md:w-40">
                 <Calendar
                   value={
                     workData?.beginWorkAt
@@ -428,10 +428,10 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
               <FieldError className="text-xs text-red-700" />
             </TextField>
             <TextField className={"flex w-full items-center gap-3 "}>
-              <Label className="min-w-28 font-semibold text-[var(--primary-blue)] md:min-w-32">
+              <Label className="min-w-24 font-semibold text-[var(--primary-blue)] md:min-w-32">
                 ปีที่ผลงานแล้วเสร็จ
               </Label>
-              <div className="w-40 rounded-lg bg-slate-300 p-1">
+              <div className="w-24 rounded-lg bg-slate-300 p-1 md:w-40">
                 <Calendar
                   value={
                     workData?.finishWorkAt
@@ -578,7 +578,9 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
             })}
           </div>
           <div>
-            <TextField className={`ml-3 flex  gap-5`}>
+            <TextField
+              className={`ml-3 flex flex-col gap-5 md:flex-row  md:items-center`}
+            >
               <Input
                 disabled={workData?.agreementTitle === "ไม่มี"}
                 aria-label="ระบุชื่อหน่วยงาน"
@@ -589,7 +591,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                 className=" w-60 rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem]  md:p-2  md:pl-4 md:text-base"
                 placeholder="ระบุชื่อหน่วยงาน"
               />
-              <div className=" w-40 rounded-lg bg-slate-300 p-1">
+              <div className=" w-28 rounded-lg bg-slate-300 p-1 md:w-40">
                 <Calendar
                   disabled={workData?.agreementTitle === "ไม่มี"}
                   value={
@@ -699,12 +701,12 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                 </section>
               </RadioGroup>
             </section>
-            <section className="flex w-full items-center gap-3 md:pl-10">
+            <section className="flex w-full flex-col gap-3 md:flex-row md:items-center md:pl-10">
               <p className="font-semibold md:min-w-52">
                 5.3 ผลของการสืบค้นพบว่า
               </p>
               <div className="flex flex-col gap-1">
-                <div className="w-80 rounded-lg bg-slate-300 p-1">
+                <div className="w-56rounded-lg bg-slate-300 p-1 md:w-80">
                   <Dropdown
                     value={workData?.searchResult}
                     onChange={(e) => {
@@ -806,7 +808,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                 <Label className="min-w-28  text-[var(--primary-blue)] md:min-w-24">
                   ยื่นเมื่อวันที่ :
                 </Label>
-                <div className="w-40 rounded-lg bg-slate-300 p-1">
+                <div className="w-28 rounded-lg bg-slate-300 p-1 md:w-40">
                   <Calendar
                     disabled={workData?.isRequest === "ไม่เคย"}
                     value={
@@ -874,7 +876,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
             <section className=" flex w-96 flex-col gap-5">
               <label>เลือกรูปแบบการเผยแพร่</label>
               <div className="flex flex-col gap-1">
-                <div className=" h-12 rounded-lg bg-slate-300 p-1">
+                <div className=" h-12 w-56 rounded-lg bg-slate-300 p-1 md:w-60">
                   <Dropdown
                     value={workData?.publicType}
                     options={publicType}

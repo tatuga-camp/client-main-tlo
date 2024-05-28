@@ -23,14 +23,7 @@ import fakeImageUpload from "@/data/fakeImageUpload";
 import { Editor } from "@tinymce/tinymce-react";
 import UpdateNews from "../../../components/Forms/News/updateNews";
 
-const label = { inputProps: { "aria-label": "Switch demo" } };
 function ManageNews() {
-  const editorRef = useRef(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log("error");
-    }
-  };
   return (
     <>
       <Head>

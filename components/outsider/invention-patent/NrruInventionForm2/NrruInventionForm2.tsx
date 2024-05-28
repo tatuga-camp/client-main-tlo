@@ -374,23 +374,23 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
   };
 
   return (
-    <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
+    <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       <Form
         aria-label="form"
         onSubmit={handleUpdateWorkInvention}
-        className="mx-0 my-5 flex flex-col gap-8 md:mx-5 md:my-10 "
+        className="mx-0 my-5 flex flex-col gap-8 lg:mx-5 lg:my-10 "
       >
         {/* ข้อ 1*/}
-        <section className="flex flex-col items-start justify-center gap-3 md:gap-5  lg:flex-row">
+        <section className="flex flex-col items-start justify-center gap-3 lg:flex-row  lg:gap-5">
           <section className="flex items-center gap-3">
             <Number number={1} />
-            <p className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
+            <p className="my-2 text-[0.8rem] font-semibold lg:min-w-64 lg:text-base">
               ชื่อที่แสดงถึงการประดิษฐ์
             </p>
           </section>
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-7 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-7 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
             <TextField className={"flex w-full min-w-60 items-center gap-3 "}>
-              <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-40">
+              <Label className=" text-[var(--primary-blue) min-w-24 font-medium lg:min-w-40">
                 ชื่อภาษาไทย
               </Label>
               <div className="flex flex-col gap-1">
@@ -400,14 +400,14 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   name="thaiName"
                   onChange={handleChangeWorkData}
                   type="text"
-                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:min-w-80 lg:pl-4 "
                   placeholder="กรอกชื่อภาษาไทย"
                 />
                 <FieldError className="text-xs text-red-700" />
               </div>
             </TextField>
             <TextField className={"flex w-full min-w-60 items-center gap-3 "}>
-              <Label className=" text-[var(--primary-blue) min-w-24 font-medium md:min-w-40">
+              <Label className=" text-[var(--primary-blue) min-w-24 font-medium lg:min-w-40">
                 ชื่อภาษาอังกฤษ
               </Label>
               <div className="flex flex-col gap-1">
@@ -417,7 +417,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   name="englishName"
                   onChange={handleChangeWorkData}
                   type="text"
-                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
+                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:min-w-80 lg:pl-4 "
                   placeholder="กรอกชื่อภาษาอังกฤษ"
                 />
                 <FieldError className="text-xs text-red-700" />
@@ -430,20 +430,20 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
           value={workData?.type}
           onChange={(e) => handleChangeRaio({ e, name: "type" })}
           isRequired
-          className="flex flex-col items-start justify-center gap-2 md:gap-5  lg:flex-row"
+          className="flex flex-col items-start justify-center gap-2 lg:flex-row  lg:gap-5"
         >
           <div className="flex flex-col gap-1">
             <section className="flex items-center gap-3">
               <Number number={2} />
 
-              <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
+              <Label className="my-2 text-[0.8rem] font-semibold lg:min-w-64 lg:text-base">
                 ประเภทสิทธิบัตรที่จะขอรับการคุ้มครอง
               </Label>
             </section>
             <FieldError className="text-xs text-red-700" />
           </div>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
             <Radio className="flex items-center " value="INVENTION">
               {({ isSelected }) => (
                 <div className=" flex items-center justify-center gap-2">
@@ -485,14 +485,14 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
         </RadioGroup>
 
         {/* ข้อ 3*/}
-        <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+        <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
           <Number number={3} />
-          <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
+          <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
             <TextField className={"flex items-center gap-3 "}>
-              <Label className=" text-[var(--primary-blue) min-w-28 font-semibold md:min-w-32">
+              <Label className=" text-[var(--primary-blue) min-w-28 font-semibold lg:min-w-32">
                 ปีที่เริ่มการประดิษฐ์
               </Label>
-              <div className="w-40 rounded-lg bg-slate-300 p-1">
+              <div className="w-28 rounded-lg bg-slate-300 p-1 lg:w-40">
                 <Calendar
                   value={
                     workData?.beginWorkAt
@@ -515,10 +515,10 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
               <FieldError className="text-xs text-red-700" />
             </TextField>
             <TextField className={"flex w-full items-center gap-3 "}>
-              <Label className="min-w-28 font-semibold text-[var(--primary-blue)] md:min-w-32">
+              <Label className="min-w-28 font-semibold text-[var(--primary-blue)] lg:min-w-32">
                 ปีที่ผลงานแล้วเสร็จ
               </Label>
-              <div className="w-40 rounded-lg bg-slate-300 p-1">
+              <div className="w-28 rounded-lg bg-slate-300 p-1 lg:w-40">
                 <Calendar
                   value={
                     workData?.finishWorkAt
@@ -548,19 +548,19 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
           isRequired
           value={workData?.benefit}
           onChange={(e) => handleChangeCheckbox({ e, name: "benefit" })}
-          className="flex flex-col items-start justify-center gap-2 md:gap-5 "
+          className="flex flex-col items-start justify-center gap-2 lg:gap-5 "
         >
           <div className="flex flex-col gap-1">
             <section className="flex items-center gap-3">
               <Number number={4} />
-              <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
+              <Label className="my-2 text-[0.8rem] font-semibold lg:min-w-64 lg:text-base">
                 สิ่งที่ได้จากการประดิษฐ์/งานวิจัย/ข้อค้นพบ (ตอบได้มากกว่า 1 ข้อ)
               </Label>
             </section>
             <FieldError className="text-xs text-red-700" />
           </div>
 
-          <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:gap-3 md:pl-0 md:text-base md:xl:grid-cols-3 2xl:grid-cols-4">
+          <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] lg:gap-3 lg:pl-0 lg:text-base lg:xl:grid-cols-3 2xl:grid-cols-4">
             {/* row1 */}
             {menuBenefits.map((menu, index) => {
               return (
@@ -587,9 +587,9 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
               );
             })}
           </div>
-          <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
+          <section className="flex w-full flex-col gap-2 px-5 lg:flex-row lg:px-0">
             <TextField className={"ml-3"}>
-              <Label className="text-[0.8rem] font-medium md:text-base">
+              <Label className="text-[0.8rem] font-medium lg:text-base">
                 อื่นๆ (โปรดระบุ)
               </Label>
               <Input
@@ -603,13 +603,13 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   });
                 }}
                 type="text"
-                className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
               />
             </TextField>
           </section>
         </CheckboxGroup>
 
-        {/* ข้อ 7*/}
+        {/* ข้อ 5*/}
         <RadioGroup
           value={workData?.agreementTitle}
           onChange={(e) => {
@@ -627,12 +627,12 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
             handleChangeRaio({ e, name: "agreementTitle" });
           }}
           isRequired
-          className="flex flex-col items-start justify-center gap-2 md:gap-5 "
+          className="flex flex-col items-start justify-center gap-2 lg:gap-5 "
         >
           <div className="flex flex-col gap-1">
             <section className="flex items-center gap-3">
               <Number number={5} />
-              <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+              <Label className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
                 ส่วนใดส่วนหนึ่งของการวิจัยที่นำมาซึ่งการประดิษฐ์นี้
                 ได้มีการลงนามหรืออยู่ภายใต้ข้อตกลงหรือสัญญาใด ๆ
                 กับหน่วยงานอื่นหรือไม่ (ให้ระบุ)
@@ -642,7 +642,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
           </div>
           <div
             className="flex w-full flex-col flex-wrap gap-3 pl-5 
-          text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base "
+          text-[0.8rem] lg:flex-col lg:gap-5 lg:pl-0 lg:text-base "
           >
             {agreementTitles.map((item, index) => {
               return (
@@ -657,7 +657,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                             <MdOutlineRadioButtonUnchecked />
                           )}
                         </div>
-                        <p className="text-[0.8rem] font-medium md:text-base">
+                        <p className="text-[0.8rem] font-medium lg:text-base">
                           {item}
                         </p>
                       </div>
@@ -668,7 +668,9 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
             })}
           </div>
           <div>
-            <TextField className={`ml-3 flex  gap-5`}>
+            <TextField
+              className={`ml-3 flex flex-col gap-5 lg:flex-row  lg:items-center`}
+            >
               <Input
                 disabled={workData?.agreementTitle === "ไม่มี"}
                 aria-label="ระบุชื่อหน่วยงาน"
@@ -676,10 +678,10 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                 name="agreementInstitution"
                 value={workData?.agreementInstitution}
                 onChange={handleChangeWorkData}
-                className=" w-60 rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem]  md:p-2  md:pl-4 md:text-base"
+                className=" w-60 rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem]  lg:p-2  lg:pl-4 lg:text-base"
                 placeholder="ระบุชื่อหน่วยงาน"
               />
-              <div className=" w-40 rounded-lg bg-slate-300 p-1">
+              <div className="w-28 rounded-lg bg-slate-300 p-1 text-xs lg:w-40">
                 <Calendar
                   disabled={workData?.agreementTitle === "ไม่มี"}
                   value={
@@ -704,12 +706,12 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
           </div>
         </RadioGroup>
 
-        {/* ข้อ 8*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        {/* ข้อ 6*/}
+        <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
           <div className="flex flex-col gap-1">
             <section className="flex items-center gap-3">
               <Number number={6} />
-              <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+              <Label className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
                 ผลการวิจัย ผลการทดสอบ หรือผลการทดลอง
               </Label>
             </section>
@@ -720,9 +722,9 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
             )}
           </div>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
-              <div className="w-80 rounded-lg bg-slate-300 p-1">
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
+            <section className="flex w-full flex-col gap-2 px-5 lg:flex-row lg:px-0">
+              <div className="w-48 rounded-lg bg-slate-300 p-1 lg:w-80">
                 <Dropdown
                   value={workData?.researchResult}
                   onChange={(e) => {
@@ -741,7 +743,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   }}
                   options={researchTypes}
                   placeholder="เลือกประเภทแหล่งทุน"
-                  className="md:w-14rem w-full"
+                  className="lg:w-14rem w-full"
                 />
               </div>
               <FileTrigger
@@ -787,9 +789,9 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   className={` flex  items-center justify-center gap-3 rounded-md 
                   p-2 px-5
                    ${workData?.researchResult === "ไม่มี" ? "bg-gray-400 text-black" : "bg-[#BED6FF] hover:bg-[#91B2EB] "} 
-                   font-semibold duration-300  md:gap-5`}
+                   font-semibold duration-300  lg:gap-5`}
                 >
-                  <span className="text-3xl md:text-base">
+                  <span className="text-3xl lg:text-base">
                     <FiPlusCircle />
                   </span>
 
@@ -818,17 +820,17 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
         </section>
 
         {/* ข้อ 7*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={7} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+            <p className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
               ข้อมูลประกอบการสืบค้นสิทธิบัตรเบื้องต้น
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <section className="flex w-full items-center gap-3 md:pl-10">
-              <p className="font-semibold md:min-w-52">
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
+            <section className="flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:pl-10">
+              <p className="font-semibold lg:min-w-52">
                 7.1 Keyword ที่ใช้ในการสืบค้น
               </p>
               <TextField className={"flex w-full flex-col gap-1 "}>
@@ -838,7 +840,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   name="keywords"
                   required
                   type="text"
-                  className="h-8 w-96 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2   md:text-base"
+                  className="h-8 w-56 rounded-md bg-slate-300 p-1  pl-3 text-[0.8rem] lg:h-10 lg:w-96 lg:p-2   lg:text-base"
                   placeholder="โปรดระบุ Keyword"
                 />
                 <FieldError className="text-xs text-red-700" />
@@ -848,13 +850,13 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
               value={workData?.website}
               onChange={(e) => handleChangeRaio({ e, name: "website" })}
               isRequired
-              className="flex w-full flex-col  gap-3 md:pl-10"
+              className="flex w-full flex-col  gap-3 lg:pl-10"
             >
-              <Label className="flex items-center  gap-2 font-semibold md:min-w-52">
+              <Label className="flex items-center  gap-2 font-semibold lg:min-w-52">
                 7.2 เว็บไซต์/ฐานข้อมูลที่ใช้ในการสืบค้น
                 <FieldError className="text-xs font-normal text-red-700" />
               </Label>
-              <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:grid-cols-2 md:gap-3 md:pl-0 md:text-base">
+              <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] lg:grid-cols-2 lg:gap-3 lg:pl-0 lg:text-base">
                 {websites.map((menu, index) => {
                   return (
                     <Radio
@@ -886,18 +888,18 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                     onChange={handleChangeWorkData}
                     name="website"
                     type="text"
-                    className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                    className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                     placeholder="โปรดระบุ"
                   />
                 </TextField>
               </div>
             </RadioGroup>
-            <section className="flex w-full items-center gap-3 md:pl-10">
-              <p className="font-semibold md:min-w-52">
+            <section className="flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:pl-10">
+              <p className="font-semibold lg:min-w-52">
                 7.3 ผลของการสืบค้นพบว่า
               </p>
               <div className="flex flex-col gap-1">
-                <div className="w-80 rounded-lg bg-slate-300 p-1">
+                <div className="w-60 rounded-lg bg-slate-300 p-1 lg:w-80">
                   <Dropdown
                     value={workData?.searchResult}
                     onChange={(e) => {
@@ -917,7 +919,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                     required
                     options={searchResults}
                     placeholder="เลือกประเภทแหล่งทุน"
-                    className="md:w-14rem w-full"
+                    className="lg:w-14rem w-full"
                   />
                 </div>
                 {!workData.searchResult && (
@@ -950,20 +952,20 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
             }
           }}
           isRequired
-          className="flex flex-col items-start justify-center gap-2 md:gap-5 "
+          className="flex flex-col items-start justify-center gap-2 lg:gap-5 "
         >
           <div className="flex flex-col gap-1">
             <section className="flex items-center gap-3">
               <Number number={8} />
-              <Label className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+              <Label className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
                 การประดิษฐ์นี้เคยนำไปยื่นขอรับสิทธิบัตรหรืออนุสิทธิบัตรหรือไม่
               </Label>
             </section>
             <FieldError className="text-xs text-red-700" />
           </div>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
+            <section className="flex w-full flex-col gap-2 px-5 lg:flex-row lg:px-0">
               <Radio className="flex" value="เคย">
                 {({ isSelected }) => (
                   <div className=" flex items-center gap-2">
@@ -974,7 +976,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                         <MdOutlineRadioButtonUnchecked />
                       )}
                     </div>
-                    <p className="text-[0.8rem] font-medium md:text-base">
+                    <p className="text-[0.8rem] font-medium lg:text-base">
                       เคย
                     </p>
                   </div>
@@ -982,7 +984,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
               </Radio>
 
               <TextField className={"ml-3 flex items-center"}>
-                <Label className="min-w-28  text-[var(--primary-blue)] md:min-w-24">
+                <Label className="min-w-28  text-[var(--primary-blue)] lg:min-w-24">
                   เลขที่คำขอ :
                 </Label>
                 <Input
@@ -991,12 +993,12 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   onChange={handleChangeWorkData}
                   name="requestNumber"
                   type="text"
-                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                   placeholder="เลขที่คำขอ"
                 />
               </TextField>
               <TextField className={"ml-3 flex items-center"}>
-                <Label className="min-w-28  text-[var(--primary-blue)] md:min-w-24">
+                <Label className="min-w-28  text-[var(--primary-blue)] lg:min-w-24">
                   ยื่นเมื่อวันที่ :
                 </Label>
                 <div className="w-40 rounded-lg bg-slate-300 p-1">
@@ -1021,7 +1023,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                 </div>
               </TextField>
               <TextField className={"ml-3 flex items-center"}>
-                <Label className="min-w-28  text-[var(--primary-blue)] md:min-w-24">
+                <Label className="min-w-28  text-[var(--primary-blue)] lg:min-w-24">
                   ประเทศที่ยื่น :
                 </Label>
                 <Input
@@ -1030,7 +1032,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   onChange={handleChangeWorkData}
                   name="requestCountry"
                   type="text"
-                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                   placeholder=""
                 />
               </TextField>
@@ -1045,7 +1047,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                       <MdOutlineRadioButtonUnchecked />
                     )}
                   </div>
-                  <p className="text-[0.8rem] font-medium md:text-base">
+                  <p className="text-[0.8rem] font-medium lg:text-base">
                     ไม่เคย
                   </p>
                 </div>
@@ -1055,19 +1057,19 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
         </RadioGroup>
 
         {/* ข้อ 9*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={9} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+            <p className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
               การเปิดเผยสาระสำคัญของการประดิษฐ์/การเผยแพร่ผลงาน
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base">
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-col lg:gap-5 lg:pl-0 lg:text-base">
             <section className=" flex w-96 flex-col gap-5">
               <label>เลือกรูปแบบการเผยแพร่</label>
               <div className="flex flex-col gap-1">
-                <div className=" h-12 rounded-lg bg-slate-300 p-1">
+                <div className=" h-12 w-56 rounded-lg bg-slate-300 p-1 lg:w-72">
                   <Dropdown
                     value={workData?.publicType}
                     options={publicType}
@@ -1087,7 +1089,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                     }}
                     required
                     placeholder="การเผยแพร่ผลงานแล้วในรูปแบบ"
-                    className="md:w-14rem h-10 w-full"
+                    className="lg:w-14rem h-10 w-full"
                   />
                 </div>
                 {!workData.publicType && (
@@ -1099,7 +1101,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
             </section>
             {workData?.publicType === "อื่น ๆ (โปรดระบุ)" && (
               <TextField className={"ml-3 flex items-center"}>
-                <Label className="min-w-28  text-[var(--primary-blue)] md:min-w-24">
+                <Label className="min-w-28  text-[var(--primary-blue)] lg:min-w-24">
                   ระบุุอื่นๆ :
                 </Label>
                 <Input
@@ -1107,7 +1109,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   onChange={handleChangeWorkData}
                   name="otherPublicType"
                   type="text"
-                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                   placeholder="ระบุุอื่นๆ"
                 />
               </TextField>
@@ -1150,11 +1152,11 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
             <Button
               isDisabled={workData?.publicType === "ไม่เผยแพร่ผลงาน"}
               className={`flex items-center  justify-center gap-3 rounded-md 
-             p-2 px-5 font-semibold duration-300  md:gap-5
+             p-2 px-5 font-semibold duration-300  lg:gap-5
              ${workData?.publicType === "ไม่เผยแพร่ผลงาน" ? "bg-gray-400 text-black" : "bg-[#BED6FF] hover:bg-[#91B2EB] "}
              `}
             >
-              <span className="text-3xl md:text-base">
+              <span className="text-3xl lg:text-base">
                 <FiPlusCircle />
               </span>
 
@@ -1174,13 +1176,13 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                 );
               })}
           </div>
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <p className={"w-full md:px-8"}>
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
+            <p className={"w-full lg:px-8"}>
               กรุณาระบุรายละเอียดของการเผยแพร่ผลงาน ได้แก่ ชื่อผลงาน
               วัน/เดือน/ปีที่เผยแพร่ สถานที่ หรือผู้จัดงาน
               และ/หรือแนบหนังสือรับรองจากผู้จัดงาน หรือแนบ เอกสารประกอบ
             </p>
-            <TextField className={"w-full md:px-8"}>
+            <TextField className={"w-full lg:px-8"}>
               <TextArea
                 required={workData?.publicType !== "ไม่เผยแพร่ผลงาน"}
                 disabled={workData?.publicType === "ไม่เผยแพร่ผลงาน"}
@@ -1188,7 +1190,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                 onChange={handleChangeWorkData}
                 name="publicDetail"
                 className="no-re min-h-52   w-full	 resize-none
-                 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                 placeholder="กรอกข้อมูล"
               />
               <FieldError className="text-xs text-red-700" />
@@ -1198,28 +1200,28 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
         </section>
 
         {/* ข้อ 10*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={10} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+            <p className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
               ข้อดีและลักษณะเฉพาะของการประดิษฐ์/งานวิจัยนี้/การเผยแพร่ผลงาน
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <p className={"w-full md:px-8"}>
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
+            <p className={"w-full lg:px-8"}>
               โปรดระบุถึงลักษณะเด่นและอธิบายในรายละเอียดของความใหม่ของผลงาน
               โดยเฉพาะในส่วนที่ได้พัฒนาให้ดีขึ้นกว่าเดิมได้
               โดยเน้นให้เห็นถึงความแตกต่างจากการประดิษฐ์หรืองานเดิม
             </p>
-            <TextField className={"w-full md:px-8"}>
+            <TextField className={"w-full lg:px-8"}>
               <TextArea
                 value={workData?.outstandingDetail}
                 onChange={handleChangeWorkData}
                 name="outstandingDetail"
                 required
                 className="no-re min-h-52   w-full	 resize-none
-                 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                 placeholder="กรอกข้อมูล"
               />
               <FieldError className="text-xs text-red-700" />
@@ -1227,23 +1229,23 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
           </div>
         </section>
         {/* ข้อ 11*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={11} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+            <p className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
               ข้อด้อยหรือข้อจำกัดของการประดิษฐ์/งานวิจัยนี้
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <TextField className={"w-full md:px-8"}>
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
+            <TextField className={"w-full lg:px-8"}>
               <TextArea
                 required
                 value={workData?.limitationDetail}
                 onChange={handleChangeWorkData}
                 name="limitationDetail"
                 className="no-re min-h-52   w-full	 resize-none
-                 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                 placeholder="กรอกข้อมูล"
               />
               <FieldError className="text-xs text-red-700" />
@@ -1251,23 +1253,23 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
           </div>
         </section>
         {/* ข้อ 12*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={12} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+            <p className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
               ผลิตภัณฑ์/การประดิษฐ์/ผลงานที่ใกล้เคียงที่มีอยู่แล้วในตลาด
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <TextField className={"w-full md:px-8"}>
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
+            <TextField className={"w-full lg:px-8"}>
               <TextArea
                 value={workData?.marketDetail}
                 onChange={handleChangeWorkData}
                 name="marketDetail"
                 required
                 className="no-re min-h-52   w-full	 resize-none
-                 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                 placeholder="กรอกข้อมูล"
               />
               <FieldError className="text-xs text-red-700" />

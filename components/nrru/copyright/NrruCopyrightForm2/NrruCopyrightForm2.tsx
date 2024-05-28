@@ -395,7 +395,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
         <section className="flex flex-col items-start justify-center gap-3 md:gap-5  lg:flex-row">
           <section className="flex items-center gap-3">
             <Number number={1} />
-            <p className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
+            <p className="my-2 text-[0.8rem] font-semibold md:min-w-24 md:text-base">
               ชื่อผลงาน
             </p>
           </section>
@@ -577,7 +577,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                     </Radio>
                     {quality === "จ้างทำของ" && (
                       <div className="flex w-full flex-col items-start gap-1 md:ml-8 md:w-[70%]">
-                        <div className="w-80 rounded-lg bg-slate-300 p-1">
+                        <div className="w-56 rounded-lg bg-slate-300 p-1 md:w-80">
                           <Dropdown
                             value={workData?.hireWork}
                             onChange={(e) => {
@@ -632,7 +632,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                             onChange={handleChangeWorkData}
                             name="workQualityPartDetail"
                             type="text"
-                            className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                            className="h-8 w-56 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60 md:pl-4 "
                             placeholder="โปรดระบุ รายละเอียด"
                           />
                           <FieldError className="text-xs text-red-700" />
@@ -654,7 +654,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                             onChange={handleChangeWorkData}
                             name="otherWorkQuality"
                             type="text"
-                            className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                            className="h-8 w-56 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60 md:pl-4 "
                             placeholder="โปรดระบุ รายละเอียด"
                           />
                           <FieldError className="text-xs text-red-700" />
@@ -737,7 +737,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
             <div className="flex flex-col gap-1">
-              <div className="w-80 rounded-lg bg-slate-300 p-1">
+              <div className="w-56 rounded-lg bg-slate-300 p-1 md:w-80">
                 <Dropdown
                   value={workData?.funding}
                   onChange={(e) => {
@@ -784,9 +784,9 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
               )}
             </div>
 
-            <section className="flex flex-col gap-5 md:flex-row">
+            <section className="flex flex-col gap-5 lg:flex-row">
               <TextField className={"flex w-full items-center gap-3 "}>
-                <Label className=" text-[var(--primary-blue) min-w-28 font-semibold md:min-w-20">
+                <Label className=" text-[var(--primary-blue) min-w-16 font-semibold md:min-w-20">
                   แหล่งทุน
                 </Label>
                 <div className="flex flex-col gap-1">
@@ -797,7 +797,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                     name="sourceFunding"
                     onChange={handleChangeWorkData}
                     type="text"
-                    className="h-8 w-80 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                    className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-80 md:pl-4 "
                     placeholder="แหล่งทุน"
                   />
                   <FieldError className="text-xs text-red-700" />
@@ -805,7 +805,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
               </TextField>
 
               <TextField className={"flex  items-center gap-3 "}>
-                <Label className="min-w-28 font-semibold text-[var(--primary-blue)] md:min-w-24">
+                <Label className="min-w-20 font-semibold text-[var(--primary-blue)] md:min-w-24">
                   ปีงบประมาณ
                 </Label>
                 <div className="w-40 rounded-lg bg-slate-300 p-1">
@@ -846,7 +846,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
         >
           <div className="flex flex-col gap-1">
             <section className="flex items-center gap-3">
-              <Number number={5} />
+              <Number number={7} />
               <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
                 การยื่นขอความเป็นเจ้าของผลงานวิจัยและนวัตกรรมกับแหล่งให้ทุน
                 (กรณีรับทุนวิจัยจากแหล่งทุนภายนอก)
@@ -856,12 +856,16 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
           </div>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base">
-            <div className="flex gap-5">
+            <div className="flex flex-col gap-5 md:flex-row">
               {researchOwnershipSubmissionList.map((item, index) => {
                 return (
-                  <Radio key={index} className="flex items-center" value={item}>
+                  <Radio
+                    key={index}
+                    className="flex w-56 items-center md:w-full"
+                    value={item}
+                  >
                     {({ isSelected }) => (
-                      <div className=" flex items-center justify-center gap-2">
+                      <div className=" flex gap-2">
                         <div className=" text-2xl">
                           {isSelected ? (
                             <MdOutlineRadioButtonChecked />
@@ -914,8 +918,8 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                 isDisabled={
                   workData?.researchOwnershipSubmission === "ยังไม่มีการยื่น"
                 }
-                className={`flex w-max  items-center justify-center gap-3 rounded-md 
-               p-2 px-5 font-semibold duration-300 
+                className={`flex w-56 items-center  justify-center gap-3 rounded-md p-2 
+               px-5 font-semibold duration-300 md:w-72 
                md:gap-5 ${workData?.researchOwnershipSubmission === "ยังไม่มีการยื่น" ? "bg-gray-400 text-black" : "bg-[#BED6FF] hover:bg-[#91B2EB] "} `}
               >
                 <span className="text-3xl md:text-base">

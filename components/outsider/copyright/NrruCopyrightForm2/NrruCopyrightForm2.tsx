@@ -577,7 +577,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                     </Radio>
                     {quality === "จ้างทำของ" && (
                       <div className="flex w-full flex-col items-start gap-1 md:ml-8 md:w-[70%]">
-                        <div className="w-80 rounded-lg bg-slate-300 p-1">
+                        <div className="w-56 rounded-lg bg-slate-300 p-1 md:w-80">
                           <Dropdown
                             value={workData?.hireWork}
                             onChange={(e) => {
@@ -632,7 +632,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                             onChange={handleChangeWorkData}
                             name="workQualityPartDetail"
                             type="text"
-                            className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                            className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-72 md:pl-4 "
                             placeholder="โปรดระบุ รายละเอียด"
                           />
                           <FieldError className="text-xs text-red-700" />
