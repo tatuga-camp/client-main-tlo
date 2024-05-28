@@ -671,7 +671,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   required
                   options={fundingLists}
                   placeholder="เลือกประเภทแหล่งทุน"
-                  className="w-full "
+                  className="w-full"
                 />
               </div>
               {!workData.funding && (
@@ -1289,7 +1289,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
         </RadioGroup>
 
         {/* ข้อ 11*/}
-        <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
+        <section className="flex  flex-col items-start justify-center gap-2 lg:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={11} />
             <p className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
@@ -1298,10 +1298,10 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-col lg:gap-5 lg:pl-0 lg:text-base">
-            <section className=" flex w-96 flex-col gap-5">
+            <section className=" flex w-full flex-col gap-5">
               <label>เลือกรูปแบบการเผยแพร่</label>
-              <div className="flex flex-col gap-1">
-                <div className=" h-12 w-56 rounded-lg bg-slate-300 p-1 lg:w-72">
+              <div className="flex w-full flex-col gap-1">
+                <div className=" h-12 w-full rounded-lg bg-slate-300 p-1 lg:w-72">
                   <Dropdown
                     value={workData?.publicType}
                     options={publicType}

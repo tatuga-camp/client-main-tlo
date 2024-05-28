@@ -317,7 +317,7 @@ function SearchWorkInvention({ invention }: SearchWorkInventionProps) {
                 </Label>
                 <div className="w-full rounded-lg bg-slate-300 p-1">
                   <Calendar
-                    className="w-72"
+                    className="w-full"
                     value={
                       searchWorkData?.releaseDate
                         ? new Date(searchWorkData.releaseDate)
@@ -383,7 +383,6 @@ function SearchWorkInvention({ invention }: SearchWorkInventionProps) {
                 </Label>
                 <div className="w-full rounded-lg bg-slate-300 p-1">
                   <Calendar
-                    className="w-72"
                     value={
                       searchWorkData?.releaseDate
                         ? new Date(searchWorkData.releaseDate)
@@ -400,6 +399,7 @@ function SearchWorkInvention({ invention }: SearchWorkInventionProps) {
                     }}
                     required
                     locale="th"
+                    className="w-full"
                     dateFormat="dd/mm/yy"
                     placeholder="dd/mm/yyyy"
                   />
@@ -419,7 +419,7 @@ function SearchWorkInvention({ invention }: SearchWorkInventionProps) {
         </div>
         <div className="mt-5 flex w-full flex-col items-center justify-center gap-3">
           <h3 className="font-semibold">ข้อมูลที่เพิ่มล่าสุด</h3>
-          <div className="grid w-full grid-cols-3 gap-5">
+          <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-3">
             {invention.data?.workInfoOnInventionPatent.patentRelateToSearchResultOnInventionPatents.map(
               (search, index) => (
                 <div
