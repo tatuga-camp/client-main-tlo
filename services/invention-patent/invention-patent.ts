@@ -43,6 +43,35 @@ export async function GetInventionPatentsService(
   }
 }
 
+type RequestGetCountInventionService = {
+  requestYear: string;
+};
+
+type ResponseGetCountInventionService = number;
+export async function GetCountInventionService(
+  input: RequestGetCountInventionService,
+): Promise<ResponseGetCountInventionService> {
+  try {
+    const cookies = parseCookies();
+    const access_token = cookies.access_token;
+    const invention = await axios({
+      method: "GET",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/invention-patents/count`,
+      params: {
+        ...input,
+      },
+      headers: {
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      },
+    });
+    return invention.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw error?.response?.data;
+  }
+}
+
 type RequestGetInventionPatentsByUserIdService = {
   limit: number;
   page: number;
