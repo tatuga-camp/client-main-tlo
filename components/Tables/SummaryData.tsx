@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -8,13 +8,18 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartData,
 } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { FaSquare } from "react-icons/fa";
-import { fakeBarChart, fakePieChart } from "@/data/fakeChart";
 import { Bar } from "react-chartjs-2";
 import { IoOptionsOutline } from "react-icons/io5";
-import Select from "react-select";
+import { useQuery } from "@tanstack/react-query";
+import { GetCountCopyrightService } from "../../services/copyright/copyright";
+import { Calendar } from "primereact/calendar";
+import { GetCountInventionService } from "../../services/invention-patent/invention-patent";
+import { GetCountDesignService } from "../../services/design-patent/design-patent";
+import { GetCountTrademarkService } from "../../services/trademark/trademark";
 
 ChartJS.register(
   ArcElement,
@@ -28,64 +33,72 @@ ChartJS.register(
   Legend,
 );
 
-const PieOptions = {
-  plugins: {
-    legend: {
-      display: false,
-    },
-    tooltip: {
-      callbacks: {
-        label: function (context: any) {
-          return `${context.label}: ${context.raw}%`;
-        },
-      },
-    },
-  },
-};
-
-export const BarOptions = {
+const BarOptions: Chart.ChartOptions = {
   responsive: true,
-  plugins: {
-    legend: {
-      display: false,
-    },
-    title: {
-      display: false,
-      text: "ประเภทคำขอ",
-    },
-  },
-  scales: {
-    x: {
-      ticks: {
-        autoSkip: false,
-        callback: function (value: any) {
-          return value.length > 4 ? value.substr(0, 4) + "..." : value;
-        },
-        font: {
-          size: 14,
-        },
-      },
-    },
-    y: {
-      ticks: {
-        font: {
-          size: 14,
-        },
-      },
-    },
-  },
 };
 
 type Data = number[];
 
-const sumData = (data: Data) => {
-  return data.reduce((acc, value) => acc + value, 0);
-};
-
 const SummaryData = () => {
-  const total = sumData(fakeBarChart.datasets[0].data);
+  const currentYear = new Date().getFullYear();
+  const [barData, setBarData] = useState<ChartData<"bar">>();
+
+  // Construct the ISO date string for January 1st of the current year
+  const currentYearISO = new Date(
+    Date.UTC(currentYear - 1, 11, 31, 17, 0, 0),
+  ).toISOString();
+  const [requestYear, setRequestYear] = useState<string>(currentYearISO);
+  const copyright = useQuery({
+    queryKey: ["copyright-count", { requestYear: requestYear }],
+    queryFn: () => GetCountCopyrightService({ requestYear: requestYear }),
+  });
+  const invention = useQuery({
+    queryKey: ["invention-count", { requestYear: requestYear }],
+    queryFn: () => GetCountInventionService({ requestYear: requestYear }),
+  });
+
+  const design = useQuery({
+    queryKey: ["design-count", { requestYear: requestYear }],
+    queryFn: () => GetCountDesignService({ requestYear: requestYear }),
+  });
+
+  const trademark = useQuery({
+    queryKey: ["trademark-count", { requestYear: requestYear }],
+    queryFn: () => GetCountTrademarkService({ requestYear: requestYear }),
+  });
+
+  useEffect(() => {
+    setBarData(() => {
+      return {
+        labels: [
+          "สิทธิบัตรการออกแบบผลิตภัณฑ์",
+          "ลิขสิทธิ์",
+          "สิทธิบัตรการประดิษฐ์และอนุสิทธิบัตร",
+          "เครื่องหมายการค้า",
+        ],
+        datasets: [
+          {
+            label: "จำนวนคำข้อทั้งหมด",
+            data: [
+              design.data ?? 0,
+              copyright.data ?? 0,
+              invention.data ?? 0,
+              trademark.data ?? 0,
+            ],
+            backgroundColor: [
+              "rgba(70, 95, 229, 1)",
+              "rgba(229, 238, 249, 1)",
+              "rgba(189, 211, 244, 1)",
+              "rgba(150, 175, 239, 1)",
+            ],
+            borderWidth: 0,
+          },
+        ],
+      };
+    });
+  }, [copyright.data, design.data, invention.data, trademark.data]);
   return (
-    <div className="flex w-[80%] flex-col items-center gap-5">
+    <div className="mb-5 flex w-[80%] flex-col items-center gap-5">
       <div className="mt-16 w-full bg-[var(--secondary-yellow)] p-2 text-center text-xl font-semibold text-[var(--primary-blue)] ">
         ทรัพย์สินทางปัญญาที่ยื่นจด
       </div>
@@ -100,103 +113,23 @@ const SummaryData = () => {
           <label className="font-semibold text-[var(--primary-blue)]">
             ปีงบประมาณที่ยื่นจด
           </label>
-          <div className="flex w-full items-center  gap-4  md:gap-5 ">
-            <Select
-              className="w-[80%]"
-              placeholder={<div>ทั้งหมด</div>}
-              styles={{
-                control: (base, state) => ({
-                  ...base,
-                  border: "1.5px solid #BED6FF",
-                  padding: "0.25rem 0.3rem",
-                  borderRadius: "5px",
-                  color: "blue",
-                }),
-                singleValue: (provided: any) => ({
-                  ...provided,
-                  color: "#2166DD",
-                  fontWeight: "500",
-                }),
-                placeholder: (defaultStyles) => {
-                  return {
-                    ...defaultStyles,
-                    color: "#2166DD",
-                    fontWeight: "500",
-                  };
-                },
+          <div className="w-full rounded-lg bg-slate-300 p-1">
+            <Calendar
+              value={requestYear ? new Date(requestYear) : null}
+              onChange={(e) => {
+                setRequestYear(() => e.value?.toISOString() as string);
               }}
-            />
-          </div>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold text-[var(--primary-blue)]">
-            ประเภทที่ยื่นจด
-          </label>
-          <div className="flex w-full items-center  gap-4  md:gap-5 ">
-            <Select
-              className="w-[80%]"
-              placeholder={<div>ทั้งหมด</div>}
-              styles={{
-                control: (base, state) => ({
-                  ...base,
-                  border: "1.5px solid #BED6FF",
-                  padding: "0.25rem 0.3rem",
-                  borderRadius: "5px",
-                  color: "blue",
-                }),
-                singleValue: (provided: any) => ({
-                  ...provided,
-                  color: "#2166DD",
-                  fontWeight: "500",
-                }),
-                placeholder: (defaultStyles) => {
-                  return {
-                    ...defaultStyles,
-                    color: "#2166DD",
-                    fontWeight: "500",
-                  };
-                },
-              }}
-            />
-          </div>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold text-[var(--primary-blue)]">
-            สังกัด
-          </label>
-          <div className="flex w-full items-center  gap-4  md:gap-5 ">
-            <Select
-              className="w-[80%]"
-              placeholder={<div>ทั้งหมด</div>}
-              styles={{
-                control: (base, state) => ({
-                  ...base,
-                  border: "1.5px solid #BED6FF",
-                  padding: "0.25rem 0.3rem",
-                  borderRadius: "5px",
-                  color: "blue",
-                }),
-                singleValue: (provided: any) => ({
-                  ...provided,
-                  color: "#2166DD",
-                  fontWeight: "500",
-                }),
-                placeholder: (defaultStyles) => {
-                  return {
-                    ...defaultStyles,
-                    color: "#2166DD",
-                    fontWeight: "500",
-                  };
-                },
-              }}
+              className="text- h-10 w-full"
+              dateFormat="yy"
+              view="year"
+              locale="th"
+              placeholder="ระบุวันที่ยื่นคำขอ"
             />
           </div>
         </div>
       </section>
-      <div className="mt-10 w-full rounded-md bg-[var(--primary-blue)] p-4 pl-5 font-semibold text-white">
-        สังกัด : <span className="text-[var(--secondary-yellow)]">ทั้งหมด</span>
-      </div>
-      <div className="mt-5 flex w-[90%] flex-col items-center justify-center md:mt-10 md:w-full md:flex-row md:gap-24">
+
+      {/* <div className="mt-5 flex w-[90%] flex-col items-center justify-center md:mt-10 md:w-full md:flex-row md:gap-24">
         <div className="flex w-full items-center justify-center md:h-96 md:w-96">
           <Pie data={fakePieChart} options={PieOptions} />
         </div>
@@ -214,28 +147,54 @@ const SummaryData = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
       <div className="mt-10 flex w-full flex-col items-center gap-4 md:h-[27rem] md:flex-row">
         <section className="flex flex-row gap-4 md:flex-col">
           <div className="flex h-[9rem] w-[9rem] flex-col items-center justify-center gap-2 rounded-lg bg-[var(--primary-blue)] md:h-[13rem] md:w-[13rem]">
-            <h1 className="text-2xl font-semibold text-[var(--secondary-yellow)] ">
-              {total}
-            </h1>
+            {trademark.isLoading ||
+            design.isLoading ||
+            invention.isLoading ||
+            copyright.isLoading ? (
+              <h1 className="text-2xl font-semibold text-[var(--secondary-yellow)] ">
+                loading..
+              </h1>
+            ) : (
+              <h1 className="text-2xl font-semibold text-[var(--secondary-yellow)] ">
+                {(trademark?.data ?? 0) +
+                  (design?.data ?? 0) +
+                  (invention?.data ?? 0) +
+                  (copyright.data ?? 0)}
+              </h1>
+            )}
             <p className="text-xs font-semibold text-white">จำนวนการยื่นคำขอ</p>
           </div>
           <div className="flex h-[9rem] w-[9rem] flex-col items-center justify-center rounded-lg bg-[var(--primary-blue)] md:h-[13rem] md:w-[13rem]">
             <p className="text-xs font-semibold text-white">ปีงบประมาณ</p>
             <h1 className="text-xl font-semibold text-[var(--secondary-yellow)]">
-              2565-2567
+              {requestYear ? new Date(requestYear).getFullYear() : ""}
             </h1>
           </div>
         </section>
-        <section className="h-[15rem] w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5 md:h-full">
+        <div
+          className=" w-full rounded-md border-[1px] border-solid border-slate-200
+         bg-white p-5 md:h-full"
+        >
           <h1 className="my-5 ml-5 text-base font-semibold text-[var(--primary-blue)] md:text-xl">
             ประเภทคำขอ
           </h1>
-          <Bar options={BarOptions} data={fakeBarChart} />
-        </section>
+          {barData ? (
+            <Bar
+              className="h-full w-full"
+              options={{
+                responsive: true,
+                maintainAspectRatio: true,
+              }}
+              data={barData}
+            />
+          ) : (
+            <h1>loading...</h1>
+          )}
+        </div>
       </div>
     </div>
   );

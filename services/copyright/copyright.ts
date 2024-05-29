@@ -71,6 +71,35 @@ export async function GetCopyrightsByUserIdService(
   }
 }
 
+type RequestGetCountCopyrightService = {
+  requestYear: string;
+};
+
+type ResponseGetCountCopyrightService = number;
+export async function GetCountCopyrightService(
+  input: RequestGetCountCopyrightService,
+): Promise<ResponseGetCountCopyrightService> {
+  try {
+    const cookies = parseCookies();
+    const access_token = cookies.access_token;
+    const copyright = await axios({
+      method: "GET",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/copyrights/count`,
+      params: {
+        ...input,
+      },
+      headers: {
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      },
+    });
+    return copyright.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw error?.response?.data;
+  }
+}
+
 type RequestGetCopyrightService = {
   copyrightId: string;
 };

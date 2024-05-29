@@ -43,6 +43,35 @@ export async function GetDesignPatentsService(
   }
 }
 
+type RequestGetCountDesignService = {
+  requestYear: string;
+};
+
+type ResponseGetCountDesignService = number;
+export async function GetCountDesignService(
+  input: RequestGetCountDesignService,
+): Promise<ResponseGetCountDesignService> {
+  try {
+    const cookies = parseCookies();
+    const access_token = cookies.access_token;
+    const design = await axios({
+      method: "GET",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/design-patents/count`,
+      params: {
+        ...input,
+      },
+      headers: {
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      },
+    });
+    return design.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw error?.response?.data;
+  }
+}
+
 type RequestGetDesignPatentsByUserIdService = {
   limit: number;
   page: number;

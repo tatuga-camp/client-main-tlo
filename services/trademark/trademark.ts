@@ -36,6 +36,35 @@ export async function GetTrademarksService(
   }
 }
 
+type RequestGetCountTrademarkService = {
+  requestYear: string;
+};
+
+type ResponseGetCountTrademarkService = number;
+export async function GetCountTrademarkService(
+  input: RequestGetCountTrademarkService,
+): Promise<ResponseGetCountTrademarkService> {
+  try {
+    const cookies = parseCookies();
+    const access_token = cookies.access_token;
+    const trademarks = await axios({
+      method: "GET",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/trademarks/count`,
+      params: {
+        ...input,
+      },
+      headers: {
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      },
+    });
+    return trademarks.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw error?.response?.data;
+  }
+}
+
 type RequestGetTrademarksByUserIdService = {
   limit: number;
   page: number;
