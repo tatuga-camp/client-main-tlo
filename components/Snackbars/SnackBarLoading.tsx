@@ -4,7 +4,7 @@ import { IoIosSave } from "react-icons/io";
 function SnackbarLoading() {
   return (
     <div
-      className=" fixed bottom-2 left-2  flex w-60 animate-pulse cursor-pointer items-center
+      className=" fixed bottom-2 left-2 z-50  flex w-60 animate-pulse cursor-pointer items-center
        justify-center gap-1 rounded-md bg-main-color p-2 font-Anuphan text-white 
        drop-shadow-md"
     >

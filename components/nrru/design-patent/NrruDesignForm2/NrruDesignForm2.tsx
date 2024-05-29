@@ -385,7 +385,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
             </p>
           </section>
           <div className="flex w-full flex-col flex-wrap gap-3 pl-7 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
-            <TextField className={"flex w-full min-w-60 items-center gap-3 "}>
+            <TextField className={"flex w-full  items-center gap-3 "}>
               <Label className=" text-[var(--primary-blue) min-w-24 font-medium lg:min-w-40">
                 ชื่อภาษาไทย
               </Label>
@@ -396,7 +396,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   name="thaiName"
                   onChange={handleChangeWorkData}
                   type="text"
-                  className="lg:min-lg:w-80 h-8 w-56  rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
+                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 lg:h-10 lg:w-80 lg:pl-4 "
                   placeholder="กรอกชื่อภาษาไทย"
                 />
                 <FieldError className="text-xs text-red-700" />
