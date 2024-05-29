@@ -49,6 +49,33 @@ export default function Home() {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
+        <meta
+          property="og:title"
+          content="งานทรัพย์สินทางปัญญา กองพัฒนาพิเศษ สำนักงานอธิการบดี
+          มหาวิทยาลัยราชภัฏนครราชสีมา NRRU TLO"
+        />
+        <meta
+          property="og:description"
+          content="งานทรัพย์สินทางปัญญา กองพัฒนาพิเศษ สำนักงานอธิการบดี
+          มหาวิทยาลัยราชภัฏนครราชสีมา NRRU TLO"
+        />
+        <meta
+          property="og:image"
+          content="https://storage.googleapis.com/production-nrru-tlo/public/thumbnail-nrru-tlo-main.png"
+        />
+        <meta
+          property="og:image:secure_url"
+          content="https://storage.googleapis.com/production-nrru-tlo/public/thumbnail-nrru-tlo-main.png"
+        />
+        <meta
+          name="twitter:image:src"
+          content="https://storage.googleapis.com/production-nrru-tlo/public/thumbnail-nrru-tlo-main.png"
+        />
+        <meta
+          name="description"
+          content="งานทรัพย์สินทางปัญญา กองพัฒนาพิเศษ สำนักงานอธิการบดี
+          มหาวิทยาลัยราชภัฏนครราชสีมา NRRU TLO"
+        />
         <title>
           งานทรัพย์สินทางปัญญา กองพัฒนาพิเศษ สำนักงานอธิการบดี
           มหาวิทยาลัยราชภัฏนครราชสีมา
