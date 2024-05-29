@@ -419,7 +419,7 @@ function SearchWorkInvention({ invention }: SearchWorkInventionProps) {
         </div>
         <div className="mt-5 flex w-full flex-col items-center justify-center gap-3">
           <h3 className="font-semibold">ข้อมูลที่เพิ่มล่าสุด</h3>
-          <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-3">
+          <div className="grid w-full grid-cols-1 gap-5 lg:grid-cols-3">
             {invention.data?.workInfoOnInventionPatent.patentRelateToSearchResultOnInventionPatents.map(
               (search, index) => (
                 <div

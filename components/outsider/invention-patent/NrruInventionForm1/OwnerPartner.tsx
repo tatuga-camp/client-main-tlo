@@ -234,7 +234,7 @@ function OwnerPartner({
                   onChange={handleChangePartnerData}
                   name="houseNumber"
                   type="text"
-                  className="ounded-lg h-8  w-28 bg-slate-300 p-1 pl-3 lg:h-10 lg:w-40 lg:pl-4 "
+                  className="h-8 w-28  rounded-lg bg-slate-300 p-1 pl-3 lg:h-10 lg:w-40 lg:pl-4 "
                   placeholder="บ้านเลขที่"
                 />
                 <FieldError className="text-xs text-red-700" />

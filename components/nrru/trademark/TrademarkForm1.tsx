@@ -495,28 +495,34 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
               <section className="flex items-start justify-start  gap-3  md:gap-5">
                 <NumberTitle number={3} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:flex-wrap md:gap-5 md:text-base">
-                  <TextField className={"flex  items-center gap-3  "}>
+                  <TextField
+                    className={
+                      "flex flex-col gap-3  lg:flex-row lg:items-center  "
+                    }
+                  >
                     <p className="font-semibold">ที่อยู่ (ตามบัตรประชาชน)</p>
-                    <Label className=" text-[var(--primary-blue) font-medium ">
-                      บ้านเลขที่
-                    </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
-                        value={
-                          partnerData.find((item) => item.id === partner.id)
-                            ?.houseNumber
-                        }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        name="houseNumber"
-                        type="text"
-                        className="h-8 w-40  max-w-20 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                        placeholder="บ้านเลขที่"
-                      />
-                      <FieldError className="text-xs text-red-700" />
-                    </div>
+                    <section className="flex items-center lg:gap-5">
+                      <Label className="text-[var(--primary-blue) min-w-16 font-medium ">
+                        บ้านเลขที่
+                      </Label>
+                      <div className="flex flex-col gap-1">
+                        <Input
+                          required
+                          value={
+                            partnerData.find((item) => item.id === partner.id)
+                              ?.houseNumber
+                          }
+                          onChange={(e) =>
+                            handleChangePartnerData({ e, id: partner.id })
+                          }
+                          name="houseNumber"
+                          type="text"
+                          className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                          placeholder="บ้านเลขที่"
+                        />
+                        <FieldError className="text-xs text-red-700" />
+                      </div>
+                    </section>
                   </TextField>
                   <TextField className={"flex  items-center gap-3  "}>
                     <Label className=" text-[var(--primary-blue) font-medium ">
@@ -534,7 +540,7 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
                         }
                         name="villageNumber"
                         type="text"
-                        className="h-8 w-40  max-w-14 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
                         placeholder="หมู่"
                       />
                       <FieldError className="text-xs text-red-700" />

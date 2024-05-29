@@ -176,29 +176,29 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
       <div className="flex w-full flex-col items-center gap-3">
         <Form
           onSubmit={handleUpdateNumnerRequest}
-          className="flex w-max items-center gap-2 text-xl font-semibold lg:text-2xl "
+          className="flex w-max flex-col items-center gap-5 text-xl font-semibold lg:flex-row lg:gap-2 lg:text-2xl"
         >
-          <TextField>
-            <Label className="text-lg">เลขที่คำขอ:</Label>
+          <TextField className="flex flex-col gap-2 ">
+            <Label className="text-base lg:text-lg">เลขที่คำขอ:</Label>
             <Input
               disabled={user?.role !== "ADMIN"}
               onChange={(e) => setNumberRequest(e.target.value)}
               value={numberRequest}
               placeholder={numberRequest === "" ? "กรุณากรอกเลขที่คำขอ" : ""}
               type="text"
-              className=" h-12 w-full rounded-md bg-slate-300 p-1 pl-3 text-lg  md:min-w-80 md:pl-4 "
+              className="h-11 w-60 rounded-md bg-slate-300 p-1 pl-3 text-base md:min-w-80 md:pl-4 lg:h-12 lg:w-full lg:text-lg"
             />
           </TextField>
-          <TextField>
-            <Label className="text-lg">วันยื่นคำขอ:</Label>
-            <div className="w-40 rounded-lg bg-slate-300 p-1">
+          <TextField className="flex flex-col gap-2 ">
+            <Label className="text-base lg:text-lg">วันยื่นคำขอ:</Label>
+            <div className="w-60 rounded-lg bg-slate-300 p-1 lg:w-40">
               <Calendar
                 value={requestDate ? new Date(requestDate) : null}
                 onChange={(e) => {
                   setRequestDate(e.value?.toISOString());
                 }}
                 disabled={user?.role !== "ADMIN"}
-                className="h-10"
+                className="h-10 w-full"
                 locale="th"
                 placeholder="ระบุวันที่ยื่นคำขอ"
               />
@@ -207,12 +207,13 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
           {user?.role === "ADMIN" && (
             <Button
               type="submit"
-              className="rounded-md bg-[var(--secondary-yellow)] px-3 py-1 text-[0.65rem] font-semibold ring-1 ring-black drop-shadow-md duration-200 hover:bg-yellow-400 lg:text-[0.85rem]"
+              className="w-44 rounded-md bg-[var(--secondary-yellow)] px-3 py-3 text-base font-semibold ring-1 ring-black drop-shadow-md duration-200 hover:bg-yellow-400 md:w-24 lg:mt-8 lg:py-1"
             >
               ยืนยัน
             </Button>
           )}
         </Form>
+
         <h1 className="font-semibold lg:text-xl">
           ประเภท : สิทธิบัตรการประดิษฐ์
         </h1>

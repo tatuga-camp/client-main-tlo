@@ -873,7 +873,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base">
-            <section className=" flex w-96 flex-col gap-5">
+            <section className=" flex w-72 flex-col gap-5 lg:w-96">
               <label>เลือกรูปแบบการเผยแพร่</label>
               <div className="flex flex-col gap-1">
                 <div className=" h-12 w-56 rounded-lg bg-slate-300 p-1 md:w-60">

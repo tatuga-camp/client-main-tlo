@@ -390,7 +390,7 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
                 </Button>
               </FileTrigger>
             </section>
-            <section className="grid grid-cols-3 gap-2 2xl:grid-cols-4">
+            <section className=" grid grid-cols-1 gap-2 lg:ml-0  lg:grid-cols-3 2xl:grid-cols-4">
               {...files
                 ?.filter((file) => file.documentType === "TRADEMARK")
                 .map((file) => {
