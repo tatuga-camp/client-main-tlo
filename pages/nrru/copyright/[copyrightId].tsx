@@ -137,7 +137,7 @@ const Index = ({ user }: { user: User }) => {
         await DeleteCopyrightService({
           copyrightId: copyrightId,
         });
-        naviateRouter.push("/dashboard");
+        naviateRouter.push("/");
         Swal.fire({
           title: "ลบข้อมูลสำเร็จ",
           icon: "success",

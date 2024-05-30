@@ -117,15 +117,15 @@ const Index = ({ user }: { user: User }) => {
           html: "กรุณารอสักครู่",
           allowEscapeKey: false,
           allowOutsideClick: false,
+
           didOpen: () => {
             Swal.showLoading();
           },
         });
-
         await DeleteDesignPatentService({
           designPatentId: designId,
         });
-        naviateRouter.push("/dashboard");
+        naviateRouter.push("/");
         Swal.fire({
           title: "ลบข้อมูลสำเร็จ",
           icon: "success",

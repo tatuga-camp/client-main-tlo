@@ -107,11 +107,13 @@ function OwnerPartner({
         {(ownerData?.status === "นิติบุคคล" ||
           ownerData?.status === "มูลนิธิ" ||
           ownerData?.status === "หน่วยงานรัฐ") && (
-          <TextField className={"flex w-full items-center gap-3 "}>
+          <TextField
+            className={"flex w-full flex-col items-center gap-3 md:flex-row "}
+          >
             <Label className=" text-[var(--primary-blue) min-w-20 font-semibold lg:min-w-24">
               ชื่อของนิติบุคคลหรือหน่วยงานรัฐหรือมูลนิธ
             </Label>
-            <div className="flex w-96 flex-col gap-1">
+            <div className="flex w-full flex-col gap-1">
               <Input
                 required
                 name="fullName"

@@ -80,7 +80,7 @@ function SearchWorkDesign({ design }: SearchWorkDesignProps) {
       }
       Swal.fire({
         title: "กำลังสร้างข้อมูล",
-        willOpen: () => {
+        didOpen: () => {
           Swal.showLoading();
         },
       });
