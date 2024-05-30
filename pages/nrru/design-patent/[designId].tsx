@@ -134,7 +134,7 @@ const Index = ({ user }: { user: User }) => {
         await DeleteDesignPatentService({
           designPatentId: designId,
         });
-        naviateRouter.push("/dashboard");
+        naviateRouter.push("/");
         Swal.fire({
           title: "ลบข้อมูลสำเร็จ",
           icon: "success",

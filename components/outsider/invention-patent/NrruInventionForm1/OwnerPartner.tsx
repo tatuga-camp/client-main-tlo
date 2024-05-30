@@ -107,11 +107,13 @@ function OwnerPartner({
         {(ownerData?.status === "นิติบุคคล" ||
           ownerData?.status === "มูลนิธิ" ||
           ownerData?.status === "หน่วยงานรัฐ") && (
-          <TextField className={"flex w-full items-center gap-3 "}>
+          <TextField
+            className={"flex w-full flex-col items-center gap-3 md:flex-row "}
+          >
             <Label className=" text-[var(--primary-blue) min-w-20 font-semibold lg:min-w-24">
               ชื่อของนิติบุคคลหรือหน่วยงานรัฐหรือมูลนิธ
             </Label>
-            <div className="flex w-96 flex-col gap-1">
+            <div className="flex w-full flex-col gap-1">
               <Input
                 required
                 name="fullName"
@@ -234,7 +236,7 @@ function OwnerPartner({
                   onChange={handleChangePartnerData}
                   name="houseNumber"
                   type="text"
-                  className="ounded-lg h-8  w-28 bg-slate-300 p-1 pl-3 lg:h-10 lg:w-40 lg:pl-4 "
+                  className="h-8 w-28  rounded-lg bg-slate-300 p-1 pl-3 lg:h-10 lg:w-40 lg:pl-4 "
                   placeholder="บ้านเลขที่"
                 />
                 <FieldError className="text-xs text-red-700" />

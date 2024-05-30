@@ -232,7 +232,7 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
               </FileTrigger>
             </section>
           </div>
-          <section className="grid grid-cols-1 gap-2 lg:grid-cols-3 2xl:grid-cols-4">
+          <section className="ml-5 grid grid-cols-1 gap-2 lg:ml-0  lg:grid-cols-3 2xl:grid-cols-4">
             {...files
               ?.filter((file) => file.documentType === "IDCARD")
               .map((file) => {
@@ -298,7 +298,7 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
               </button>
             </section>
           </div>
-          <section className="grid grid-cols-3 gap-2 2xl:grid-cols-4">
+          <section className="ml-5 grid grid-cols-1 gap-2 lg:ml-0  lg:grid-cols-3 2xl:grid-cols-4">
             {...files
               ?.filter((file) => file.documentType === "REQUEST")
               .map((file) => {
@@ -364,7 +364,7 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
               </FileTrigger>
             </section>
           </div>
-          <section className="grid grid-cols-3 gap-2 2xl:grid-cols-4">
+          <section className="ml-5 grid grid-cols-1 gap-2 lg:ml-0  lg:grid-cols-3 2xl:grid-cols-4">
             {...files
               ?.filter((file) => file.documentType === "OTHERS")
               .map((file) => {

@@ -349,14 +349,18 @@ function RequestSummary({ user }: { user?: User }) {
 
       <div className="mt-12 flex w-full flex-col items-center gap-8">
         <div className="relative max-h-96 w-10/12 overflow-auto">
-          <table className="w-max min-w-full border-separate border-spacing-1 rounded-md bg-white p-1 text-center text-[0.7rem]  md:p-4 md:text-base">
+          <table
+            className="w-max min-w-full border-separate border-spacing-1 
+          rounded-md bg-white  text-center text-[0.7rem]  md:p-4 md:text-base"
+          >
             <thead className="">
-              <tr className="sticky top-2 z-10 bg-white  p-5 ">
+              <tr className="sticky top-0 z-10 bg-white  p-5 ">
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">
                   รายชื่อผู้ยื่น
                 </th>
                 <th className=" rounded-md bg-[#BED6FF] p-2">วันยื่นคำขอ</th>
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
+                <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทบุคคล</th>
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
               </tr>
@@ -411,18 +415,36 @@ function RequestSummary({ user }: { user?: User }) {
                             {item.user.lastName}
                           </td>
                           <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                            {item.requestDate
-                              ? moment(item.requestDate).format("DD/MM/YYYY")
-                              : "ไม่มีพบวันยื่นคำขอ"}
+                            {item.requestDate ? (
+                              <span>
+                                {moment(item.requestDate).format("DD/MM/YYYY")}
+                              </span>
+                            ) : (
+                              <span className="text-red-600">
+                                ไม่มีพบวันยื่นคำขอ
+                              </span>
+                            )}
                           </td>
                           <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                            {item.numberRequest ?? "ไม่มีหมายเลขคำขอ"}
+                            {item.numberRequest ?? (
+                              <span className="text-red-600">
+                                ไม่มีหมายเลขคำขอ
+                              </span>
+                            )}
+                          </td>
+                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                            {item.userType === "INTERNAL"
+                              ? "บุคลากรมหาวิทยาลัย"
+                              : "บุคลากรภายนอก"}
                           </td>
                           <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                             {title}
                           </td>
-                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:bg-main-color hover:text-white">
-                            <LinkNextJS className="" href={url}>
+                          <td>
+                            <LinkNextJS
+                              className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:bg-main-color hover:text-white"
+                              href={url}
+                            >
                               ตรวจสอบ
                             </LinkNextJS>
                           </td>

@@ -529,7 +529,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                   >
                     <p className="font-semibold">ที่อยู่ (ตามบัตรประชาชน)</p>
                     <span className="flex items-center gap-5">
-                      <Label className=" text-[var(--primary-blue) font-medium ">
+                      <Label className=" text-[var(--primary-blue) min-w-16 font-medium ">
                         บ้านเลขที่
                       </Label>
                       <div className="flex flex-col gap-1">
@@ -544,7 +544,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                           }
                           name="houseNumber"
                           type="text"
-                          className="h-8 w-40  max-w-20 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                          className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
                           placeholder="บ้านเลขที่"
                         />
                         <FieldError className="text-xs text-red-700" />
@@ -567,7 +567,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                         }
                         name="villageNumber"
                         type="text"
-                        className="h-8 w-40  max-w-14 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
                         placeholder="หมู่"
                       />
                       <FieldError className="text-xs text-red-700" />
