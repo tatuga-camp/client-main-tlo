@@ -6,8 +6,9 @@ function generateSiteMap() {
     <!--We manually set the two URLs we know already-->
     <url>
     <loc>https://nrru-tlo.org</loc>
-<lastmod>2024-05-26</lastmod>
+      <lastmod>2024-05-26</lastmod>
     </url>
+    <url>
     <loc>https://www.nrru-tlo.org</loc>
     <lastmod>2024-05-26</lastmod>
     </url>
