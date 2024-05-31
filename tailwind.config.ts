@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      transitionProperty: {
+        height: "height",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

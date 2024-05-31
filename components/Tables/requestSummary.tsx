@@ -241,7 +241,7 @@ function RequestSummary({ user }: { user?: User }) {
     <>
       <Element
         name="request"
-        className="flex w-7/12 justify-center font-Anuphan"
+        className="flex w-11/12 justify-center font-Anuphan md:w-7/12"
       >
         <div className="mt-12 flex w-full flex-col items-center gap-8">
           <h1 className="w-full  bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold hover:drop-shadow-md md:text-xl">
@@ -348,7 +348,7 @@ function RequestSummary({ user }: { user?: User }) {
       </Element>
 
       <div className="mt-12 flex w-full flex-col items-center gap-8">
-        <div className="relative max-h-96 w-10/12 overflow-auto">
+        <div className="relative max-h-96 w-11/12 overflow-auto md:w-10/12">
           <table
             className="w-max min-w-full border-separate border-spacing-1 
           rounded-md bg-white  text-center text-[0.7rem]  md:p-4 md:text-base"

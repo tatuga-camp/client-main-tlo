@@ -46,10 +46,6 @@ const Navbar = () => {
         <LogoFile />
       </Link>
 
-      {/* <button className="text-4xl text-main-color transition duration-100 hover:text-second-color active:scale-105">
-          <IoMenu />
-        </button> */}
-
       <div className="flex gap-2">
         {user.data && user.data.role === "ADMIN" && (
           <Link

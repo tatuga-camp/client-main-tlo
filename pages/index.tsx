@@ -107,7 +107,7 @@ export default function Home() {
                 href="/dashboard"
                 className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] duration-300 hover:scale-110 hover:bg-yellow-500 hover:drop-shadow-md md:px-4 md:py-2 md:text-xl"
               >
-                เข้าสู่หน้าหลัก
+                ส่งคำร้อง
               </LinkNextJS>
             </section>
           </header>
@@ -192,13 +192,17 @@ export default function Home() {
             </section>
           </main>
           <RequestSummary />
+
           {/* ข่าวประชาสัมพันธ์ */}
           <div className="w-full">
             <Element
               name="information"
               className="mt-12 flex w-full flex-col items-center gap-8 md:items-start "
             >
-              <h1 className="z-10 flex w-[85%] items-center justify-center gap-5 bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold hover:drop-shadow-md md:justify-start md:pl-32 md:text-start md:text-xl">
+              <h1
+                className="z-10 flex w-[85%] items-center justify-center gap-5 bg-[var(--secondary-yellow)]
+               px-4 py-2 text-center font-semibold hover:drop-shadow-md md:justify-start md:pl-32 md:text-start md:text-xl"
+              >
                 <BsEnvelopePaper />
                 ข่าวประชาสัมพันธ์
               </h1>
@@ -225,6 +229,7 @@ export default function Home() {
             </Element>
             <NewsList />
           </div>
+
           {/* ความรู้เกี่ยวกับงานทรัพย์สินทางปัญญา */}
           <div className="flex w-full justify-center gap-4 ">
             <Element
@@ -286,18 +291,21 @@ export default function Home() {
             </Element>
           </div>
           {/* เกี่ยวกับเรา */}
-          <div className="mt-12 flex w-full flex-col items-center gap-8 bg-[var(--primary-blue)] py-5 md:items-start md:bg-[#F4F8FF] md:py-0">
+          <div
+            className="mt-12 flex w-full flex-col items-center gap-8 bg-[var(--primary-blue)]
+           py-5 md:items-start md:bg-[#F4F8FF] md:py-0"
+          >
             <Element
               name="aboutUs"
-              className="z-10 flex w-[85%] items-center justify-center gap-5 bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold 
+              className="w-[85% z-10 flex  items-center justify-center gap-5 
+              bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold 
          hover:drop-shadow-md md:justify-start md:pl-32 md:text-start md:text-xl"
             >
               <PiUserCircleFill />
               เกี่ยวกับเรา
             </Element>
 
-            {/* Desktop */}
-            <div className="-mt-12 hidden min-h-[50rem] w-full bg-[var(--primary-blue)] text-[white] md:flex">
+            <div className="  flex min-h-[50rem] w-full bg-[var(--primary-blue)] py-10 text-[white] ">
               <div className="relative min-h-full w-[35%] bg-slate-400">
                 <Image
                   alt="pictor of aboutUs"
@@ -306,15 +314,18 @@ export default function Home() {
                   src={"/picture/aboutUs.png"}
                 />
               </div>
-              <section className="z-10 my-16 flex flex-col gap-9">
+              <section className="z-10  flex flex-col gap-10">
                 {/* วิสัยทัศน์ */}
                 <div className="-ml-9 flex items-center gap-5">
-                  <div className="flex h-32 w-32 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)] bg-[#DDE9FF] text-7xl text-[var(--primary-blue)]">
+                  <div
+                    className="flex h-16 w-16 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)]
+                   bg-[#DDE9FF] text-7xl text-[var(--primary-blue)] md:h-32 md:w-32"
+                  >
                     <GoGoal />
                   </div>
-                  <div className="flex w-[70%] flex-col justify-center gap-3">
-                    <h1 className="text-2xl font-semibold">วิสัยทัศน์</h1>
-                    <p>
+                  <div className="flex w-10/12 flex-col justify-center gap-3">
+                    <h1 className=" text-2xl font-semibold">วิสัยทัศน์</h1>
+                    <p className="text-sm md:text-base">
                       การบริหารจัดการทรัพย์สินทางปัญญา
                       ให้เกิดการจัดการองค์ความรู้
                       และประโยชน์ที่ได้รับจากการจัดการทรัพย์สินทางปัญญา
@@ -324,12 +335,15 @@ export default function Home() {
 
                 {/* พันธกิจ */}
                 <div className="-ml-9 flex items-center gap-5">
-                  <div className="flex h-32 w-32 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)] bg-[#ACC9FF] text-7xl text-[var(--primary-blue)]">
+                  <div
+                    className="flex h-16 w-16 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)]
+                   bg-[#DDE9FF] text-7xl text-[var(--primary-blue)] md:h-32 md:w-32"
+                  >
                     <LiaClipboardListSolid />
                   </div>
                   <div className="flex w-[70%] flex-col justify-center gap-3">
                     <h1 className="text-2xl font-semibold">พันธกิจ</h1>
-                    <ol>
+                    <ol className="text-sm md:text-base">
                       <li>1. บริการฝึกอบรมความรู้ทางด้านทรัพย์สินทางปัญญา</li>
                       <li>
                         2. บริการให้คำปรึกษาทางด้านทรัพย์สินทางปัญญา
@@ -353,12 +367,15 @@ export default function Home() {
 
                 {/* กลุ่มเป้าหมาย */}
                 <div className="-ml-9 flex items-center gap-5">
-                  <div className="flex h-32 w-32 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)] bg-[#82ADFF] text-7xl text-[var(--primary-blue)]">
+                  <div
+                    className="flex h-16 w-16 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)]
+                   bg-[#DDE9FF] text-7xl text-[var(--primary-blue)] md:h-32 md:w-32"
+                  >
                     <GrGroup />
                   </div>
                   <div className="flex w-[70%] flex-col justify-center gap-3">
                     <h1 className="text-2xl font-semibold">กลุ่มเป้าหมาย</h1>
-                    <ol>
+                    <ol className="text-sm md:text-base">
                       <li>1. นักศึกษามหาวิทยาลัยราชภัฏนครราชสีมา</li>
                       <li>
                         2. คณาจารย์/นักวิชาการ ที่มีผลงานวิจัย
@@ -374,12 +391,15 @@ export default function Home() {
 
                 {/* บริการของเรา */}
                 <div className="-ml-9 flex items-center gap-5">
-                  <div className="flex h-32 w-32 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)] bg-[#5D95FF] text-7xl text-[var(--primary-blue)]">
+                  <div
+                    className="flex h-16 w-16 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)]
+                   bg-[#DDE9FF] text-7xl text-[var(--primary-blue)] md:h-32 md:w-32"
+                  >
                     <FaRegCircleCheck />
                   </div>
                   <div className="flex w-[70%] flex-col justify-center gap-3">
                     <h1 className="text-2xl font-semibold">บริการของเรา</h1>
-                    <ol>
+                    <ol className="text-sm md:text-base">
                       <li>
                         1.
                         บริการให้คำปรึกษาแนะนำความรู้เกี่ยวกับทรัพย์สินทางปัญญาแก่นักศึกษา
@@ -406,56 +426,6 @@ export default function Home() {
                   </div>
                 </div>
               </section>
-            </div>
-
-            {/* mobile (swiper) */}
-            <div className="min-h-[15rem] w-[85%] bg-[var(--primary-blue)] md:hidden ">
-              <Swiper slidesPerView={2} spaceBetween={10} freeMode={true}>
-                <SwiperSlide className="">
-                  <div className="mr-5 flex h-48 w-36 flex-col items-center justify-center gap-3 bg-white drop-shadow-sm">
-                    <h1 className="text-xl font-semibold">วิสัยทัศน์</h1>
-                    <div className="text-5xl">
-                      <GoGoal />
-                    </div>
-                    <button className="mt-2 bg-[var(--secondary-yellow)] px-2 py-1 font-semibold">
-                      เพิ่มเติม
-                    </button>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide className="">
-                  <div className="mr-5 flex h-48 w-36 flex-col items-center justify-center gap-3 bg-white drop-shadow-sm">
-                    <h1 className="text-xl font-semibold">พันธกิจ</h1>
-                    <div className="text-5xl">
-                      <LiaClipboardListSolid />
-                    </div>
-                    <button className="mt-2 bg-[var(--secondary-yellow)] px-2 py-1 font-semibold">
-                      เพิ่มเติม
-                    </button>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide className="">
-                  <div className="mr-5 flex h-48 w-36 flex-col items-center justify-center gap-3 bg-white drop-shadow-sm">
-                    <h1 className="text-xl font-semibold">กลุ่มเป้าหมาย</h1>
-                    <div className="text-5xl">
-                      <GrGroup />
-                    </div>
-                    <button className="mt-2 bg-[var(--secondary-yellow)] px-2 py-1 font-semibold">
-                      เพิ่มเติม
-                    </button>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide className="">
-                  <div className="mr-5 flex h-48 w-36 flex-col items-center justify-center gap-3 bg-white drop-shadow-sm">
-                    <h1 className="text-xl font-semibold">บริการ</h1>
-                    <div className="text-5xl">
-                      <FaRegCircleCheck />
-                    </div>
-                    <button className="mt-2 bg-[var(--secondary-yellow)] px-2 py-1 font-semibold">
-                      เพิ่มเติม
-                    </button>
-                  </div>
-                </SwiperSlide>
-              </Swiper>
             </div>
           </div>
         </div>

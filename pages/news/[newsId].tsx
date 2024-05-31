@@ -37,7 +37,7 @@ function Index({ news }: { news: ResponseGetNewsByIdService }) {
         className="flex h-full w-full flex-col items-center bg-[#F4F8FF] 
         pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center"
       >
-        <main className="flex w-9/12 flex-col items-center justify-between rounded-md border-[1px] border-solid bg-white p-6 py-8">
+        <main className="flex w-full flex-col items-center justify-between rounded-md border-[1px] border-solid bg-white p-6 py-8 md:w-9/12">
           <div className="flex w-[90%] flex-col gap-3 ">
             <section className="flex w-[80%] items-center gap-3 font-semibold md:w-[70%]">
               <FacebookShareButton url={fullUrl}>
@@ -90,7 +90,7 @@ function Index({ news }: { news: ResponseGetNewsByIdService }) {
           {news.content && (
             <div className="mb-10 w-[90%] ">{parse(news.content)}</div>
           )}
-          <section className="grid w-full grid-cols-4 gap-5">
+          <section className="grid w-11/12 grid-cols-1 gap-5 md:grid-cols-3 xl:grid-cols-4">
             {news.files.map((file) => {
               return <FileOnNews file={file} key={file.id} />;
             })}

@@ -37,7 +37,7 @@ function NewsList() {
   return (
     <div>
       <div className="mt-12 flex w-full flex-col items-center gap-8">
-        <div className="flex w-96 items-center justify-center gap-2 md:gap-5">
+        <div className="flex w-10/12 items-center justify-center gap-2 md:w-96 md:gap-5">
           <div className=" text-base md:text-xl">
             <LuSearch />
           </div>
@@ -59,7 +59,7 @@ function NewsList() {
              md:p-2 md:pl-10"
           />
         </div>
-        <div className="relative max-h-96 w-10/12 overflow-auto">
+        <div className="relative max-h-96 w-11/12 overflow-auto md:w-10/12">
           <table
             className="w-max min-w-full border-separate border-spacing-1 rounded-md bg-white
            p-1 text-center text-[0.7rem]  md:border-spacing-2 md:p-4 md:text-base"
