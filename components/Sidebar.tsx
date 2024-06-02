@@ -13,6 +13,10 @@ const menuSidebars = [
     link: "/admin/manage-news",
   },
   {
+    title: "คลังความรู้",
+    link: "/admin/manage-knowledge",
+  },
+  {
     title: "หน้าหลัก",
     link: "/",
   },
