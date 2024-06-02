@@ -1,3 +1,5 @@
+import { NewsType } from "./type.model";
+
 export type News = {
   id: string;
   createAt: string;
@@ -6,6 +8,7 @@ export type News = {
   content: string;
   releaseAt: string;
   isPublic: boolean;
+  type: NewsType;
 };
 
 export type FileOnNews = {

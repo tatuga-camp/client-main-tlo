@@ -19,6 +19,7 @@ function NewsList() {
         page: page,
         limit: 5,
         searchField: searchField.actual,
+        type: "news",
       }),
   });
 

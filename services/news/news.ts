@@ -1,11 +1,12 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
-import { FileOnNews, News, Pagination, User } from "../../models";
+import { FileOnNews, News, NewsType, Pagination, User } from "../../models";
 
 type RequestGetNewsByPageService = {
   page: number;
   limit: number;
   searchField: string;
+  type: NewsType;
 };
 
 export type ResponseGetNewsByPageService = Pagination<
@@ -67,6 +68,7 @@ type RequestCreateNewsService = {
   content?: string;
   isPublic: boolean;
   releaseAt: string;
+  type: NewsType;
 };
 
 type ResponseCreateNewsService = News;

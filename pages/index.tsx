@@ -9,7 +9,6 @@ import { IoBulbOutline } from "react-icons/io5";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import { PiUserCircleFill } from "react-icons/pi";
 import { GoGoal } from "react-icons/go";
@@ -17,6 +16,8 @@ import { LiaClipboardListSolid } from "react-icons/lia";
 import { GrGroup } from "react-icons/gr";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import LinkNextJS from "next/link";
+import { Pagination as PaginationMUI } from "@mui/material";
+
 import {
   Link,
   Button,
@@ -40,8 +41,19 @@ export default function Home() {
     queryFn: () =>
       GetNewsByPageService({
         limit: 3,
+        page: 1,
+        searchField: "",
+        type: "news",
+      }),
+  });
+  const knowledges = useQuery({
+    queryKey: ["knowledge", { page: page }],
+    queryFn: () =>
+      GetNewsByPageService({
+        limit: 10,
         page: page,
         searchField: "",
+        type: "knowledge",
       }),
   });
   return (
@@ -51,12 +63,12 @@ export default function Home() {
         <meta charSet="UTF-8" />
         <meta
           property="og:title"
-          content="งานทรัพย์สินทางปัญญา กองพัฒนาพิเศษ สำนักงานอธิการบดี
+          content="งานทรัพย์สินทางปัญญา กองกิจการพิเศษ สำนักงานอธิการบดี
           มหาวิทยาลัยราชภัฏนครราชสีมา NRRU TLO"
         />
         <meta
           property="og:description"
-          content="งานทรัพย์สินทางปัญญา กองพัฒนาพิเศษ สำนักงานอธิการบดี
+          content="งานทรัพย์สินทางปัญญา กองกิจการพิเศษ สำนักงานอธิการบดี
           มหาวิทยาลัยราชภัฏนครราชสีมา NRRU TLO"
         />
         <meta
@@ -73,11 +85,11 @@ export default function Home() {
         />
         <meta
           name="description"
-          content="งานทรัพย์สินทางปัญญา กองพัฒนาพิเศษ สำนักงานอธิการบดี
+          content="งานทรัพย์สินทางปัญญา กองกิจการพิเศษ สำนักงานอธิการบดี
           มหาวิทยาลัยราชภัฏนครราชสีมา NRRU TLO"
         />
         <title>
-          งานทรัพย์สินทางปัญญา กองพัฒนาพิเศษ สำนักงานอธิการบดี
+          งานทรัพย์สินทางปัญญา กองกิจการพิเศษ สำนักงานอธิการบดี
           มหาวิทยาลัยราชภัฏนครราชสีมา
         </title>
       </Head>
@@ -97,7 +109,7 @@ export default function Home() {
                   งานทรัพย์สินทางปัญญา
                 </h2>
                 <h1 className="mt-3 md:text-2xl">
-                  กองพัฒนาพิเศษ สำนักงานอธิการบดี
+                  กองกิจการพิเศษ สำนักงานอธิการบดี
                 </h1>
               </div>
             </section>
@@ -107,7 +119,7 @@ export default function Home() {
                 href="/dashboard"
                 className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] duration-300 hover:scale-110 hover:bg-yellow-500 hover:drop-shadow-md md:px-4 md:py-2 md:text-xl"
               >
-                ส่งคำร้อง
+                เข้าสู้หน้าหลักพื่อยื่นคำขอ
               </LinkNextJS>
             </section>
           </header>
@@ -251,40 +263,25 @@ export default function Home() {
                   ความรู้เกี่ยวกับงานทรัพย์สินทางปัญญา
                 </h2>
                 <div className="flex  w-full justify-center bg-[url('/knowledge.png')] py-10 md:bg-none md:py-0">
-                  <div className="flex h-full w-[85%] flex-col gap-2 text-[0.8rem]  md:w-full md:text-base">
-                    <a
-                      href="https://www.ipthailand.go.th/th/dip-law-2.html"
-                      target="_blank"
-                      className="h-full w-full  bg-[#10316B] bg-opacity-70 p-5 text-center text-white duration-300 hover:bg-opacity-100"
-                    >
-                      กฏหมายทรัพย์สินทางปัญญา
-                    </a>
-                    <a
-                      href="/pdf/stepRequestCopyright.pdf"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      className="h-full w-full bg-[#10316B]  bg-opacity-70 p-5 text-center text-white duration-300 hover:bg-opacity-100"
-                    >
-                      ขั้นตอนการจดแจ้งข้อมูลลิขสิทธิ์
-                    </a>
-                    <a
-                      href="/pdf/stepRequestInvention.pdf"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      className="h-full w-full bg-[#10316B]  bg-opacity-70 p-5 text-center text-white duration-300 hover:bg-opacity-100"
-                    >
-                      ขั้นนตอนการจดทะเบียนสิทธิบัตร/อนุสิทธิบัตร
-                    </a>
-                    <a
-                      href="https://www.ipthailand.go.th/th/dip-law-2.html"
-                      target="_blank"
-                      className="h-full w-full bg-[#10316B]  bg-opacity-70 p-5 text-center text-white duration-300 hover:bg-opacity-100"
-                    >
-                      ค่าธรรมเนียม
-                    </a>
-                    <button className="h-full w-full  bg-[#10316B] bg-opacity-70 p-5 text-white duration-300 hover:bg-opacity-100">
-                      จำนวนทรัพย์สินทางปัญญา
-                    </button>
+                  <div className="flex h-full w-[85%] flex-col items-center justify-center gap-2 text-[0.8rem]   md:w-full md:text-base">
+                    {knowledges.data?.data.map((knowledge, index) => {
+                      return (
+                        <LinkNextJS
+                          href={`/news/${knowledge.id}`}
+                          key={index}
+                          className="h-full w-full  bg-[#10316B] bg-opacity-70 p-5 text-center text-white duration-300 hover:bg-opacity-100"
+                        >
+                          {knowledge.title}
+                        </LinkNextJS>
+                      );
+                    })}
+                    <PaginationMUI
+                      className="mt-5"
+                      page={page}
+                      onChange={(e, page) => setPage(page)}
+                      count={knowledges.data?.meta.total ?? 1}
+                      color="primary"
+                    />
                   </div>
                 </div>
               </section>

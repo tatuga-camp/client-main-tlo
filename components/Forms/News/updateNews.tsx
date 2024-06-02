@@ -309,7 +309,7 @@ function UpdateNews() {
             menubar: true,
             image_title: true,
             automatic_uploads: true,
-            file_picker_types: "image",
+            paste_data_images: false,
             file_picker_callback: filePickerCallback,
             plugins: [
               "contextmenu",
@@ -317,7 +317,6 @@ function UpdateNews() {
               "autolink",
               "lists",
               "link",
-              "image",
               "charmap",
               "preview",
               "anchor",
@@ -332,12 +331,12 @@ function UpdateNews() {
               "wordcount",
             ],
             contextmenu:
-              "paste | link image inserttable | cell row column deletetable",
+              "paste | link  inserttable | cell row column deletetable",
             toolbar:
               "undo redo | formatselect | blocks | " +
               "bold italic backcolor | alignleft aligncenter " +
               "alignright alignjustify | bullist numlist outdent indent | " +
-              "removeformat | help | link | image",
+              "removeformat | help | link ",
             content_style:
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}

@@ -1,39 +1,35 @@
-import { Editor } from "@tinymce/tinymce-react";
+import { useRouter } from "next-nprogress-bar";
 import React, { FormEvent, useState } from "react";
-import {
-  Button,
-  FieldError,
-  FileTrigger,
-  Form,
-  Input,
-  Label,
-  TextField,
-} from "react-aria-components";
-import { MdCancel } from "react-icons/md";
-import { filePickerCallback } from "../../../utilities/filePickerCallback";
-import Loading from "../../Loading/loadingSpinner";
-import LoadingSpinner from "../../Loading/loadingSpinner";
-import Link from "next/link";
-import { FiPlusCircle } from "react-icons/fi";
-import FileOnNews from "./FileOnNews";
 import { ErrorMessages } from "../../../models";
 import Swal from "sweetalert2";
+import {
+  CreateNewsService,
+  UpdateNewsService,
+} from "../../../services/news/news";
 import { filterBase64Image } from "../../../utilities/filterImageBase64";
-import { Base64ToFile } from "../../../utilities/base64ToFile";
+import { replaceBase64WithNewContentService } from "../../../services/replaceBase64";
 import {
   GetSignURLService,
   UploadSignURLService,
 } from "../../../services/google-storage";
 import { CreateFileNewsService } from "../../../services/news/file-news";
 import {
-  CreateNewsService,
-  UpdateNewsService,
-} from "../../../services/news/news";
-import { replaceBase64WithNewContentService } from "../../../services/replaceBase64";
-import { useRouter } from "next-nprogress-bar";
+  Button,
+  FieldError,
+  FileTrigger,
+  Form,
+  Input,
+  TextField,
+} from "react-aria-components";
+import Link from "next/link";
+import { MdCancel } from "react-icons/md";
 import { Switch } from "@mui/material";
+import LoadingSpinner from "../../Loading/loadingSpinner";
+import { Editor } from "@tinymce/tinymce-react";
+import { filePickerCallback } from "../../../utilities/filePickerCallback";
+import FileOnNews from "../News/FileOnNews";
 
-function CreateNews() {
+function CreateKnowledge() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [newsData, setNewsData] = useState<{
@@ -93,7 +89,7 @@ function CreateNews() {
       }
 
       Swal.fire({
-        title: "กำลังสร้างข่าว",
+        title: "กำลังสร้างคลังความรู้",
         text: "กรุณารอสักครู่",
         icon: "info",
         showConfirmButton: false,
@@ -108,7 +104,7 @@ function CreateNews() {
         title: newsData?.title as string,
         isPublic: newsData?.isPublic,
         releaseAt: new Date(newsData?.date).toISOString(),
-        type: "news",
+        type: "knowledge",
       });
       const imageBase64 = filterBase64Image(newsData?.description);
 
@@ -154,9 +150,9 @@ function CreateNews() {
           }),
         ),
       );
-      router.push("/admin/manage-news");
+      router.push("/admin/manage-knowledge");
       Swal.fire({
-        title: "สร้างข่าวสำเร็จ",
+        title: "สร้างความรู้สำเร็จ",
         text: "ระบบกำลังดำเนินการตรวจสอบข้อมูล",
         icon: "success",
       });
@@ -172,7 +168,6 @@ function CreateNews() {
       });
     }
   };
-
   return (
     <Form
       onSubmit={handleCreateNews}
@@ -181,8 +176,8 @@ function CreateNews() {
       <Link
         href={"/admin/manage-news"}
         className="absolute right-2 top-2 m-auto flex items-center
-         justify-center gap-2 rounded-md bg-red-300 px-3 py-1 text-red-600
-          transition duration-150 hover:bg-red-400 active:scale-105"
+     justify-center gap-2 rounded-md bg-red-300 px-3 py-1 text-red-600
+      transition duration-150 hover:bg-red-400 active:scale-105"
       >
         <MdCancel />
         ยกเลิก
@@ -195,7 +190,7 @@ function CreateNews() {
             onChange={handleChange}
             value={newsData?.title}
             className=" w-full rounded-sm bg-white p-1 pl-4 ring-1 ring-blue-200  md:h-10 "
-            placeholder="ใส่หัวข้อข่าว"
+            placeholder="ใส่หัวข้อความรู้"
           />
           <FieldError className="text-xs text-red-700" />
         </section>
@@ -260,6 +255,7 @@ function CreateNews() {
             menubar: true,
             image_title: true,
             automatic_uploads: true,
+            file_picker_types: "image",
             file_picker_callback: filePickerCallback,
             plugins: [
               "contextmenu",
@@ -333,12 +329,12 @@ function CreateNews() {
       <Button
         type="submit"
         className="w-40 rounded-md bg-main-color px-3 py-3 font-semibold
-         text-white shadow-md transition duration-100 hover:drop-shadow-lg active:scale-105"
+     text-white shadow-md transition duration-100 hover:drop-shadow-lg active:scale-105"
       >
-        สร้างข่าว
+        สร้างคลังความรู้
       </Button>
     </Form>
   );
 }
 
-export default CreateNews;
+export default CreateKnowledge;

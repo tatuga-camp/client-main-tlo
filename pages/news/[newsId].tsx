@@ -22,6 +22,7 @@ import {
   FacebookIcon,
 } from "react-share";
 import { useRouter } from "next/router";
+import Head from "next/head";
 function Index({ news }: { news: ResponseGetNewsByIdService }) {
   const [fullUrl, setFullUrl] = useState("");
   const router = useRouter();
@@ -32,72 +33,79 @@ function Index({ news }: { news: ResponseGetNewsByIdService }) {
     }
   }, [router.isReady]);
   return (
-    <HomeLayout>
-      <div
-        className="flex h-full w-full flex-col items-center bg-[#F4F8FF] 
-        pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center"
-      >
-        <main className="flex w-full flex-col items-center justify-between rounded-md border-[1px] border-solid bg-white p-6 py-8 md:w-9/12">
-          <div className="flex w-[90%] flex-col gap-3 ">
-            <section className="flex w-[80%] items-center gap-3 font-semibold md:w-[70%]">
-              <FacebookShareButton url={fullUrl}>
-                <FacebookIcon size={30} round={true} />
-              </FacebookShareButton>
-              <p className="text-base text-[var(--primary-blue)] duration-200 group-hover:text-blue-400">
-                Share
+    <>
+      <Head>
+        <title>{news.title}</title>
+        <meta property="og:title" content={news.title} />
+        <meta property="og:description" content={news.content} />{" "}
+        {/* Assuming news has a description */}
+        <meta property="og:url" content={fullUrl} />
+        <meta property="og:type" content="article" />
+      </Head>
+      <HomeLayout>
+        <div className="flex h-full w-full flex-col items-center bg-[#F4F8FF] py-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center">
+          <main className="flex w-full flex-col items-center justify-between rounded-md border-[1px] border-solid bg-white p-6 py-8 md:w-9/12">
+            <div className="flex w-[90%] flex-col gap-3 ">
+              <section className="flex w-[80%] items-center gap-3 font-semibold md:w-[70%]">
+                <FacebookShareButton url={fullUrl}>
+                  <FacebookIcon size={30} round={true} />
+                </FacebookShareButton>
+                <p className="text-base text-[var(--primary-blue)] duration-200 group-hover:text-blue-400">
+                  Share
+                </p>
+              </section>
+              <h1 className="mt-10 text-start font-bold md:text-xl ">
+                {news.title}
+              </h1>
+              <p className="text-xs md:text-base">
+                {moment(news.releaseAt).format("DD/MM/YYYY HH:mm")}{" "}
+                <span className="font-semibold">
+                  เผยแพร่ โดย {news.user.firstName} {news.user.lastName}
+                </span>
               </p>
-            </section>
-            <h1 className="mt-10 text-start font-bold md:text-xl ">
-              {news.title}
-            </h1>
-            <p className="text-xs md:text-base">
-              {moment(news.releaseAt).format("DD/MM/YYYY HH:mm")}{" "}
-              <span className="font-semibold">
-                เผยแพร่ โดย {news.user.firstName} {news.user.lastName}
-              </span>
-            </p>
-          </div>
-          {news.files.filter((file) => file.type === "image/jpeg").length >
-            0 && (
-            <div className="my-5 flex w-full justify-center md:my-10 ">
-              <Swiper
-                slidesPerView={1}
-                spaceBetween={30}
-                modules={[Navigation]}
-                navigation={true}
-                className=" w-[90%]  md:w-[80%]"
-              >
-                {news.files
-                  .filter((file) => file.type === "image/jpeg")
-                  .map((image, index) => (
-                    <SwiperSlide key={index}>
-                      <div className=" flex h-[10rem] justify-center   md:h-[23rem] md:w-full">
-                        <div className="relative h-full w-[35rem] ">
-                          <Image
-                            src={image.url}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                            className="overflow-hidden object-cover"
-                            alt={`Image ${index + 1}`}
-                          />
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-              </Swiper>
             </div>
-          )}
-          {news.content && (
-            <div className="mb-10 w-[90%] ">{parse(news.content)}</div>
-          )}
-          <section className="grid w-11/12 grid-cols-1 gap-5 md:grid-cols-3 xl:grid-cols-4">
-            {news.files.map((file) => {
-              return <FileOnNews file={file} key={file.id} />;
-            })}
-          </section>
-        </main>
-      </div>
-    </HomeLayout>
+            {news.files.filter((file) => file.type === "image/jpeg").length >
+              0 && (
+              <div className="my-5 flex w-full justify-center md:my-10 ">
+                <Swiper
+                  slidesPerView={1}
+                  spaceBetween={30}
+                  modules={[Navigation]}
+                  navigation={true}
+                  className=" w-[90%]  md:w-[80%]"
+                >
+                  {news.files
+                    .filter((file) => file.type === "image/jpeg")
+                    .map((image, index) => (
+                      <SwiperSlide key={index}>
+                        <div className=" flex h-[10rem] justify-center   md:h-[23rem] md:w-full">
+                          <div className="relative h-full w-[35rem] ">
+                            <Image
+                              src={image.url}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 33vw"
+                              className="overflow-hidden object-cover"
+                              alt={`Image ${index + 1}`}
+                            />
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                </Swiper>
+              </div>
+            )}
+            {news.content && (
+              <div className="mb-10 w-[90%] ">{parse(news.content)}</div>
+            )}
+            <section className="grid w-11/12 grid-cols-1 gap-5 md:grid-cols-3 xl:grid-cols-4">
+              {news.files.map((file) => {
+                return <FileOnNews file={file} key={file.id} />;
+              })}
+            </section>
+          </main>
+        </div>
+      </HomeLayout>
+    </>
   );
 }
 

@@ -1,54 +1,49 @@
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import React, { useEffect, useState } from "react";
-import { GetUserService } from "../../../services/user";
 import AdminLayout from "../../../layouts/adminLayout";
 import Head from "next/head";
-import { IoIosCloseCircle } from "react-icons/io";
-import { Pagination, Switch } from "@mui/material";
-import { GoPencil } from "react-icons/go";
-import { Swiper, SwiperSlide } from "swiper/react";
-import Image from "next/image";
-import { Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import { IoCreate } from "react-icons/io5";
-import CreateNews from "../../../components/Forms/News/createNews";
-import Link from "next/link";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetUserService } from "../../../services/user";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   DeleteNewsService,
   GetNewsByPageService,
   ResponseGetNewsByPageService,
 } from "../../../services/news/news";
-import moment from "moment";
-import parse from "html-react-parser";
-import { LuSearch } from "react-icons/lu";
 import Swal from "sweetalert2";
 import { ErrorMessages } from "../../../models";
+import Link from "next/link";
+import { IoCreate } from "react-icons/io5";
+import { LuSearch } from "react-icons/lu";
+import { Pagination, Switch } from "@mui/material";
+import { GoPencil } from "react-icons/go";
+import { IoIosCloseCircle } from "react-icons/io";
+import moment from "moment";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import Image from "next/image";
+import parse from "html-react-parser";
 import FileOnNews from "../../../components/Forms/News/FileOnNews";
 
-function ManageNews() {
+function Index() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [searchField, setSearchField] = useState({
     delay: "",
     actual: "",
   });
-  const news = useQuery({
-    queryKey: ["news", { page: page, searchField: searchField.actual }],
+  const knowledges = useQuery({
+    queryKey: ["knowledge", { page: page, searchField: searchField.actual }],
     queryFn: () =>
       GetNewsByPageService({
         page: page,
         limit: 5,
         searchField: searchField.actual,
-        type: "news",
+        type: "knowledge",
       }),
   });
 
   useEffect(() => {
-    news.refetch();
+    knowledges.refetch();
   }, []);
 
   useEffect(() => {
@@ -64,8 +59,8 @@ function ManageNews() {
     return () => clearTimeout(delayDebounceFn);
   }, [searchField]);
 
-  const handleDeleteNews = async ({ newsId }: { newsId: string }) => {
-    if (!news.data) {
+  const handleDeleteNews = async ({ knowledgeId }: { knowledgeId: string }) => {
+    if (!knowledges.data) {
       throw new Error("โปรดรอสักครู่ และลองใหม่อีกครั้ง");
     }
     const replacedText = "ยืนยันการลบข้อมูล";
@@ -100,12 +95,12 @@ function ManageNews() {
         });
 
         await DeleteNewsService({
-          newsId: newsId,
+          newsId: knowledgeId,
         });
 
         const updateNews: ResponseGetNewsByPageService = {
-          data: news.data?.data.filter((news) => news.id !== newsId),
-          meta: news.data?.meta,
+          data: knowledges.data?.data.filter((news) => news.id !== knowledgeId),
+          meta: knowledges.data?.meta,
         };
 
         await queryClient.setQueryData(
@@ -135,26 +130,26 @@ function ManageNews() {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <title>ข่าวประชาสัมพันธ์</title>
+        <title>จัดการ คลังความรู้</title>
       </Head>
 
       <AdminLayout>
         <div
           className="flex h-full w-full flex-col items-center bg-[#F4F8FF] 
-        pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center"
+      pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center"
         >
           <header className="flex w-full flex-col items-center gap-10">
             <div
               className="mt-16 w-[70%]  bg-[var(--secondary-yellow)] p-2 
-            text-center font-semibold "
+          text-center font-semibold "
             >
-              ข่าวประชาสัมพันธ์
+              คลังความรู้
             </div>
             <Link
-              href={"/admin/manage-news/create"}
+              href={"/admin/manage-knowledge/create"}
               className="flex w-96 items-center justify-center gap-2 rounded-md
-               bg-[#BED6FF] p-2 font-semibold drop-shadow-md
-             transition  duration-100 hover:bg-[#87aced] active:scale-105 "
+             bg-[#BED6FF] p-2 font-semibold drop-shadow-md
+           transition  duration-100 hover:bg-[#87aced] active:scale-105 "
             >
               สร้างโพสต์ใหม่ <IoCreate />
             </Link>
@@ -178,21 +173,21 @@ function ManageNews() {
                   setPage(() => 1);
                 }}
                 value={searchField.delay}
-                placeholder="ค้นหาด้วยชื่อหรือเนื้อหาข่าว"
+                placeholder="ค้นหาด้วยชื่อหรือเนื้อหาคลังความรู้"
                 className="w-full rounded-md border-[1.5px] border-solid border-[#BED6FF] p-3 pl-2 placeholder:font-medium placeholder:text-[#2166DD] 
-                  md:p-2 md:pl-10"
+                md:p-2 md:pl-10"
               />
             </div>
             <Pagination
               page={page}
               onChange={(e, page) => setPage(page)}
-              count={news.data?.meta.total || 1}
+              count={knowledges.data?.meta.total || 1}
               color="primary"
             />
-            {news.isLoading ? (
+            {knowledges.isLoading ? (
               <div>Loading...</div>
             ) : (
-              news.data?.data.map((list) => {
+              knowledges.data?.data.map((list) => {
                 return (
                   <section
                     key={list.id}
@@ -206,7 +201,7 @@ function ManageNews() {
                       </div>
                       <div className=" ml-2 mt-5 flex flex-col gap-2 font-semibold text-[#6e98e199] md:ml-0 md:mt-0 md:flex-row md:items-center md:gap-5">
                         <Link
-                          href={`/admin/manage-news/${list.id}`}
+                          href={`/admin/manage-knowledge/${list.id}`}
                           className="flex items-center gap-2 duration-200 hover:text-[#5372a7]"
                         >
                           <div className="text-xl">
@@ -215,7 +210,9 @@ function ManageNews() {
                           <p>แก้ไขโพสต์</p>
                         </Link>
                         <button
-                          onClick={() => handleDeleteNews({ newsId: list.id })}
+                          onClick={() =>
+                            handleDeleteNews({ knowledgeId: list.id })
+                          }
                           className="flex items-center gap-2 duration-200 hover:text-[#5372a7]"
                         >
                           <div className="text-xl">
@@ -283,7 +280,7 @@ function ManageNews() {
   );
 }
 
-export default ManageNews;
+export default Index;
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext,
 ) => {
