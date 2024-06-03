@@ -88,7 +88,16 @@ function NewsList() {
                     return (
                       <tr key={item.id} className="hover:bg-gray-200">
                         <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                          {moment(item.releaseAt).format("DD/MM/YYYY HH:mm")}
+                          {new Date(item.releaseAt).toLocaleDateString(
+                            "th-TH",
+                            {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                              hour: "numeric",
+                              minute: "2-digit",
+                            },
+                          )}
                         </td>
                         <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                           {item.title}

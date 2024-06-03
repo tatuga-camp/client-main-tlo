@@ -47,7 +47,29 @@ const SummaryData = () => {
   const currentYearISO = new Date(
     Date.UTC(currentYear - 1, 11, 31, 17, 0, 0),
   ).toISOString();
+
+  const handleChangeToBuddhistYear = (date: string) => {
+    const currentYear = new Date(date).getFullYear();
+    const buddhistCurrentYearISO = new Date(
+      Date.UTC(currentYear + 543 - 1, 11, 31, 17, 0, 0),
+    ).toISOString();
+
+    return buddhistCurrentYearISO;
+  };
+
+  const handleChangeToChristianYear = (date: string) => {
+    const currentYear = new Date(date).getFullYear();
+    const christianCurrentYearISO = new Date(
+      Date.UTC(currentYear - 543 - 1, 11, 31, 17, 0, 0),
+    ).toISOString();
+
+    return christianCurrentYearISO;
+  };
   const [requestYear, setRequestYear] = useState<string>(currentYearISO);
+  const [buddhistYear, setBuddhistYear] = useState<string>(
+    handleChangeToBuddhistYear(currentYearISO),
+  );
+
   const copyright = useQuery({
     queryKey: ["copyright-count", { requestYear: requestYear }],
     queryFn: () => GetCountCopyrightService({ requestYear: requestYear }),
@@ -97,6 +119,8 @@ const SummaryData = () => {
       };
     });
   }, [copyright.data, design.data, invention.data, trademark.data]);
+
+  console.log(requestYear);
   return (
     <div className="mb-5 flex w-[80%] flex-col items-center gap-5">
       <div className="mt-16 w-full bg-[var(--secondary-yellow)] p-2 text-center text-xl font-semibold text-[var(--primary-blue)] ">
@@ -115,9 +139,18 @@ const SummaryData = () => {
           </label>
           <div className="w-full rounded-lg bg-slate-300 p-1">
             <Calendar
-              value={requestYear ? new Date(requestYear) : null}
+              value={buddhistYear ? new Date(buddhistYear) : null}
+              yearNavigator
+              yearRange="2560:2580"
               onChange={(e) => {
-                setRequestYear(() => e.value?.toISOString() as string);
+                if (e.value) {
+                  setRequestYear(() =>
+                    handleChangeToChristianYear(
+                      e.value?.toISOString() as string,
+                    ),
+                  );
+                  setBuddhistYear(() => e.value?.toISOString() as string);
+                }
               }}
               className="text- h-10 w-full"
               dateFormat="yy"
@@ -129,25 +162,6 @@ const SummaryData = () => {
         </div>
       </section>
 
-      {/* <div className="mt-5 flex w-[90%] flex-col items-center justify-center md:mt-10 md:w-full md:flex-row md:gap-24">
-        <div className="flex w-full items-center justify-center md:h-96 md:w-96">
-          <Pie data={fakePieChart} options={PieOptions} />
-        </div>
-
-        <div className="mt-10 flex w-[90%] flex-col gap-3 text-xs md:mt-0 md:w-60 md:items-center md:text-base">
-          {fakePieChart.labels.map((label, index) => (
-            <div key={index} className="flex items-center gap-3 md:w-80">
-              <FaSquare
-                style={{
-                  color: fakePieChart.datasets[0].backgroundColor[index],
-                }}
-              />
-              <p>{label}</p>
-              <p>{fakePieChart.datasets[0].data[index]}%</p>
-            </div>
-          ))}
-        </div>
-      </div> */}
       <div className="mt-10 flex w-full flex-col items-center gap-4 md:h-[27rem] md:flex-row">
         <section className="flex flex-row gap-4 md:flex-col">
           <div className="flex h-[9rem] w-[9rem] flex-col items-center justify-center gap-2 rounded-lg bg-[var(--primary-blue)] md:h-[13rem] md:w-[13rem]">
@@ -171,7 +185,7 @@ const SummaryData = () => {
           <div className="flex h-[9rem] w-[9rem] flex-col items-center justify-center rounded-lg bg-[var(--primary-blue)] md:h-[13rem] md:w-[13rem]">
             <p className="text-xs font-semibold text-white">ปีงบประมาณ</p>
             <h1 className="text-xl font-semibold text-[var(--secondary-yellow)]">
-              {requestYear ? new Date(requestYear).getFullYear() : ""}
+              {buddhistYear ? new Date(buddhistYear).getFullYear() : ""}
             </h1>
           </div>
         </section>

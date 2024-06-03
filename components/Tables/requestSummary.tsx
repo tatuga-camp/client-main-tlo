@@ -417,7 +417,14 @@ function RequestSummary({ user }: { user?: User }) {
                           <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                             {item.requestDate ? (
                               <span>
-                                {moment(item.requestDate).format("DD/MM/YYYY")}
+                                {new Date(item.requestDate).toLocaleDateString(
+                                  "th-TH",
+                                  {
+                                    day: "numeric",
+                                    month: "short",
+                                    year: "numeric",
+                                  },
+                                )}
                               </span>
                             ) : (
                               <span className="text-red-600">

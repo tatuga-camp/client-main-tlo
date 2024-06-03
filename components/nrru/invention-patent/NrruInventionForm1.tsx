@@ -809,7 +809,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                         name="email"
                         type="email"
                         className="h-8 w-28 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-44 md:pl-4 "
-                        placeholder="1360401295700"
+                        placeholder="กรอกอีเมลล์"
                       />
                       <FieldError className="text-xs text-red-700" />
                     </div>

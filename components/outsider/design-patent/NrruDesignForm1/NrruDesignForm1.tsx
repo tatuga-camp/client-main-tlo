@@ -788,7 +788,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                         name="email"
                         type="email"
                         className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:pl-4 "
-                        placeholder="1360401295700"
+                        placeholder="กรอก E-mail ของคุณ"
                       />
                       <FieldError className="text-xs text-red-700" />
                     </div>

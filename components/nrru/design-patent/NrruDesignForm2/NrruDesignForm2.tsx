@@ -661,7 +661,10 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
             <FieldError className="text-xs text-red-700" />
           </div>
 
-          <div className="flex w-56 flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-col lg:gap-5 lg:pl-0 lg:text-base">
+          <div
+            className="flex w-56 flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:w-full 
+          lg:flex-col lg:gap-5 lg:pl-0 lg:text-base"
+          >
             <div className="flex flex-col gap-5 lg:flex-row">
               {researchOwnershipSubmissionList.map((item, index) => {
                 return (
@@ -732,7 +735,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                 </p>
               </Button>
             </FileTrigger>
-            <div className="grid w-full gap-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <div className="grid w-full gap-2  xl:grid-cols-3 2xl:grid-cols-4">
               {workData?.files
                 ?.filter((file) => file.name === "OWNERSHIP")
                 .map((file, index) => {
