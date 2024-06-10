@@ -17,10 +17,7 @@ type RequestCreatePartnerCopyrightService = {
   postalCode: string;
   phone: string;
   status: StatusPartner;
-  major?: string;
   faculty?: string;
-  department?: string;
-  university?: string;
   participationRate: number;
   copyrightId: string;
 };
@@ -69,10 +66,7 @@ type RequestUpdatePartnerCopyrightService = {
     postalCode?: string;
     phone?: string;
     status?: StatusPartner;
-    major?: string;
     faculty?: string;
-    department?: string;
-    university?: string;
     participationRate?: number;
   };
 };

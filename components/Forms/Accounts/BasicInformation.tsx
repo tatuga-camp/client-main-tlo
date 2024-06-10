@@ -50,9 +50,7 @@ function BasicInformation({ user }: BasicInformationProps) {
     province?: Province;
     road?: string;
     zipCode?: string;
-    department?: string;
     faculty?: string;
-    major?: string;
     email?: string;
     password?: string;
     confirmPassword?: string;
@@ -76,12 +74,9 @@ function BasicInformation({ user }: BasicInformationProps) {
     province: {
       name_th: user.data?.province,
     },
-
     road: user.data?.road,
     zipCode: user.data?.postalCode,
-    department: user.data?.department,
     faculty: user.data?.faculty,
-    major: user.data?.major,
   });
 
   const handleDataFromCombobox = ({
@@ -153,9 +148,7 @@ function BasicInformation({ user }: BasicInformationProps) {
         amphure: userForm?.district?.name_th,
         province: userForm?.province?.name_th,
         postalCode: userForm?.zipCode,
-        major: userForm?.major,
         faculty: userForm?.faculty,
-        department: userForm?.department,
       });
       await user.refetch();
       setUserForm(() => {
@@ -181,9 +174,7 @@ function BasicInformation({ user }: BasicInformationProps) {
           },
           road: user.data?.road,
           zipCode: user.data?.postalCode,
-          department: user.data?.department,
           faculty: user.data?.faculty,
-          major: user.data?.major,
         };
       });
       Swal.fire({
@@ -449,29 +440,9 @@ function BasicInformation({ user }: BasicInformationProps) {
       </TextField>
 
       {user.data.type === "INTERNAL" && (
-        <TextField
-          type="text"
-          isRequired
-          className="mt-10 flex  flex-col gap-1"
-        >
-          <Label className="font-semibold text-[var(--primary-blue)]">
-            หน่วยงาน/สังกัด
-          </Label>
-          <Input
-            onChange={handleChangeUserForm}
-            value={userForm?.department}
-            name="department"
-            type="text"
-            className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-            placeholder="กรุณาเลือกหน่วยงาน/สังกัด"
-          />
-          <FieldError className="text-xs text-red-600" />
-        </TextField>
-      )}
-      {user.data.type === "INTERNAL" && (
         <TextField type="text" isRequired className=" flex flex-col gap-1">
           <Label className="font-semibold text-[var(--primary-blue)]">
-            คณะ
+            คณะ/หน่วยงาน
           </Label>
           <Input
             onChange={handleChangeUserForm}
@@ -479,23 +450,7 @@ function BasicInformation({ user }: BasicInformationProps) {
             name="faculty"
             type="text"
             className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-            placeholder="คณะ"
-          />
-          <FieldError className="text-xs text-red-600" />
-        </TextField>
-      )}
-      {user.data.type === "INTERNAL" && (
-        <TextField isRequired className=" flex flex-col gap-1">
-          <Label className="font-semibold text-[var(--primary-blue)]">
-            สาขาวิชา
-          </Label>
-          <Input
-            onChange={handleChangeUserForm}
-            value={userForm?.major}
-            name="major"
-            type="text"
-            className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-            placeholder="สาขาวิชา"
+            placeholder="คณะ/หน่วยงาน"
           />
           <FieldError className="text-xs text-red-600" />
         </TextField>

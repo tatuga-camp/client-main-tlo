@@ -236,11 +236,7 @@ function CopyrightStatus({ copyrightId, user }: CopyrightStatusProps) {
             <p>
               <span className="font-semibold">สังกัด : </span>{" "}
               {status.data?.copyright.partnerInfoOnCopyrights.map((partner) => {
-                return (
-                  <span key={partner.id}>
-                    {partner.major} {partner.faculty} {partner.department}
-                  </span>
-                );
+                return <span key={partner.id}>{partner.faculty}</span>;
               })}
             </p>
           )}

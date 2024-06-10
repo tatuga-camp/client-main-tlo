@@ -1,5 +1,5 @@
-import NumberTitle from "@/components/Number";
-import React, { useEffect, useState } from "react";
+import NumberTitle from '@/components/Number';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   FieldError,
@@ -7,39 +7,39 @@ import {
   Input,
   Label,
   TextField,
-} from "react-aria-components";
-import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
-import { FiPlusCircle } from "react-icons/fi";
-import ProviceCombobox from "@/components/Combobox/proviceCombobox";
-import AmphureCombobox from "@/components/Combobox/amphureCombobox";
-import TambonCombobox from "@/components/Combobox/tambonCombobox";
+} from 'react-aria-components';
+import { InputMask, InputMaskChangeEvent } from 'primereact/inputmask';
+import { FiPlusCircle } from 'react-icons/fi';
+import ProviceCombobox from '@/components/Combobox/proviceCombobox';
+import AmphureCombobox from '@/components/Combobox/amphureCombobox';
+import TambonCombobox from '@/components/Combobox/tambonCombobox';
 import {
   Amphure,
   ErrorMessages,
   Province,
   Tambon,
   User,
-} from "../../../../models";
-import { UseQueryResult } from "@tanstack/react-query";
+} from '../../../../models';
+import { UseQueryResult } from '@tanstack/react-query';
 import {
   ResponseGetCopyrightService,
   UpdateCopyrightService,
-} from "../../../../services/copyright/copyright";
-import { v4 as uuidv4 } from "uuid";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
-import Swal from "sweetalert2";
-import { isMongoDBId, isUUIDv4 } from "../../../../utilities/validateID";
+} from '../../../../services/copyright/copyright';
+import { v4 as uuidv4 } from 'uuid';
+import SnackbarSaveData from '../../../Snackbars/SnackbarSaveData';
+import Swal from 'sweetalert2';
+import { isMongoDBId, isUUIDv4 } from '../../../../utilities/validateID';
 import {
   CreatePartnerCopyrightService,
   DeletePartnerCopyrightService,
   UpdatePartnerCopyrightService,
-} from "../../../../services/copyright/partner-copyright";
-import SnackbarLoading from "../../../Snackbars/SnackBarLoading";
-import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
-import { MdDelete } from "react-icons/md";
-import { OwnerPartnerType } from "../../invention-patent/NrruInventionForm1/NrruInventionForm1";
-import { PartnerStatus } from "../../../../data/invention";
-import OwnerPartner from "./OwnerPartner";
+} from '../../../../services/copyright/partner-copyright';
+import SnackbarLoading from '../../../Snackbars/SnackBarLoading';
+import SnackbarNoSaveData from '../../../Snackbars/SnackBarNoSaveData';
+import { MdDelete } from 'react-icons/md';
+import { OwnerPartnerType } from '../../invention-patent/NrruInventionForm1/NrruInventionForm1';
+import { PartnerStatus } from '../../../../data/invention';
+import OwnerPartner from './OwnerPartner';
 
 type NrruCopyrightForm1Props = {
   user: User;
@@ -69,10 +69,8 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
       province?: Province;
       road?: string;
       zipCode?: string;
-      department?: string;
       faculty?: string;
       participateRate?: number;
-      major?: string;
       email?: string;
     }[]
   >();
@@ -139,10 +137,8 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
               },
               road: partner.road,
               zipCode: partner.postalCode,
-              department: partner.department,
               faculty: partner.faculty,
               participateRate: partner.participationRate,
-              major: partner.major,
               email: partner.email,
             };
           });
@@ -174,10 +170,8 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
               },
               road: user.road,
               zipCode: user.postalCode,
-              department: user.department,
               faculty: user.faculty,
               participateRate: 100,
-              major: user.major,
               email: user.email,
             },
           ];
@@ -188,22 +182,22 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
 
   const handleDeletePartner = (id: string) => {
     Swal.fire({
-      title: "คุณแน่ใจหรือไม่ที่จะลบข้อมูลผู้ประดิษฐ์",
-      text: "คุณจะไม่สามารถย้อนกลับได้!",
-      icon: "warning",
+      title: 'คุณแน่ใจหรือไม่ที่จะลบข้อมูลผู้ประดิษฐ์',
+      text: 'คุณจะไม่สามารถย้อนกลับได้!',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "ใช่, ลบข้อมูล!",
-      cancelButtonText: "ยกเลิก",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'ใช่, ลบข้อมูล!',
+      cancelButtonText: 'ยกเลิก',
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           const mongoDBId = isMongoDBId(id);
           const UUID = isUUIDv4(id);
           Swal.fire({
-            title: "กำลังลบข้อมูลผู้ประดิษฐ์",
-            text: "กรุณารอสักครู่",
+            title: 'กำลังลบข้อมูลผู้ประดิษฐ์',
+            text: 'กรุณารอสักครู่',
             showConfirmButton: false,
             willOpen: () => {
               Swal.showLoading();
@@ -221,19 +215,19 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
             await copyright.refetch();
           }
           Swal.fire({
-            title: "ลบข้อมูลสำเร็จ",
-            text: "ลบข้อมูลผู้ประดิษฐ์สำเร็จ",
-            icon: "success",
+            title: 'ลบข้อมูลสำเร็จ',
+            text: 'ลบข้อมูลผู้ประดิษฐ์สำเร็จ',
+            icon: 'success',
           });
         } catch (error) {
           let result = error as ErrorMessages;
           Swal.fire({
-            title: result.error ? result.error : "เกิดข้อผิดพลาด",
+            title: result.error ? result.error : 'เกิดข้อผิดพลาด',
             text: result.message.toString(),
             footer: result.statusCode
-              ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
-              : "",
-            icon: "error",
+              ? 'รหัสข้อผิดพลาด: ' + result.statusCode?.toString()
+              : '',
+            icon: 'error',
           });
         }
       }
@@ -255,14 +249,14 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
     });
 
     const { name, value } = e.target;
-    const parsedValue = typeof value === "string" ? value : "";
+    const parsedValue = typeof value === 'string' ? value : '';
 
     setPartnerData((prev) => {
       const newState = prev?.map((partner) => {
         if (partner.id === id) {
           return {
             ...partner,
-            [name]: name === "participateRate" ? Number(parsedValue) : value,
+            [name]: name === 'participateRate' ? Number(parsedValue) : value,
           };
         }
 
@@ -280,9 +274,9 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
   }: {
     id?: string;
     value: Province | Amphure | Tambon;
-    type: "provice" | "amphure" | "tambon";
+    type: 'provice' | 'amphure' | 'tambon';
   }) => {
-    if (type === "provice") {
+    if (type === 'provice') {
       setPartnerData((prev) => {
         return prev?.map((partner) => {
           if (partner.id === id) {
@@ -294,7 +288,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
           return partner;
         });
       });
-    } else if (type === "amphure") {
+    } else if (type === 'amphure') {
       setPartnerData((prev) => {
         return prev?.map((partner) => {
           if (partner.id === id) {
@@ -306,7 +300,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
           return partner;
         });
       });
-    } else if (type === "tambon") {
+    } else if (type === 'tambon') {
       setPartnerData((prev) => {
         return prev?.map((partner) => {
           if (partner.id === id) {
@@ -331,14 +325,14 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
         };
       });
       if (partnerData?.length === 0 || !partnerData) {
-        throw new Error("กรุณากรอกข้อมูลผู้ประดิษฐ์");
+        throw new Error('กรุณากรอกข้อมูลผู้ประดิษฐ์');
       }
       const totalParticipationRate = partnerData.reduce(
         (prev, current) => prev + (current.participateRate ?? 0),
         0,
       );
       if (totalParticipationRate !== 100) {
-        throw new Error("กรุณากรอก % ส่วนร่วมให้ครบ 100");
+        throw new Error('กรุณากรอก % ส่วนร่วมให้ครบ 100');
       }
       UpdateCopyrightService({
         query: {
@@ -350,7 +344,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
           fullName: ownerData?.fullName,
           firstName: ownerData?.firstName,
           lastName: ownerData?.lastName,
-          idCard: ownerData?.idCard?.replace(/-/g, "") as string,
+          idCard: ownerData?.idCard?.replace(/-/g, '') as string,
           addressNumber: ownerData?.houseNumber,
           moo: ownerData?.villageNumber,
           tambon: ownerData?.tambon?.name_th,
@@ -359,7 +353,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
           province: ownerData?.province?.name_th,
           road: ownerData?.road,
           postalCode: ownerData?.zipCode,
-          phone: ownerData?.phone?.replace(/-/g, ""),
+          phone: ownerData?.phone?.replace(/-/g, ''),
           email: ownerData?.email,
         },
       });
@@ -373,7 +367,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
             title: partner.title as string,
             firstName: partner.firstName as string,
             lastName: partner.lastName as string,
-            idCard: partner.idCard?.replace(/-/g, "") as string,
+            idCard: partner.idCard?.replace(/-/g, '') as string,
             addressNumber: partner.houseNumber as string,
             moo: partner.villageNumber as string,
             road: partner.road as string,
@@ -381,14 +375,11 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
             amphure: partner.amphure?.name_th as string,
             province: partner.province?.name_th as string,
             postalCode: partner.zipCode as string,
-            phone: partner.phone?.replace(/-/g, "") as string,
-            major: partner.major as string,
+            phone: partner.phone?.replace(/-/g, '') as string,
             faculty: partner.faculty as string,
-            department: partner.department as string,
-            university: "มหาวิทยาลัยราชภัฏนครราชสีมา",
             participationRate: partner.participateRate as number,
             copyrightId: copyright.data?.id as string,
-            status: "STAFF",
+            status: 'STAFF',
           });
         } else if (mongoDBId) {
           await UpdatePartnerCopyrightService({
@@ -400,7 +391,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
               title: partner.title as string,
               firstName: partner.firstName as string,
               lastName: partner.lastName as string,
-              idCard: partner.idCard?.replace(/-/g, "") as string,
+              idCard: partner.idCard?.replace(/-/g, '') as string,
               addressNumber: partner.houseNumber as string,
               moo: partner.villageNumber as string,
               road: partner.road as string,
@@ -408,10 +399,8 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
               amphure: partner.amphure?.name_th as string,
               province: partner.province?.name_th as string,
               postalCode: partner.zipCode as string,
-              phone: partner.phone?.replace(/-/g, "") as string,
-              major: partner.major as string,
+              phone: partner.phone?.replace(/-/g, '') as string,
               faculty: partner.faculty as string,
-              department: partner.department as string,
               participationRate: partner.participateRate as number,
             },
           });
@@ -433,12 +422,12 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
       });
       let result = error as ErrorMessages;
       Swal.fire({
-        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        title: result.error ? result.error : 'เกิดข้อผิดพลาด',
         text: result.message.toString(),
         footer: result.statusCode
-          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
-          : "",
-        icon: "error",
+          ? 'รหัสข้อผิดพลาด: ' + result.statusCode?.toString()
+          : '',
+        icon: 'error',
       });
     }
   };
@@ -467,7 +456,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                 <NumberTitle number={1} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 lg:w-[50%]"}
+                    className={'flex w-full items-center gap-3 lg:w-[50%]'}
                   >
                     <Label className=" text-[var(--primary-blue) min-w-20 font-semibold lg:min-w-24">
                       คำนำหน้าชื่อ
@@ -491,7 +480,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                     </div>
                   </TextField>
                   <TextField
-                    className={"flex w-full items-center gap-3 lg:w-[50%]"}
+                    className={'flex w-full items-center gap-3 lg:w-[50%]'}
                   >
                     <Label className="min-w-10 font-semibold text-[var(--primary-blue)] ">
                       ชื่อ
@@ -516,7 +505,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                     </div>
                   </TextField>
                   <TextField
-                    className={"flex w-full items-center gap-3 lg:w-[50%]"}
+                    className={'flex w-full items-center gap-3 lg:w-[50%]'}
                   >
                     <Label className="min-w-14 font-semibold text-[var(--primary-blue)] lg:min-w-16">
                       นามสกุล
@@ -548,7 +537,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
                   <TextField
                     className={
-                      "flex w-full flex-col gap-3 lg:w-[60%] lg:flex-row lg:items-center "
+                      'flex w-full flex-col gap-3 lg:w-[60%] lg:flex-row lg:items-center '
                     }
                   >
                     <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-44">
@@ -584,7 +573,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:flex-wrap lg:gap-5 lg:text-base">
                   <TextField
                     className={
-                      "flex  flex-col gap-3 lg:flex-row lg:items-center  "
+                      'flex  flex-col gap-3 lg:flex-row lg:items-center  '
                     }
                   >
                     <p className="font-semibold">ที่อยู่ (ตามบัตรประชาชน)</p>
@@ -611,7 +600,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                       </div>
                     </section>
                   </TextField>
-                  <TextField className={"flex  items-center gap-3  "}>
+                  <TextField className={'flex  items-center gap-3  '}>
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       หมู่ที่
                     </Label>
@@ -633,7 +622,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                       <FieldError className="text-xs text-red-700" />
                     </div>
                   </TextField>
-                  <TextField className={"flex   items-center gap-3  "}>
+                  <TextField className={'flex   items-center gap-3  '}>
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       ถนน
                     </Label>
@@ -656,7 +645,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                     </div>
                   </TextField>
                   <TextField
-                    className={"flex w-44 items-center  gap-3 lg:w-72  "}
+                    className={'flex w-44 items-center  gap-3 lg:w-72  '}
                   >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       จังหวัด
@@ -672,7 +661,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                     />
                   </TextField>
                   <TextField
-                    className={"flex w-44 items-center  gap-3 lg:w-72  "}
+                    className={'flex w-44 items-center  gap-3 lg:w-72  '}
                   >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       อำเภอ
@@ -692,7 +681,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                     />
                   </TextField>
                   <TextField
-                    className={"flex w-44 items-center  gap-3 lg:w-72  "}
+                    className={'flex w-44 items-center  gap-3 lg:w-72  '}
                   >
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       ตำบล
@@ -710,7 +699,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                       arrayId={partner.id}
                     />
                   </TextField>
-                  <TextField className={"flex  items-center gap-3  "}>
+                  <TextField className={'flex  items-center gap-3  '}>
                     <Label className=" text-[var(--primary-blue) font-medium ">
                       รหัสไปรษณีย์
                     </Label>
@@ -740,7 +729,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                 <NumberTitle number={4} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 lg:w-[40%] "}
+                    className={'flex w-full items-center gap-3 lg:w-[40%] '}
                   >
                     <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-36">
                       หมายเลขโทรศัพท์
@@ -775,7 +764,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                 <NumberTitle number={5} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 lg:w-[40%] "}
+                    className={'flex w-full items-center gap-3 lg:w-[40%] '}
                   >
                     <Label className=" text-[var(--primary-blue) min-w-12 font-semibold lg:min-w-20">
                       E-mail
@@ -805,7 +794,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                 <NumberTitle number={6} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 lg:w-[30%] "}
+                    className={'flex w-full items-center gap-3 lg:w-[30%] '}
                   >
                     <Label className=" text-[var(--primary-blue) min-w-24 font-semibold lg:min-w-20">
                       % ส่วนร่วม

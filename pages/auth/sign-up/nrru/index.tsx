@@ -51,9 +51,7 @@ const Index = () => {
     province?: Province;
     road?: string;
     zipCode?: string;
-    department?: string;
     faculty?: string;
-    major?: string;
     email?: string;
     password?: string;
     confirmPassword?: string;
@@ -88,9 +86,7 @@ const Index = () => {
         !signUpNRRUForm?.district ||
         !signUpNRRUForm?.province ||
         !signUpNRRUForm?.zipCode ||
-        !signUpNRRUForm?.department ||
         !signUpNRRUForm?.faculty ||
-        !signUpNRRUForm?.major ||
         !signUpNRRUForm?.road ||
         !signUpNRRUForm?.subDistrict ||
         !signUpNRRUForm?.district ||
@@ -115,9 +111,7 @@ const Index = () => {
         province: signUpNRRUForm?.province.name_th,
         nationality: "Thai",
         postalCode: signUpNRRUForm?.zipCode,
-        major: signUpNRRUForm?.major,
         faculty: signUpNRRUForm?.faculty,
-        department: signUpNRRUForm?.department,
       });
       router.push("/auth/sign-in");
       Swal.fire({
@@ -437,27 +431,10 @@ const Index = () => {
                   <TextField
                     type="text"
                     isRequired
-                    className="mt-10 flex  flex-col gap-1"
-                  >
-                    <Label className="font-semibold text-[var(--primary-blue)]">
-                      หน่วยงาน/สังกัด
-                    </Label>
-                    <Input
-                      onChange={handleChangeSignUpNRRUForm}
-                      name="department"
-                      type="text"
-                      className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-                      placeholder="กรุณาเลือกหน่วยงาน/สังกัด"
-                    />
-                    <FieldError className="text-xs text-red-600" />
-                  </TextField>
-                  <TextField
-                    type="text"
-                    isRequired
                     className=" flex flex-col gap-1"
                   >
                     <Label className="font-semibold text-[var(--primary-blue)]">
-                      คณะ
+                      คณะ/หน่วยงาน
                     </Label>
                     <Input
                       onChange={handleChangeSignUpNRRUForm}
@@ -465,23 +442,6 @@ const Index = () => {
                       type="text"
                       className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
                       placeholder="รหัสผ่าน"
-                    />
-                    <FieldError className="text-xs text-red-600" />
-                  </TextField>
-                  <TextField
-                    type="text"
-                    isRequired
-                    className=" flex flex-col gap-1"
-                  >
-                    <Label className="font-semibold text-[var(--primary-blue)]">
-                      สาขาวิชา
-                    </Label>
-                    <Input
-                      onChange={handleChangeSignUpNRRUForm}
-                      name="major"
-                      type="text"
-                      className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-                      placeholder="สาขาวิชา"
                     />
                     <FieldError className="text-xs text-red-600" />
                   </TextField>

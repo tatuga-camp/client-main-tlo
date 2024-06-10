@@ -255,11 +255,7 @@ function InventionStatus({ inventionId, user }: InventionStatusProps) {
               <span className="font-semibold">สังกัด : </span>{" "}
               {status.data?.invention.partnerInfoOnInventionPatents.map(
                 (partner) => {
-                  return (
-                    <span key={partner.id}>
-                      {partner.major} {partner.faculty} {partner.department}
-                    </span>
-                  );
+                  return <span key={partner.id}>{partner.faculty}</span>;
                 },
               )}
             </p>

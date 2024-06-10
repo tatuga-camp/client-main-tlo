@@ -69,10 +69,8 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
       province?: Province;
       road?: string;
       zipCode?: string;
-      department?: string;
       faculty?: string;
       participateRate?: number;
-      major?: string;
       email?: string;
     }[]
   >();
@@ -136,10 +134,8 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               },
               road: partner.road,
               zipCode: partner.postalCode,
-              department: partner.department,
               faculty: partner.faculty,
               participateRate: partner.participationRate,
-              major: partner.major,
               email: partner.email,
             };
           });
@@ -171,10 +167,8 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               },
               road: user.road,
               zipCode: user.postalCode,
-              department: user.department,
               faculty: user.faculty,
               participateRate: 100,
-              major: user.major,
               email: user.email,
             },
           ];
@@ -403,9 +397,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               province: partner.province?.name_th as string,
               postalCode: partner.zipCode as string,
               phone: partner.phone?.replace(/-/g, "") as string,
-              major: partner.major as string,
               faculty: partner.faculty as string,
-              department: partner.department as string,
               participationRate: partner.participateRate as number,
             },
           });

@@ -63,10 +63,8 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
       province?: Province;
       road?: string;
       zipCode?: string;
-      department?: string;
       faculty?: string;
       participateRate?: number;
-      major?: string;
       email?: string;
     }[]
   >();
@@ -104,10 +102,8 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               },
               road: partner.road,
               zipCode: partner.postalCode,
-              department: partner.department,
               faculty: partner.faculty,
               participateRate: partner.participationRate,
-              major: partner.major,
               email: partner.email,
             };
           });
@@ -139,10 +135,8 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               },
               road: user.road,
               zipCode: user.postalCode,
-              department: user.department,
               faculty: user.faculty,
               participateRate: 100,
-              major: user.major,
               email: user.email,
             },
           ];
@@ -324,10 +318,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
             province: partner.province?.name_th as string,
             postalCode: partner.zipCode as string,
             phone: partner.phone?.replace(/-/g, "") as string,
-            major: partner.major as string,
             faculty: partner.faculty as string,
-            department: partner.department as string,
-            university: "มหาวิทยาลัยราชภัฏนครราชสีมา",
             participationRate: partner.participateRate as number,
             designPatentId: design.data?.id as string,
             status: "STAFF",
@@ -351,9 +342,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               province: partner.province?.name_th as string,
               postalCode: partner.zipCode as string,
               phone: partner.phone?.replace(/-/g, "") as string,
-              major: partner.major as string,
               faculty: partner.faculty as string,
-              department: partner.department as string,
               participationRate: partner.participateRate as number,
             },
           });
@@ -679,30 +668,8 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                 </p>
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:flex-wrap md:gap-5 md:text-base">
                   <TextField className={"flex  items-center gap-3  "}>
-                    <Label className=" text-[var(--primary-blue) min-w-14 font-medium ">
-                      สาขาวิชา
-                    </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
-                        value={
-                          partnerData.find((item) => item.id === partner.id)
-                            ?.major
-                        }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        name="major"
-                        type="text"
-                        className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 md:h-10 md:w-40 md:pl-4 "
-                        placeholder="ภาษาอังกฤษ"
-                      />
-                      <FieldError className="text-xs text-red-700" />
-                    </div>
-                  </TextField>
-                  <TextField className={"flex  items-center gap-3  "}>
                     <Label className=" text-[var(--primary-blue) min-w-12 font-medium ">
-                      คณะ
+                      คณะ/หน่วยงาน
                     </Label>
                     <div className="flex flex-col gap-1">
                       <Input
@@ -718,28 +685,6 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                         type="text"
                         className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
                         placeholder="มนุษยศาสตร์และสังคมศาสตร์"
-                      />
-                      <FieldError className="text-xs text-red-700" />
-                    </div>
-                  </TextField>
-                  <TextField className={"flex  items-center gap-3  "}>
-                    <Label className=" text-[var(--primary-blue) min-w-14 font-medium ">
-                      หน่วยงาน
-                    </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
-                        value={
-                          partnerData.find((item) => item.id === partner.id)
-                            ?.department
-                        }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        name="department"
-                        type="text"
-                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-40 md:pl-4 "
-                        placeholder="หน่วยงาน"
                       />
                       <FieldError className="text-xs text-red-700" />
                     </div>

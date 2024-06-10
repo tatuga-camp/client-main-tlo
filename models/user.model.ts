@@ -22,9 +22,7 @@ export type User = {
   nationality: string;
   role: UserRole;
   type: UserType;
-  major?: string;
   faculty?: string;
-  department?: string;
   passwordResetToken: string;
   passwordResetTokenExpiresAt: Date;
   isDeleted: boolean;
