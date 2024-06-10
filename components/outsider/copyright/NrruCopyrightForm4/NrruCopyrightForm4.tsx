@@ -178,7 +178,10 @@ const NrruCopyrightForm4 = ({ copyright }: NrruCopyrightFormProps) => {
     }
   };
   return (
-    <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
+    <div
+      className=" w-full  rounded-md border-[1px] 
+    border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10"
+    >
       <Form
         onSubmit={handleUploadFile}
         className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
@@ -234,7 +237,7 @@ const NrruCopyrightForm4 = ({ copyright }: NrruCopyrightFormProps) => {
               </FileTrigger>
             </section>
           </div>
-          <section className="ml-5 grid grid-cols-1 gap-2 lg:ml-0  lg:grid-cols-3 2xl:grid-cols-4">
+          <section className="ml-5 grid grid-cols-1 gap-2 md:grid-cols-2 lg:ml-0   xl:grid-cols-3 2xl:grid-cols-4">
             {...files
               ?.filter((file) => file.documentType === "IDCARD")
               .map((file) => {
@@ -299,7 +302,7 @@ const NrruCopyrightForm4 = ({ copyright }: NrruCopyrightFormProps) => {
               </button>
             </section>
           </div>
-          <section className="ml-5 grid grid-cols-1 gap-2 lg:ml-0  lg:grid-cols-3 2xl:grid-cols-4">
+          <section className="ml-5 grid grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
             {...files
               ?.filter((file) => file.documentType === "REQUEST")
               .map((file) => {
@@ -364,7 +367,7 @@ const NrruCopyrightForm4 = ({ copyright }: NrruCopyrightFormProps) => {
               </FileTrigger>
             </section>
           </div>
-          <section className="ml-5 grid grid-cols-1 gap-2 lg:ml-0  lg:grid-cols-3 2xl:grid-cols-4">
+          <section className="ml-5 grid grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
             {...files
               ?.filter((file) => file.documentType === "OTHERS")
               .map((file) => {

@@ -1,6 +1,6 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { nrruCopyrightSection } from "../../../data/PatentSection";
 import NrruCopyrightForm1 from "@/components/nrru/copyright/NrruCopyrightForm1";
 import NrruCopyrightForm2 from "@/components/nrru/copyright/NrruCopyrightForm2/NrruCopyrightForm2";

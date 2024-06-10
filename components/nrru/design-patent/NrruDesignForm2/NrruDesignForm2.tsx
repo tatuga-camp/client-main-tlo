@@ -481,7 +481,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
             </Label>
           </section>
 
-          <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] lg:grid-cols-3 lg:gap-3 lg:pl-0 lg:text-base">
+          <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] lg:gap-3 lg:pl-0 lg:text-base xl:grid-cols-3">
             {/* row1 */}
 
             {menuDesignForm2.map((item, index) => {

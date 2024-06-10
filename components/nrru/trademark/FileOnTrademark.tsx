@@ -26,13 +26,14 @@ function FileOnTrademark({ file, handleDeleteFile }: FileOnInventionProps) {
   return (
     <div
       key={file.url}
-      className="flex items-center justify-between rounded-md border-[1px] border-solid border-[#cbdbf9] bg-white p-2 md:min-w-72 "
+      className="flex w-full items-center justify-between rounded-md 
+      border-[1px] border-solid border-[#cbdbf9] bg-white p-2"
     >
       <div className="flex justify-center gap-1">
         <div className="flex items-center justify-center text-black">
           <BsFileEarmarkCode />
         </div>
-        <span className="w-max max-w-[7rem] truncate text-sm md:max-w-40 ">
+        <span className="w-max max-w-[7rem] truncate text-sm md:max-w-32 ">
           {file?.id ? fileName : file.file?.name}
         </span>
       </div>

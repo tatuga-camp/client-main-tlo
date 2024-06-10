@@ -1,5 +1,10 @@
 import NumberTitle from "@/components/Number";
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import {
   Button,
   FieldError,
@@ -376,6 +381,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
       });
     }
   };
+
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
       <Form
@@ -388,14 +394,15 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
           return (
             <div
               key={partner.id}
-              className={`flex flex-col gap-5 rounded-lg p-5 ring-1 ring-gray-400  `}
+              className={`flex w-full flex-col gap-5 rounded-lg p-5 ring-1 ring-gray-400  `}
             >
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex w-full items-start justify-center gap-3  md:items-center md:gap-5">
                 <NumberTitle number={1} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:gap-5 md:text-base lg:flex-row">
-                  <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
-                  >
+                <div
+                  className="flex w-full flex-col gap-3
+                   text-[0.8rem] md:gap-5 md:text-base lg:flex-row"
+                >
+                  <TextField className={"flex w-full items-center gap-3"}>
                     <Label className=" text-[var(--primary-blue) min-w-24 font-semibold">
                       คำนำหน้าชื่อ
                     </Label>
@@ -417,9 +424,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                       <FieldError className="text-xs text-red-700" />
                     </div>
                   </TextField>
-                  <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
-                  >
+                  <TextField className={"flex w-full items-center gap-3"}>
                     <Label className="min-w-8 font-semibold text-[var(--primary-blue)] md:min-w-10">
                       ชื่อ
                     </Label>
@@ -435,16 +440,14 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                         }
                         name="firstName"
                         type="text"
-                        className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-48  md:p-2 md:pl-4"
+                        className="h-8  w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:p-2 md:pl-4"
                         placeholder="ชื่อจริง"
                       />
 
                       <FieldError className="text-xs text-red-700" />
                     </div>
                   </TextField>
-                  <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
-                  >
+                  <TextField className={"flex w-full items-center gap-3 "}>
                     <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
                       นามสกุล
                     </Label>
@@ -460,7 +463,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                         }
                         name="lastName"
                         type="text"
-                        className="h-8 w-40 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60  md:p-2 md:pl-4"
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
                         placeholder="นามสกุล"
                       />
                       <FieldError className="text-xs text-red-700" />

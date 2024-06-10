@@ -177,7 +177,10 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
     }
   };
   return (
-    <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
+    <div
+      className=" w-full  rounded-md border-[1px] border-solid 
+    border-[#BED6FF] bg-white p-5 py-10 md:p-10"
+    >
       <Form
         onSubmit={handleUploadFile}
         className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
@@ -229,7 +232,7 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
                 </Button>
               </FileTrigger>
             </section>
-            <section className=" grid grid-cols-1 gap-2 lg:ml-0  lg:grid-cols-3 2xl:grid-cols-4">
+            <section className=" grid grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
               {...files
                 ?.filter((file) => file.documentType === "IDCARD")
                 .map((file) => {
@@ -294,7 +297,7 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
                 </Button>
               </FileTrigger>
             </section>
-            <section className=" grid grid-cols-1 gap-2 lg:ml-0  lg:grid-cols-3 2xl:grid-cols-4">
+            <section className=" grid grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
               {...files
                 ?.filter((file) => file.documentType === "COPORATE")
                 .map((file) => {
@@ -358,7 +361,7 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
                 </Button>
               </FileTrigger>
             </section>
-            <section className=" grid grid-cols-1 gap-2 lg:ml-0  lg:grid-cols-3 2xl:grid-cols-4">
+            <section className=" grid grid-cols-1 gap-2 md:grid-cols-2  lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
               {...files
                 ?.filter((file) => file.documentType === "OTOP")
                 .map((file) => {
