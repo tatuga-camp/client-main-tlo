@@ -46,9 +46,7 @@ type RequestSingUpService = {
   province: string;
   nationality: string;
   postalCode: string;
-  major?: string;
   faculty?: string;
-  department?: string;
 };
 
 type ResponseSingUpService = { access_token: string; user: User };

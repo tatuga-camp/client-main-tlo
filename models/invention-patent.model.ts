@@ -72,10 +72,7 @@ export type PartnerInfoOnInventionPatent = {
   postalCode: string;
   phone: string;
   status: StatusPartner;
-  major: string;
   faculty: string;
-  department: string;
-  university: string;
   participationRate: number;
   inventionPatentId: string;
   userId: string;

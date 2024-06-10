@@ -3,24 +3,11 @@ import React, { useRef, useState } from "react";
 import { GetUserService } from "../../../services/user";
 import AdminLayout from "../../../layouts/adminLayout";
 import Head from "next/head";
-import {
-  Button,
-  FieldError,
-  FileTrigger,
-  Form,
-  Input,
-  Label,
-  TextField,
-} from "react-aria-components";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { Calendar } from "primereact/calendar";
-import { IoIosCloseCircle } from "react-icons/io";
-import { MdOutlinePhoto, MdOutlinePhotoSizeSelectActual } from "react-icons/md";
-import fakeImageUpload from "@/data/fakeImageUpload";
-import { Editor } from "@tinymce/tinymce-react";
+
 import UpdateNews from "../../../components/Forms/News/updateNews";
 
 function ManageNews() {

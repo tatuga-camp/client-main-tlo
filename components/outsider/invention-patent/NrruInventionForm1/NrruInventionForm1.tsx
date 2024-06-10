@@ -88,10 +88,8 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
       province?: Province;
       road?: string;
       zipCode?: string;
-      department?: string;
       faculty?: string;
       participateRate?: number;
-      major?: string;
       email?: string;
     }[]
   >();
@@ -158,10 +156,8 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
               },
               road: partner.road,
               zipCode: partner.postalCode,
-              department: partner.department,
               faculty: partner.faculty,
               participateRate: partner.participationRate,
-              major: partner.major,
               email: partner.email,
             };
           });
@@ -193,10 +189,8 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
               },
               road: user.road,
               zipCode: user.postalCode,
-              department: user.department,
               faculty: user.faculty,
               participateRate: 100,
-              major: user.major,
               email: user.email,
             },
           ];
@@ -402,10 +396,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
             province: partner.province?.name_th as string,
             postalCode: partner.zipCode as string,
             phone: partner.phone?.replace(/-/g, "") as string,
-            major: partner.major as string,
             faculty: partner.faculty as string,
-            department: partner.department as string,
-            university: "มหาวิทยาลัยราชภัฏนครราชสีมา",
             participationRate: partner.participateRate as number,
             inventionPatentId: invention.data?.id as string,
             status: "STAFF",
@@ -429,9 +420,7 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
               province: partner.province?.name_th as string,
               postalCode: partner.zipCode as string,
               phone: partner.phone?.replace(/-/g, "") as string,
-              major: partner.major as string,
               faculty: partner.faculty as string,
-              department: partner.department as string,
               participationRate: partner.participateRate as number,
             },
           });

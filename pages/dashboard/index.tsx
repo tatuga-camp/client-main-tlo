@@ -15,7 +15,6 @@ import { PiCertificateBold } from "react-icons/pi";
 import { FaPaintbrush, FaTrademark } from "react-icons/fa6";
 import { MdLightbulbCircle } from "react-icons/md";
 import Link from "next/link";
-import fakeSearchResult from "../../data/fakeSearchResult";
 import { Input, SearchField } from "react-aria-components";
 import { IoSearchCircleSharp } from "react-icons/io5";
 import { useQuery } from "@tanstack/react-query";

@@ -111,9 +111,7 @@ type RequestUpdateUserService = {
   province?: string;
   postalCode?: string;
   nationality?: string;
-  major?: string;
   faculty?: string;
-  department?: string;
 };
 type ResponseUpdateUserService = User;
 export async function UpdateUserService(

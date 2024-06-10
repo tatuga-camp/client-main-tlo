@@ -239,11 +239,7 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
             <p>
               <span className="font-semibold">สังกัด : </span>{" "}
               {status.data?.design.partnerInfoOnDesignPatents.map((partner) => {
-                return (
-                  <span key={partner.id}>
-                    {partner.major} {partner.faculty} {partner.department}
-                  </span>
-                );
+                return <span key={partner.id}>{partner.faculty}</span>;
               })}
             </p>
           )}

@@ -71,10 +71,7 @@ export type PartnerInfoOnDesignPatent = {
   postalCode: string;
   phone: string;
   status: StatusPartner;
-  major: string;
   faculty: string;
-  department: string;
-  university: string;
   participationRate: number;
   designPatentId: string;
   userId: string;

@@ -20,7 +20,6 @@ import {
   scrollSpy,
 } from "react-scroll";
 import Select from "react-select";
-import fakeOptions from "../../data/fakeOptions";
 import { LuSearch } from "react-icons/lu";
 import LinkNextJS from "next/link";
 import { Pagination as PaginationMUI } from "@mui/material";

@@ -19,7 +19,6 @@ import "swiper/css/scrollbar";
 import { Calendar } from "primereact/calendar";
 import { IoIosCloseCircle } from "react-icons/io";
 import { MdOutlinePhoto, MdOutlinePhotoSizeSelectActual } from "react-icons/md";
-import fakeImageUpload from "@/data/fakeImageUpload";
 import { Editor } from "@tinymce/tinymce-react";
 import UpdateNews from "../../../components/Forms/News/updateNews";
 import UpdateKnowledge from "../../../components/Forms/Knowledge/updateKnowledge";

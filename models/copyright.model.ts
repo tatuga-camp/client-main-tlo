@@ -70,10 +70,7 @@ export type PartnerInfoOnCopyright = {
   province: string;
   postalCode: string;
   phone: string;
-  major: string;
   faculty: string;
-  department: string;
-  university: string;
   participationRate: number;
   copyrightId: string;
   userId: string;

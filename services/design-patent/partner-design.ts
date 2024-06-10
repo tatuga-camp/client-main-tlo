@@ -1,6 +1,6 @@
-import axios from "axios";
-import { parseCookies } from "nookies";
-import { PartnerInfoOnDesignPatent, StatusPartner } from "../../models";
+import axios from 'axios';
+import { parseCookies } from 'nookies';
+import { PartnerInfoOnDesignPatent, StatusPartner } from '../../models';
 
 type RequestCreatePartnerDesignPatentService = {
   email: string;
@@ -17,10 +17,7 @@ type RequestCreatePartnerDesignPatentService = {
   postalCode: string;
   phone: string;
   status: StatusPartner;
-  major?: string;
   faculty?: string;
-  department?: string;
-  university?: string;
   participationRate: number;
   designPatentId: string;
 };
@@ -33,14 +30,14 @@ export async function CreatePartnerDesignPatentService(
     const cookies = parseCookies();
     const access_token = cookies.access_token;
     const partner = await axios({
-      method: "POST",
+      method: 'POST',
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/partner-designs`,
       data: {
         ...input,
       },
       headers: {
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
+        Authorization: 'Bearer ' + access_token,
+        'Content-Type': 'application/json',
       },
     });
     return partner.data;
@@ -69,10 +66,7 @@ type RequestUpdatePartnerDesignPatentService = {
     postalCode?: string;
     phone?: string;
     status?: StatusPartner;
-    major?: string;
     faculty?: string;
-    department?: string;
-    university?: string;
     participationRate?: number;
   };
 };
@@ -85,14 +79,14 @@ export async function UpdatePartnerDesignPatentService(
     const cookies = parseCookies();
     const access_token = cookies.access_token;
     const partner = await axios({
-      method: "PATCH",
+      method: 'PATCH',
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/partner-designs`,
       data: {
         ...input,
       },
       headers: {
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
+        Authorization: 'Bearer ' + access_token,
+        'Content-Type': 'application/json',
       },
     });
     return partner.data;
@@ -114,11 +108,11 @@ export async function DeletePartnerDesignPatentService(
     const cookies = parseCookies();
     const access_token = cookies.access_token;
     const partner = await axios({
-      method: "DELETE",
+      method: 'DELETE',
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/partner-designs/${input.partnerId}`,
       headers: {
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
+        Authorization: 'Bearer ' + access_token,
+        'Content-Type': 'application/json',
       },
     });
     return partner.data;
