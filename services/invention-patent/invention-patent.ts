@@ -230,6 +230,37 @@ export async function UpdateInventionPatentService(
   }
 }
 
+type RequestMigrantInventionPatentService = {
+  invnetionPatentId: string;
+  targetUserId: string;
+};
+
+type ResponseMigrantInventionPatentService = InventionPatent;
+
+export async function MigrantInventionPatentService(
+  input: RequestMigrantInventionPatentService,
+): Promise<ResponseMigrantInventionPatentService> {
+  try {
+    const cookies = parseCookies();
+    const access_token = cookies.access_token;
+    const invention = await axios({
+      method: "PATCH",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/invention-patents/migrant`,
+      data: {
+        ...input,
+      },
+      headers: {
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      },
+    });
+    return invention.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw error?.response?.data;
+  }
+}
+
 type RequestDeleteInventionPatentService = {
   inventionPatentId: string;
 };

@@ -238,6 +238,37 @@ export async function UpdateDesignPatentService(
   }
 }
 
+type RequestMigrantDesignPatentService = {
+  designPatentId: string;
+  targetUserId: string;
+};
+
+type ResponseMigrantDesignPatentService = DesignPatent;
+
+export async function MigrantDesignPatentService(
+  input: RequestMigrantDesignPatentService,
+): Promise<ResponseMigrantDesignPatentService> {
+  try {
+    const cookies = parseCookies();
+    const access_token = cookies.access_token;
+    const Design = await axios({
+      method: "PATCH",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/design-patents/migrant`,
+      data: {
+        ...input,
+      },
+      headers: {
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      },
+    });
+    return Design.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw error?.response?.data;
+  }
+}
+
 type RequestDeleteDesignPatentService = {
   designPatentId: string;
 };
