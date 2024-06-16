@@ -4,7 +4,7 @@ import { BsFileEarmarkCode } from "react-icons/bs";
 import { GrFormView } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 
-type FileOnInventionProps = {
+type FileOnDesignProps = {
   file: {
     id?: string | undefined;
     url: string;
@@ -20,7 +20,7 @@ type FileOnInventionProps = {
     fileOnDesignId?: string;
   }) => Promise<void>;
 };
-function FileOnInvention({ file, handleDeleteFile }: FileOnInventionProps) {
+function FileOnDesign({ file, handleDeleteFile }: FileOnDesignProps) {
   const fileName = file?.url?.split("/").pop();
 
   return (
@@ -60,4 +60,4 @@ function FileOnInvention({ file, handleDeleteFile }: FileOnInventionProps) {
   );
 }
 
-export default FileOnInvention;
+export default FileOnDesign;

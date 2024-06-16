@@ -4,7 +4,7 @@ import { BsFileEarmarkCode } from "react-icons/bs";
 import { GrFormView } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 
-type FileOnInventionProps = {
+type FileOnCopyrightProps = {
   file: {
     id?: string | undefined;
     url: string;
@@ -14,13 +14,13 @@ type FileOnInventionProps = {
   };
   handleDeleteFile: ({
     url,
-    fileOnDesignId,
+    fileOnCopyrightId,
   }: {
     url: string;
-    fileOnDesignId?: string;
+    fileOnCopyrightId?: string;
   }) => Promise<void>;
 };
-function FileOnCopyright({ file, handleDeleteFile }: FileOnInventionProps) {
+function FileOnCopyright({ file, handleDeleteFile }: FileOnCopyrightProps) {
   const fileName = file?.url?.split("/").pop();
 
   return (
@@ -48,7 +48,7 @@ function FileOnCopyright({ file, handleDeleteFile }: FileOnInventionProps) {
         <button
           type="button"
           onClick={() =>
-            handleDeleteFile({ url: file.url, fileOnDesignId: file.id })
+            handleDeleteFile({ url: file.url, fileOnCopyrightId: file.id })
           }
           className=" z-10 flex cursor-pointer 
    items-center justify-center gap-2 rounded-md bg-red-500 p-1  text-xl text-white"

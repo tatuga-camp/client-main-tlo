@@ -11,9 +11,10 @@ import { useRouter as NextuseRouter } from "next/router";
 import {
   DeleteInventionPatentService,
   GetInventionPatentService,
+  MigrantInventionPatentService,
 } from "../../../services/invention-patent/invention-patent";
 import Swal from "sweetalert2";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdOutlineDriveFileMove } from "react-icons/md";
 import { useRouter } from "next-nprogress-bar";
 import InventionStatus from "../../../components/Status/InventionStatus";
 import NrruInventionForm1 from "../../../components/outsider/invention-patent/NrruInventionForm1/NrruInventionForm1";
@@ -21,11 +22,13 @@ import NrruInventionForm2 from "../../../components/outsider/invention-patent/Nr
 import NrruInventionForm3 from "../../../components/outsider/invention-patent/NrruInventionForm3/NrruInventionForm3";
 import NrruInventionForm4 from "../../../components/outsider/invention-patent/NrruInventionForm4/NrruInventionForm4";
 import NrruInventionForm5 from "../../../components/outsider/invention-patent/NrruInventionForm5";
+import MigrantForm from "../../../components/Forms/migrantForm";
 
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
+  const [triggerMigrationForm, setTriggerMigrationForm] = useState(false);
 
   const invention = useQuery({
     queryKey: ["invention", { inventionId: router.query.inventionId }],
@@ -150,6 +153,71 @@ const Index = ({ user }: { user: User }) => {
     }
   };
 
+  const handleMigrationForm = async ({
+    userId,
+    email,
+    formId,
+  }: {
+    userId: string;
+    email: string;
+    formId: string;
+  }) => {
+    const replacedText = "ยืนยันการย้ายข้อมูล";
+    let content = document.createElement("div");
+    content.innerHTML =
+      "<div>กรุณาพิมพ์คำด้านล่าง </div> <strong>" +
+      replacedText +
+      `</strong> <div>เพื่อเป็นการยืนยันในการย้ายข้อมูลไปยัง ผู้ใช้งาน email ${email} </div>`;
+    const { value } = await Swal.fire({
+      title: "ยืนยันการย้ายข้อมูล",
+      input: "text",
+      footer:
+        "ข้อมูลทั้งหมดที่เกี่ยวข้องกับข้อมูลนี้จะถูกย้ายออกทั้งหมด และไม่สามารถกู้คืนได้อีก",
+      html: content,
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (value !== replacedText) {
+          return "คำที่พิมพ์ไม่ตรงกับคำที่ต้องการย้าย กรุณาลองใหม่อีกครั้ง";
+        }
+      },
+    });
+    if (value) {
+      try {
+        Swal.fire({
+          title: "กำลังดำเนินการย้ายข้อมูล",
+          html: "กรุณารอสักครู่",
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        await MigrantInventionPatentService({
+          invnetionPatentId: formId,
+          targetUserId: userId,
+        });
+        await invention.refetch();
+        naviateRouter.push("/admin");
+        Swal.fire({
+          title: "ย้ายข้อมูลสำเร็จ",
+          icon: "success",
+        });
+      } catch (error) {
+        let result = error as ErrorMessages;
+        Swal.fire({
+          title: result.error ? result.error : "เกิดข้อผิดพลาด",
+          text: result.message.toString(),
+          footer: result.statusCode
+            ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+            : "",
+          icon: "error",
+        });
+      }
+    }
+  };
+
   return (
     <>
       <Head>
@@ -157,6 +225,13 @@ const Index = ({ user }: { user: User }) => {
         <meta charSet="UTF-8" />
         <title>แบบฟอร์มประกอบคำขอรับสิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร</title>
       </Head>
+      {triggerMigrationForm && router.query.inventionId && (
+        <MigrantForm
+          setTrigger={setTriggerMigrationForm}
+          handleMigrationForm={handleMigrationForm}
+          formId={router.query.inventionId as string}
+        />
+      )}
       <HomeLayout>
         <div className="flex h-full w-full flex-col items-center bg-[#F4F8FF] pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center">
           <header className="mt-10 flex w-[90%] flex-col items-center gap-5 md:mt-5 md:w-full">
@@ -166,18 +241,30 @@ const Index = ({ user }: { user: User }) => {
             <section className="max-w-[32rem] bg-[var(--secondary-yellow)] p-3 text-center text-base font-bold shadow-md md:text-xl">
               <p>สำหรับบุคคลภายนอก</p>
             </section>
-            <button
-              onClick={() =>
-                handleDeleteInvention({
-                  inventionId: router.query.inventionId as string,
-                })
-              }
-              className="flex items-center justify-center gap-2 rounded-lg bg-red-600 px-10 py-2
+            <section className="flex w-full justify-center gap-3">
+              <button
+                onClick={() =>
+                  handleDeleteInvention({
+                    inventionId: router.query.inventionId as string,
+                  })
+                }
+                className="flex items-center justify-center gap-2 rounded-lg bg-red-600 px-10 py-2
              text-white drop-shadow-md transition hover:bg-red-700 active:scale-105"
-            >
-              ลบคำขอ
-              <MdDelete />
-            </button>
+              >
+                ลบคำขอ
+                <MdDelete />
+              </button>
+              {user.role === "ADMIN" && (
+                <button
+                  onClick={() => setTriggerMigrationForm(true)}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-green-600 px-10 py-2
+             text-white drop-shadow-md transition hover:bg-green-700 active:scale-105"
+                >
+                  ย้ายคำขอ
+                  <MdOutlineDriveFileMove />
+                </button>
+              )}
+            </section>
 
             <section className="flex w-full flex-wrap items-center justify-center gap-3 md:w-[70%]">
               {outsiderInventionSection.map((item, index) => (

@@ -216,6 +216,37 @@ export async function UpdateTrademarkervice(
   }
 }
 
+type RequestMigrantTrademarkService = {
+  trademarkId: string;
+  targetUserId: string;
+};
+
+type ResponseMigrantTrademarkService = Trademark;
+
+export async function MigrantTrademarkervice(
+  input: RequestMigrantTrademarkService,
+): Promise<ResponseMigrantTrademarkService> {
+  try {
+    const cookies = parseCookies();
+    const access_token = cookies.access_token;
+    const trademark = await axios({
+      method: "PATCH",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/trademarks/migrant`,
+      data: {
+        ...input,
+      },
+      headers: {
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      },
+    });
+    return trademark.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw error?.response?.data;
+  }
+}
+
 type RequestDeleteTrademarkService = {
   trademarkId: string;
 };

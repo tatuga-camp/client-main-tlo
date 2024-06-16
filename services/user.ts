@@ -1,5 +1,5 @@
 import { parseCookies } from "nookies";
-import { User } from "../models";
+import { Pagination, User } from "../models";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { GetServerSidePropsContext } from "next";
@@ -25,6 +25,36 @@ export async function GetUserService(
     const user = await axios({
       method: "GET",
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+    return user.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw error?.response?.data;
+  }
+}
+
+type RequestGetUserByPageService = {
+  page: number;
+  limit: number;
+  searchField: string;
+};
+type ResponseGetUserByPageService = Pagination<User>;
+export async function GetUserByPageService(
+  input: RequestGetUserByPageService,
+): Promise<ResponseGetUserByPageService> {
+  try {
+    const cookies = parseCookies();
+    const access_token = cookies.access_token;
+    const user = await axios({
+      method: "GET",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users/page`,
+      params: {
+        ...input,
+      },
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token}`,

@@ -25,7 +25,7 @@ import { DocumentType, ErrorMessages } from "../../../../models";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
 import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import Swal from "sweetalert2";
-import FileOnWorkDesign from "../NrruDesignForm2/FileOnWorkDesign";
+import FileOnDesign from "./FileOnDesign";
 
 type NrruDesignForm4Props = {
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;
@@ -235,7 +235,7 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
               ?.filter((file) => file.documentType === "IDCARD")
               .map((file) => {
                 return (
-                  <FileOnWorkDesign
+                  <FileOnDesign
                     file={file}
                     key={file.url}
                     handleDeleteFile={handleDeleteFile}
@@ -300,7 +300,7 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
               ?.filter((file) => file.documentType === "PRODUCT")
               .map((file) => {
                 return (
-                  <FileOnWorkDesign
+                  <FileOnDesign
                     file={file}
                     key={file.url}
                     handleDeleteFile={handleDeleteFile}
@@ -364,7 +364,7 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
               ?.filter((file) => file.documentType === "OTHERS")
               .map((file) => {
                 return (
-                  <FileOnWorkDesign
+                  <FileOnDesign
                     file={file}
                     key={file.url}
                     handleDeleteFile={handleDeleteFile}

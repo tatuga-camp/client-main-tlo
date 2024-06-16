@@ -28,7 +28,7 @@ import { DocumentType, ErrorMessages } from "../../../../models";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
 import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import Swal from "sweetalert2";
-import FileOnWorkCopyright from "../NrruCopyrightForm2/FileOnWorkCopyright";
+import FileOnCopyright from "./FileOnCopyright";
 
 type NrruCopyrightFormProps = {
   copyright: UseQueryResult<ResponseGetCopyrightService, Error>;
@@ -128,10 +128,10 @@ const NrruCopyrightForm4 = ({ copyright }: NrruCopyrightFormProps) => {
 
   const handleDeleteFile = async ({
     url,
-    fileCopyrightId,
+    fileOnCopyrightId,
   }: {
     url: string;
-    fileCopyrightId?: string;
+    fileOnCopyrightId?: string;
   }) => {
     try {
       setSnackBarData(() => {
@@ -140,9 +140,9 @@ const NrruCopyrightForm4 = ({ copyright }: NrruCopyrightFormProps) => {
           action: <SnackbarLoading />,
         };
       });
-      if (fileCopyrightId) {
+      if (fileOnCopyrightId) {
         await DeleteFileCopyrightService({
-          fileCopyrightId: fileCopyrightId,
+          fileCopyrightId: fileOnCopyrightId,
         });
         setFiles((prev) => {
           return [...prev?.filter((file) => file.url !== url)];
@@ -242,7 +242,7 @@ const NrruCopyrightForm4 = ({ copyright }: NrruCopyrightFormProps) => {
               ?.filter((file) => file.documentType === "IDCARD")
               .map((file) => {
                 return (
-                  <FileOnWorkCopyright
+                  <FileOnCopyright
                     file={file}
                     key={file.url}
                     handleDeleteFile={handleDeleteFile}
@@ -307,7 +307,7 @@ const NrruCopyrightForm4 = ({ copyright }: NrruCopyrightFormProps) => {
               ?.filter((file) => file.documentType === "REQUEST")
               .map((file) => {
                 return (
-                  <FileOnWorkCopyright
+                  <FileOnCopyright
                     file={file}
                     key={file.url}
                     handleDeleteFile={handleDeleteFile}
@@ -372,7 +372,7 @@ const NrruCopyrightForm4 = ({ copyright }: NrruCopyrightFormProps) => {
               ?.filter((file) => file.documentType === "OTHERS")
               .map((file) => {
                 return (
-                  <FileOnWorkCopyright
+                  <FileOnCopyright
                     file={file}
                     key={file.url}
                     handleDeleteFile={handleDeleteFile}
