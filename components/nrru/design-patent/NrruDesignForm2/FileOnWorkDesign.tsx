@@ -26,7 +26,7 @@ function FileOnWorkDesign({ file, handleDeleteFile }: FileOnWorkDesignProps) {
   return (
     <div
       key={file.url}
-      className="flex items-center justify-between rounded-md border-[1px] border-solid border-[#cbdbf9] bg-white p-2 md:min-w-72 "
+      className="flex h-10 items-center justify-between rounded-md border-[1px] border-solid border-[#cbdbf9] bg-white p-2 md:min-w-72 "
     >
       <div className="flex justify-center gap-1">
         <div className="flex items-center justify-center text-black">

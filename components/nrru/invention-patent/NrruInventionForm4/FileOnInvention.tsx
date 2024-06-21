@@ -26,7 +26,7 @@ function FileOnInvention({ file, handleDeleteFile }: FileOnInventionProps) {
   return (
     <div
       key={file.url}
-      className="flex w-full items-center justify-between rounded-md
+      className="flex h-10 w-full items-center justify-between rounded-md
        border-[1px] border-solid border-[#cbdbf9] bg-white p-2 "
     >
       <div className="flex justify-center gap-1">

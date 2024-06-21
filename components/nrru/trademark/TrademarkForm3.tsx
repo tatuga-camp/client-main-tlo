@@ -232,7 +232,7 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
                 </Button>
               </FileTrigger>
             </section>
-            <section className=" grid grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
+            <section className=" grid h-full grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
               {...files
                 ?.filter((file) => file.documentType === "IDCARD")
                 .map((file) => {
