@@ -40,6 +40,8 @@ import { MdDelete } from "react-icons/md";
 import { OwnerPartnerType } from "../../invention-patent/NrruInventionForm1/NrruInventionForm1";
 import OwnerPartner from "./OwnerPartner";
 import { PartnerStatus } from "../../../../data/invention";
+import { TitleNameList } from "../../../../data/name";
+import { Dropdown } from "primereact/dropdown";
 
 type NrruDesignForm1Props = {
   user: User;
@@ -459,22 +461,45 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                     <Label className=" text-[var(--primary-blue) min-w-20 font-semibold lg:min-w-24">
                       คำนำหน้าชื่อ
                     </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
-                        name="title"
+                    <div className="flex  flex-col gap-1">
+                      <Dropdown
                         value={
                           partnerData.find((item) => item.id === partner.id)
                             ?.title
                         }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        type="text"
-                        className="h-8 w-24 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:w-full lg:pl-4 "
-                        placeholder="คำนำหน้า"
+                        options={TitleNameList}
+                        onChange={(e) => {
+                          setSnackBarData(() => {
+                            return {
+                              open: true,
+                              action: <SnackbarSaveData />,
+                            };
+                          });
+                          setPartnerData((prev) => {
+                            const newState = prev?.map((prevPartner) => {
+                              if (prevPartner.id === partner.id) {
+                                return {
+                                  ...partner,
+                                  title: e.value,
+                                };
+                              }
+
+                              return partner;
+                            });
+
+                            return newState;
+                          });
+                        }}
+                        required
+                        className="w-full rounded-md bg-slate-300 text-sm "
                       />
-                      <FieldError className="text-xs text-red-700" />
+
+                      {!partnerData.find((item) => item.id === partner.id)
+                        ?.title && (
+                        <span className="text-xs text-red-700">
+                          Please fill out this field.
+                        </span>
+                      )}
                     </div>
                   </TextField>
                   <TextField
