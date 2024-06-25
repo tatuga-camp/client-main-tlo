@@ -29,6 +29,9 @@ import {
   GetSignURLService,
   UploadSignURLService,
 } from "../../../services/google-storage";
+import { Dropdown } from "primereact/dropdown";
+import { TitleNameList } from "../../../data/name";
+import { FacultyLists } from "../../../data/user";
 type BasicInformationProps = {
   user: DefinedUseQueryResult<User, Error>;
 };
@@ -250,14 +253,25 @@ function BasicInformation({ user }: BasicInformationProps) {
         <Label className="font-semibold text-[var(--primary-blue)]">
           คำนำหน้า
         </Label>
-        <Input
-          value={userForm?.title}
-          onChange={handleChangeUserForm}
-          name="title"
-          type="text"
-          className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-          placeholder="คำนำหน้า"
-        />
+        <div className="flex  flex-col gap-1">
+          <Dropdown
+            value={userForm?.title}
+            options={TitleNameList}
+            onChange={(e) => {
+              setUserForm((prev) => {
+                return { ...prev, title: e.value };
+              });
+            }}
+            required
+            className="w-full rounded-md bg-slate-300 text-sm "
+          />
+
+          {!userForm?.title && (
+            <span className="text-xs text-red-700">
+              Please fill out this field.
+            </span>
+          )}
+        </div>
       </TextField>
       <TextField type="text" isRequired className="flex flex-col gap-1">
         <Label className="font-semibold text-[var(--primary-blue)]">
@@ -444,15 +458,25 @@ function BasicInformation({ user }: BasicInformationProps) {
           <Label className="font-semibold text-[var(--primary-blue)]">
             คณะ/หน่วยงาน
           </Label>
-          <Input
-            onChange={handleChangeUserForm}
-            value={userForm?.faculty}
-            name="faculty"
-            type="text"
-            className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-            placeholder="คณะ/หน่วยงาน"
-          />
-          <FieldError className="text-xs text-red-600" />
+          <div className="flex  flex-col gap-1">
+            <Dropdown
+              value={userForm?.faculty}
+              options={FacultyLists}
+              onChange={(e) => {
+                setUserForm((prev) => {
+                  return { ...prev, faculty: e.value };
+                });
+              }}
+              required
+              className="w-full rounded-md bg-slate-300 text-sm "
+            />
+
+            {!userForm?.faculty && (
+              <span className="text-xs text-red-700">
+                Please fill out this field.
+              </span>
+            )}
+          </div>
         </TextField>
       )}
 

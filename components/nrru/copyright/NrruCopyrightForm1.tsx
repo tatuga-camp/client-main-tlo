@@ -39,6 +39,9 @@ import {
 import SnackbarLoading from "../../Snackbars/SnackBarLoading";
 import SnackbarNoSaveData from "../../Snackbars/SnackBarNoSaveData";
 import { MdDelete } from "react-icons/md";
+import { Dropdown } from "primereact/dropdown";
+import { TitleNameList } from "../../../data/name";
+import { FacultyLists } from "../../../data/user";
 
 type NrruCopyrightForm1Props = {
   user: User;
@@ -396,32 +399,55 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
               key={partner.id}
               className={`flex w-full flex-col gap-5 rounded-lg p-5 ring-1 ring-gray-400  `}
             >
-              <section className="flex w-full items-start justify-center gap-3  md:items-center md:gap-5">
+              <section className="flex w-full items-start justify-start gap-3  md:items-center md:gap-5">
                 <NumberTitle number={1} />
                 <div
-                  className="flex w-full flex-col gap-3
+                  className="flex  flex-col gap-3
                    text-[0.8rem] md:gap-5 md:text-base lg:flex-row"
                 >
-                  <TextField className={"flex w-full items-center gap-3"}>
-                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold">
+                  <TextField className={"flex items-center gap-3"}>
+                    <Label className=" text-[var(--primary-blue) w-max font-semibold">
                       คำนำหน้าชื่อ
                     </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
-                        name="title"
+                    <div className="flex  flex-col gap-1">
+                      <Dropdown
                         value={
                           partnerData.find((item) => item.id === partner.id)
                             ?.title
                         }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        type="text"
-                        className="h-8 w-28 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-28 md:pl-4 "
-                        placeholder="คำนำหน้า"
+                        options={TitleNameList}
+                        onChange={(e) => {
+                          setSnackBarData(() => {
+                            return {
+                              open: true,
+                              action: <SnackbarSaveData />,
+                            };
+                          });
+                          setPartnerData((prev) => {
+                            const newState = prev?.map((prevPartner) => {
+                              if (prevPartner.id === partner.id) {
+                                return {
+                                  ...partner,
+                                  title: e.value,
+                                };
+                              }
+
+                              return partner;
+                            });
+
+                            return newState;
+                          });
+                        }}
+                        required
+                        className="w-full rounded-md bg-slate-300 text-sm md:w-60 "
                       />
-                      <FieldError className="text-xs text-red-700" />
+
+                      {!partnerData.find((item) => item.id === partner.id)
+                        ?.title && (
+                        <span className="text-xs text-red-700">
+                          Please fill out this field.
+                        </span>
+                      )}
                     </div>
                   </TextField>
                   <TextField className={"flex w-full items-center gap-3"}>
@@ -473,15 +499,13 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
               </section>
 
               {/* ข้อ 2*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-start gap-3 md:items-center md:gap-5">
                 <NumberTitle number={2} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
                   <TextField
-                    className={
-                      "flex w-full flex-col gap-3 md:w-[60%] md:flex-col  "
-                    }
+                    className={"flex w-full flex-col  md:w-[60%] md:flex-col  "}
                   >
-                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-44">
+                    <Label className=" text-[var(--primary-blue) font-semibold">
                       เลขบัตรประจำตัวประชาชน
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -666,43 +690,66 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
               {/* ข้อ 5*/}
               <section className="flex items-start justify-start  gap-3  md:gap-5">
                 <NumberTitle number={4} />{" "}
-                <p className="my-2 text-[0.8rem] font-semibold md:text-base">
-                  สังกัด
-                </p>
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:flex-wrap md:gap-5 md:text-base">
-                  <TextField className={"flex  items-center gap-3  "}>
+                <div className="flex w-full flex-col gap-2 text-[0.8rem] md:flex-row md:flex-wrap md:gap-5 md:text-base">
+                  <p className=" text-[0.8rem] font-semibold md:text-base">
+                    สังกัด
+                  </p>
+                  <TextField
+                    className={"flex w-full flex-col items-start  md:w-96  "}
+                  >
                     <Label className=" text-[var(--primary-blue) min-w-12 font-medium ">
                       คณะ/หน่วยงาน
                     </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
+                    <div className="flex w-full flex-col gap-1">
+                      <Dropdown
                         value={
                           partnerData.find((item) => item.id === partner.id)
                             ?.faculty
                         }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        name="faculty"
-                        type="text"
-                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                        placeholder="มนุษยศาสตร์และสังคมศาสตร์"
+                        options={FacultyLists}
+                        onChange={(e) => {
+                          setSnackBarData(() => {
+                            return {
+                              open: true,
+                              action: <SnackbarSaveData />,
+                            };
+                          });
+                          setPartnerData((prev) => {
+                            const newState = prev?.map((prevPartner) => {
+                              if (prevPartner.id === partner.id) {
+                                return {
+                                  ...partner,
+                                  faculty: e.value,
+                                };
+                              }
+
+                              return partner;
+                            });
+
+                            return newState;
+                          });
+                        }}
+                        required
+                        className="w-full rounded-md bg-slate-300 text-sm"
                       />
-                      <FieldError className="text-xs text-red-700" />
+
+                      {!partnerData.find((item) => item.id === partner.id)
+                        ?.faculty && (
+                        <span className="text-xs text-red-700">
+                          Please fill out this field.
+                        </span>
+                      )}
                     </div>
                   </TextField>
                 </div>
               </section>
 
-              {/* ข้อ 6*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              {/* ข้อ 5*/}
+              <section className="flex items-start justify-start gap-3 md:items-center md:gap-5">
                 <NumberTitle number={5} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
-                  <TextField
-                    className={"flex w-full items-center gap-3 md:w-[40%] "}
-                  >
-                    <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-36">
+                  <TextField className={"flex flex-col  items-start   "}>
+                    <Label className=" text-[var(--primary-blue) font-semibold ">
                       หมายเลขโทรศัพท์
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -731,14 +778,10 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                 </div>
               </section>
               {/* ข้อ 7*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-start gap-3 md:items-center md:gap-5">
                 <NumberTitle number={6} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
-                  <TextField
-                    className={
-                      "flex w-full items-center gap-2 md:w-[40%] lg:gap-3 "
-                    }
-                  >
+                <div className="flex flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
+                  <TextField className={"flex items-center gap-2  lg:gap-3 "}>
                     <Label className=" text-[var(--primary-blue) min-w-14 font-semibold md:min-w-20">
                       E-mail
                     </Label>
@@ -754,7 +797,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                         }
                         name="email"
                         type="email"
-                        className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60 md:pl-4 "
+                        className="w-full rounded-md bg-slate-300 p-1 pl-3  "
                         placeholder="xxx@gmail.com"
                       />
                       <FieldError className="text-xs text-red-700" />

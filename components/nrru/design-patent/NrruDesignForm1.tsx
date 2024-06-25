@@ -34,6 +34,9 @@ import {
 import SnackbarLoading from "../../Snackbars/SnackBarLoading";
 import SnackbarNoSaveData from "../../Snackbars/SnackBarNoSaveData";
 import { MdDelete } from "react-icons/md";
+import { Dropdown } from "primereact/dropdown";
+import { TitleNameList } from "../../../data/name";
+import { FacultyLists } from "../../../data/user";
 
 type NrruDesignForm1Props = {
   user: User;
@@ -386,39 +389,58 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
           return (
             <div
               key={partner.id}
-              className={`flex flex-col gap-5 rounded-lg p-5 ring-1 ring-gray-400  `}
+              className={`flex flex-col gap-5 rounded-lg p-5  ring-gray-400  `}
             >
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex flex-wrap items-start justify-start gap-3 md:items-start md:gap-5">
                 <NumberTitle number={1} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:gap-5 md:text-base lg:flex-row">
-                  <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
-                  >
+                <div className="flex  flex-col flex-wrap gap-3 text-[0.8rem] md:gap-5 md:text-base lg:flex-row">
+                  <TextField className={"flex w-max items-center gap-3 "}>
                     <Label className=" text-[var(--primary-blue) min-w-20 font-semibold md:min-w-24">
                       คำนำหน้าชื่อ
                     </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
-                        name="title"
+                    <div className="flex w-max  flex-col gap-1">
+                      <Dropdown
                         value={
                           partnerData.find((item) => item.id === partner.id)
                             ?.title
                         }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        type="text"
-                        className="h-8 w-24 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-32 md:pl-4 "
-                        placeholder="คำนำหน้า"
+                        options={TitleNameList}
+                        onChange={(e) => {
+                          setSnackBarData(() => {
+                            return {
+                              open: true,
+                              action: <SnackbarSaveData />,
+                            };
+                          });
+                          setPartnerData((prev) => {
+                            const newState = prev?.map((prevPartner) => {
+                              if (prevPartner.id === partner.id) {
+                                return {
+                                  ...partner,
+                                  title: e.value,
+                                };
+                              }
+
+                              return partner;
+                            });
+
+                            return newState;
+                          });
+                        }}
+                        required
+                        className="w-full rounded-md bg-slate-300 text-sm md:w-60 "
                       />
-                      <FieldError className="text-xs text-red-700" />
+
+                      {!partnerData.find((item) => item.id === partner.id)
+                        ?.title && (
+                        <span className="text-xs text-red-700">
+                          Please fill out this field.
+                        </span>
+                      )}
                     </div>
                   </TextField>
-                  <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
-                  >
-                    <Label className="w-5 font-semibold text-[var(--primary-blue)] md:min-w-16">
+                  <TextField className={"flex w-max items-center gap-3  "}>
+                    <Label className="font-semibold text-[var(--primary-blue)]">
                       ชื่อ
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -440,10 +462,8 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                       <FieldError className="text-xs text-red-700" />
                     </div>
                   </TextField>
-                  <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
-                  >
-                    <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
+                  <TextField className={"flex w-max items-center gap-3 "}>
+                    <Label className="font-semibold text-[var(--primary-blue)] ">
                       นามสกุล
                     </Label>
                     <div className="flex flex-col gap-1">
@@ -468,7 +488,7 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               </section>
 
               {/* ข้อ 2*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-start gap-3 md:items-center md:gap-5">
                 <NumberTitle number={2} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
                   <TextField
@@ -663,30 +683,57 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               {/* ข้อ 5*/}
               <section className="flex items-start justify-start  gap-3  md:gap-5">
                 <NumberTitle number={4} />{" "}
-                <p className="my-2 text-[0.8rem] font-semibold md:text-base">
-                  สังกัด
-                </p>
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:flex-wrap md:gap-5 md:text-base">
-                  <TextField className={"flex  items-center gap-3  "}>
+                  <p className="text-[0.8rem] font-semibold md:text-base">
+                    สังกัด
+                  </p>
+                  <TextField
+                    className={
+                      "flex w-full flex-col  items-start gap-3 md:w-96  "
+                    }
+                  >
                     <Label className=" text-[var(--primary-blue) min-w-12 font-medium ">
                       คณะ/หน่วยงาน
                     </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
+                    <div className="flex w-full flex-col gap-1">
+                      <Dropdown
                         value={
                           partnerData.find((item) => item.id === partner.id)
                             ?.faculty
                         }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        name="faculty"
-                        type="text"
-                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                        placeholder="มนุษยศาสตร์และสังคมศาสตร์"
+                        options={FacultyLists}
+                        onChange={(e) => {
+                          setSnackBarData(() => {
+                            return {
+                              open: true,
+                              action: <SnackbarSaveData />,
+                            };
+                          });
+                          setPartnerData((prev) => {
+                            const newState = prev?.map((prevPartner) => {
+                              if (prevPartner.id === partner.id) {
+                                return {
+                                  ...partner,
+                                  faculty: e.value,
+                                };
+                              }
+
+                              return partner;
+                            });
+
+                            return newState;
+                          });
+                        }}
+                        required
+                        className="w-full rounded-md bg-slate-300 text-sm"
                       />
-                      <FieldError className="text-xs text-red-700" />
+
+                      {!partnerData.find((item) => item.id === partner.id)
+                        ?.faculty && (
+                        <span className="text-xs text-red-700">
+                          Please fill out this field.
+                        </span>
+                      )}
                     </div>
                   </TextField>
                 </div>
