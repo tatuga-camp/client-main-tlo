@@ -35,6 +35,9 @@ import {
 import SnackbarNoSaveData from "../../Snackbars/SnackBarNoSaveData";
 import SnackbarLoading from "../../Snackbars/SnackBarLoading";
 import { MdDelete } from "react-icons/md";
+import { Dropdown } from "primereact/dropdown";
+import { TitleNameList } from "../../../data/name";
+import { OccupationLists } from "../../../data/user";
 
 type TrademarkForm1Props = {
   trademark: UseQueryResult<ResponseGetTrademarkService, Error>;
@@ -374,38 +377,57 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
           return (
             <div
               key={partner.id}
-              className={`flex flex-col gap-5 rounded-lg p-5 ring-1 ring-gray-400  `}
+              className={`flex flex-col gap-5 rounded-lg p-5  ring-1 ring-gray-400  `}
             >
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-start gap-3 md:items-start md:gap-5">
                 <NumberTitle number={1} />
-                <div className="flex w-full flex-col gap-3 text-[0.8rem] md:gap-5 md:text-base lg:flex-row">
-                  <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
-                  >
+                <div className="flex w-full flex-col flex-wrap gap-3 text-[0.8rem] md:gap-5 md:text-base lg:flex-row">
+                  <TextField className={"flex items-center gap-3"}>
                     <Label className=" text-[var(--primary-blue) min-w-20 font-semibold md:min-w-24">
                       คำนำหน้าชื่อ
                     </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
-                        name="title"
+                    <div className="flex  flex-col gap-1">
+                      <Dropdown
                         value={
                           partnerData.find((item) => item.id === partner.id)
                             ?.title
                         }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        type="text"
-                        className="h-8 w-28 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-32 md:pl-4 "
-                        placeholder="คำนำหน้า"
+                        options={TitleNameList}
+                        onChange={(e) => {
+                          setSnackBarData(() => {
+                            return {
+                              open: true,
+                              action: <SnackbarSaveData />,
+                            };
+                          });
+                          setPartnerData((prev) => {
+                            const newState = prev?.map((prevPartner) => {
+                              if (prevPartner.id === partner.id) {
+                                return {
+                                  ...partner,
+                                  title: e.value,
+                                };
+                              }
+
+                              return partner;
+                            });
+
+                            return newState;
+                          });
+                        }}
+                        required
+                        className="w-full rounded-md bg-slate-300 text-sm "
                       />
-                      <FieldError className="text-xs text-red-700" />
+
+                      {!partnerData.find((item) => item.id === partner.id)
+                        ?.title && (
+                        <span className="text-xs text-red-700">
+                          Please fill out this field.
+                        </span>
+                      )}
                     </div>
                   </TextField>
-                  <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
-                  >
+                  <TextField className={"flex items-center gap-3  "}>
                     <Label className="min-w-8 font-semibold text-[var(--primary-blue)] ">
                       ชื่อ
                     </Label>
@@ -421,16 +443,14 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
                         }
                         name="firstName"
                         type="text"
-                        className="h-8md:w-60 w-44 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                        className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60  md:p-2 md:pl-4"
                         placeholder="ชื่อจริง"
                       />
 
                       <FieldError className="text-xs text-red-700" />
                     </div>
                   </TextField>
-                  <TextField
-                    className={"flex w-full items-center gap-3 md:w-[50%]"}
-                  >
+                  <TextField className={"flex items-center gap-3  "}>
                     <Label className="min-w-14 font-semibold text-[var(--primary-blue)] md:min-w-16">
                       นามสกุล
                     </Label>
@@ -446,7 +466,7 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
                         }
                         name="lastName"
                         type="text"
-                        className="h-8md:w-60 w-40 rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:p-2 md:pl-4"
+                        className="h-8 w-40 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-60  md:p-2 md:pl-4"
                         placeholder="นามสกุล"
                       />
                       <FieldError className="text-xs text-red-700" />
@@ -456,7 +476,7 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
               </section>
 
               {/* ข้อ 2*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-start gap-3 md:items-center md:gap-5">
                 <NumberTitle number={2} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
                   <TextField
@@ -649,14 +669,18 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
               </section>
 
               {/* ข้อ 4*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-start gap-3 md:items-center md:gap-5">
                 <NumberTitle number={4} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
-                  <TextField className={"flex  items-center gap-3 md:w-[40%] "}>
+                  <TextField
+                    className={
+                      "flex w-full flex-col items-start gap-1  md:w-96  md:flex-row md:gap-3 "
+                    }
+                  >
                     <Label className=" text-[var(--primary-blue) min-w-24 font-semibold md:min-w-36">
                       หมายเลขโทรศัพท์
                     </Label>
-                    <div className="flex flex-col gap-1">
+                    <div className="flex w-full flex-col gap-1">
                       <div className="flex flex-col gap-1">
                         <InputMask
                           required
@@ -668,7 +692,7 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
                             handleChangePartnerData({ e, id: partner.id })
                           }
                           name="phone"
-                          className="h-8 w-32 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 lg:w-72 "
+                          className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3   "
                           placeholder="กรอกหมายเลขโทรศัพท์"
                           maxLength={10}
                           inputMode="numeric"
@@ -682,11 +706,13 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
                 </div>
               </section>
               {/* ข้อ 5*/}
-              <section className="flex items-start justify-center gap-3 md:items-center md:gap-5">
+              <section className="flex items-start justify-start gap-3 md:items-center md:gap-5">
                 <NumberTitle number={5} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[40%] "}
+                    className={
+                      "flex w-full flex-col items-start gap-1 md:w-[40%] md:flex-row md:gap-3 "
+                    }
                   >
                     <Label className=" text-[var(--primary-blue) min-w-14 font-semibold ">
                       E-mail
@@ -703,7 +729,7 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
                         }
                         name="email"
                         type="email"
-                        className="h-8 w-44 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 lg:w-72 "
+                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 lg:w-72 "
                         placeholder="xxx@gmail.com"
                       />
                       <FieldError className="text-xs text-red-700" />
@@ -717,27 +743,52 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
                 <NumberTitle number={6} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:flex-row md:gap-5 md:text-base">
                   <TextField
-                    className={"flex w-full items-center gap-3 md:w-[40%] "}
+                    className={
+                      "flex w-full flex-col items-start gap-1 md:w-[40%] md:flex-row md:gap-3 "
+                    }
                   >
                     <Label className=" text-[var(--primary-blue) min-w-10 font-semibold ">
                       อาชีพ
                     </Label>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        required
+                    <div className="flex w-full flex-col gap-1">
+                      <Dropdown
                         value={
                           partnerData.find((item) => item.id === partner.id)
                             ?.career
                         }
-                        onChange={(e) =>
-                          handleChangePartnerData({ e, id: partner.id })
-                        }
-                        name="career"
-                        type="text"
-                        className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:pl-4 "
-                        placeholder="อาชีพ"
+                        options={OccupationLists}
+                        onChange={(e) => {
+                          setSnackBarData(() => {
+                            return {
+                              open: true,
+                              action: <SnackbarSaveData />,
+                            };
+                          });
+                          setPartnerData((prev) => {
+                            const newState = prev?.map((prevPartner) => {
+                              if (prevPartner.id === partner.id) {
+                                return {
+                                  ...partner,
+                                  career: e.value,
+                                };
+                              }
+
+                              return partner;
+                            });
+
+                            return newState;
+                          });
+                        }}
+                        required
+                        className="w-full rounded-md bg-slate-300 text-sm "
                       />
-                      <FieldError className="text-xs text-red-700" />
+
+                      {!partnerData.find((item) => item.id === partner.id)
+                        ?.career && (
+                        <span className="text-xs text-red-700">
+                          Please fill out this field.
+                        </span>
+                      )}
                     </div>
                   </TextField>
                 </div>

@@ -10,6 +10,7 @@ import AmphureCombobox from "../../../Combobox/amphureCombobox";
 import TambonCombobox from "../../../Combobox/tambonCombobox";
 import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import { OwnerPartnerType } from "../../invention-patent/NrruInventionForm1/NrruInventionForm1";
+import { TitleNameList } from "../../../../data/name";
 
 type OwnerPartnerProps = {
   setSnackBarData: (
@@ -135,17 +136,24 @@ function OwnerPartner({
               <Label className=" text-[var(--primary-blue) min-w-20 font-semibold lg:min-w-24">
                 คำนำหน้าชื่อ
               </Label>
-              <div className="flex flex-col gap-1">
-                <Input
-                  required
-                  name="title"
-                  onChange={handleChangePartnerData}
+              <div className="flex  flex-col gap-1">
+                <Dropdown
                   value={ownerData?.title}
-                  type="text"
-                  className="h-8 w-24 rounded-md bg-slate-300 p-1 pl-3 lg:h-10 lg:w-24 lg:pl-4 "
-                  placeholder="คำนำหน้า"
+                  options={TitleNameList}
+                  onChange={(e) => {
+                    setOwnerData((prev) => {
+                      return { ...prev, title: e.value };
+                    });
+                  }}
+                  required
+                  className="w-full rounded-md bg-slate-300 text-sm "
                 />
-                <FieldError className="text-xs text-red-700" />
+
+                {!ownerData?.title && (
+                  <span className="text-xs text-red-700">
+                    Please fill out this field.
+                  </span>
+                )}
               </div>
             </TextField>
             <TextField className={"flex w-full items-center gap-3 lg:w-[50%]"}>
@@ -188,7 +196,7 @@ function OwnerPartner({
       </section>
 
       {/* ข้อ 2*/}
-      <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
+      <section className="flex items-start justify-start gap-3 lg:items-center lg:gap-5">
         <NumberTitle number={2} />
         <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
           <TextField
@@ -328,8 +336,8 @@ function OwnerPartner({
         </div>
       </section>
 
-      {/* ข้อ 6*/}
-      <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
+      {/* ข้อ 4*/}
+      <section className="flex items-start justify-start gap-3 lg:items-center lg:gap-5">
         <NumberTitle number={4} />
         <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
           <TextField className={"flex w-full items-center gap-3 lg:w-[40%] "}>

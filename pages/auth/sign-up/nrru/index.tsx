@@ -31,6 +31,9 @@ import Swal from "sweetalert2";
 import { SingUpService } from "../../../../services/auth";
 import { useRouter } from "next-nprogress-bar";
 import HomeLayout from "../../../../layouts/homepageLayout";
+import { Dropdown } from "primereact/dropdown";
+import { FacultyLists } from "../../../../data/user";
+import { TitleNameList } from "../../../../data/name";
 
 const Index = () => {
   const router = useRouter();
@@ -198,13 +201,25 @@ const Index = () => {
                     <Label className="font-semibold text-[var(--primary-blue)]">
                       คำนำหน้า
                     </Label>
-                    <Input
-                      onChange={handleChangeSignUpNRRUForm}
-                      name="title"
-                      type="text"
-                      className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-                      placeholder="คำนำหน้า"
-                    />
+                    <div className="flex  flex-col gap-1">
+                      <Dropdown
+                        value={signUpNRRUForm?.title}
+                        options={TitleNameList}
+                        onChange={(e) => {
+                          setsignUpNRRUForm((prev) => {
+                            return { ...prev, title: e.value };
+                          });
+                        }}
+                        required
+                        className="w-full rounded-md bg-slate-300 text-sm "
+                      />
+
+                      {!signUpNRRUForm?.title && (
+                        <span className="text-xs text-red-700">
+                          Please fill out this field.
+                        </span>
+                      )}
+                    </div>
                   </TextField>
                   <TextField
                     type="text"
@@ -436,14 +451,25 @@ const Index = () => {
                     <Label className="font-semibold text-[var(--primary-blue)]">
                       คณะ/หน่วยงาน
                     </Label>
-                    <Input
-                      onChange={handleChangeSignUpNRRUForm}
-                      name="faculty"
-                      type="text"
-                      className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4"
-                      placeholder="รหัสผ่าน"
-                    />
-                    <FieldError className="text-xs text-red-600" />
+                    <div className="flex  flex-col gap-1">
+                      <Dropdown
+                        value={signUpNRRUForm?.faculty}
+                        options={FacultyLists}
+                        onChange={(e) => {
+                          setsignUpNRRUForm((prev) => {
+                            return { ...prev, faculty: e.value };
+                          });
+                        }}
+                        required
+                        className="w-full rounded-md bg-slate-300 text-sm "
+                      />
+
+                      {!signUpNRRUForm?.faculty && (
+                        <span className="text-xs text-red-700">
+                          Please fill out this field.
+                        </span>
+                      )}
+                    </div>
                   </TextField>
 
                   <TextField
