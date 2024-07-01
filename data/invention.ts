@@ -69,7 +69,7 @@ export const websites = [
   {
     title: "ยุโรป : www.espacenet.com",
   },
-] as const;
+];
 
 export type Websites =
   | "ประเทศไทย : www.ipthailand.go.th"
@@ -128,10 +128,7 @@ export const publicType = [
   "ตีพิมพ์ในวารสาร (Journal)",
   "การนำเสนอผลงานในการประชุม/การแสดงสินค้า/การออกบูธประชาสัมพันธ",
   "การวางจำหน่ายผลงาน",
-  "ตีพิมพ์ในวารสาร (Journal)",
   "การส่งผลงานตีพิมพ์",
-  "อื่น ๆ (โปรดระบุ)",
-  "ไม่เผยแพร่ผลงาน",
 ];
 
 export const supportBenefits = [

@@ -99,13 +99,13 @@ export type WorkInfoOnInventionPatent = {
   otherAgreement: string;
   researchResult: ResearchType;
   keywords: string;
-  website: Websites;
+  website: string[];
   otherWebsite: string;
   searchResult: string;
   requestNumber: string;
   requestDate: string;
   requestCountry: string;
-  publicType: PublicType;
+  publicType: string[];
   otherPublicType: string;
   publicDetail: string;
   outstandingDetail: string;

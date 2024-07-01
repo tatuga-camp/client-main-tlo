@@ -218,7 +218,7 @@ const Index = ({ user }: { user: User }) => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <title>แบบฟอร์มประกอบคำขอจดแจ้งข้อมูลลิขสิทธ์</title>
+        <title>คำขอจดแจ้งข้อมูลลิขสิทธ์</title>
       </Head>
       {triggerMigrationForm && router.query.copyrightId && (
         <MigrantForm
@@ -231,7 +231,7 @@ const Index = ({ user }: { user: User }) => {
         <div className="flex h-full w-full flex-col items-center bg-[#F4F8FF] pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center">
           <header className="mt-10 flex w-[90%] flex-col items-center gap-5 md:mt-5 md:w-full">
             <h2 className="text-center text-2xl font-bold md:text-3xl">
-              แบบฟอร์มประกอบคำขอจดแจ้งข้อมูลลิขสิทธ์
+              คำขอจดแจ้งข้อมูลลิขสิทธ์
             </h2>
             <section className="max-w-[32rem] bg-[var(--secondary-yellow)] p-3 text-center text-base font-bold shadow-md md:text-xl">
               <p>สำหรับบุคคลภายนอก</p>

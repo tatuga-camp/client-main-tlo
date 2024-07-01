@@ -26,7 +26,6 @@ import {
   UpdateCopyrightService,
 } from "../../../../services/copyright/copyright";
 import { v4 as uuidv4 } from "uuid";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import Swal from "sweetalert2";
 import { isMongoDBId, isUUIDv4 } from "../../../../utilities/validateID";
 import {
@@ -145,12 +144,6 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
             };
           });
         } else {
-          setSnackBarData(() => {
-            return {
-              open: true,
-              action: <SnackbarSaveData />,
-            };
-          });
           return [
             {
               id: uuidv4(),
@@ -243,13 +236,6 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
     e: React.ChangeEvent<HTMLInputElement> | InputMaskChangeEvent;
     id: string;
   }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
-
     const { name, value } = e.target;
     const parsedValue = typeof value === "string" ? value : "";
 
@@ -416,12 +402,6 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -471,12 +451,6 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                         }
                         options={TitleNameList}
                         onChange={(e) => {
-                          setSnackBarData(() => {
-                            return {
-                              open: true,
-                              action: <SnackbarSaveData />,
-                            };
-                          });
                           setPartnerData((prev) => {
                             const newState = prev?.map((prevPartner) => {
                               if (prevPartner.id === partner.id) {

@@ -53,12 +53,13 @@ type RequestUpdateWorkInventionPatentService = {
     otherAgreement?: string;
     researchResult?: string;
     keywords?: string;
-    website?: string;
+    website?: string[];
+    otherWebsite?: string;
     searchResult?: string;
     requestNumber?: string;
     requestDate?: string;
     requestCountry?: string;
-    publicType?: string;
+    publicType?: string[];
     otherPublicType?: string;
     publicDetail?: string;
     outstandingDetail?: string;

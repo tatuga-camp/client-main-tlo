@@ -24,7 +24,6 @@ import {
 import { UseQueryResult } from "@tanstack/react-query";
 import { ResponseGetTrademarkService } from "../../../services/trademark/trademark";
 import { v4 as uuidv4 } from "uuid";
-import SnackbarSaveData from "../../Snackbars/SnackbarSaveData";
 import Swal from "sweetalert2";
 import { isMongoDBId, isUUIDv4 } from "../../../utilities/validateID";
 import {
@@ -110,12 +109,6 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
             };
           });
         } else {
-          setSnackBarData(() => {
-            return {
-              open: true,
-              action: <SnackbarSaveData />,
-            };
-          });
           return [
             {
               id: uuidv4(),
@@ -206,13 +199,6 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
     e: React.ChangeEvent<HTMLInputElement> | InputMaskChangeEvent;
     id: string;
   }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
-
     const { name, value } = e.target;
     const parsedValue = typeof value === "string" ? value : "";
 
@@ -348,12 +334,6 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -394,12 +374,6 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
                         }
                         options={TitleNameList}
                         onChange={(e) => {
-                          setSnackBarData(() => {
-                            return {
-                              open: true,
-                              action: <SnackbarSaveData />,
-                            };
-                          });
                           setPartnerData((prev) => {
                             const newState = prev?.map((prevPartner) => {
                               if (prevPartner.id === partner.id) {
@@ -758,12 +732,6 @@ const TrademarkForm1 = ({ trademark, user }: TrademarkForm1Props) => {
                         }
                         options={OccupationLists}
                         onChange={(e) => {
-                          setSnackBarData(() => {
-                            return {
-                              open: true,
-                              action: <SnackbarSaveData />,
-                            };
-                          });
                           setPartnerData((prev) => {
                             const newState = prev?.map((prevPartner) => {
                               if (prevPartner.id === partner.id) {

@@ -1,6 +1,12 @@
 import Number from "@/components/Number";
 import { UseQueryResult } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import {
   Button,
   FieldError,
@@ -23,14 +29,15 @@ import {
 } from "../../../../services/design-patent/file-design";
 import { DocumentType, ErrorMessages } from "../../../../models";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import Swal from "sweetalert2";
 import FileOnDesign from "./FileOnDesign";
 
 type NrruDesignForm4Props = {
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
-const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
+const NrruDesignForm4 = forwardRef(({ design }: NrruDesignForm4Props, ref) => {
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -63,9 +70,23 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
     }
   }, [design.data]);
 
-  const handleUploadFile = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+      formRef.current?.requestSubmit();
       setSnackBarData(() => {
         return {
           open: true,
@@ -105,12 +126,6 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -156,12 +171,6 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -173,12 +182,13 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
       });
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    saveData,
+  }));
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
-      <Form
-        onSubmit={handleUploadFile}
-        className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
-      >
+      <Form className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 ">
         {/* ข้อ 1*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
@@ -199,12 +209,7 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
@@ -260,12 +265,7 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
@@ -328,12 +328,7 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
@@ -377,6 +372,6 @@ const NrruDesignForm4 = ({ design }: NrruDesignForm4Props) => {
       </Form>
     </div>
   );
-};
+});
 
 export default NrruDesignForm4;

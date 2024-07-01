@@ -191,7 +191,7 @@ function Index({ user }: { user: User }) {
             className="w-fulljustify-between flex bg-second-color px-2 py-1 text-2xl font-semibold text-main-color
            drop-shadow-md"
           >
-            รายงานผลคำขอจดทะเบียน
+            รายงานผลการยื่นคำขอจดทะเบียน
           </div>
 
           <div className="relative max-h-96 w-full overflow-auto md:max-h-max">

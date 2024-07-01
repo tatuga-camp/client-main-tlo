@@ -1,6 +1,6 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { nrruInventionSection } from "../../../data/PatentSection";
 import NrruInventionForm1 from "../../../components/nrru/invention-patent/NrruInventionForm1";
 import NrruInventionForm2 from "../../../components/nrru/invention-patent/NrruInventionForm2/NrruInventionForm2";
@@ -22,12 +22,19 @@ import { useRouter } from "next-nprogress-bar";
 import NrruInventionForm5 from "../../../components/nrru/invention-patent/NrruInventionForm5";
 import InventionStatus from "../../../components/Status/InventionStatus";
 import MigrantForm from "../../../components/Forms/migrantForm";
+import { IoIosSave } from "react-icons/io";
+
+export type ChildFormRef = {
+  saveData: () => Promise<void>;
+};
 
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
   const [triggerMigrationForm, setTriggerMigrationForm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const childRef = useRef<ChildFormRef>(null);
   const invention = useQuery({
     queryKey: ["invention", { inventionId: router.query.inventionId }],
     queryFn: () =>
@@ -84,15 +91,27 @@ const Index = ({ user }: { user: User }) => {
       throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
     } else if (
       number === 4 &&
-      (invention.data?.fileOnInventionPatents.length === 0 ||
+      ((invention.data?.fileOnInventionPatents?.filter(
+        (file) => file.documentType === "IDCARD",
+      ).length ?? 0) <
+        (invention.data?.partnerInfoOnInventionPatents?.length ?? 0) ||
+        (invention.data?.fileOnInventionPatents?.filter(
+          (file) => file.documentType === "REQUEST",
+        )?.length ?? 0) === 0 ||
         invention.data?.supportingDataOnInventionPatent.isComplete === false ||
         invention.data?.workInfoOnInventionPatent.isComplete === false ||
         invention.data?.partnerInfoOnInventionPatents.length === 0)
     ) {
-      throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");
+      throw new Error("กรุณาตรวจสอบเอกสาร ว่าอัพโหลดครบถ้วนแล้วหรือไม่");
     } else if (
       number === 5 &&
-      (invention.data?.fileOnInventionPatents.length === 0 ||
+      ((invention.data?.fileOnInventionPatents?.filter(
+        (file) => file.documentType === "IDCARD",
+      ).length ?? 0) <
+        (invention.data?.partnerInfoOnInventionPatents?.length ?? 0) ||
+        (invention.data?.fileOnInventionPatents?.filter(
+          (file) => file.documentType === "REQUEST",
+        )?.length ?? 0) === 0 ||
         invention.data?.supportingDataOnInventionPatent.isComplete === false ||
         invention.data?.workInfoOnInventionPatent.isComplete === false ||
         invention.data?.partnerInfoOnInventionPatents.length === 0 ||
@@ -159,6 +178,12 @@ const Index = ({ user }: { user: User }) => {
         });
       }
     }
+  };
+
+  const handleSaveData = async () => {
+    setIsLoading(true);
+    await childRef.current?.saveData();
+    setIsLoading(false);
   };
 
   const handleMigrationForm = async ({
@@ -231,7 +256,7 @@ const Index = ({ user }: { user: User }) => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <title>แบบฟอร์มประกอบคำขอรับสิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร</title>
+        <title>คำขอรับสิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร</title>
       </Head>
       {triggerMigrationForm && router.query.inventionId && (
         <MigrantForm
@@ -244,7 +269,7 @@ const Index = ({ user }: { user: User }) => {
         <div className="flex h-full w-full flex-col items-center bg-[#F4F8FF] pb-10 font-Anuphan text-[var(--primary-blue)] lg:justify-center">
           <header className="mt-10 flex w-[90%] flex-col items-center gap-5 md:mt-5 md:w-full">
             <h2 className="text-center text-2xl font-bold md:text-3xl">
-              แบบฟอร์มประกอบคำขอรับสิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร
+              คำขอรับสิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร
             </h2>
             <section className="max-w-[32rem] bg-[var(--secondary-yellow)] p-3 text-center text-base font-bold shadow-md md:text-xl">
               <p>สำหรับบุคลากรมหาวิทยาลัยราชภัฏนครราชสีมา</p>
@@ -313,22 +338,26 @@ const Index = ({ user }: { user: User }) => {
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
-                  <NrruInventionForm1 invention={invention} user={user} />
+                  <NrruInventionForm1
+                    ref={childRef}
+                    invention={invention}
+                    user={user}
+                  />
                 </div>
               )}
               {currentSection == 1 && (
                 <div>
-                  <NrruInventionForm2 invention={invention} />
+                  <NrruInventionForm2 ref={childRef} invention={invention} />
                 </div>
               )}
               {currentSection == 2 && (
                 <div>
-                  <NrruInventionForm3 invention={invention} />
+                  <NrruInventionForm3 ref={childRef} invention={invention} />
                 </div>
               )}
               {currentSection == 3 && (
                 <div>
-                  <NrruInventionForm4 invention={invention} />
+                  <NrruInventionForm4 ref={childRef} invention={invention} />
                 </div>
               )}
               {currentSection == 4 && (
@@ -337,7 +366,11 @@ const Index = ({ user }: { user: User }) => {
                     {" "}
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
-                  <NrruInventionForm5 invention={invention} user={user} />
+                  <NrruInventionForm5
+                    ref={childRef}
+                    invention={invention}
+                    user={user}
+                  />
                 </div>
               )}
               {currentSection === 5 && invention.data && (
@@ -349,23 +382,48 @@ const Index = ({ user }: { user: User }) => {
                 </div>
               )}
             </section>
-            <section className=" my-5 flex items-center justify-center gap-3">
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={previousSection}
-                disabled={currentSection === 0}
-              >
-                ย้อนกลับ
-              </button>
+            {currentSection !== 5 && (
+              <section className=" my-5 flex items-center justify-center gap-3">
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3
+                text-[0.6rem] font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={previousSection}
+                  disabled={currentSection === 0}
+                >
+                  ย้อนกลับ
+                </button>
+                {isLoading ? (
+                  <button
+                    className="flex h-8 animate-pulse items-center justify-center rounded-md
+                   border-2 border-solid border-[var(--primary-blue)] bg-main-color px-3
+                font-semibold text-white transition md:w-52"
+                  >
+                    กำลังบันทึกข้อมูล
+                    <IoIosSave />
+                  </button>
+                ) : (
+                  <button
+                    className="flex h-8 items-center justify-center rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 font-semibold transition 
+                hover:bg-main-color hover:text-white disabled:border-slate-300 disabled:text-slate-300 md:w-52"
+                    onClick={handleSaveData}
+                  >
+                    {currentSection === 4
+                      ? "ยืนยันการส่งข้อมูล"
+                      : "บันทึกข้อมูล"}
+                    <IoIosSave />
+                  </button>
+                )}
 
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={nextSection}
-                disabled={currentSection === nrruInventionSection.length - 1}
-              >
-                ถัดไป
-              </button>
-            </section>
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 text-[0.6rem]
+                font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={nextSection}
+                  disabled={currentSection === nrruInventionSection.length - 1}
+                >
+                  ถัดไป
+                </button>
+              </section>
+            )}
           </main>
         </div>
       </HomeLayout>

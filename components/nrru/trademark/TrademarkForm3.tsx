@@ -26,7 +26,6 @@ import {
   DeleteFileTrademarkervice,
 } from "../../../services/trademark/file-trademark";
 import SnackbarNoSaveData from "../../Snackbars/SnackBarNoSaveData";
-import SnackbarSaveData from "../../Snackbars/SnackbarSaveData";
 import Swal from "sweetalert2";
 import FileOnTrademark from "./FileOnTrademark";
 
@@ -108,12 +107,6 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -159,12 +152,6 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -205,12 +192,7 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
@@ -270,12 +252,7 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
@@ -334,12 +311,7 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
