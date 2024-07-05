@@ -16,7 +16,7 @@ import {
 import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import { FiPlusCircle } from "react-icons/fi";
 import CompanyInterest from "./CompanyInterest";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
+
 import { ErrorMessages } from "../../../../models";
 import Swal from "sweetalert2";
 import SnackbarLoading from "../../../Snackbars/SnackBarLoading";
@@ -75,12 +75,6 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
       | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
       | InputMaskChangeEvent,
   ) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     const { name, value } = e.target;
     setSupportData((prev) => ({ ...prev, [name]: value }));
   };
@@ -119,12 +113,6 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -209,12 +197,6 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
                   required
                   value={supportData?.cost}
                   onValueChange={(e) => {
-                    setSnackBarData(() => {
-                      return {
-                        open: true,
-                        action: <SnackbarSaveData />,
-                      };
-                    });
                     setSupportData((prev) => {
                       return {
                         ...prev,
@@ -239,12 +221,6 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
           isRequired
           value={supportData?.benefit}
           onChange={(e) => {
-            setSnackBarData(() => {
-              return {
-                open: true,
-                action: <SnackbarSaveData />,
-              };
-            });
             setSupportData((prev) => {
               return {
                 ...prev,
@@ -326,12 +302,6 @@ const NrruInventionForm3 = ({ invention }: NrruInventionForm3Props) => {
           isRequired
           value={supportData?.allowPublic}
           onChange={(e) => {
-            setSnackBarData(() => {
-              return {
-                open: true,
-                action: <SnackbarSaveData />,
-              };
-            });
             setSupportData((prev) => {
               return {
                 ...prev,

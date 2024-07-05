@@ -7,7 +7,11 @@ export type DocumentType =
   | "OTOP"
   | "REQUEST"
   | "TRADEMARK"
-  | "OTHERS";
+  | "OTHERS"
+  | "AUTORIZEPERSON_COPORATE"
+  | "AUTORIZEPERSON_OTOP"
+  | "MEMBER";
+
 export type UserRole = "ADMIN" | "USER";
 export type UserType = "EXTERNAL" | "INTERNAL";
 export type StatusPartner = "STAFF" | "STUDENT" | "EXTERNAL";

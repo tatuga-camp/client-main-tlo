@@ -23,7 +23,6 @@ import {
 } from "react-icons/md";
 import { UseQueryResult } from "@tanstack/react-query";
 import { ResponseGetDesignPatentService } from "../../../../services/design-patent/design-patent";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import SnackbarLoading from "../../../Snackbars/SnackBarLoading";
 import { UpdateSupportDesignPatentService } from "../../../../services/design-patent/support-design/support-design";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
@@ -70,12 +69,6 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
       | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
       | InputMaskChangeEvent,
   ) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     const { name, value } = e.target;
     setSupportData((prev) => ({ ...prev, [name]: value }));
   };
@@ -114,12 +107,6 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -204,12 +191,6 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
                   required
                   value={supportData?.cost}
                   onValueChange={(e) => {
-                    setSnackBarData(() => {
-                      return {
-                        open: true,
-                        action: <SnackbarSaveData />,
-                      };
-                    });
                     setSupportData((prev) => {
                       return {
                         ...prev,
@@ -234,12 +215,6 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
           isRequired
           value={supportData?.benefit}
           onChange={(e) => {
-            setSnackBarData(() => {
-              return {
-                open: true,
-                action: <SnackbarSaveData />,
-              };
-            });
             setSupportData((prev) => {
               return {
                 ...prev,
@@ -321,12 +296,6 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
           isRequired
           value={supportData?.allowPublic}
           onChange={(e) => {
-            setSnackBarData(() => {
-              return {
-                open: true,
-                action: <SnackbarSaveData />,
-              };
-            });
             setSupportData((prev) => {
               return {
                 ...prev,

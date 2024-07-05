@@ -18,7 +18,7 @@ import {
   DeleteFileInventionPatentService,
 } from "../../../../services/invention-patent/file-invention";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
+
 import Swal from "sweetalert2";
 import {
   GetSignURLService,
@@ -106,12 +106,6 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -159,12 +153,6 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -203,12 +191,7 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
@@ -264,12 +247,7 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
@@ -335,12 +313,7 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);

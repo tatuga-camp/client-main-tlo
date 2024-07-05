@@ -1,5 +1,10 @@
 import Number from "@/components/Number";
-import React, { useState } from "react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import {
   Button,
   Checkbox,
@@ -51,17 +56,21 @@ import {
 } from "../../../../services/design-patent/work-design/file-work-design";
 import { UpdateWorkDesignPatentService } from "../../../../services/design-patent/work-design/work-design";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import Swal from "sweetalert2";
 import { DeleteFileWorkInventionPatentService } from "../../../../services/invention-patent/work-invention/file-work-invention";
 import { Dropdown } from "primereact/dropdown";
 import FileOnWorkDesign from "./FileOnWorkDesign";
 import { menuDesignForm2 } from "../../../../data/menu";
+import {
+  handleChangeToBuddhistYear,
+  handleChangeToChristianYear,
+} from "../../../../utilities/date";
+import { outstandingOptions } from "../../../../data/design";
 
 type NrruDesignForm2Props = {
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
-const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
+const NrruDesignForm2 = forwardRef(({ design }: NrruDesignForm2Props, ref) => {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -69,6 +78,8 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
     open: false,
     action: <></>,
   });
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [workData, setWorkData] = useState<{
     thaiName?: string;
     englishName?: string;
@@ -93,13 +104,14 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
     otherAgreement?: string;
     researchResult?: ResearchType;
     keywords?: string;
-    website?: Websites;
+    website?: string[];
+    otherWebsite?: string;
     searchResult?: string;
     isRequest?: string;
     requestNumber?: string;
     requestDate?: string;
     requestCountry?: string;
-    publicType?: PublicType;
+    publicType?: string[];
     otherPublicType?: string;
     publicDetail?: string;
     outstandingDetail?: string;
@@ -119,19 +131,27 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
           };
         }) ?? []),
       ],
-      beginWorkAt: design.data?.workInfoOnDesignPatent.beginWorkAt,
-      finishWorkAt: design.data?.workInfoOnDesignPatent.finishWorkAt,
+      beginWorkAt: handleChangeToBuddhistYear(
+        new Date(design.data?.workInfoOnDesignPatent.beginWorkAt as string),
+      ),
+      finishWorkAt: handleChangeToBuddhistYear(
+        new Date(design.data?.workInfoOnDesignPatent.finishWorkAt as string),
+      ),
       benefit: design.data?.workInfoOnDesignPatent.benefit,
       otherBenefit: design.data?.workInfoOnDesignPatent.otherBenefit,
       funding: design.data?.workInfoOnDesignPatent.funding,
       sourceFunding: design.data?.workInfoOnDesignPatent.sourceFunding,
-      yearFunding: design.data?.workInfoOnDesignPatent.yearFunding,
+      yearFunding: handleChangeToBuddhistYear(
+        new Date(design.data?.workInfoOnDesignPatent.yearFunding as string),
+      ),
       researchOwnershipSubmission:
         design.data?.workInfoOnDesignPatent.researchOwnershipSubmission,
       agreementTitle: design.data?.workInfoOnDesignPatent.agreementTitle,
       agreementInstitution:
         design.data?.workInfoOnDesignPatent.agreementInstitution,
-      agreementYear: design.data?.workInfoOnDesignPatent.agreementYear,
+      agreementYear: handleChangeToBuddhistYear(
+        new Date(design.data?.workInfoOnDesignPatent.agreementYear as string),
+      ),
       otherAgreement: design.data?.workInfoOnDesignPatent.otherAgreement,
       researchResult: design.data?.workInfoOnDesignPatent.researchResult,
       keywords: design.data?.workInfoOnDesignPatent.keywords,
@@ -152,9 +172,23 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
     };
   });
 
-  const handleUpdateWorkDesign = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+      formRef.current?.requestSubmit();
       setSnackBarData(() => {
         return {
           open: true,
@@ -194,19 +228,28 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
         body: {
           thaiName: workData?.thaiName,
           englishName: workData?.englishName,
-          beginWorkAt: workData?.beginWorkAt,
-          finishWorkAt: workData?.finishWorkAt,
+          beginWorkAt: handleChangeToChristianYear(
+            new Date(workData?.beginWorkAt as string),
+          ),
+          finishWorkAt: handleChangeToChristianYear(
+            new Date(workData?.finishWorkAt as string),
+          ),
           benefit: workData?.benefit,
           otherBenefit: workData?.otherBenefit,
           funding: workData?.funding,
           sourceFunding: workData?.sourceFunding,
-          yearFunding: workData?.yearFunding,
+          yearFunding: handleChangeToChristianYear(
+            new Date(workData?.yearFunding as string),
+          ),
           researchOwnershipSubmission: workData?.researchOwnershipSubmission,
           agreementTitle: workData?.agreementTitle,
           agreementInstitution: workData?.agreementInstitution,
-          agreementYear: workData?.agreementYear,
+          agreementYear: handleChangeToChristianYear(
+            new Date(workData?.agreementYear as string),
+          ),
           researchResult: workData?.researchResult,
           website: workData?.website,
+          otherWebsite: workData?.otherWebsite,
           keywords: workData?.keywords,
           searchResult: workData?.searchResult,
           requestNumber: workData?.requestNumber,
@@ -229,12 +272,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -250,23 +287,11 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
   const handleChangeWorkData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     const { name, value } = e.target;
     setWorkData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleChangeRaio = ({ e, name }: { e: string; name: string }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     setWorkData((prev) => {
       return {
         ...prev,
@@ -314,12 +339,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -333,12 +352,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
   };
 
   const handleChangeCheckbox = ({ e, name }: { e: string[]; name: string }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     setWorkData((prev) => {
       return {
         ...prev,
@@ -355,12 +368,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
     name: string;
   }) => {
     if (value instanceof Date) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       setWorkData((prev) => {
         return {
           ...prev,
@@ -370,10 +377,14 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
     }
   };
 
+  useImperativeHandle(ref, () => ({
+    saveData,
+  }));
+
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       <Form
-        onSubmit={handleUpdateWorkDesign}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-8 lg:mx-5 lg:my-10 "
       >
         {/* ข้อ 1*/}
@@ -381,7 +392,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
           <section className="flex items-center gap-3">
             <Number number={1} />
             <p className="my-2 text-[0.8rem] font-semibold lg:min-w-64 lg:text-base">
-              ชื่อที่แสดงถึงรออกแบบผลิตภัณฑ์
+              ชื่อที่แสดงถึงการออกแบบผลิตภัณฑ์
             </p>
           </section>
           <div className="flex w-full flex-col flex-wrap gap-3 pl-7 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
@@ -397,7 +408,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   onChange={handleChangeWorkData}
                   type="text"
                   className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 lg:h-10 lg:w-80 lg:pl-4 "
-                  placeholder="กรอกชื่อภาษาไทย"
+                  placeholder="กรอกชื่อ"
                 />
                 <FieldError className="text-xs text-red-700" />
               </div>
@@ -423,6 +434,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                       ? new Date(workData.beginWorkAt)
                       : null
                   }
+                  yearRange="2560:2580"
                   onChange={(e) => {
                     handleChangeCalendar({
                       value: e.value as Date,
@@ -432,7 +444,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   required
                   locale="th"
                   view="year"
-                  placeholder="ปี 2024"
+                  placeholder="ระบุปี"
                   dateFormat="yy"
                 />
               </div>
@@ -444,6 +456,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
               </Label>
               <div className="w-24 rounded-lg bg-slate-300 p-1 lg:w-40">
                 <Calendar
+                  yearRange="2560:2580"
                   value={
                     workData?.finishWorkAt
                       ? new Date(workData.finishWorkAt)
@@ -458,7 +471,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   required
                   locale="th"
                   view="year"
-                  placeholder="ปี 2024"
+                  placeholder="ระบุปี"
                   dateFormat="yy"
                 />
               </div>
@@ -546,12 +559,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                 <Dropdown
                   value={workData?.funding}
                   onChange={(e) => {
-                    setSnackBarData(() => {
-                      return {
-                        open: true,
-                        action: <SnackbarSaveData />,
-                      };
-                    });
                     setWorkData((prev) => {
                       const value: FundingLists = e.value;
                       if (
@@ -615,6 +622,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                 </Label>
                 <div className="w-40 rounded-lg bg-slate-300 p-1">
                   <Calendar
+                    yearRange="2560:2580"
                     value={
                       workData?.yearFunding
                         ? new Date(workData.yearFunding)
@@ -630,7 +638,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                     required={workData?.funding !== "ไม่ได้รับทุนอุดหนุนใดๆ"}
                     locale="th"
                     view="year"
-                    placeholder="ปี 2024"
+                    placeholder="ระบุปี"
                     dateFormat="yy"
                   />
                 </div>
@@ -689,12 +697,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
               allowsMultiple
               onSelect={(e) => {
                 if (!e) return null;
-                setSnackBarData(() => {
-                  return {
-                    open: true,
-                    action: <SnackbarSaveData />,
-                  };
-                });
+
                 const files: FileList = e;
                 Array.from(files).forEach((file) => {
                   const url = URL.createObjectURL(file);
@@ -815,16 +818,17 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
             >
               <Input
                 disabled={workData?.agreementTitle === "ไม่มี"}
-                aria-label="ระบุชื่อหน่วยงาน"
+                aria-label="ระบุชื่อหน่วยงาน  ชื่อข้อตกลงหรือสัญญา"
                 type="text"
                 name="agreementInstitution"
                 value={workData?.agreementInstitution}
                 onChange={handleChangeWorkData}
                 className=" w-60 rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem]  lg:p-2  lg:pl-4 lg:text-base"
-                placeholder="ระบุชื่อหน่วยงาน"
+                placeholder="ระบุชื่อหน่วยงาน  ชื่อข้อตกลงหรือสัญญา"
               />
               <div className=" w-40 rounded-lg bg-slate-300 p-1">
                 <Calendar
+                  yearRange="2560:2580"
                   disabled={workData?.agreementTitle === "ไม่มี"}
                   value={
                     workData?.agreementYear
@@ -878,9 +882,9 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
               <p className="font-semibold lg:min-w-52">
                 7.2 เว็บไซต์/ฐานข้อมูลที่ใช้ในการสืบค้น
               </p>
-              <RadioGroup
+              <CheckboxGroup
                 value={workData?.website}
-                onChange={(e) => handleChangeRaio({ e, name: "website" })}
+                onChange={(e) => handleChangeCheckbox({ e, name: "website" })}
                 isRequired
                 className="flex flex-col items-start justify-center gap-2 lg:gap-5 "
               >
@@ -889,7 +893,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
 
                   {websites.map((menu, index) => {
                     return (
-                      <Radio
+                      <Checkbox
                         key={index}
                         className={({ isPressed, isSelected }) =>
                           isSelected ? "" : ""
@@ -900,15 +904,15 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                           <div className="flex items-center justify-start gap-2 ">
                             <div className=" text-3xl">
                               {isSelected ? (
-                                <MdOutlineRadioButtonChecked />
+                                <IoIosCheckbox />
                               ) : (
-                                <MdOutlineRadioButtonUnchecked />
+                                <MdCheckBoxOutlineBlank />
                               )}
                             </div>
                             <span className="font-medium">{menu.title}</span>
                           </div>
                         )}
-                      </Radio>
+                      </Checkbox>
                     );
                   })}
                 </div>
@@ -919,19 +923,20 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                     </p>
                   </div>
 
-                  <TextField className={"ml-3"}>
+                  <TextField
+                    className={"flex items-center justify-center gap-2"}
+                  >
                     <Input
-                      value={workData?.website}
+                      value={workData?.otherWebsite}
                       onChange={handleChangeWorkData}
-                      name="website"
+                      name="otherWebsite"
                       type="text"
                       className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                       placeholder="โปรดระบุ"
                     />
-                    <FieldError className="text-xs text-red-700" />
                   </TextField>
                 </section>
-              </RadioGroup>
+              </CheckboxGroup>
             </section>
             <section className="lg:flex-rowflex-col flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:pl-10">
               <p className="font-semibold lg:min-w-52">
@@ -942,12 +947,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   <Dropdown
                     value={workData?.searchResult}
                     onChange={(e) => {
-                      setSnackBarData(() => {
-                        return {
-                          open: true,
-                          action: <SnackbarSaveData />,
-                        };
-                      });
                       setWorkData((prev) => {
                         return {
                           ...prev,
@@ -1105,65 +1104,61 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-col lg:gap-5 lg:pl-0 lg:text-base">
-            <section className=" flex w-60 flex-col gap-5 lg:w-96">
-              <label>เลือกรูปแบบการเผยแพร่</label>
-              <div className="flex flex-col gap-1">
-                <div className=" h-12 rounded-lg bg-slate-300 p-1">
-                  <Dropdown
-                    value={workData?.publicType}
-                    options={publicType}
-                    required
-                    onChange={(e) => {
-                      setSnackBarData(() => {
-                        return {
-                          open: true,
-                          action: <SnackbarSaveData />,
-                        };
-                      });
-                      setWorkData((prev) => {
-                        return {
-                          ...prev,
-                          publicType: e.value,
-                        };
-                      });
-                    }}
-                    placeholder="การเผยแพร่ผลงานแล้วในรูปแบบ"
-                    className="h-10 w-full "
-                  />
-                </div>
-                {!workData.publicType && (
-                  <span className="text-xs text-red-700">
-                    Please fill out this field.
-                  </span>
-                )}
+            <CheckboxGroup
+              value={workData?.publicType}
+              onChange={(e) => {
+                handleChangeCheckbox({ e, name: "publicType" });
+              }}
+              className=" flex w-full flex-col gap-5"
+            >
+              <label>เลือกรูปแบบการเผยแพร่ (ตอบได้มากกว่า 1 ข้อ)</label>
+              <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] lg:gap-3 lg:pl-0 lg:text-base lg:xl:grid-cols-3 2xl:grid-cols-4">
+                {/* row1 */}
+                {publicType.map((menu, index) => {
+                  return (
+                    <Checkbox
+                      key={index}
+                      className={({ isPressed, isSelected }) =>
+                        isSelected ? "" : ""
+                      }
+                      value={menu}
+                    >
+                      {({ isSelected }) => (
+                        <div className="flex items-center justify-start gap-2 ">
+                          <div className=" text-3xl">
+                            {isSelected ? (
+                              <IoIosCheckbox />
+                            ) : (
+                              <MdCheckBoxOutlineBlank />
+                            )}
+                          </div>
+                          <span className="font-medium">{menu}</span>
+                        </div>
+                      )}
+                    </Checkbox>
+                  );
+                })}
               </div>
-            </section>
-            {workData?.publicType === "อื่น ๆ (โปรดระบุ)" && (
-              <TextField className={"ml-3 flex items-center"}>
-                <Label className="min-w-28  text-[var(--primary-blue)] lg:min-w-24">
-                  ระบุุอื่นๆ :
-                </Label>
-                <Input
-                  value={workData?.otherPublicType}
-                  onChange={handleChangeWorkData}
-                  name="otherPublicType"
-                  type="text"
-                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
-                  placeholder="ระบุุอื่นๆ"
-                />
-              </TextField>
-            )}
+            </CheckboxGroup>
+            <TextField className={"ml-3 flex items-center"}>
+              <Label className="min-w-28  text-[var(--primary-blue)] lg:min-w-24">
+                ระบุุอื่นๆ :
+              </Label>
+              <Input
+                value={workData?.otherPublicType}
+                onChange={handleChangeWorkData}
+                name="otherPublicType"
+                type="text"
+                className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
+                placeholder="ระบุุอื่นๆ"
+              />
+            </TextField>
           </div>
           <FileTrigger
             allowsMultiple
             onSelect={(e) => {
               if (!e) return null;
-              setSnackBarData(() => {
-                return {
-                  open: true,
-                  action: <SnackbarSaveData />,
-                };
-              });
+
               const files: FileList = e;
               Array.from(files).forEach((file) => {
                 const url = URL.createObjectURL(file);
@@ -1189,11 +1184,9 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
             }}
           >
             <Button
-              isDisabled={workData?.publicType === "ไม่เผยแพร่ผลงาน"}
               className={`flex items-center  justify-center gap-3 rounded-md 
-             p-2 px-5 font-semibold duration-300  lg:gap-5
-             ${workData?.publicType === "ไม่เผยแพร่ผลงาน" ? "bg-gray-400 text-black" : "bg-[#BED6FF] hover:bg-[#91B2EB] "}
-             `}
+             bg-[#BED6FF] p-2 px-5 font-semibold  duration-300
+           hover:bg-[#91B2EB] lg:gap-5 `}
             >
               <span className="text-3xl lg:text-base">
                 <FiPlusCircle />
@@ -1230,21 +1223,41 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
             <p className={"w-full lg:px-8"}>
-              โปรดระบุถึงลักษณะเด่นและอธิบายในรายละเอียดของความใหม่
-              โดยเฉพาะในส่วนที่ได้พัฒนาให้ดีขึ้นกว่าเดิมได้
-              โดยเน้นให้เห็นถึงความ แตกต่างจากแบบผลิตภัณฑ์เดิม
+              โปรดระบุถึงลักษณะเด่น ความใหม่ของผลิตภัณฑ์
+              หรือสิ่งที่ต้องการขอรับความคุ้มครอง เลือกเพียง 1 ข้อ
             </p>
-            <TextField isRequired className={"w-full lg:px-8"}>
-              <TextArea
-                required
-                name="outstandingDetail"
-                value={workData.outstandingDetail}
-                onChange={handleChangeWorkData}
-                className="h-40 w-full resize-none rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem]  lg:p-2  lg:pl-4 lg:text-base"
-                placeholder="กรอกข้อมูล"
-              />
-              <FieldError className="text-xs text-red-700" />
-            </TextField>
+            <RadioGroup
+              value={workData.outstandingDetail}
+              onChange={(e) =>
+                handleChangeRaio({ e, name: "outstandingDetail" })
+              }
+              isRequired
+              className="flex flex-col items-start justify-center gap-2 lg:flex-row  lg:gap-5"
+            >
+              <div
+                className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem]
+               lg:flex-row lg:gap-5 lg:pl-0 lg:text-base"
+              >
+                {outstandingOptions.map((item, index) => {
+                  return (
+                    <Radio className="flex items-center " value={item}>
+                      {({ isSelected }) => (
+                        <div className=" flex items-center justify-center gap-2">
+                          <div className=" text-2xl">
+                            {isSelected ? (
+                              <MdOutlineRadioButtonChecked />
+                            ) : (
+                              <MdOutlineRadioButtonUnchecked />
+                            )}
+                          </div>
+                          <span className=" font-semibold">{item}</span>
+                        </div>
+                      )}
+                    </Radio>
+                  );
+                })}
+              </div>
+            </RadioGroup>
           </div>
         </section>
         {/* ข้อ 11*/}
@@ -1293,6 +1306,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
       </Form>
     </div>
   );
-};
+});
 
 export default NrruDesignForm2;

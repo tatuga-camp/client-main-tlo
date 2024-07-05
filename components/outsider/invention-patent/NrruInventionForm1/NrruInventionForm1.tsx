@@ -29,7 +29,6 @@ import {
 } from "../../../../services/invention-patent/invention-patent";
 import Swal from "sweetalert2";
 import { isMongoDBId, isUUIDv4 } from "../../../../utilities/validateID";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import { Snackbar } from "@mui/material";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
 import {
@@ -163,12 +162,6 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
             };
           });
         } else {
-          setSnackBarData(() => {
-            return {
-              open: true,
-              action: <SnackbarSaveData />,
-            };
-          });
           return [
             {
               id: uuidv4(),
@@ -261,13 +254,6 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
     e: React.ChangeEvent<HTMLInputElement> | InputMaskChangeEvent;
     id: string;
   }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
-
     const { name, value } = e.target;
     const parsedValue = typeof value === "string" ? value : "";
 
@@ -435,12 +421,6 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -489,12 +469,6 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                         }
                         options={TitleNameList}
                         onChange={(e) => {
-                          setSnackBarData(() => {
-                            return {
-                              open: true,
-                              action: <SnackbarSaveData />,
-                            };
-                          });
                           setPartnerData((prev) => {
                             const newState = prev?.map((prevPartner) => {
                               if (prevPartner.id === partner.id) {

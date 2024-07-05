@@ -4,6 +4,25 @@ export const menuTrademark2 = [
   { title: "เครื่องหมายร่วม" },
 ];
 
+export const personStatusOptions = [
+  "บุคคลธรรมดา",
+  "นิติบุคคล",
+  "ส่วนราชการไทย",
+  "ต่างชาติ",
+];
+
+export const OTOPOptions = [
+  "ผู้ประกอบการรายเดียว",
+  "กลุ่มผู้ประกอบการ",
+  "SMEs",
+];
+
+export type PersonStatusOptions =
+  | "บุคคลธรรมดา"
+  | "นิติบุคคล"
+  | "ส่วนราชการไทย"
+  | "ต่างชาติ";
+
 export type AllowColorProtectionOptions =
   | "ไม่ขอรับความคุ้มครอง"
   | "ขอรับความคุ้มครอง (ให้บรรยายลักษณะกลุ่มของสีและระบุสีให้ชัดเจน )";

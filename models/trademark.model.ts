@@ -1,3 +1,4 @@
+import { PersonStatusOptions } from "../data/trademark";
 import {
   DocumentType,
   StatusLists,
@@ -9,23 +10,29 @@ export type Trademark = {
   id: string;
   createAt: Date;
   updateAt: Date;
-  personStatus?: string | null;
-  titleName?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  idCard?: string | null;
-  adressNumber?: string | null;
-  moo?: string | null;
-  road?: string | null;
-  tambon?: string | null;
-  amphure?: string | null;
-  province?: string | null;
-  postcode?: string | null;
-  nationality?: string | null;
-  email?: string | null;
+  personStatus: PersonStatusOptions | null;
+  title: string | null;
+  fullName: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  idCard: string | null;
+  addressNumber: string | null;
+  moo: string | null;
+  road: string | null;
+  tambon: string | null;
+  amphure: string | null;
+  province: string | null;
+  phone: string | null;
+  postalCode: string | null;
+  nationality: string | null;
+  email: string | null;
+  career: string | null;
+  authorizedPerson?: string | null;
+  passPort?: string | null;
   numberRequest?: string | null;
   titleTrademark: string;
   trademarkType: string;
+  country?: string;
   pronunciation: string;
   meaning: string;
   productDetail: string;
@@ -40,6 +47,7 @@ export type Trademark = {
   requestDate?: string;
   isComplete: boolean;
   userId: string;
+  order: number;
 };
 
 export type StatusTrademark = {

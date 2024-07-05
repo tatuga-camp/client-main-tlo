@@ -43,7 +43,7 @@ import {
 import { ErrorMessages, FileWorkType, WorkType } from "../../../../models";
 import { Dropdown } from "primereact/dropdown";
 import SearchWorkInvention from "./SearchWorkInvention";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
+
 import { BsFileEarmarkCode } from "react-icons/bs";
 import { GrFormView } from "react-icons/gr";
 import FileOnWorkInvention from "./FileOnWorkInvention";
@@ -89,20 +89,20 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
     finishWorkAt?: string;
     benefit?: string[];
     otherBenefit?: string;
-
     agreementTitle?: string;
     agreementInstitution?: string;
     agreementYear?: string;
     otherAgreement?: string;
     researchResult?: ResearchType;
     keywords?: string;
-    website?: Websites;
+    website?: string[];
+    otherWebsite?: string;
     searchResult?: string;
     isRequest?: string;
     requestNumber?: string;
     requestDate?: string;
     requestCountry?: string;
-    publicType?: PublicType;
+    publicType?: string[];
     otherPublicType?: string;
     publicDetail?: string;
     outstandingDetail?: string;
@@ -232,12 +232,6 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -253,23 +247,11 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
   const handleChangeWorkData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     const { name, value } = e.target;
     setWorkData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleChangeRaio = ({ e, name }: { e: string; name: string }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     setWorkData((prev) => {
       return {
         ...prev,
@@ -317,12 +299,6 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -336,12 +312,6 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
   };
 
   const handleChangeCheckbox = ({ e, name }: { e: string[]; name: string }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     setWorkData((prev) => {
       return {
         ...prev,
@@ -358,12 +328,6 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
     name: string;
   }) => {
     if (value instanceof Date) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       setWorkData((prev) => {
         return {
           ...prev,
@@ -508,7 +472,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   required
                   locale="th"
                   view="year"
-                  placeholder="ปี 2024"
+                  placeholder="ระบุปี"
                   dateFormat="yy"
                 />
               </div>
@@ -534,7 +498,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   required
                   locale="th"
                   view="year"
-                  placeholder="ปี 2024"
+                  placeholder="ระบุปี"
                   dateFormat="yy"
                 />
               </div>
@@ -728,12 +692,6 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                 <Dropdown
                   value={workData?.researchResult}
                   onChange={(e) => {
-                    setSnackBarData(() => {
-                      return {
-                        open: true,
-                        action: <SnackbarSaveData />,
-                      };
-                    });
                     setWorkData((prev) => {
                       return {
                         ...prev,
@@ -750,12 +708,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
@@ -847,7 +800,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
               </TextField>
             </section>
             <RadioGroup
-              value={workData?.website}
+              // value={workData?.website}
               onChange={(e) => handleChangeRaio({ e, name: "website" })}
               isRequired
               className="flex w-full flex-col  gap-3 lg:pl-10"
@@ -903,12 +856,6 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   <Dropdown
                     value={workData?.searchResult}
                     onChange={(e) => {
-                      setSnackBarData(() => {
-                        return {
-                          open: true,
-                          action: <SnackbarSaveData />,
-                        };
-                      });
                       setWorkData((prev) => {
                         return {
                           ...prev,
@@ -1074,12 +1021,6 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                     value={workData?.publicType}
                     options={publicType}
                     onChange={(e) => {
-                      setSnackBarData(() => {
-                        return {
-                          open: true,
-                          action: <SnackbarSaveData />,
-                        };
-                      });
                       setWorkData((prev) => {
                         return {
                           ...prev,
@@ -1099,32 +1040,12 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                 )}
               </div>
             </section>
-            {workData?.publicType === "อื่น ๆ (โปรดระบุ)" && (
-              <TextField className={"ml-3 flex items-center"}>
-                <Label className="min-w-28  text-[var(--primary-blue)] lg:min-w-24">
-                  ระบุุอื่นๆ :
-                </Label>
-                <Input
-                  value={workData?.otherPublicType}
-                  onChange={handleChangeWorkData}
-                  name="otherPublicType"
-                  type="text"
-                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
-                  placeholder="ระบุุอื่นๆ"
-                />
-              </TextField>
-            )}
           </div>
           <FileTrigger
             allowsMultiple
             onSelect={(e) => {
               if (!e) return null;
-              setSnackBarData(() => {
-                return {
-                  open: true,
-                  action: <SnackbarSaveData />,
-                };
-              });
+
               const files: FileList = e;
               Array.from(files).forEach((file) => {
                 const url = URL.createObjectURL(file);
@@ -1150,10 +1071,9 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
             }}
           >
             <Button
-              isDisabled={workData?.publicType === "ไม่เผยแพร่ผลงาน"}
               className={`flex items-center  justify-center gap-3 rounded-md 
-             p-2 px-5 font-semibold duration-300  lg:gap-5
-             ${workData?.publicType === "ไม่เผยแพร่ผลงาน" ? "bg-gray-400 text-black" : "bg-[#BED6FF] hover:bg-[#91B2EB] "}
+             bg-[#BED6FF] p-2 px-5 font-semibold  duration-300
+           hover:bg-[#91B2EB] lg:gap-5 
              `}
             >
               <span className="text-3xl lg:text-base">
@@ -1184,8 +1104,6 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
             </p>
             <TextField className={"w-full lg:px-8"}>
               <TextArea
-                required={workData?.publicType !== "ไม่เผยแพร่ผลงาน"}
-                disabled={workData?.publicType === "ไม่เผยแพร่ผลงาน"}
                 value={workData?.publicDetail}
                 onChange={handleChangeWorkData}
                 name="publicDetail"

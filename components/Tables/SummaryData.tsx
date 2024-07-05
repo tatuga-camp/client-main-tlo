@@ -20,6 +20,10 @@ import { Calendar } from "primereact/calendar";
 import { GetCountInventionService } from "../../services/invention-patent/invention-patent";
 import { GetCountDesignService } from "../../services/design-patent/design-patent";
 import { GetCountTrademarkService } from "../../services/trademark/trademark";
+import {
+  handleChangeToBuddhistYear,
+  handleChangeToChristianYear,
+} from "../../utilities/date";
 
 ChartJS.register(
   ArcElement,
@@ -48,26 +52,9 @@ const SummaryData = () => {
     Date.UTC(currentYear - 1, 11, 31, 17, 0, 0),
   ).toISOString();
 
-  const handleChangeToBuddhistYear = (date: string) => {
-    const currentYear = new Date(date).getFullYear();
-    const buddhistCurrentYearISO = new Date(
-      Date.UTC(currentYear + 543 - 1, 11, 31, 17, 0, 0),
-    ).toISOString();
-
-    return buddhistCurrentYearISO;
-  };
-
-  const handleChangeToChristianYear = (date: string) => {
-    const currentYear = new Date(date).getFullYear();
-    const christianCurrentYearISO = new Date(
-      Date.UTC(currentYear - 543 - 1, 11, 31, 17, 0, 0),
-    ).toISOString();
-
-    return christianCurrentYearISO;
-  };
   const [requestYear, setRequestYear] = useState<string>(currentYearISO);
   const [buddhistYear, setBuddhistYear] = useState<string>(
-    handleChangeToBuddhistYear(currentYearISO),
+    handleChangeToBuddhistYear(new Date(currentYearISO)),
   );
 
   const copyright = useQuery({
@@ -145,9 +132,7 @@ const SummaryData = () => {
               onChange={(e) => {
                 if (e.value) {
                   setRequestYear(() =>
-                    handleChangeToChristianYear(
-                      e.value?.toISOString() as string,
-                    ),
+                    handleChangeToChristianYear(new Date(e.value as Date)),
                   );
                   setBuddhistYear(() => e.value?.toISOString() as string);
                 }

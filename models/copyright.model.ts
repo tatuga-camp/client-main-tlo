@@ -39,6 +39,7 @@ export type Copyright = {
   requestDate?: string;
   numberRequest?: string;
   userId: string;
+  order: number;
 };
 
 export type StatusCopyright = {

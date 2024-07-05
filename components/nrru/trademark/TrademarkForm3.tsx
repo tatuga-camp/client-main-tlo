@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import {
   Button,
   FieldError,
@@ -32,7 +32,7 @@ import FileOnTrademark from "./FileOnTrademark";
 type TrademarkForm3Props = {
   trademark: UseQueryResult<ResponseGetTrademarkService, Error>;
 };
-const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
+const TrademarkForm3 = forwardRef(({ trademark }: TrademarkForm3Props, ref) => {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -40,6 +40,8 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
     open: false,
     action: <></>,
   });
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [files, setFiles] = useState<
     {
       id?: string;
@@ -49,6 +51,21 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
       file?: File;
     }[]
   >([]);
+  const fileUploadOptionsOnOTOP = [
+    {
+      value: "OTOP",
+      title:
+        "สำเนาเอกสารแสดงการจัดตั้งกลุ่มวิสาหกิจหรือกลุ่ม OTOP (ไฟล์ .pdf/.jpg)",
+    },
+    {
+      value: "AUTORIZEPERSON_OTOP",
+      title: "สำเนาบัตรประจำตัวประชาชนผู้มีอำนาจในการลงนาม (ไฟล์ .pdf/.jpg)",
+    },
+    {
+      value: "MEMBER",
+      title: "รายชื่อสมาชิกกลุ่มและรายงานการประชุม (ไฟล์ .pdf/.jpg)",
+    },
+  ];
 
   useEffect(() => {
     if (trademark.data) {
@@ -65,9 +82,24 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
     }
   }, [trademark.data]);
 
-  const handleUploadFile = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+      formRef.current?.requestSubmit();
+
       setSnackBarData(() => {
         return {
           open: true,
@@ -140,6 +172,7 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
         setFiles((prev) => {
           return [...prev?.filter((file) => file.url !== url)];
         });
+        await trademark.refetch();
       } else {
         setFiles((prev) => {
           return [...prev?.filter((file) => file.url !== url)];
@@ -163,137 +196,194 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
       });
     }
   };
+
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
   return (
     <div
       className=" w-full  rounded-md border-[1px] border-solid 
     border-[#BED6FF] bg-white p-5 py-10 md:p-10"
     >
       <Form
-        onSubmit={handleUploadFile}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
       >
         {/* ข้อ 1*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={1} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              กรณีเป็นบุคคลธรรมดา
-            </p>
-          </section>
+        {trademark.data?.personStatus === "บุคคลธรรมดา" && (
+          <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+            <section className="flex items-center gap-3">
+              <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+                กรณีเป็นบุคคลธรรมดา
+              </p>
+            </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem]  md:gap-4 md:pl-10 md:text-base">
-            <p className="-mt-2 font-semibold text-purple-500 md:-mt-4">
-              แนบสำเนาบัตรประจำตัวประชาชนของเจ้าของ โดยรับรองสำเนาถูกต้อง
-              ระบุข้อความ “ใช้ประกอบการยื่นคำขอด้านทรัพย์สินทางปัญญาเท่านั้น”
-              ไม่ต้องระบุวันที่
-            </p>
-            <section className="flex flex-col gap-2 md:flex-row md:items-start">
-              <FileTrigger
-                allowsMultiple
-                onSelect={(e) => {
-                  if (!e) return null;
+            <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem]  md:gap-4 md:pl-10 md:text-base">
+              <p className="-mt-2 font-semibold text-purple-500 md:-mt-4">
+                แนบสำเนาบัตรประจำตัวประชาชนของเจ้าของ โดยรับรองสำเนาถูกต้อง
+                ระบุข้อความ “ใช้ประกอบการยื่นคำขอด้านทรัพย์สินทางปัญญาเท่านั้น”
+                ไม่ต้องระบุวันที่
+              </p>
+              <section className="flex flex-col gap-2 md:flex-row md:items-start">
+                <FileTrigger
+                  allowsMultiple
+                  onSelect={(e) => {
+                    if (!e) return null;
 
-                  const files: FileList = e;
-                  Array.from(files).forEach((file) => {
-                    const url = URL.createObjectURL(file);
-                    const reader = new FileReader();
+                    const files: FileList = e;
+                    Array.from(files).forEach((file) => {
+                      const url = URL.createObjectURL(file);
+                      const reader = new FileReader();
 
-                    setFiles((prev) => {
-                      return [
-                        ...prev,
-                        { file: file, url: url, documentType: "IDCARD" },
-                      ];
+                      setFiles((prev) => {
+                        return [
+                          ...prev,
+                          { file: file, url: url, documentType: "IDCARD" },
+                        ];
+                      });
+
+                      reader.readAsDataURL(file);
                     });
-
-                    reader.readAsDataURL(file);
-                  });
-                }}
-              >
-                <Button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md">
-                  อัพโหลดไฟล์ .pdf/.jpg
-                </Button>
-              </FileTrigger>
-            </section>
-            <section className=" grid h-full grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
-              {...files
-                ?.filter((file) => file.documentType === "IDCARD")
-                .map((file) => {
-                  return (
-                    <FileOnTrademark
-                      file={file}
-                      key={file.url}
-                      handleDeleteFile={handleDeleteFile}
-                    />
-                  );
-                })}
-            </section>
-          </div>
-        </section>
+                  }}
+                >
+                  <Button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 text-sm font-semibold shadow-md">
+                    อัพโหลด สำเนาบัตรประจำตัวประชาชน (ไฟล์ .pdf/.jpg)
+                  </Button>
+                </FileTrigger>
+              </section>
+              <section className=" grid h-full grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
+                {...files
+                  ?.filter((file) => file.documentType === "IDCARD")
+                  .map((file) => {
+                    return (
+                      <FileOnTrademark
+                        file={file}
+                        key={file.url}
+                        handleDeleteFile={handleDeleteFile}
+                      />
+                    );
+                  })}
+              </section>
+            </div>
+          </section>
+        )}
 
         {/* ข้อ 2*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={2} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              กรณีเป็นนิติบุคคลหรือส่วนราชการไทย
-            </p>
+        {(trademark.data?.personStatus === "นิติบุคคล" ||
+          trademark.data?.personStatus === "ส่วนราชการไทย") && (
+          <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+            <section className="flex items-center gap-3">
+              <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+                กรณีเป็นนิติบุคคลหรือส่วนราชการไทย
+              </p>
+            </section>
+
+            <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem]  md:gap-4 md:pl-10 md:text-base">
+              <p className="-mt-2 font-semibold text-purple-500 md:-mt-4">
+                แนบสำเนาบัตรประจำตัวประชาชนของเจ้าของหรือผู้มีอำนาจในการลงนาม
+                และสำเนาหนังสือรับรองนิติบุคคลที่ออกให้ไม่เกิน 6 เดือน
+                โดยรับรองสำเนาถูกต้อง ระบุข้อความ
+                “ใช้ประกอบการยื่นคำขอด้านทรัพย์สินทางปัญญาเท่านั้น”
+                ไม่ต้องระบุวันที่
+              </p>
+              <section className=" flex flex-col gap-2 border-b-2 pb-3">
+                <section className="flex flex-col  gap-2 md:flex-row md:items-start">
+                  <FileTrigger
+                    allowsMultiple
+                    onSelect={(e) => {
+                      if (!e) return null;
+
+                      const files: FileList = e;
+                      Array.from(files).forEach((file) => {
+                        const url = URL.createObjectURL(file);
+                        const reader = new FileReader();
+
+                        setFiles((prev) => {
+                          return [
+                            ...prev,
+                            { file: file, url: url, documentType: "COPORATE" },
+                          ];
+                        });
+
+                        reader.readAsDataURL(file);
+                      });
+                    }}
+                  >
+                    <Button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 text-sm font-semibold shadow-md">
+                      สำเนาหนังสือรับรองนิติบุคคลหรือสำเนาแสดงการจัดตั้งหน่วยงาน
+                      (ไฟล์ .pdf/.jpg)
+                    </Button>
+                  </FileTrigger>
+                </section>
+                <section className=" grid grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
+                  {...files
+                    ?.filter((file) => file.documentType === "COPORATE")
+                    .map((file) => {
+                      return (
+                        <FileOnTrademark
+                          file={file}
+                          key={file.url}
+                          handleDeleteFile={handleDeleteFile}
+                        />
+                      );
+                    })}
+                </section>
+              </section>
+              <section className=" flex flex-col gap-2 ">
+                <section className="flex flex-col  gap-2 md:flex-row md:items-start">
+                  <FileTrigger
+                    allowsMultiple
+                    onSelect={(e) => {
+                      if (!e) return null;
+
+                      const files: FileList = e;
+                      Array.from(files).forEach((file) => {
+                        const url = URL.createObjectURL(file);
+                        const reader = new FileReader();
+
+                        setFiles((prev) => {
+                          return [
+                            ...prev,
+                            {
+                              file: file,
+                              url: url,
+                              documentType: "AUTORIZEPERSON_COPORATE",
+                            },
+                          ];
+                        });
+
+                        reader.readAsDataURL(file);
+                      });
+                    }}
+                  >
+                    <Button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 text-sm font-semibold shadow-md">
+                      สำเนาบัตรประจำตัวประชาชน ผู้มีอำนาจในการลงนาม (ไฟล์
+                      .pdf/.jpg)
+                    </Button>
+                  </FileTrigger>
+                </section>
+                <section className=" grid grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
+                  {...files
+                    ?.filter(
+                      (file) => file.documentType === "AUTORIZEPERSON_COPORATE",
+                    )
+                    .map((file) => {
+                      return (
+                        <FileOnTrademark
+                          file={file}
+                          key={file.url}
+                          handleDeleteFile={handleDeleteFile}
+                        />
+                      );
+                    })}
+                </section>
+              </section>
+            </div>
           </section>
+        )}
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem]  md:gap-4 md:pl-10 md:text-base">
-            <p className="-mt-2 font-semibold text-purple-500 md:-mt-4">
-              แนบสำเนาบัตรประจำตัวประชาชนของเจ้าของหรือผู้มีอำนาจในการลงนาม
-              และสำเนาหนังสือรับรองนิติบุคคลที่ออกให้ไม่เกิน 6 เดือน
-              โดยรับรองสำเนาถูกต้อง ระบุข้อความ
-              “ใช้ประกอบการยื่นคำขอด้านทรัพย์สินทางปัญญาเท่านั้น”
-              ไม่ต้องระบุวันที่
-            </p>
-            <section className="flex flex-col gap-2 md:flex-row md:items-start">
-              <FileTrigger
-                allowsMultiple
-                onSelect={(e) => {
-                  if (!e) return null;
-
-                  const files: FileList = e;
-                  Array.from(files).forEach((file) => {
-                    const url = URL.createObjectURL(file);
-                    const reader = new FileReader();
-
-                    setFiles((prev) => {
-                      return [
-                        ...prev,
-                        { file: file, url: url, documentType: "COPORATE" },
-                      ];
-                    });
-
-                    reader.readAsDataURL(file);
-                  });
-                }}
-              >
-                <Button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md">
-                  อัพโหลดไฟล์ .pdf/.jpg
-                </Button>
-              </FileTrigger>
-            </section>
-            <section className=" grid grid-cols-1 gap-2  md:grid-cols-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
-              {...files
-                ?.filter((file) => file.documentType === "COPORATE")
-                .map((file) => {
-                  return (
-                    <FileOnTrademark
-                      file={file}
-                      key={file.url}
-                      handleDeleteFile={handleDeleteFile}
-                    />
-                  );
-                })}
-            </section>
-          </div>
-        </section>
-
-        {/* ข้อ 3*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
-            <Number number={3} />
             <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
               กรณีเป็นกลุ่มวิสาหกิจชุมชนหรือกลุ่มผู้ประกอบการ OTOP
             </p>
@@ -306,52 +396,70 @@ const TrademarkForm3 = ({ trademark }: TrademarkForm3Props) => {
               และสรุปรายงานการประชุม ซึ่งมีมติการประชุม
               เกี่ยวกับผู้มีอำนาจในการลงนามเอกสารคำขอเครื่องหมายการค้า
             </p>
-            <section className="flex flex-col gap-2 md:flex-row md:items-start">
-              <FileTrigger
-                allowsMultiple
-                onSelect={(e) => {
-                  if (!e) return null;
 
-                  const files: FileList = e;
-                  Array.from(files).forEach((file) => {
-                    const url = URL.createObjectURL(file);
-                    const reader = new FileReader();
+            {fileUploadOptionsOnOTOP.map((option) => {
+              return (
+                <section
+                  key={option.value}
+                  className=" flex flex-col gap-2 border-b-2 pb-2 "
+                >
+                  <section className="flex flex-col gap-2 md:flex-row md:items-start">
+                    <FileTrigger
+                      allowsMultiple
+                      onSelect={(e) => {
+                        if (!e) return null;
 
-                    setFiles((prev) => {
-                      return [
-                        ...prev,
-                        { file: file, url: url, documentType: "OTOP" },
-                      ];
-                    });
+                        const files: FileList = e;
+                        Array.from(files).forEach((file) => {
+                          const url = URL.createObjectURL(file);
+                          const reader = new FileReader();
 
-                    reader.readAsDataURL(file);
-                  });
-                }}
-              >
-                <Button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md">
-                  อัพโหลดไฟล์ .pdf/.jpg
-                </Button>
-              </FileTrigger>
-            </section>
-            <section className=" grid grid-cols-1 gap-2 md:grid-cols-2  lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
-              {...files
-                ?.filter((file) => file.documentType === "OTOP")
-                .map((file) => {
-                  return (
-                    <FileOnTrademark
-                      file={file}
-                      key={file.url}
-                      handleDeleteFile={handleDeleteFile}
-                    />
-                  );
-                })}
-            </section>
+                          setFiles((prev) => {
+                            return [
+                              ...prev,
+                              {
+                                file: file,
+                                url: url,
+                                documentType: option.value as DocumentType,
+                              },
+                            ];
+                          });
+
+                          reader.readAsDataURL(file);
+                        });
+                      }}
+                    >
+                      <Button className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 text-sm font-semibold shadow-md">
+                        {option.title}
+                      </Button>
+                    </FileTrigger>
+                  </section>
+                  <section className=" grid grid-cols-1 gap-2 md:grid-cols-2  lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
+                    {...files
+                      ?.filter(
+                        (file) =>
+                          file.documentType === (option.value as DocumentType),
+                      )
+                      .map((file) => {
+                        return (
+                          <FileOnTrademark
+                            file={file}
+                            key={file.url}
+                            handleDeleteFile={handleDeleteFile}
+                          />
+                        );
+                      })}
+                  </section>
+                </section>
+              );
+            })}
           </div>
         </section>
+
         {snackBarData.open && snackBarData.action}
       </Form>
     </div>
   );
-};
+});
 
 export default TrademarkForm3;

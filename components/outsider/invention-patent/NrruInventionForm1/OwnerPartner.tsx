@@ -8,7 +8,7 @@ import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import ProviceCombobox from "../../../Combobox/proviceCombobox";
 import AmphureCombobox from "../../../Combobox/amphureCombobox";
 import TambonCombobox from "../../../Combobox/tambonCombobox";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
+
 import { OwnerPartnerType } from "./NrruInventionForm1";
 import { TitleNameList } from "../../../../data/name";
 
@@ -32,13 +32,6 @@ function OwnerPartner({
   const handleChangePartnerData = (
     e: React.ChangeEvent<HTMLInputElement> | InputMaskChangeEvent,
   ) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
-
     const { name, value } = e.target;
     setOwnerData({ ...ownerData, [name]: value });
   };

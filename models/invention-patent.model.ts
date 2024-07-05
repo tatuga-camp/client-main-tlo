@@ -40,6 +40,7 @@ export type InventionPatent = {
   userType: UserType;
   isComplete: boolean;
   userId: string;
+  order: number;
 };
 
 export type StatusInventionPatent = {

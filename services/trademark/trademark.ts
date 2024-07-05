@@ -157,27 +157,32 @@ type RequestUpdateTrademarkService = {
   };
   body: {
     personStatus?: string;
-    titleName?: string;
+    title?: string;
     firstName?: string;
     lastName?: string;
     idCard?: string;
-    adressNumber?: string;
+    addressNumber?: string;
     moo?: string;
     road?: string;
     tambon?: string;
     amphure?: string;
-    provice?: string;
+    province?: string;
     postcode?: string;
+    phone?: string;
     nationality?: string;
     email?: string;
-
+    career?: string;
+    authorizedPerson?: string;
+    passPort?: string;
     titleTrademark?: string;
     trademarkType?: string;
+    country?: string;
     trademarkPicture?: string;
     pronunciation?: string;
     meaning?: string;
     productDetail?: string;
     otopType?: string;
+    postalCode?: string;
     otopNumber?: string;
     isAllowColorProtection?: boolean;
     colorProtectionDetail?: string;

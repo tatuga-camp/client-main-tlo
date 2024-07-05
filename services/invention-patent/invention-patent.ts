@@ -20,7 +20,9 @@ type RequestGetInventionPatentsService = {
 };
 
 type ResponseGetInventionPatentsService = Pagination<
-  InventionPatent & { user: User }
+  InventionPatent & { user: User } & {
+    workOnInvention: WorkInfoOnInventionPatent;
+  }
 >;
 export async function GetInventionPatentsService(
   input: RequestGetInventionPatentsService,
@@ -77,7 +79,9 @@ type RequestGetInventionPatentsByUserIdService = {
   page: number;
 };
 
-type ResponseGetInventionPatentsByUserIdService = Pagination<InventionPatent>;
+type ResponseGetInventionPatentsByUserIdService = Pagination<
+  InventionPatent & { workOnInvention: WorkInfoOnInventionPatent }
+>;
 export async function GetInventionPatentsByUserIdService(
   input: RequestGetInventionPatentsByUserIdService,
 ): Promise<ResponseGetInventionPatentsByUserIdService> {

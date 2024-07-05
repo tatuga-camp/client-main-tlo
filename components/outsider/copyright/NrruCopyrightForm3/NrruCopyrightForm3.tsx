@@ -25,7 +25,6 @@ import { menuNrruDesign3 } from "@/data/menu";
 import CompanyInterest from "./CompanyInterest";
 import { UseQueryResult } from "@tanstack/react-query";
 import { ResponseGetCopyrightService } from "../../../../services/copyright/copyright";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import SnackbarLoading from "../../../Snackbars/SnackBarLoading";
 import { UpdateSupportCopyrightService } from "../../../../services/copyright/support-copyright/support-copyright";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
@@ -71,12 +70,6 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
       | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
       | InputMaskChangeEvent,
   ) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     const { name, value } = e.target;
     setSupportData((prev) => ({ ...prev, [name]: value }));
   };
@@ -115,12 +108,6 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -205,12 +192,6 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
                   required
                   value={supportData?.cost}
                   onValueChange={(e) => {
-                    setSnackBarData(() => {
-                      return {
-                        open: true,
-                        action: <SnackbarSaveData />,
-                      };
-                    });
                     setSupportData((prev) => {
                       return {
                         ...prev,
@@ -235,12 +216,6 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
           isRequired
           value={supportData?.benefit}
           onChange={(e) => {
-            setSnackBarData(() => {
-              return {
-                open: true,
-                action: <SnackbarSaveData />,
-              };
-            });
             setSupportData((prev) => {
               return {
                 ...prev,
@@ -322,12 +297,6 @@ const NrruCopyrightForm3 = ({ copyright }: NrruCopyrightForm3Props) => {
           isRequired
           value={supportData?.allowPublic}
           onChange={(e) => {
-            setSnackBarData(() => {
-              return {
-                open: true,
-                action: <SnackbarSaveData />,
-              };
-            });
             setSupportData((prev) => {
               return {
                 ...prev,

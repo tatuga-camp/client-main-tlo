@@ -8,6 +8,9 @@ import {
   InventionPatent,
   Trademark,
   User,
+  WorkInfoOnCopyright,
+  WorkInfoOnDesignPatent,
+  WorkInfoOnInventionPatent,
 } from "../../models";
 import Image from "next/image";
 import Head from "next/head";
@@ -45,9 +48,21 @@ function Index({ user }: { user: User }) {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [requests, setRequests] = useState<{
-    inventions: (InventionPatent & { type: "invention-patent" })[] | [];
-    designs: (DesignPatent & { type: "design-patent" })[] | [];
-    copyrights: (Copyright & { type: "copyright" })[] | [];
+    inventions:
+      | (InventionPatent & { type: "invention-patent" } & {
+          workOnInvention: WorkInfoOnInventionPatent;
+        })[]
+      | [];
+    designs:
+      | (DesignPatent & { type: "design-patent" } & {
+          workOnDesign: WorkInfoOnDesignPatent;
+        })[]
+      | [];
+    copyrights:
+      | (Copyright & { type: "copyright" } & {
+          workOnCopyright: WorkInfoOnCopyright;
+        })[]
+      | [];
     trademarks: (Trademark & { type: "trademark" })[] | [];
   }>({
     inventions: [],
@@ -115,19 +130,25 @@ function Index({ user }: { user: User }) {
               ...invention,
               type: "invention-patent",
             };
-          }) as (InventionPatent & { type: "invention-patent" })[],
+          }) as (InventionPatent & { type: "invention-patent" } & {
+            workOnInvention: WorkInfoOnInventionPatent;
+          })[],
           designs: designs.data.data.map((design) => {
             return {
               ...design,
               type: "design-patent",
             };
-          }) as (DesignPatent & { type: "design-patent" })[],
+          }) as (DesignPatent & { type: "design-patent" } & {
+            workOnDesign: WorkInfoOnDesignPatent;
+          })[],
           copyrights: copyrights.data.data.map((copyright) => {
             return {
               ...copyright,
               type: "copyright",
             };
-          }) as (Copyright & { type: "copyright" })[],
+          }) as (Copyright & { type: "copyright" } & {
+            workOnCopyright: WorkInfoOnCopyright;
+          })[],
           trademarks: trademarks.data.data.map((trademark) => {
             return {
               ...trademark,
@@ -201,33 +222,49 @@ function Index({ user }: { user: User }) {
             >
               <thead className="">
                 <tr className="sticky top-2 bg-white">
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">
+                    ลำดับหมายเลข
+                  </th>
                   <th className=" rounded-md bg-[#BED6FF] p-2 ">วันยื่นคำขอ</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">ชื่อผลงาน</th>
                   <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะ</th>
                 </tr>
               </thead>
               <tbody>
                 {Object.values(requests)
                   .flat()
+                  .sort((a, b) => b.order - a.order)
                   .map((item) => {
                     let title:
-                      | "สิทธิบัตรการประดิษฐ์และอนุสิทธิบัตร"
+                      | "สิทธิบัตรการประดิษฐ์"
+                      | "อนุสิทธิบัตร"
                       | "สิทธิบัตรการออกแบบผลิตภัณฑ์"
                       | "ลิขสิทธิ์"
-                      | "เครื่องหมายการค้า";
-
+                      | "เครื่องหมายการค้า" = "สิทธิบัตรการประดิษฐ์";
+                    let workName: string = "ไม่พบชื่อผลงาน";
                     switch (item.type) {
                       case "copyright":
                         title = "ลิขสิทธิ์";
+                        workName =
+                          item.workOnCopyright?.name ?? "ไม่พบชื่อผลงาน";
                         break;
                       case "invention-patent":
-                        title = "สิทธิบัตรการประดิษฐ์และอนุสิทธิบัตร";
+                        workName =
+                          item.workOnInvention?.thaiName ?? "ไม่พบชื่อผลงาน";
+                        if (item.workOnInvention?.type === "INVENTION") {
+                          title = "สิทธิบัตรการประดิษฐ์";
+                        } else if (item.workOnInvention?.type === "PETTY") {
+                          title = "อนุสิทธิบัตร";
+                        }
                         break;
                       case "design-patent":
+                        workName =
+                          item.workOnDesign?.thaiName ?? "ไม่พบชื่อผลงาน";
                         title = "สิทธิบัตรการออกแบบผลิตภัณฑ์";
                         break;
                       case "trademark":
+                        workName = item?.titleTrademark ?? "ไม่พบชื่อผลงาน";
                         title = "เครื่องหมายการค้า";
                         break;
                     }
@@ -235,12 +272,15 @@ function Index({ user }: { user: User }) {
                     return (
                       <tr key={item.id} className="hover:bg-gray-200">
                         <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                          {item.order}
+                        </td>
+                        <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                           {item.requestDate
                             ? moment(item.requestDate).format("DD/MM/YYYY")
                             : "ไม่มีพบวันยื่นคำขอ"}
                         </td>
                         <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                          {item.numberRequest ?? "ไม่มีหมายเลขคำขอ"}
+                          {workName}
                         </td>
                         <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                           {title}

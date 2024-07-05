@@ -1,5 +1,11 @@
 import Number from "@/components/Number";
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import {
   Button,
   Checkbox,
@@ -28,13 +34,13 @@ import {
   allowPublicOptions,
   allowShapeProtectionOptions,
   menuTrademark2,
+  OTOPOptions,
 } from "../../../data/trademark";
 import {
   ResponseGetTrademarkService,
   UpdateTrademarkervice,
 } from "../../../services/trademark/trademark";
 import { UseQueryResult } from "@tanstack/react-query";
-import SnackbarSaveData from "../../Snackbars/SnackbarSaveData";
 import { DocumentType, ErrorMessages } from "../../../models";
 import FileOnTrademark from "./FileOnTrademark";
 import SnackbarLoading from "../../Snackbars/SnackBarLoading";
@@ -48,11 +54,12 @@ import {
   GetSignURLService,
   UploadSignURLService,
 } from "../../../services/google-storage";
+import { Dropdown } from "primereact/dropdown";
 
 type TrademarkForm2Props = {
   trademark: UseQueryResult<ResponseGetTrademarkService, Error>;
 };
-const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
+const TrademarkForm2 = forwardRef(({ trademark }: TrademarkForm2Props, ref) => {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -60,6 +67,9 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
     open: false,
     action: <></>,
   });
+  const formRef = useRef<HTMLFormElement>(null);
+  const fileTriggerRef = useRef<HTMLDivElement>(null);
+
   const [trademarkData, setTrademarkData] = useState<{
     titleTrademark?: string;
     trademarkType?: string;
@@ -118,23 +128,11 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
   const handleChangeWorkData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     const { name, value } = e.target;
     setTrademarkData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleChangeRaio = ({ e, name }: { e: string; name: string }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     setTrademarkData((prev) => {
       return {
         ...prev,
@@ -164,6 +162,7 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
         setFiles((prev) => {
           return [...prev?.filter((file) => file.url !== url)];
         });
+        await trademark.refetch();
       } else {
         setFiles((prev) => {
           return [...prev?.filter((file) => file.url !== url)];
@@ -176,12 +175,6 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -194,12 +187,31 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
     }
   };
 
-  const handleUpdateTrademark = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+      formRef.current?.requestSubmit();
+
+      if (files.length === 0) {
+        fileTriggerRef.current?.scrollIntoView();
+        throw new Error("กรุณาอัพโหลดไฟล์เครื่องหมายการค้า");
+      }
       if (!trademark.data?.id) {
         throw new Error("ไม่พบข้อมูลการจดทะเบียน");
       }
-      e.preventDefault();
       setSnackBarData(() => {
         return {
           open: true,
@@ -246,12 +258,7 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
       });
     } catch (error) {
       console.error(error);
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
+
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -263,11 +270,13 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
       });
     }
   };
-
+  useImperativeHandle(ref, () => ({
+    saveData,
+  }));
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
       <Form
-        onSubmit={handleUpdateTrademark}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
       >
         {/* ข้อ 1*/}
@@ -275,7 +284,7 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
           <section className="flex items-center gap-3">
             <Number number={1} />
             <p className="my-2 text-[0.8rem] font-semibold md:min-w-32 md:text-base">
-              ชื่อเครื่องหมาย
+              กรอกชื่อเครื่องหมายการค้า
             </p>
           </section>
           <div className="flex w-full flex-col flex-wrap gap-3 pl-7 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
@@ -310,7 +319,7 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
             <section className="flex items-center gap-3">
               <Number number={2} />
               <Label className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
-                ประเภทของงานอันมีลิขสิทธิ์
+                ประเภทของเครื่องหมายการค้า{" "}
               </Label>
             </section>
             <FieldError className="text-xs text-red-700" />
@@ -352,10 +361,13 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
             <Number number={3} />
           </div>
 
-          <div className="flex w-full flex-col gap-3 text-[0.8rem]  md:gap-5 md:text-base">
+          <div
+            ref={fileTriggerRef}
+            className="flex w-full flex-col gap-3 text-[0.8rem]  md:gap-5 md:text-base"
+          >
             <TextField isRequired className={"flex w-full items-center gap-3 "}>
               <Label className="min-w-28 font-semibold text-[var(--primary-blue)] md:min-w-32">
-                ภาพเครื่องหมาย
+                ภาพเครื่องหมาย (จำเป็นต้องมี)
               </Label>
             </TextField>
             <section className="flex flex-col gap-3">
@@ -363,12 +375,7 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
                 allowsMultiple
                 onSelect={(e) => {
                   if (!e) return null;
-                  setSnackBarData(() => {
-                    return {
-                      open: true,
-                      action: <SnackbarSaveData />,
-                    };
-                  });
+
                   const files: FileList = e;
                   Array.from(files).forEach((file) => {
                     const url = URL.createObjectURL(file);
@@ -503,30 +510,30 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
             </p>
           </section>
           <div className="flex w-full flex-col flex-wrap gap-3 pl-7 text-[0.8rem] md:ml-10 md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <TextField
-              isRequired
-              className={"flex w-full min-w-60 items-center gap-3 "}
-            >
-              <Label className="my-2 min-w-44 text-[0.8rem] font-semibold md:text-base">
-                6.1 ประเภทผู้ประกอบการ
-              </Label>
-              <section className="flex flex-col">
-                <Input
-                  value={trademarkData?.otopType}
-                  name="otopType"
-                  onChange={handleChangeWorkData}
-                  type="text"
-                  className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
-                  placeholder="SMEs"
-                />
+            <Label className="my-2 min-w-44 text-[0.8rem] font-semibold md:text-base">
+              6.1 ประเภทผู้ประกอบการ
+            </Label>
 
-                <FieldError className="text-xs text-red-700" />
-              </section>
-            </TextField>
-            <TextField
-              isRequired
-              className={"flex w-full min-w-60 items-center gap-3 "}
-            >
+            <div className="flex flex-col gap-1">
+              <div className="w-44 rounded-lg bg-slate-300 p-1 lg:w-80">
+                <Dropdown
+                  value={trademarkData?.otopType}
+                  onChange={(e) =>
+                    setTrademarkData((prev) => {
+                      return {
+                        ...prev,
+                        otopType: e.value,
+                      };
+                    })
+                  }
+                  options={OTOPOptions}
+                  placeholder="เลือกประเภทผู้ประกอบการ"
+                  className="lg:w-14rem w-full "
+                />
+              </div>
+            </div>
+
+            <TextField className={"flex w-full min-w-60 items-center gap-3 "}>
               <Label className="my-2 min-w-44 text-[0.8rem] font-semibold md:text-base">
                 6.2 เลขทะเบียน OTOP
               </Label>
@@ -537,10 +544,7 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
                   onChange={handleChangeWorkData}
                   type="text"
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:min-w-80 md:pl-4 "
-                  placeholder="โปรดระบุ"
                 />
-
-                <FieldError className="text-xs text-red-700" />
               </section>
             </TextField>
           </div>
@@ -768,6 +772,5 @@ const TrademarkForm2 = ({ trademark }: TrademarkForm2Props) => {
       </Form>
     </div>
   );
-};
-
+});
 export default TrademarkForm2;

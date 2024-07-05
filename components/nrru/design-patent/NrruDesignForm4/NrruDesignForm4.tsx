@@ -159,6 +159,8 @@ const NrruDesignForm4 = forwardRef(({ design }: NrruDesignForm4Props, ref) => {
         setFiles((prev) => {
           return [...prev?.filter((file) => file.url !== url)];
         });
+
+        await design.refetch();
       } else {
         setFiles((prev) => {
           return [...prev?.filter((file) => file.url !== url)];
@@ -188,7 +190,10 @@ const NrruDesignForm4 = forwardRef(({ design }: NrruDesignForm4Props, ref) => {
   }));
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
-      <Form className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 ">
+      <Form
+        ref={formRef}
+        className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
+      >
         {/* ข้อ 1*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
@@ -204,6 +209,23 @@ const NrruDesignForm4 = forwardRef(({ design }: NrruDesignForm4Props, ref) => {
               โดยระบุข้อความ “ใช้ประกอบการยื่นคำขอด้านทรัพย์สินทางปัญญาเท่านั้น”
               ไม่ต้องระบุวันที่
             </p>
+            <p className="-mt-2 font-normal text-purple-500 underline md:-mt-4">
+              โปรดอัพโหลดสำเนาบัตรประจำตัวประชาชนของผู้ประดิษฐ์ทุกราย
+              ตามรายชื่อด้านล่าง
+            </p>
+            {design.data?.partnerInfoOnDesignPatents.map((partner, index) => {
+              return (
+                <div key={partner.id} className="flex gap-2">
+                  <p className="font-semibold">
+                    1.{index + 1} ) ชื่อ: {partner.title} {partner.firstName}{" "}
+                    {partner.lastName}
+                  </p>
+                  <p className="font-semibold">
+                    เลขบัตรประจำตัวประชาชน: {partner.idCard}
+                  </p>
+                </div>
+              );
+            })}
             <section className="flex flex-col gap-2 md:flex-row md:items-start">
               <FileTrigger
                 allowsMultiple

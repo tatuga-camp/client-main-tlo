@@ -23,7 +23,6 @@ import {
   MdOutlineRadioButtonChecked,
   MdOutlineRadioButtonUnchecked,
 } from "react-icons/md";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import {
   HireDetailOptions,
   IsMarketingLists,
@@ -244,12 +243,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
       });
     } catch (error) {
       console.error(error);
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
+
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -265,12 +259,6 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
   const handleChangeWorkData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     const { name, value } = e.target;
     setWorkData((prev) => ({ ...prev, [name]: value }));
   };
@@ -283,12 +271,6 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
     name: string;
   }) => {
     if (value instanceof Date) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       setWorkData((prev) => {
         return {
           ...prev,
@@ -299,12 +281,6 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
   };
 
   const handleChangeCheckbox = ({ e, name }: { e: string[]; name: string }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     setWorkData((prev) => {
       return {
         ...prev,
@@ -314,12 +290,6 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
   };
 
   const handleChangeRaio = ({ e, name }: { e: string; name: string }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     setWorkData((prev) => {
       return {
         ...prev,
@@ -367,12 +337,6 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -424,12 +388,6 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
           isRequired
           value={workData?.workType}
           onChange={(e) => {
-            setSnackBarData(() => {
-              return {
-                open: true,
-                action: <SnackbarSaveData />,
-              };
-            });
             setWorkData((prev) => ({
               ...prev,
               workType: e,
@@ -508,7 +466,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                     required
                     locale="th"
                     view="year"
-                    placeholder="ปี 2024"
+                    placeholder="ระบุปี"
                     dateFormat="yy"
                   />
                 </div>
@@ -529,12 +487,6 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
 
           <RadioGroup
             onChange={(e) => {
-              setSnackBarData(() => {
-                return {
-                  open: true,
-                  action: <SnackbarSaveData />,
-                };
-              });
               const value = e as WorkQualityOptions;
               setWorkData((prev) => {
                 return {
@@ -581,13 +533,6 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                           <Dropdown
                             value={workData?.hireWork}
                             onChange={(e) => {
-                              setSnackBarData(() => {
-                                return {
-                                  open: true,
-                                  action: <SnackbarSaveData />,
-                                };
-                              });
-
                               setWorkData((prev) => {
                                 return {
                                   ...prev,

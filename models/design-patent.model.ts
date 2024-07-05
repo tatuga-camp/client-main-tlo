@@ -39,6 +39,7 @@ export type DesignPatent = {
   requestDate?: string;
   isComplete: boolean;
   userId: string;
+  order: number;
 };
 
 export type StatusDesignPatent = {
@@ -97,13 +98,14 @@ export type WorkInfoOnDesignPatent = {
   otherAgreement?: string;
   researchResult?: ResearchType;
   keywords?: string;
-  website?: Websites;
+  website?: string[];
+  otherWebsite?: string;
   searchResult?: string;
   isRequest?: string;
   requestNumber?: string;
   requestDate?: string;
   requestCountry?: string;
-  publicType?: PublicType;
+  publicType?: string[];
   otherPublicType?: string;
   publicDetail?: string;
   outstandingDetail?: string;

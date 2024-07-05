@@ -78,7 +78,9 @@ type RequestGetDesignPatentsByUserIdService = {
   searchField?: string;
 };
 
-type ResponseGetDesignPatentsByUserIdService = Pagination<DesignPatent>;
+type ResponseGetDesignPatentsByUserIdService = Pagination<
+  DesignPatent & { workOnDesign: WorkInfoOnDesignPatent }
+>;
 export async function GetDesignPatentsByUserIdService(
   input: RequestGetDesignPatentsByUserIdService,
 ): Promise<ResponseGetDesignPatentsByUserIdService> {

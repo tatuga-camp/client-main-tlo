@@ -1,5 +1,10 @@
 import Number from "@/components/Number";
-import React, { useState } from "react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import {
   Button,
   FieldError,
@@ -23,7 +28,6 @@ import {
 } from "react-icons/md";
 import { UseQueryResult } from "@tanstack/react-query";
 import { ResponseGetDesignPatentService } from "../../../../services/design-patent/design-patent";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import SnackbarLoading from "../../../Snackbars/SnackBarLoading";
 import { UpdateSupportDesignPatentService } from "../../../../services/design-patent/support-design/support-design";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
@@ -37,7 +41,7 @@ import { InputNumber } from "primereact/inputnumber";
 type NrruDesignForm3Props = {
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
-const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
+const NrruDesignForm3 = forwardRef(({ design }: NrruDesignForm3Props, ref) => {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -45,6 +49,7 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
     open: false,
     action: <></>,
   });
+  const formRef = useRef<HTMLFormElement>(null);
   const [supportData, setSupportData] = useState<{
     durationYear?: string;
     durationMonth?: string;
@@ -70,19 +75,12 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
       | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
       | InputMaskChangeEvent,
   ) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     const { name, value } = e.target;
     setSupportData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleUpdateSupportData = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
       setSnackBarData(() => {
         return {
           open: true,
@@ -114,12 +112,6 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -131,10 +123,14 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
       });
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    saveData,
+  }));
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       <Form
-        onSubmit={handleUpdateSupportData}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-5 lg:mx-5 lg:my-10 "
       >
         {/* ข้อ 1 */}
@@ -201,12 +197,6 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
                   required
                   value={supportData?.cost}
                   onValueChange={(e) => {
-                    setSnackBarData(() => {
-                      return {
-                        open: true,
-                        action: <SnackbarSaveData />,
-                      };
-                    });
                     setSupportData((prev) => {
                       return {
                         ...prev,
@@ -231,12 +221,6 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
           isRequired
           value={supportData?.benefit}
           onChange={(e) => {
-            setSnackBarData(() => {
-              return {
-                open: true,
-                action: <SnackbarSaveData />,
-              };
-            });
             setSupportData((prev) => {
               return {
                 ...prev,
@@ -318,12 +302,6 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
           isRequired
           value={supportData?.allowPublic}
           onChange={(e) => {
-            setSnackBarData(() => {
-              return {
-                open: true,
-                action: <SnackbarSaveData />,
-              };
-            });
             setSupportData((prev) => {
               return {
                 ...prev,
@@ -393,6 +371,6 @@ const NrruDesignForm3 = ({ design }: NrruDesignForm3Props) => {
       </Form>
     </div>
   );
-};
+});
 
 export default NrruDesignForm3;

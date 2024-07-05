@@ -525,7 +525,7 @@ const NrruInventionForm2 = forwardRef(
                     required
                     locale="th"
                     view="year"
-                    placeholder="ปี 2024"
+                    placeholder="ระบุปี"
                     dateFormat="yy"
                   />
                 </div>
@@ -551,7 +551,7 @@ const NrruInventionForm2 = forwardRef(
                     required
                     locale="th"
                     view="year"
-                    placeholder="ปี 2024"
+                    placeholder="ระบุปี"
                     dateFormat="yy"
                   />
                 </div>
@@ -721,7 +721,7 @@ const NrruInventionForm2 = forwardRef(
                       required={workData?.funding !== "ไม่ได้รับทุนอุดหนุนใดๆ"}
                       locale="th"
                       view="year"
-                      placeholder="ปี 2024"
+                      placeholder="ระบุปี"
                       dateFormat="yy"
                     />
                   </div>

@@ -51,7 +51,6 @@ import {
 } from "../../../../services/design-patent/work-design/file-work-design";
 import { UpdateWorkDesignPatentService } from "../../../../services/design-patent/work-design/work-design";
 import SnackbarNoSaveData from "../../../Snackbars/SnackBarNoSaveData";
-import SnackbarSaveData from "../../../Snackbars/SnackbarSaveData";
 import Swal from "sweetalert2";
 import { DeleteFileWorkInventionPatentService } from "../../../../services/invention-patent/work-invention/file-work-invention";
 import { Dropdown } from "primereact/dropdown";
@@ -218,12 +217,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -239,23 +232,11 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
   const handleChangeWorkData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     const { name, value } = e.target;
     setWorkData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleChangeRaio = ({ e, name }: { e: string; name: string }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     setWorkData((prev) => {
       return {
         ...prev,
@@ -303,12 +284,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
         };
       });
     } catch (error) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       let result = error as ErrorMessages;
       Swal.fire({
         title: result.error ? result.error : "เกิดข้อผิดพลาด",
@@ -322,12 +297,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
   };
 
   const handleChangeCheckbox = ({ e, name }: { e: string[]; name: string }) => {
-    setSnackBarData(() => {
-      return {
-        open: true,
-        action: <SnackbarSaveData />,
-      };
-    });
     setWorkData((prev) => {
       return {
         ...prev,
@@ -344,12 +313,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
     name: string;
   }) => {
     if (value instanceof Date) {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarSaveData />,
-        };
-      });
       setWorkData((prev) => {
         return {
           ...prev,
@@ -421,7 +384,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   required
                   locale="th"
                   view="year"
-                  placeholder="ปี 2024"
+                  placeholder="ระบุปี"
                   dateFormat="yy"
                 />
               </div>
@@ -447,7 +410,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   required
                   locale="th"
                   view="year"
-                  placeholder="ปี 2024"
+                  placeholder="ระบุปี"
                   dateFormat="yy"
                 />
               </div>
@@ -710,12 +673,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   <Dropdown
                     value={workData?.searchResult}
                     onChange={(e) => {
-                      setSnackBarData(() => {
-                        return {
-                          open: true,
-                          action: <SnackbarSaveData />,
-                        };
-                      });
                       setWorkData((prev) => {
                         return {
                           ...prev,
@@ -882,12 +839,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                     options={publicType}
                     required
                     onChange={(e) => {
-                      setSnackBarData(() => {
-                        return {
-                          open: true,
-                          action: <SnackbarSaveData />,
-                        };
-                      });
                       setWorkData((prev) => {
                         return {
                           ...prev,
@@ -926,12 +877,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
             allowsMultiple
             onSelect={(e) => {
               if (!e) return null;
-              setSnackBarData(() => {
-                return {
-                  open: true,
-                  action: <SnackbarSaveData />,
-                };
-              });
+
               const files: FileList = e;
               Array.from(files).forEach((file) => {
                 const url = URL.createObjectURL(file);

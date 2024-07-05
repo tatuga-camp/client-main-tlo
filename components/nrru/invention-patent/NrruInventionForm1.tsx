@@ -423,18 +423,16 @@ const NrruInventionForm1 = forwardRef(
                           options={TitleNameList}
                           onChange={(e) => {
                             setPartnerData((prev) => {
-                              const newState = prev?.map((prevPartner) => {
+                              return prev?.map((prevPartner) => {
                                 if (prevPartner.id === partner.id) {
                                   return {
                                     ...partner,
                                     title: e.value,
                                   };
+                                } else {
+                                  return prevPartner;
                                 }
-
-                                return partner;
                               });
-
-                              return newState;
                             });
                           }}
                           required
@@ -709,18 +707,16 @@ const NrruInventionForm1 = forwardRef(
                           options={FacultyLists}
                           onChange={(e) => {
                             setPartnerData((prev) => {
-                              const newState = prev?.map((prevPartner) => {
+                              return prev?.map((prevPartner) => {
                                 if (prevPartner.id === partner.id) {
                                   return {
                                     ...partner,
                                     faculty: e.value,
                                   };
+                                } else {
+                                  return prevPartner;
                                 }
-
-                                return partner;
                               });
-
-                              return newState;
                             });
                           }}
                           required

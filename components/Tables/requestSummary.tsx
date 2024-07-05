@@ -5,6 +5,7 @@ import {
   InventionPatent,
   Trademark,
   User,
+  WorkInfoOnInventionPatent,
 } from "../../models";
 import { useQuery } from "@tanstack/react-query";
 import { GetInventionPatentsService } from "../../services/invention-patent/invention-patent";
@@ -42,7 +43,11 @@ function RequestSummary({ user }: { user?: User }) {
   const [totalPage, setTotalPage] = useState(1);
   const [requests, setRequests] = useState<{
     inventions:
-      | (InventionPatent & { type: "invention-patent"; user: User })[]
+      | (InventionPatent & {
+          type: "invention-patent";
+          user: User;
+          workOnInvention: WorkInfoOnInventionPatent;
+        })[]
       | [];
     designs: (DesignPatent & { type: "design-patent"; user: User })[] | [];
     copyrights: (Copyright & { type: "copyright"; user: User })[] | [];
@@ -131,7 +136,11 @@ function RequestSummary({ user }: { user?: User }) {
             ...invention,
             type: "invention-patent",
           };
-        }) as (InventionPatent & { type: "invention-patent"; user: User })[];
+        }) as (InventionPatent & {
+          type: "invention-patent";
+          user: User;
+          workOnInvention: WorkInfoOnInventionPatent;
+        })[];
 
         const designsState = designs.data.data.map((design) => {
           return {
@@ -289,35 +298,6 @@ function RequestSummary({ user }: { user?: User }) {
                   }}
                 />
               </div>
-              {/* <div className="flex w-full items-center gap-5 md:w-[50%]">
-                <label className="font-semibold">ปีงบประมาณ</label>
-                <Select
-                  options={fakeOptions}
-                  className="w-[15rem]"
-                  placeholder={<div>ทั้งหมด</div>}
-                  styles={{
-                    control: (base, state) => ({
-                      ...base,
-                      border: "1.5px solid #BED6FF",
-                      padding: "0.25rem 0.3rem",
-                      borderRadius: "5px",
-                      color: "blue",
-                    }),
-                    singleValue: (provided: any) => ({
-                      ...provided,
-                      color: "#2166DD",
-                      fontWeight: "500",
-                    }),
-                    placeholder: (defaultStyles) => {
-                      return {
-                        ...defaultStyles,
-                        color: "#2166DD",
-                        fontWeight: "500",
-                      };
-                    },
-                  }}
-                />
-              </div> */}
             </div>
             {/* Search */}
             <div className="flex w-full items-center justify-center gap-2 md:gap-5">
@@ -354,6 +334,7 @@ function RequestSummary({ user }: { user?: User }) {
           >
             <thead className="">
               <tr className="sticky top-0 z-10 bg-white  p-5 ">
+                <th className=" rounded-md bg-[#BED6FF] p-2">ลำดับหมายเลข</th>
                 <th className=" rounded-md bg-[#BED6FF] p-2 ">
                   รายชื่อผู้ยื่น
                 </th>
@@ -381,19 +362,26 @@ function RequestSummary({ user }: { user?: User }) {
                   ))
                 : Object.values(requests)
                     .flat()
+                    .sort((a, b) => b.order - a.order)
                     .map((item) => {
                       let title:
-                        | "สิทธิบัตรการประดิษฐ์และอนุสิทธิบัตร"
+                        | "สิทธิบัตรการประดิษฐ์"
+                        | "อนุสิทธิบัตร"
                         | "สิทธิบัตรการออกแบบผลิตภัณฑ์"
                         | "ลิขสิทธิ์"
-                        | "เครื่องหมายการค้า";
+                        | "เครื่องหมายการค้า" = "สิทธิบัตรการประดิษฐ์";
 
                       switch (item.type) {
                         case "copyright":
                           title = "ลิขสิทธิ์";
                           break;
                         case "invention-patent":
-                          title = "สิทธิบัตรการประดิษฐ์และอนุสิทธิบัตร";
+                          if (item.workOnInvention.type === "INVENTION") {
+                            title = "สิทธิบัตรการประดิษฐ์";
+                          } else if (item.workOnInvention.type === "PETTY") {
+                            title = "อนุสิทธิบัตร";
+                          }
+
                           break;
                         case "design-patent":
                           title = "สิทธิบัตรการออกแบบผลิตภัณฑ์";
@@ -409,6 +397,9 @@ function RequestSummary({ user }: { user?: User }) {
 
                       return (
                         <tr key={item.id} className="hover:bg-gray-200">
+                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                            {item.order}
+                          </td>
                           <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                             {item.user.title} {item.user.firstName}{" "}
                             {item.user.lastName}

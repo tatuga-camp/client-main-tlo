@@ -178,36 +178,41 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
           onSubmit={handleUpdateNumnerRequest}
           className="flex w-max flex-col items-center gap-5 text-xl font-semibold lg:flex-row lg:gap-2 lg:text-2xl"
         >
-          <TextField className="flex flex-col gap-2 ">
-            <Label className="text-base lg:text-lg">เลขที่คำขอ:</Label>
-            <Input
-              disabled={user?.role !== "ADMIN"}
-              onChange={(e) => setNumberRequest(e.target.value)}
-              value={numberRequest}
-              placeholder={numberRequest === "" ? "กรุณากรอกเลขที่คำขอ" : ""}
-              type="text"
-              className="h-11 w-60 rounded-md bg-slate-300 p-1 pl-3 text-base md:min-w-80 md:pl-4 lg:h-12 lg:w-full lg:text-lg"
-            />
-          </TextField>
-          <TextField className="flex flex-col gap-2 ">
-            <Label className="text-base lg:text-lg">วันยื่นคำขอ:</Label>
-            <div className="w-60 rounded-lg bg-slate-300 p-1 lg:w-40">
-              <Calendar
-                value={requestDate ? new Date(requestDate) : null}
-                onChange={(e) => {
-                  setRequestDate(e.value?.toISOString());
-                }}
+          {user?.role === "ADMIN" && (
+            <TextField className={" flex flex-col gap-2 "}>
+              <Label className="text-base lg:text-lg">เลขที่คำขอ:</Label>
+              <Input
                 disabled={user?.role !== "ADMIN"}
-                className="h-10 w-full"
-                locale="th"
-                placeholder="ระบุวันที่ยื่นคำขอ"
+                onChange={(e) => setNumberRequest(e.target.value)}
+                value={numberRequest}
+                placeholder={numberRequest === "" ? "กรุณากรอกเลขที่คำขอ" : ""}
+                type="text"
+                className=" h-11 w-60 rounded-md bg-slate-300 p-1 pl-3  text-base md:min-w-80 md:pl-4 lg:h-12  lg:w-full lg:text-lg "
               />
-            </div>
-          </TextField>
+            </TextField>
+          )}
+
+          {user?.role === "ADMIN" && (
+            <TextField className={"flex flex-col gap-2 "}>
+              <Label className="text-base lg:text-lg">วันยื่นคำขอ:</Label>
+              <div className="w-60 rounded-lg bg-slate-300 p-1 lg:w-40">
+                <Calendar
+                  value={requestDate ? new Date(requestDate) : null}
+                  onChange={(e) => {
+                    setRequestDate(e.value?.toISOString());
+                  }}
+                  disabled={user?.role !== "ADMIN"}
+                  className="h-10 w-full"
+                  locale="th"
+                  placeholder="ระบุวันที่ยื่นคำขอ"
+                />
+              </div>
+            </TextField>
+          )}
           {user?.role === "ADMIN" && (
             <Button
               type="submit"
-              className="w-44 rounded-md bg-[var(--secondary-yellow)] px-3 py-3 text-base font-semibold ring-1 ring-black drop-shadow-md duration-200 hover:bg-yellow-400 md:w-24 lg:mt-8 lg:py-1"
+              className="w-44 rounded-md bg-[var(--secondary-yellow)] px-3 py-3 text-base font-semibold ring-1 ring-black drop-shadow-md duration-200 hover:bg-yellow-400 md:w-24 lg:mt-8 lg:py-1 "
             >
               ยืนยัน
             </Button>
@@ -217,16 +222,14 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
         <h1 className="font-semibold lg:text-xl">
           ประเภท : สิทธิบัตรการประดิษฐ์
         </h1>
-        <section className="mt-5 w-10/12 text-start text-xs lg:text-base">
+        <section className="grid w-full grid-cols-2 gap-5 p-5">
           <p>
-            <span className="font-semibold">ชื่อสิ่งประดิษฐ์/การออกแบบ : </span>{" "}
-            {status.data?.design.workInfoOnDesignPatent.thaiName} /{" "}
+            <span className="font-semibold">ชื่อการประดิษฐ์ : </span>{" "}
+            {status.data?.design.workInfoOnDesignPatent.thaiName}
             {status.data?.design.workInfoOnDesignPatent.englishName}
           </p>
-        </section>
-        <section className="flex w-10/12 flex-col gap-2 text-xs md:flex-row md:justify-between lg:text-base">
           <p>
-            <span className="font-semibold">ชื่อผู้สิ่งประดิษฐ์/ออกแบบ :</span>{" "}
+            <span className="font-semibold">ชื่อผู้ประดิษฐ์ :</span>{" "}
             {status.data?.design.partnerInfoOnDesignPatents.map((partner) => {
               return (
                 <span key={partner.id}>
@@ -235,15 +238,26 @@ function DesignStatus({ designId, user }: DesignStatusProps) {
               );
             })}
           </p>
-          {status.data?.design.userType === "INTERNAL" && (
-            <p>
-              <span className="font-semibold">สังกัด : </span>{" "}
-              {status.data?.design.partnerInfoOnDesignPatents.map((partner) => {
-                return <span key={partner.id}>{partner.faculty}</span>;
-              })}
-            </p>
-          )}
+          <p>
+            <span className="font-semibold">ลำดับเลขที่ :</span>{" "}
+            {status.data?.design.order}
+          </p>
+          <p>
+            <span className="font-semibold">เลขทะเบียน : </span>{" "}
+            {status.data?.design.numberRequest}
+          </p>
+          <p>
+            <span className="font-semibold">วันที่ยื่นคำขอ : </span>{" "}
+            {new Date(
+              status.data?.design.requestDate as string,
+            ).toLocaleDateString("th-TH", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
         </section>
+
         <div className="w-full overflow-x-auto">
           <div className="relative my-8 flex w-[18rem] min-w-max gap-16 py-5 ">
             {status.data?.status?.map((list) => {

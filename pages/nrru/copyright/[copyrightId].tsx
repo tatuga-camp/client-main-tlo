@@ -22,11 +22,17 @@ import Swal from "sweetalert2";
 import { MdDelete, MdOutlineDriveFileMove } from "react-icons/md";
 import CopyrightStatus from "../../../components/Status/copyrightStatus";
 import MigrantForm from "../../../components/Forms/migrantForm";
+import { IoIosSave } from "react-icons/io";
+type ChildFormRef = {
+  saveData: () => Promise<void>;
+};
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
   const [triggerMigrationForm, setTriggerMigrationForm] = useState(false);
+  const childRef = useRef<ChildFormRef>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const copyright = useQuery({
     queryKey: [
@@ -39,6 +45,11 @@ const Index = ({ user }: { user: User }) => {
       }),
   });
 
+  const handleSaveData = async () => {
+    setIsLoading(true);
+    await childRef.current?.saveData();
+    setIsLoading(false);
+  };
   const previousSection = () => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
@@ -83,7 +94,12 @@ const Index = ({ user }: { user: User }) => {
       throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
     } else if (
       number === 4 &&
-      (copyright.data?.fileOnCopyrights.length === 0 ||
+      ((copyright.data?.fileOnCopyrights?.filter(
+        (file) => file.documentType === "IDCARD",
+      ).length ?? 0) < (copyright.data?.partnerInfoOnCopyrights?.length ?? 0) ||
+        (copyright.data?.fileOnCopyrights?.filter(
+          (file) => file.documentType === "REQUEST",
+        )?.length ?? 0) === 0 ||
         copyright.data?.supportingDataOnCopyright.isComplete === false ||
         copyright.data?.workInfoOnCopyright.isComplete === false ||
         copyright.data?.partnerInfoOnCopyrights.length === 0)
@@ -91,7 +107,12 @@ const Index = ({ user }: { user: User }) => {
       throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");
     } else if (
       number === 5 &&
-      (copyright.data?.fileOnCopyrights.length === 0 ||
+      ((copyright.data?.fileOnCopyrights?.filter(
+        (file) => file.documentType === "IDCARD",
+      ).length ?? 0) < (copyright.data?.partnerInfoOnCopyrights?.length ?? 0) ||
+        (copyright.data?.fileOnCopyrights?.filter(
+          (file) => file.documentType === "REQUEST",
+        )?.length ?? 0) === 0 ||
         copyright.data?.supportingDataOnCopyright.isComplete === false ||
         copyright.data?.workInfoOnCopyright.isComplete === false ||
         copyright.data?.partnerInfoOnCopyrights.length === 0 ||
@@ -101,7 +122,7 @@ const Index = ({ user }: { user: User }) => {
     }
   };
 
-  const handleDeleteDesign = async ({
+  const handleDeleteCopyright = async ({
     copyrightId,
   }: {
     copyrightId: string;
@@ -249,7 +270,7 @@ const Index = ({ user }: { user: User }) => {
             <section className="flex w-full justify-center gap-4">
               <button
                 onClick={() =>
-                  handleDeleteDesign({
+                  handleDeleteCopyright({
                     copyrightId: router.query.copyrightId as string,
                   })
                 }
@@ -310,22 +331,26 @@ const Index = ({ user }: { user: User }) => {
             <section className="w-[87%]">
               {currentSection === 0 && (
                 <div>
-                  <NrruCopyrightForm1 user={user} copyright={copyright} />
+                  <NrruCopyrightForm1
+                    ref={childRef}
+                    user={user}
+                    copyright={copyright}
+                  />
                 </div>
               )}
               {currentSection === 1 && (
                 <div>
-                  <NrruCopyrightForm2 copyright={copyright} />
+                  <NrruCopyrightForm2 ref={childRef} copyright={copyright} />
                 </div>
               )}
               {currentSection === 2 && (
                 <div>
-                  <NrruCopyrightForm3 copyright={copyright} />
+                  <NrruCopyrightForm3 ref={childRef} copyright={copyright} />
                 </div>
               )}
               {currentSection === 3 && (
                 <div>
-                  <NrruCopyrightForm4 copyright={copyright} />
+                  <NrruCopyrightForm4 ref={childRef} copyright={copyright} />
                 </div>
               )}
               {currentSection === 4 && (
@@ -333,7 +358,11 @@ const Index = ({ user }: { user: User }) => {
                   <p className="my-5 w-full items-center text-center  font-bold">
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
-                  <NrruCopyrightForm5 user={user} copyright={copyright} />
+                  <NrruCopyrightForm5
+                    ref={childRef}
+                    user={user}
+                    copyright={copyright}
+                  />
                 </div>
               )}
               {currentSection === 5 && copyright.data && (
@@ -346,23 +375,48 @@ const Index = ({ user }: { user: User }) => {
               )}
             </section>
 
-            <section className=" my-5 flex items-center justify-center gap-3">
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={previousSection}
-                disabled={currentSection === 0}
-              >
-                ย้อนกลับ
-              </button>
+            {currentSection !== 5 && (
+              <section className=" my-5 flex items-center justify-center gap-3">
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3
+                text-[0.6rem] font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={previousSection}
+                  disabled={currentSection === 0}
+                >
+                  ย้อนกลับ
+                </button>
+                {isLoading ? (
+                  <button
+                    className="flex h-8 animate-pulse items-center justify-center rounded-md
+                   border-2 border-solid border-[var(--primary-blue)] bg-main-color px-3
+                font-semibold text-white transition md:w-52"
+                  >
+                    กำลังบันทึกข้อมูล
+                    <IoIosSave />
+                  </button>
+                ) : (
+                  <button
+                    className="flex h-8 items-center justify-center rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 font-semibold transition 
+                hover:bg-main-color hover:text-white disabled:border-slate-300 disabled:text-slate-300 md:w-52"
+                    onClick={handleSaveData}
+                  >
+                    {currentSection === 4
+                      ? "ยืนยันการส่งข้อมูล"
+                      : "บันทึกข้อมูล"}
+                    <IoIosSave />
+                  </button>
+                )}
 
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={nextSection}
-                disabled={currentSection === nrruCopyrightSection.length - 1}
-              >
-                ถัดไป
-              </button>
-            </section>
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 text-[0.6rem]
+                font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={nextSection}
+                  disabled={currentSection === nrruCopyrightSection.length - 1}
+                >
+                  ถัดไป
+                </button>
+              </section>
+            )}
           </main>
         </div>
       </HomeLayout>

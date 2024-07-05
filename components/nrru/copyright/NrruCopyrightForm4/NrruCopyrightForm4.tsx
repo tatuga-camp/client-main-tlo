@@ -201,6 +201,23 @@ const NrruCopyrightForm4 = forwardRef(
                 “ใช้ประกอบการยื่นคำขอด้านทรัพย์สินทางปัญญาเท่านั้น”
                 ไม่ต้องระบุวันที่
               </p>
+              <p className="-mt-2 font-normal text-purple-500 underline md:-mt-4">
+                โปรดอัพโหลดสำเนาบัตรประจำตัวประชาชนของผู้ประดิษฐ์ทุกราย
+                ตามรายชื่อด้านล่าง
+              </p>
+              {copyright.data?.partnerInfoOnCopyrights.map((partner, index) => {
+                return (
+                  <div key={partner.id} className="flex gap-2">
+                    <p className="font-semibold">
+                      1.{index + 1} ) ชื่อ: {partner.title} {partner.firstName}{" "}
+                      {partner.lastName}
+                    </p>
+                    <p className="font-semibold">
+                      เลขบัตรประจำตัวประชาชน: {partner.idCard}
+                    </p>
+                  </div>
+                );
+              })}
               <section className="flex flex-col gap-2 md:flex-row md:items-start">
                 <FileTrigger
                   allowsMultiple
@@ -288,7 +305,7 @@ const NrruCopyrightForm4 = forwardRef(
                 </FileTrigger>
 
                 <button className="rounded-md bg-[#BED6FF] p-3 font-semibold duration-300 hover:bg-[#91B2EB]">
-                  ตัวอย่างการแสดงภาพของผลิตภัณฑ์ (คลิก)
+                  รายละเอียดของเอกสาร/ผลงานที่ใช้แนบประกอบคำขอ (คลิก)
                 </button>
               </section>
             </div>
