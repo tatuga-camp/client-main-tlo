@@ -77,48 +77,74 @@ const Index = ({ user }: { user: User }) => {
   };
 
   const handleValidateForm = ({ number }: { number: number }) => {
-    if (number === 1 && copyright.data?.partnerInfoOnCopyrights.length === 0) {
-      throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
-    } else if (
-      number === 2 &&
-      (copyright.data?.workInfoOnCopyright.isComplete === false ||
-        copyright.data?.partnerInfoOnCopyrights.length === 0)
-    ) {
-      throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
-    } else if (
-      number === 3 &&
-      (!copyright.data?.workInfoOnCopyright.id ||
-        copyright.data?.partnerInfoOnCopyrights.length === 0 ||
-        copyright.data?.supportingDataOnCopyright.isComplete === false)
-    ) {
-      throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
-    } else if (
-      number === 4 &&
-      ((copyright.data?.fileOnCopyrights?.filter(
-        (file) => file.documentType === "IDCARD",
-      ).length ?? 0) < (copyright.data?.partnerInfoOnCopyrights?.length ?? 0) ||
-        (copyright.data?.fileOnCopyrights?.filter(
-          (file) => file.documentType === "REQUEST",
-        )?.length ?? 0) === 0 ||
-        copyright.data?.supportingDataOnCopyright.isComplete === false ||
-        copyright.data?.workInfoOnCopyright.isComplete === false ||
-        copyright.data?.partnerInfoOnCopyrights.length === 0)
-    ) {
-      throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");
-    } else if (
-      number === 5 &&
-      ((copyright.data?.fileOnCopyrights?.filter(
-        (file) => file.documentType === "IDCARD",
-      ).length ?? 0) < (copyright.data?.partnerInfoOnCopyrights?.length ?? 0) ||
-        (copyright.data?.fileOnCopyrights?.filter(
-          (file) => file.documentType === "REQUEST",
-        )?.length ?? 0) === 0 ||
-        copyright.data?.supportingDataOnCopyright.isComplete === false ||
-        copyright.data?.workInfoOnCopyright.isComplete === false ||
-        copyright.data?.partnerInfoOnCopyrights.length === 0 ||
-        copyright.data?.isComplete === false)
-    ) {
-      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 5");
+    switch (number) {
+      case 0:
+        break;
+      case 1:
+        if (copyright.data?.partnerInfoOnCopyrights.length === 0) {
+          throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 2:
+        if (
+          copyright.data?.workInfoOnCopyright.isComplete === false ||
+          copyright.data?.partnerInfoOnCopyrights.length === 0
+        ) {
+          throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 3:
+        if (
+          !copyright.data?.workInfoOnCopyright.id ||
+          copyright.data?.partnerInfoOnCopyrights.length === 0 ||
+          copyright.data?.supportingDataOnCopyright.isComplete === false
+        ) {
+          throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 4:
+        if (
+          (copyright.data?.fileOnCopyrights?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (copyright.data?.partnerInfoOnCopyrights?.length ?? 0) ||
+          (copyright.data?.fileOnCopyrights?.filter(
+            (file) => file.documentType === "REQUEST",
+          )?.length ?? 0) === 0 ||
+          copyright.data?.supportingDataOnCopyright.isComplete === false ||
+          copyright.data?.workInfoOnCopyright.isComplete === false ||
+          copyright.data?.partnerInfoOnCopyrights.length === 0
+        ) {
+          throw new Error("ไม่สามารถไปต่อได้กรุณาอัพโหลดเอกสาร ให้ครบถ้วน");
+        }
+        break;
+
+      case 5:
+        if (
+          (copyright.data?.fileOnCopyrights?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (copyright.data?.partnerInfoOnCopyrights?.length ?? 0) ||
+          (copyright.data?.fileOnCopyrights?.filter(
+            (file) => file.documentType === "REQUEST",
+          )?.length ?? 0) === 0 ||
+          copyright.data?.supportingDataOnCopyright.isComplete === false ||
+          copyright.data?.workInfoOnCopyright.isComplete === false ||
+          copyright.data?.partnerInfoOnCopyrights.length === 0 ||
+          copyright.data?.isComplete === false
+        ) {
+          throw new Error(
+            "ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 5",
+          );
+        }
+
+        break;
+
+      default:
+        break;
     }
   };
 

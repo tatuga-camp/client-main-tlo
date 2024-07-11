@@ -1,5 +1,11 @@
 import NumberTitle from "@/components/Number";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, {
+  FormEvent,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Button,
   FieldError,
@@ -64,7 +70,10 @@ type NrruInventionForm1Props = {
   invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
   user: User;
 };
-const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
+const NrruInventionForm1 = forwardRef(function FromInvention(
+  { user, invention }: NrruInventionForm1Props,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -72,6 +81,8 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
     open: false,
     action: <></>,
   });
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [ownerData, setOwnerData] = useState<OwnerPartnerType>();
   const [partnerData, setPartnerData] = useState<
     {
@@ -321,9 +332,23 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
     }
   };
 
-  const handleUpdatePartners = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+      formRef.current?.requestSubmit();
       setSnackBarData(() => {
         return {
           open: true,
@@ -433,10 +458,14 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
     }
   };
 
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
+
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
       <Form
-        onSubmit={handleUpdatePartners}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
       >
         <OwnerPartner
@@ -451,9 +480,10 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
               key={partner.id}
               className={`flex flex-col gap-5 rounded-lg p-5 ring-1 ring-gray-400  `}
             >
-              <h1 className="text-lg font-semibold underline underline-offset-2">
-                ผู้ประดิษฐ์
-              </h1>
+              <h2 className="text-lg font-semibold text-[var(--primary-blue)]">
+                ผู้ประดิษฐ์คนที่ {index + 1}
+              </h2>
+
               <section className="flex items-start justify-start gap-3 md:items-start md:gap-5">
                 <NumberTitle number={1} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] md:gap-5 md:text-base lg:flex-row">
@@ -470,18 +500,16 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
                         options={TitleNameList}
                         onChange={(e) => {
                           setPartnerData((prev) => {
-                            const newState = prev?.map((prevPartner) => {
+                            return prev?.map((prevPartner) => {
                               if (prevPartner.id === partner.id) {
                                 return {
                                   ...partner,
                                   title: e.value,
                                 };
+                              } else {
+                                return prevPartner;
                               }
-
-                              return partner;
                             });
-
-                            return newState;
                           });
                         }}
                         required
@@ -858,6 +886,6 @@ const NrruInventionForm1 = ({ user, invention }: NrruInventionForm1Props) => {
       </Form>
     </div>
   );
-};
+});
 
 export default NrruInventionForm1;

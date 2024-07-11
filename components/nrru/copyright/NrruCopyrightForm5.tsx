@@ -29,74 +29,75 @@ type NrruCopyrightForm5Props = {
   copyright: UseQueryResult<ResponseGetCopyrightService, Error>;
   user: User;
 };
-const NrruCopyrightForm5 = forwardRef(
-  ({ copyright, user }: NrruCopyrightForm5Props, ref) => {
-    const router = useRouter();
-    const [isLoading, setIsLoading] = useState(false);
-    const saveData = async () => {
-      try {
-        setIsLoading(true);
-        Swal.fire({
-          title: "กำลังส่งคำขอ",
-          text: "กรุณารอสักครู่",
-          icon: "info",
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          allowEnterKey: false,
-          willOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        await UpdateCopyrightService({
-          query: {
-            copyrightId: copyright.data?.id as string,
-          },
-          body: {
-            isComplete: true,
-          },
-        });
-        await copyright.refetch();
-        router.push("/dashboard");
-        Swal.fire({
-          title: "ส่งคำขอสำเร็จ",
-          text: "ระบบกำลังดำเนินการตรวจสอบข้อมูล",
-          icon: "success",
-        });
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-        let result = error as ErrorMessages;
-        Swal.fire({
-          title: result.error ? result.error : "เกิดข้อผิดพลาด",
-          text: result.message.toString(),
-          footer: result.statusCode
-            ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
-            : "",
-          icon: "error",
-        });
-      }
-    };
-    useImperativeHandle(ref, () => ({
-      saveData,
-    }));
-    return (
-      <div className="flex flex-col gap-5">
-        <NrruCopyrightForm1 user={user} copyright={copyright} />
-        <NrruCopyrightForm2 copyright={copyright} />
-        <NrruCopyrightForm3 copyright={copyright} />
-        <NrruCopyrightForm4 copyright={copyright} />
-        {copyright.data?.isComplete === true && (
-          <div
-            className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-green-500 px-3 py-2
+const NrruCopyrightForm5 = forwardRef(function FormCopyright(
+  { copyright, user }: NrruCopyrightForm5Props,
+  ref,
+) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const saveData = async () => {
+    try {
+      setIsLoading(true);
+      Swal.fire({
+        title: "กำลังส่งคำขอ",
+        text: "กรุณารอสักครู่",
+        icon: "info",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      await UpdateCopyrightService({
+        query: {
+          copyrightId: copyright.data?.id as string,
+        },
+        body: {
+          isComplete: true,
+        },
+      });
+      await copyright.refetch();
+      router.push("/dashboard");
+      Swal.fire({
+        title: "ส่งคำขอสำเร็จ",
+        text: "ระบบกำลังดำเนินการตรวจสอบข้อมูล",
+        icon: "success",
+      });
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      let result = error as ErrorMessages;
+      Swal.fire({
+        title: result.error ? result.error : "เกิดข้อผิดพลาด",
+        text: result.message.toString(),
+        footer: result.statusCode
+          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
+          : "",
+        icon: "error",
+      });
+    }
+  };
+  useImperativeHandle(ref, () => ({
+    saveData,
+  }));
+  return (
+    <div className="flex flex-col gap-5">
+      <NrruCopyrightForm1 user={user} copyright={copyright} />
+      <NrruCopyrightForm2 copyright={copyright} />
+      <NrruCopyrightForm3 copyright={copyright} />
+      <NrruCopyrightForm4 copyright={copyright} />
+      {copyright.data?.isComplete === true && (
+        <div
+          className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-green-500 px-3 py-2
        font-semibold text-white  drop-shadow-lg "
-          >
-            คำขอของคุณได้รับการส่งเรียบร้อยแล้ว
-          </div>
-        )}
-      </div>
-    );
-  },
-);
+        >
+          คำขอของคุณได้รับการส่งเรียบร้อยแล้ว
+        </div>
+      )}
+    </div>
+  );
+});
 
 export default NrruCopyrightForm5;

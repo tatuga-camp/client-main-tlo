@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, forwardRef, useEffect, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -30,6 +30,7 @@ import {
   PublicType,
   ResearchOwnershipSubmission,
   ResearchType,
+  SearchResults,
   Websites,
   agreementTitles,
   fundingLists,
@@ -61,12 +62,19 @@ import {
   CreateFileWorkInventionPatentService,
   DeleteFileWorkInventionPatentService,
 } from "../../../../services/invention-patent/work-invention/file-work-invention";
+import {
+  handleChangeToBuddhistYear,
+  handleChangeToChristianYear,
+} from "../../../../utilities/date";
 
 type InventSection2Props = {
   invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
 };
 
-const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
+const NrruInventionForm2 = forwardRef(function FromInvention(
+  { invention }: InventSection2Props,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -74,6 +82,8 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
     open: false,
     action: <></>,
   });
+  const formRef = React.useRef<HTMLFormElement>(null);
+  const searchWorkRef = React.useRef<HTMLDivElement>(null);
   const [workData, setWorkData] = useState<{
     thaiName?: string;
     englishName?: string;
@@ -97,7 +107,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
     keywords?: string;
     website?: string[];
     otherWebsite?: string;
-    searchResult?: string;
+    searchResult?: SearchResults;
     isRequest?: string;
     requestNumber?: string;
     requestDate?: string;
@@ -125,25 +135,43 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
           },
         ) ?? []),
       ],
-      beginWorkAt: invention.data?.workInfoOnInventionPatent.beginWorkAt,
-      finishWorkAt: invention.data?.workInfoOnInventionPatent.finishWorkAt,
+      beginWorkAt: handleChangeToBuddhistYear(
+        new Date(
+          invention.data?.workInfoOnInventionPatent.beginWorkAt as string,
+        ),
+      ),
+
+      finishWorkAt: handleChangeToBuddhistYear(
+        new Date(
+          invention.data?.workInfoOnInventionPatent.finishWorkAt as string,
+        ),
+      ),
       benefit: invention.data?.workInfoOnInventionPatent.benefit,
       otherBenefit: invention.data?.workInfoOnInventionPatent.otherBenefit,
 
       agreementTitle: invention.data?.workInfoOnInventionPatent.agreementTitle,
       agreementInstitution:
         invention.data?.workInfoOnInventionPatent.agreementInstitution,
-      agreementYear: invention.data?.workInfoOnInventionPatent.agreementYear,
+      agreementYear: handleChangeToBuddhistYear(
+        new Date(
+          invention.data?.workInfoOnInventionPatent.agreementYear as string,
+        ),
+      ),
       otherAgreement: invention.data?.workInfoOnInventionPatent.otherAgreement,
       researchResult: invention.data?.workInfoOnInventionPatent.researchResult,
       keywords: invention.data?.workInfoOnInventionPatent.keywords,
       website: invention.data?.workInfoOnInventionPatent.website,
+      otherWebsite: invention.data?.workInfoOnInventionPatent.otherWebsite,
       searchResult: invention.data?.workInfoOnInventionPatent.searchResult,
       isRequest: invention.data?.workInfoOnInventionPatent.requestNumber
         ? "เคย"
         : "ไม่เคย",
       requestNumber: invention.data?.workInfoOnInventionPatent.requestNumber,
-      requestDate: invention.data?.workInfoOnInventionPatent.requestDate,
+      requestDate: handleChangeToBuddhistYear(
+        new Date(
+          invention.data?.workInfoOnInventionPatent.requestDate as string,
+        ),
+      ),
       requestCountry: invention.data?.workInfoOnInventionPatent.requestCountry,
       publicType: invention.data?.workInfoOnInventionPatent.publicType,
       otherPublicType:
@@ -157,9 +185,34 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
     };
   });
 
-  const handleUpdateWorkInvention = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+
+      formRef.current?.requestSubmit();
+
+      if (
+        workData.searchResult === "เหมือนหรือคล้ายกับงานที่ปรากฏอยู่ก่อนแล้ว" &&
+        !invention.data?.workInfoOnInventionPatent.researchOwnershipSubmission
+      ) {
+        searchWorkRef.current?.scrollIntoView({});
+        throw new Error(
+          "กรุณาเพิ่มข้อมูล 7.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น หรืองานที่ปรากฏอยู่ก่อน",
+        );
+      }
       setSnackBarData(() => {
         return {
           open: true,
@@ -200,20 +253,28 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
           thaiName: workData?.thaiName,
           englishName: workData?.englishName,
           type: workData?.type,
-          beginWorkAt: workData?.beginWorkAt,
-          finishWorkAt: workData?.finishWorkAt,
+          beginWorkAt: handleChangeToChristianYear(
+            new Date(workData?.beginWorkAt as string),
+          ),
+          finishWorkAt: handleChangeToChristianYear(
+            new Date(workData?.finishWorkAt as string),
+          ),
           benefit: workData?.benefit,
           otherBenefit: workData?.otherBenefit,
-
           agreementTitle: workData?.agreementTitle,
           agreementInstitution: workData?.agreementInstitution,
-          agreementYear: workData?.agreementYear,
+          agreementYear: handleChangeToChristianYear(
+            new Date(workData?.agreementYear as string),
+          ),
           researchResult: workData?.researchResult,
           website: workData?.website,
+          otherWebsite: workData?.otherWebsite,
           keywords: workData?.keywords,
           searchResult: workData?.searchResult,
           requestNumber: workData?.requestNumber,
-          requestDate: workData?.requestDate,
+          requestDate: handleChangeToChristianYear(
+            new Date(workData?.requestDate as string),
+          ),
           requestCountry: workData?.requestCountry,
           publicType: workData?.publicType,
           otherPublicType: workData?.otherPublicType,
@@ -337,11 +398,14 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
     }
   };
 
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
+
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       <Form
-        aria-label="form"
-        onSubmit={handleUpdateWorkInvention}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-8 lg:mx-5 lg:my-10 "
       >
         {/* ข้อ 1*/}
@@ -469,6 +533,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                       name: "beginWorkAt",
                     });
                   }}
+                  yearRange="2560:2580"
                   required
                   locale="th"
                   view="year"
@@ -484,6 +549,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
               </Label>
               <div className="w-28 rounded-lg bg-slate-300 p-1 lg:w-40">
                 <Calendar
+                  yearRange="2560:2580"
                   value={
                     workData?.finishWorkAt
                       ? new Date(workData.finishWorkAt)
@@ -637,13 +703,13 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
             >
               <Input
                 disabled={workData?.agreementTitle === "ไม่มี"}
-                aria-label="ระบุชื่อหน่วยงาน"
+                aria-label="ระบุชื่อหน่วยงาน  ชื่อข้อตกลงหรือสัญญา"
                 type="text"
                 name="agreementInstitution"
                 value={workData?.agreementInstitution}
                 onChange={handleChangeWorkData}
                 className=" w-60 rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem]  lg:p-2  lg:pl-4 lg:text-base"
-                placeholder="ระบุชื่อหน่วยงาน"
+                placeholder="ระบุชื่อหน่วยงาน  ชื่อข้อตกลงหรือสัญญา"
               />
               <div className="w-28 rounded-lg bg-slate-300 p-1 text-xs lg:w-40">
                 <Calendar
@@ -661,6 +727,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                   }}
                   required
                   locale="th"
+                  yearRange="2560:2580"
                   view="year"
                   placeholder="ปีที่ได้ลงนาม"
                   dateFormat="yy"
@@ -700,7 +767,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                     });
                   }}
                   options={researchTypes}
-                  placeholder="เลือกประเภทแหล่งทุน"
+                  placeholder="เลือกประเภทผลการทดสอบหรือทดลอง"
                   className="lg:w-14rem w-full"
                 />
               </div>
@@ -799,9 +866,9 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                 <FieldError className="text-xs text-red-700" />
               </TextField>
             </section>
-            <RadioGroup
-              // value={workData?.website}
-              onChange={(e) => handleChangeRaio({ e, name: "website" })}
+            <CheckboxGroup
+              value={workData?.website}
+              onChange={(e) => handleChangeCheckbox({ e, name: "website" })}
               isRequired
               className="flex w-full flex-col  gap-3 lg:pl-10"
             >
@@ -812,7 +879,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
               <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] lg:grid-cols-2 lg:gap-3 lg:pl-0 lg:text-base">
                 {websites.map((menu, index) => {
                   return (
-                    <Radio
+                    <Checkbox
                       key={index}
                       className={({ isPressed, isSelected }) =>
                         isSelected ? "" : ""
@@ -823,30 +890,30 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                         <div className="flex items-center justify-start gap-2 ">
                           <div className=" text-3xl">
                             {isSelected ? (
-                              <MdOutlineRadioButtonChecked />
+                              <IoIosCheckbox />
                             ) : (
-                              <MdOutlineRadioButtonUnchecked />
+                              <MdCheckBoxOutlineBlank />
                             )}
                           </div>
                           <span className="font-medium">{menu.title}</span>
                         </div>
                       )}
-                    </Radio>
+                    </Checkbox>
                   );
                 })}
                 <TextField className={"flex items-center justify-center gap-2"}>
                   <Label className="font-semibold">อื่นๆ</Label>
                   <Input
-                    value={workData?.website}
+                    value={workData?.otherWebsite}
                     onChange={handleChangeWorkData}
-                    name="website"
+                    name="otherWebsite"
                     type="text"
                     className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                     placeholder="โปรดระบุ"
                   />
                 </TextField>
               </div>
-            </RadioGroup>
+            </CheckboxGroup>
             <section className="flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:pl-10">
               <p className="font-semibold lg:min-w-52">
                 7.3 ผลของการสืบค้นพบว่า
@@ -865,7 +932,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                     }}
                     required
                     options={searchResults}
-                    placeholder="เลือกประเภทแหล่งทุน"
+                    placeholder="ระบุผลการสืบค้น"
                     className="lg:w-14rem w-full"
                   />
                 </div>
@@ -876,7 +943,14 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                 )}
               </div>
             </section>
-            <SearchWorkInvention number={7} invention={invention} />
+            {workData.searchResult ===
+              "เหมือนหรือคล้ายกับงานที่ปรากฏอยู่ก่อนแล้ว" && (
+              <SearchWorkInvention
+                searchWorkRef={searchWorkRef}
+                number={7}
+                invention={invention}
+              />
+            )}
           </div>
         </section>
 
@@ -964,6 +1038,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
                     }}
                     required
                     locale="th"
+                    yearRange="2560:2580"
                     dateFormat="dd/mm/yy"
                     placeholder="dd/mm/yyyy"
                   />
@@ -1004,7 +1079,7 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
         </RadioGroup>
 
         {/* ข้อ 9*/}
-        <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
+        <section className="flex  flex-col items-start justify-center gap-2 lg:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={9} />
             <p className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
@@ -1013,33 +1088,55 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
           </section>
 
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-col lg:gap-5 lg:pl-0 lg:text-base">
-            <section className=" flex w-full flex-col gap-5">
-              <label>เลือกรูปแบบการเผยแพร่</label>
-              <div className="flex flex-col gap-1">
-                <div className=" h-12 w-56 rounded-lg bg-slate-300 p-1 lg:w-72">
-                  <Dropdown
-                    value={workData?.publicType}
-                    options={publicType}
-                    onChange={(e) => {
-                      setWorkData((prev) => {
-                        return {
-                          ...prev,
-                          publicType: e.value,
-                        };
-                      });
-                    }}
-                    required
-                    placeholder="การเผยแพร่ผลงานแล้วในรูปแบบ"
-                    className="lg:w-14rem h-10 w-full"
-                  />
-                </div>
-                {!workData.publicType && (
-                  <span className="text-xs text-red-700">
-                    Please fill out this field.
-                  </span>
-                )}
+            <CheckboxGroup
+              value={workData?.publicType}
+              onChange={(e) => {
+                handleChangeCheckbox({ e, name: "publicType" });
+              }}
+              className=" flex w-full flex-col gap-5"
+            >
+              <label>เลือกรูปแบบการเผยแพร่ (ตอบได้มากกว่า 1 ข้อ)</label>
+              <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] lg:gap-3 lg:pl-0 lg:text-base lg:xl:grid-cols-3 2xl:grid-cols-4">
+                {/* row1 */}
+                {publicType.map((menu, index) => {
+                  return (
+                    <Checkbox
+                      key={index}
+                      className={({ isPressed, isSelected }) =>
+                        isSelected ? "" : ""
+                      }
+                      value={menu}
+                    >
+                      {({ isSelected }) => (
+                        <div className="flex items-center justify-start gap-2 ">
+                          <div className=" text-3xl">
+                            {isSelected ? (
+                              <IoIosCheckbox />
+                            ) : (
+                              <MdCheckBoxOutlineBlank />
+                            )}
+                          </div>
+                          <span className="font-medium">{menu}</span>
+                        </div>
+                      )}
+                    </Checkbox>
+                  );
+                })}
               </div>
-            </section>
+            </CheckboxGroup>
+            <TextField className={"ml-3 flex items-center"}>
+              <Label className="min-w-28  text-[var(--primary-blue)] lg:min-w-24">
+                ระบุุอื่นๆ :
+              </Label>
+              <Input
+                value={workData?.otherPublicType}
+                onChange={handleChangeWorkData}
+                name="otherPublicType"
+                type="text"
+                className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
+                placeholder="ระบุุอื่นๆ"
+              />
+            </TextField>
           </div>
           <FileTrigger
             allowsMultiple
@@ -1071,9 +1168,9 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
             }}
           >
             <Button
-              className={`flex items-center  justify-center gap-3 rounded-md 
-             bg-[#BED6FF] p-2 px-5 font-semibold  duration-300
-           hover:bg-[#91B2EB] lg:gap-5 
+              className={`ml-5 flex  w-64 items-center justify-center gap-3 rounded-md
+             bg-[#BED6FF] p-2 px-5 text-xs  font-semibold duration-300 hover:bg-[#91B2EB] lg:ml-0 lg:w-max
+            lg:gap-5 lg:text-base 
              `}
             >
               <span className="text-3xl lg:text-base">
@@ -1199,6 +1296,6 @@ const NrruInventionForm2 = ({ invention }: InventSection2Props) => {
       </Form>
     </div>
   );
-};
+});
 
 export default NrruInventionForm2;

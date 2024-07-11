@@ -415,7 +415,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                   className={({ isPressed, isSelected }) =>
                     isSelected ? "" : ""
                   }
-                  value={item.title}
+                  value={item}
                 >
                   {({ isSelected }) => (
                     <div className="flex items-center justify-start gap-2 ">
@@ -426,7 +426,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                           <MdOutlineRadioButtonUnchecked />
                         )}
                       </div>
-                      <span className="font-medium">{item.title}</span>
+                      <span className="font-medium">{item}</span>
                     </div>
                   )}
                 </Radio>
@@ -700,7 +700,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                     className={({ isPressed, isSelected }) =>
                       isSelected ? "" : ""
                     }
-                    value={item.title}
+                    value={item}
                   >
                     {({ isSelected }) => (
                       <div className="flex items-center justify-start gap-2 ">
@@ -711,7 +711,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                             <MdOutlineRadioButtonUnchecked />
                           )}
                         </div>
-                        <span className="font-medium">{item.title}</span>
+                        <span className="font-medium">{item}</span>
                       </div>
                     )}
                   </Radio>

@@ -3,6 +3,7 @@ import {
   PublicType,
   ResearchOwnershipSubmission,
   ResearchType,
+  SearchResults,
   Websites,
 } from "../data/invention";
 import {
@@ -100,7 +101,7 @@ export type WorkInfoOnDesignPatent = {
   keywords?: string;
   website?: string[];
   otherWebsite?: string;
-  searchResult?: string;
+  searchResult?: SearchResults;
   isRequest?: string;
   requestNumber?: string;
   requestDate?: string;

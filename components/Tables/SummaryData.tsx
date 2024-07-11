@@ -107,7 +107,6 @@ const SummaryData = () => {
     });
   }, [copyright.data, design.data, invention.data, trademark.data]);
 
-  console.log(requestYear);
   return (
     <div className="mb-5 flex w-[80%] flex-col items-center gap-5">
       <div className="mt-16 w-full bg-[var(--secondary-yellow)] p-2 text-center text-xl font-semibold text-[var(--primary-blue)] ">
@@ -147,7 +146,7 @@ const SummaryData = () => {
         </div>
       </section>
 
-      <div className="mt-10 flex w-full flex-col items-center gap-4 md:h-[27rem] md:flex-row">
+      <div className="mt-10 flex w-full flex-col items-center gap-4  md:flex-row">
         <section className="flex flex-row gap-4 md:flex-col">
           <div className="flex h-[9rem] w-[9rem] flex-col items-center justify-center gap-2 rounded-lg bg-[var(--primary-blue)] md:h-[13rem] md:w-[13rem]">
             {trademark.isLoading ||
@@ -175,8 +174,8 @@ const SummaryData = () => {
           </div>
         </section>
         <div
-          className=" w-full rounded-md border-[1px] border-solid border-slate-200
-         bg-white p-5 md:h-full"
+          className=" h-full w-full rounded-md border-[1px] border-solid
+         border-slate-200 bg-white p-5"
         >
           <h1 className="my-5 ml-5 text-base font-semibold text-[var(--primary-blue)] md:text-xl">
             ประเภทคำขอ

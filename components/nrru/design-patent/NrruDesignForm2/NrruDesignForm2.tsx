@@ -70,7 +70,10 @@ import { outstandingOptions } from "../../../../data/design";
 type NrruDesignForm2Props = {
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
-const NrruDesignForm2 = forwardRef(({ design }: NrruDesignForm2Props, ref) => {
+const NrruDesignForm2 = forwardRef(function FormDesign(
+  { design }: NrruDesignForm2Props,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -1240,7 +1243,11 @@ const NrruDesignForm2 = forwardRef(({ design }: NrruDesignForm2Props, ref) => {
               >
                 {outstandingOptions.map((item, index) => {
                   return (
-                    <Radio className="flex items-center " value={item}>
+                    <Radio
+                      key={index}
+                      className="flex items-center "
+                      value={item}
+                    >
                       {({ isSelected }) => (
                         <div className=" flex items-center justify-center gap-2">
                           <div className=" text-2xl">

@@ -41,7 +41,10 @@ import { InputNumber } from "primereact/inputnumber";
 type NrruDesignForm3Props = {
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
-const NrruDesignForm3 = forwardRef(({ design }: NrruDesignForm3Props, ref) => {
+const NrruDesignForm3 = forwardRef(function FormDesign(
+  { design }: NrruDesignForm3Props,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;

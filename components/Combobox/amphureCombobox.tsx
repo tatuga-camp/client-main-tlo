@@ -36,8 +36,6 @@ function AmphureCombobox({
       }),
   });
 
-  console.log(selectProvinceId);
-
   if (amphures.isFetching)
     return (
       <div className="flex h-10 w-full animate-pulse items-center justify-center  rounded-lg bg-gray-400 text-white">

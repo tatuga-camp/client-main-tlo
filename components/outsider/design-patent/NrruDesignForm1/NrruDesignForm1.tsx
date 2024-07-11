@@ -1,5 +1,5 @@
 import NumberTitle from "@/components/Number";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import {
   Button,
   FieldError,
@@ -46,7 +46,10 @@ type NrruDesignForm1Props = {
   user: User;
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
-const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
+const NrruDesignForm1 = forwardRef(function FromDesign(
+  { user, design }: NrruDesignForm1Props,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -54,6 +57,8 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
     open: false,
     action: <></>,
   });
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [ownerData, setOwnerData] = useState<OwnerPartnerType>();
   const [partnerData, setPartnerData] = useState<
     {
@@ -300,9 +305,23 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
     }
   };
 
-  const handleUpdatePartners = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+      formRef.current?.requestSubmit();
       setSnackBarData(() => {
         return {
           open: true,
@@ -410,11 +429,13 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
       });
     }
   };
-
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       <Form
-        onSubmit={handleUpdatePartners}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-5 lg:mx-5 lg:my-10 "
       >
         <OwnerPartner
@@ -429,9 +450,9 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
               key={partner.id}
               className={`flex flex-col gap-5 rounded-lg p-5 ring-1 ring-gray-400  `}
             >
-              <h1 className="text-lg font-semibold underline underline-offset-2">
-                ผู้ประดิษฐ์
-              </h1>
+              <h2 className="text-lg font-semibold text-[var(--primary-blue)]">
+                ผู้ออกแบบคนที่ {index + 1}
+              </h2>
               <section className="flex items-start justify-center gap-3 lg:items-center lg:gap-5">
                 <NumberTitle number={1} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
@@ -450,18 +471,16 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
                         options={TitleNameList}
                         onChange={(e) => {
                           setPartnerData((prev) => {
-                            const newState = prev?.map((prevPartner) => {
+                            return prev?.map((prevPartner) => {
                               if (prevPartner.id === partner.id) {
                                 return {
                                   ...partner,
                                   title: e.value,
                                 };
+                              } else {
+                                return prevPartner;
                               }
-
-                              return partner;
                             });
-
-                            return newState;
                           });
                         }}
                         required
@@ -842,6 +861,6 @@ const NrruDesignForm1 = ({ user, design }: NrruDesignForm1Props) => {
       </Form>
     </div>
   );
-};
+});
 
 export default NrruDesignForm1;

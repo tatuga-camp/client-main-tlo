@@ -1,8 +1,10 @@
 import {
   FundingLists,
+  PartnerStatus,
   PublicType,
   ResearchOwnershipSubmission,
   ResearchType,
+  SearchResults,
   Websites,
 } from "../data/invention";
 import {
@@ -19,7 +21,7 @@ export type InventionPatent = {
   id: string;
   createAt: string;
   updateAt: string;
-  personStatus?: string;
+  personStatus?: PartnerStatus;
   title?: string;
   fullName?: string;
   firstName?: string;
@@ -102,7 +104,7 @@ export type WorkInfoOnInventionPatent = {
   keywords: string;
   website: string[];
   otherWebsite: string;
-  searchResult: string;
+  searchResult: SearchResults;
   requestNumber: string;
   requestDate: string;
   requestCountry: string;

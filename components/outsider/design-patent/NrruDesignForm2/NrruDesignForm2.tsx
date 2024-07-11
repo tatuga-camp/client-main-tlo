@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -32,6 +32,7 @@ import {
   PublicType,
   ResearchOwnershipSubmission,
   ResearchType,
+  SearchResults,
   Websites,
   agreementTitles,
   fundingLists,
@@ -56,11 +57,19 @@ import { DeleteFileWorkInventionPatentService } from "../../../../services/inven
 import { Dropdown } from "primereact/dropdown";
 import FileOnWorkDesign from "./FileOnWorkDesign";
 import { menuDesignForm2 } from "../../../../data/menu";
+import {
+  handleChangeToBuddhistYear,
+  handleChangeToChristianYear,
+} from "../../../../utilities/date";
+import { outstandingOptions } from "../../../../data/design";
 
 type NrruDesignForm2Props = {
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
-const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
+const NrruDesignForm2 = forwardRef(function FromDesign(
+  { design }: NrruDesignForm2Props,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -68,6 +77,9 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
     open: false,
     action: <></>,
   });
+  const searchWorkRef = React.useRef<HTMLElement>(null);
+  const formRef = React.useRef<HTMLFormElement>(null);
+
   const [workData, setWorkData] = useState<{
     thaiName?: string;
     englishName?: string;
@@ -82,20 +94,20 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
     finishWorkAt?: string;
     benefit?: string[];
     otherBenefit?: string;
-
     agreementTitle?: string;
     agreementInstitution?: string;
     agreementYear?: string;
     otherAgreement?: string;
     researchResult?: ResearchType;
     keywords?: string;
-    website?: Websites;
-    searchResult?: string;
+    website?: string[];
+    otherWebsite?: string;
+    searchResult?: SearchResults;
     isRequest?: string;
     requestNumber?: string;
     requestDate?: string;
     requestCountry?: string;
-    publicType?: PublicType;
+    publicType?: string[];
     otherPublicType?: string;
     publicDetail?: string;
     outstandingDetail?: string;
@@ -115,25 +127,34 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
           };
         }) ?? []),
       ],
-      beginWorkAt: design.data?.workInfoOnDesignPatent.beginWorkAt,
-      finishWorkAt: design.data?.workInfoOnDesignPatent.finishWorkAt,
+      beginWorkAt: handleChangeToBuddhistYear(
+        new Date(design.data?.workInfoOnDesignPatent.beginWorkAt as string),
+      ),
+      finishWorkAt: handleChangeToBuddhistYear(
+        new Date(design.data?.workInfoOnDesignPatent.finishWorkAt as string),
+      ),
       benefit: design.data?.workInfoOnDesignPatent.benefit,
       otherBenefit: design.data?.workInfoOnDesignPatent.otherBenefit,
 
       agreementTitle: design.data?.workInfoOnDesignPatent.agreementTitle,
       agreementInstitution:
         design.data?.workInfoOnDesignPatent.agreementInstitution,
-      agreementYear: design.data?.workInfoOnDesignPatent.agreementYear,
+      agreementYear: handleChangeToBuddhistYear(
+        new Date(design.data?.workInfoOnDesignPatent.agreementYear as string),
+      ),
       otherAgreement: design.data?.workInfoOnDesignPatent.otherAgreement,
       researchResult: design.data?.workInfoOnDesignPatent.researchResult,
       keywords: design.data?.workInfoOnDesignPatent.keywords,
       website: design.data?.workInfoOnDesignPatent.website,
+      otherWebsite: design.data?.workInfoOnDesignPatent.otherWebsite,
       searchResult: design.data?.workInfoOnDesignPatent.searchResult,
       isRequest: design.data?.workInfoOnDesignPatent.requestNumber
         ? "เคย"
         : "ไม่เคย",
       requestNumber: design.data?.workInfoOnDesignPatent.requestNumber,
-      requestDate: design.data?.workInfoOnDesignPatent.requestDate,
+      requestDate: handleChangeToBuddhistYear(
+        new Date(design.data?.workInfoOnDesignPatent.requestDate as string),
+      ),
       requestCountry: design.data?.workInfoOnDesignPatent.requestCountry,
       publicType: design.data?.workInfoOnDesignPatent.publicType,
       otherPublicType: design.data?.workInfoOnDesignPatent.otherPublicType,
@@ -144,15 +165,41 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
     };
   });
 
-  const handleUpdateWorkDesign = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+
+      formRef.current?.requestSubmit();
+
+      if (
+        workData.searchResult === "เหมือนหรือคล้ายกับงานที่ปรากฏอยู่ก่อนแล้ว" &&
+        !design.data?.workInfoOnDesignPatent.requestNumber
+      ) {
+        searchWorkRef.current?.scrollIntoView({});
+        throw new Error(
+          "กรุณาเพิ่มข้อมูล 7.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น หรืองานที่ปรากฏอยู่ก่อน",
+        );
+      }
       setSnackBarData(() => {
         return {
           open: true,
           action: <SnackbarLoading />,
         };
       });
+
       const filterFiles = workData.files?.filter((file) => !file.id);
       if (filterFiles) {
         for (const file of filterFiles) {
@@ -186,19 +233,28 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
         body: {
           thaiName: workData?.thaiName,
           englishName: workData?.englishName,
-          beginWorkAt: workData?.beginWorkAt,
-          finishWorkAt: workData?.finishWorkAt,
+          beginWorkAt: handleChangeToChristianYear(
+            new Date(workData?.beginWorkAt as string),
+          ),
+          finishWorkAt: handleChangeToChristianYear(
+            new Date(workData?.finishWorkAt as string),
+          ),
           benefit: workData?.benefit,
           otherBenefit: workData?.otherBenefit,
           agreementTitle: workData?.agreementTitle,
           agreementInstitution: workData?.agreementInstitution,
-          agreementYear: workData?.agreementYear,
+          agreementYear: handleChangeToChristianYear(
+            new Date(workData?.agreementYear as string),
+          ),
           researchResult: workData?.researchResult,
           website: workData?.website,
+          otherWebsite: workData?.otherWebsite,
           keywords: workData?.keywords,
           searchResult: workData?.searchResult,
           requestNumber: workData?.requestNumber,
-          requestDate: workData?.requestDate,
+          requestDate: handleChangeToChristianYear(
+            new Date(workData?.requestDate as string),
+          ),
           requestCountry: workData?.requestCountry,
           publicType: workData?.publicType,
           otherPublicType: workData?.otherPublicType,
@@ -322,10 +378,14 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
     }
   };
 
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
+
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
       <Form
-        onSubmit={handleUpdateWorkDesign}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-8 md:mx-5 md:my-10 "
       >
         {/* ข้อ 1*/}
@@ -333,7 +393,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
           <section className="flex items-center gap-3">
             <Number number={1} />
             <p className="my-2 text-[0.8rem] font-semibold md:min-w-64 md:text-base">
-              ชื่อที่แสดงถึงรออกแบบผลิตภัณฑ์
+              ชื่อที่แสดงถึงการออกแบบผลิตภัณฑ์{" "}
             </p>
           </section>
           <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
@@ -382,6 +442,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                     });
                   }}
                   required
+                  yearRange="2560:2580"
                   locale="th"
                   view="year"
                   placeholder="ระบุปี"
@@ -410,6 +471,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   required
                   locale="th"
                   view="year"
+                  yearRange="2560:2580"
                   placeholder="ระบุปี"
                   dateFormat="yy"
                 />
@@ -546,13 +608,13 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
             >
               <Input
                 disabled={workData?.agreementTitle === "ไม่มี"}
-                aria-label="ระบุชื่อหน่วยงาน"
+                aria-label="ระบุชื่อหน่วยงาน  ชื่อข้อตกลงหรือสัญญา"
                 type="text"
                 name="agreementInstitution"
                 value={workData?.agreementInstitution}
                 onChange={handleChangeWorkData}
                 className=" w-60 rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem]  md:p-2  md:pl-4 md:text-base"
-                placeholder="ระบุชื่อหน่วยงาน"
+                placeholder="ระบุชื่อหน่วยงาน  ชื่อข้อตกลงหรือสัญญา"
               />
               <div className=" w-28 rounded-lg bg-slate-300 p-1 md:w-40">
                 <Calendar
@@ -570,6 +632,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                   }}
                   required
                   locale="th"
+                  yearRange="2560:2580"
                   view="year"
                   placeholder="ปีที่ได้ลงนาม"
                   dateFormat="yy"
@@ -609,18 +672,20 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
               <p className="font-semibold md:min-w-52">
                 5.2 เว็บไซต์/ฐานข้อมูลที่ใช้ในการสืบค้น
               </p>
-              <RadioGroup
+              <CheckboxGroup
                 value={workData?.website}
-                onChange={(e) => handleChangeRaio({ e, name: "website" })}
+                onChange={(e) => handleChangeCheckbox({ e, name: "website" })}
                 isRequired
-                className="flex flex-col items-start justify-center gap-2 md:gap-5 "
+                className="flex w-full flex-col  gap-3 lg:pl-10"
               >
-                <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:grid-cols-2 md:gap-3 md:pl-0 md:text-base">
-                  {/* row1 */}
-
+                <Label className="flex items-center  gap-2 font-semibold lg:min-w-52">
+                  5.3 เว็บไซต์/ฐานข้อมูลที่ใช้ในการสืบค้น
+                  <FieldError className="text-xs font-normal text-red-700" />
+                </Label>
+                <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] lg:grid-cols-2 lg:gap-3 lg:pl-0 lg:text-base">
                   {websites.map((menu, index) => {
                     return (
-                      <Radio
+                      <Checkbox
                         key={index}
                         className={({ isPressed, isSelected }) =>
                           isSelected ? "" : ""
@@ -631,40 +696,37 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                           <div className="flex items-center justify-start gap-2 ">
                             <div className=" text-3xl">
                               {isSelected ? (
-                                <MdOutlineRadioButtonChecked />
+                                <IoIosCheckbox />
                               ) : (
-                                <MdOutlineRadioButtonUnchecked />
+                                <MdCheckBoxOutlineBlank />
                               )}
                             </div>
                             <span className="font-medium">{menu.title}</span>
                           </div>
                         )}
-                      </Radio>
+                      </Checkbox>
                     );
                   })}
-                </div>
-                <section className="flex w-full flex-col gap-2 px-5 md:flex-row md:px-0">
-                  <div className="flex items-center gap-2">
-                    <p className="text-[0.8rem] font-medium md:text-base">
-                      อื่นๆ (วารสาร แหล่งข้อมูลอื่น)
-                    </p>
-                  </div>
-
-                  <TextField className={"ml-3"}>
+                  <TextField
+                    className={"flex items-center justify-center gap-2"}
+                  >
+                    <Label className="font-semibold">อื่นๆ</Label>
                     <Input
-                      value={workData?.website}
+                      value={workData?.otherWebsite}
                       onChange={handleChangeWorkData}
-                      name="website"
+                      name="otherWebsite"
                       type="text"
-                      className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
+                      className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                       placeholder="โปรดระบุ"
                     />
-                    <FieldError className="text-xs text-red-700" />
                   </TextField>
-                </section>
-              </RadioGroup>
+                </div>
+              </CheckboxGroup>
             </section>
-            <section className="flex w-full flex-col gap-3 md:flex-row md:items-center md:pl-10">
+            <section
+              ref={searchWorkRef}
+              className="flex w-full flex-col gap-3 md:flex-row md:items-center md:pl-10"
+            >
               <p className="font-semibold md:min-w-52">
                 5.3 ผลของการสืบค้นพบว่า
               </p>
@@ -693,7 +755,10 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                 )}
               </div>
             </section>
-            <SearchWorkDesign design={design} />
+            {workData.searchResult ===
+              "เหมือนหรือคล้ายกับงานที่ปรากฏอยู่ก่อนแล้ว" && (
+              <SearchWorkDesign design={design} />
+            )}
           </div>
         </section>
 
@@ -781,6 +846,7 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                     }}
                     required
                     locale="th"
+                    yearRange="2560:2580"
                     dateFormat="dd/mm/yy"
                     placeholder="dd/mm/yyyy"
                   />
@@ -821,57 +887,64 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
         </RadioGroup>
 
         {/* ข้อ 7*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        <section className="flex  flex-col items-start justify-center gap-2 lg:gap-5 ">
           <section className="flex items-center gap-3">
             <Number number={7} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
+            <p className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
               การเปิดเผยสาระสำคัญของการประดิษฐ์/การเผยแพร่ผลงาน
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-col md:gap-5 md:pl-0 md:text-base">
-            <section className=" flex w-72 flex-col gap-5 lg:w-96">
-              <label>เลือกรูปแบบการเผยแพร่</label>
-              <div className="flex flex-col gap-1">
-                <div className=" h-12 w-56 rounded-lg bg-slate-300 p-1 md:w-60">
-                  <Dropdown
-                    value={workData?.publicType}
-                    options={publicType}
-                    required
-                    onChange={(e) => {
-                      setWorkData((prev) => {
-                        return {
-                          ...prev,
-                          publicType: e.value,
-                        };
-                      });
-                    }}
-                    placeholder="การเผยแพร่ผลงานแล้วในรูปแบบ"
-                    className="md:w-14rem h-10 w-full"
-                  />
-                </div>
-                {!workData.publicType && (
-                  <span className="text-xs text-red-700">
-                    Please fill out this field.
-                  </span>
-                )}
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-col lg:gap-5 lg:pl-0 lg:text-base">
+            <CheckboxGroup
+              value={workData?.publicType}
+              onChange={(e) => {
+                handleChangeCheckbox({ e, name: "publicType" });
+              }}
+              className=" flex w-full flex-col gap-5"
+            >
+              <label>เลือกรูปแบบการเผยแพร่ (ตอบได้มากกว่า 1 ข้อ)</label>
+              <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] lg:gap-3 lg:pl-0 lg:text-base lg:xl:grid-cols-3 2xl:grid-cols-4">
+                {/* row1 */}
+                {publicType.map((menu, index) => {
+                  return (
+                    <Checkbox
+                      key={index}
+                      className={({ isPressed, isSelected }) =>
+                        isSelected ? "" : ""
+                      }
+                      value={menu}
+                    >
+                      {({ isSelected }) => (
+                        <div className="flex items-center justify-start gap-2 ">
+                          <div className=" text-3xl">
+                            {isSelected ? (
+                              <IoIosCheckbox />
+                            ) : (
+                              <MdCheckBoxOutlineBlank />
+                            )}
+                          </div>
+                          <span className="font-medium">{menu}</span>
+                        </div>
+                      )}
+                    </Checkbox>
+                  );
+                })}
               </div>
-            </section>
-            {workData?.publicType === "อื่น ๆ (โปรดระบุ)" && (
-              <TextField className={"ml-3 flex items-center"}>
-                <Label className="min-w-28  text-[var(--primary-blue)] md:min-w-24">
-                  ระบุุอื่นๆ :
-                </Label>
-                <Input
-                  value={workData?.otherPublicType}
-                  onChange={handleChangeWorkData}
-                  name="otherPublicType"
-                  type="text"
-                  className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] md:h-10 md:p-2  md:pl-4 md:text-base"
-                  placeholder="ระบุุอื่นๆ"
-                />
-              </TextField>
-            )}
+            </CheckboxGroup>
+            <TextField className={"ml-3 flex items-center"}>
+              <Label className="min-w-28  text-[var(--primary-blue)] lg:min-w-24">
+                ระบุุอื่นๆ :
+              </Label>
+              <Input
+                value={workData?.otherPublicType}
+                onChange={handleChangeWorkData}
+                name="otherPublicType"
+                type="text"
+                className="h-8 w-full rounded-md  bg-slate-300 p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
+                placeholder="ระบุุอื่นๆ"
+              />
+            </TextField>
           </div>
           <FileTrigger
             allowsMultiple
@@ -903,13 +976,12 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
             }}
           >
             <Button
-              isDisabled={workData?.publicType === "ไม่เผยแพร่ผลงาน"}
-              className={`flex items-center  justify-center gap-3 rounded-md 
-             p-2 px-5 font-semibold duration-300  md:gap-5
-             ${workData?.publicType === "ไม่เผยแพร่ผลงาน" ? "bg-gray-400 text-black" : "bg-[#BED6FF] hover:bg-[#91B2EB] "}
+              className={`ml-5 flex  w-64 items-center justify-center gap-3 rounded-md
+             bg-[#BED6FF] p-2 px-5 text-xs  font-semibold duration-300 hover:bg-[#91B2EB] lg:ml-0 lg:w-max
+            lg:gap-5 lg:text-base 
              `}
             >
-              <span className="text-3xl md:text-base">
+              <span className="text-3xl lg:text-base">
                 <FiPlusCircle />
               </span>
 
@@ -929,36 +1001,77 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
                 );
               })}
           </div>
-
-          <FieldError className="text-xs text-red-700" />
-        </section>
-
-        {/* ข้อ 8*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
-          <section className="flex items-center gap-3">
-            <Number number={8} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              ความใหม่ของการออกแบบผลิตภัณฑ์
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
+            <p className={"w-full lg:px-8"}>
+              กรุณาระบุรายละเอียดของการเผยแพร่ผลงาน ได้แก่ ชื่อผลงาน
+              วัน/เดือน/ปีที่เผยแพร่ สถานที่ หรือผู้จัดงาน
+              และ/หรือแนบหนังสือรับรองจากผู้จัดงาน หรือแนบ เอกสารประกอบ
             </p>
-          </section>
-
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
-            <p className={"w-full md:px-8"}>
-              โปรดระบุถึงลักษณะเด่นและอธิบายในรายละเอียดของความใหม่
-              โดยเฉพาะในส่วนที่ได้พัฒนาให้ดีขึ้นกว่าเดิมได้
-              โดยเน้นให้เห็นถึงความ แตกต่างจากแบบผลิตภัณฑ์เดิม
-            </p>
-            <TextField isRequired className={"w-full md:px-8"}>
+            <TextField className={"w-full lg:px-8"}>
               <TextArea
-                required
-                name="outstandingDetail"
-                value={workData.outstandingDetail}
+                value={workData?.publicDetail}
                 onChange={handleChangeWorkData}
-                className="h-40 w-full resize-none rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem]  md:p-2  md:pl-4 md:text-base"
+                name="publicDetail"
+                className="no-re min-h-52   w-full	 resize-none
+                 rounded-md bg-slate-300  p-1 pl-3 text-[0.8rem] lg:h-10 lg:p-2  lg:pl-4 lg:text-base"
                 placeholder="กรอกข้อมูล"
               />
               <FieldError className="text-xs text-red-700" />
             </TextField>
+          </div>
+          <FieldError className="text-xs text-red-700" />
+        </section>
+
+        {/* ข้อ 8*/}
+        <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
+          <section className="flex items-center gap-3">
+            <Number number={8} />
+            <p className="my-2 w-full text-[0.8rem] font-semibold lg:text-base">
+              ความใหม่ของการออกแบบผลิตภัณฑ์
+            </p>
+          </section>
+
+          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem] lg:flex-row lg:gap-5 lg:pl-0 lg:text-base">
+            <p className={"w-full lg:px-8"}>
+              โปรดระบุถึงลักษณะเด่น ความใหม่ของผลิตภัณฑ์
+              หรือสิ่งที่ต้องการขอรับความคุ้มครอง เลือกเพียง 1 ข้อ
+            </p>
+            <RadioGroup
+              value={workData.outstandingDetail}
+              onChange={(e) =>
+                handleChangeRaio({ e, name: "outstandingDetail" })
+              }
+              isRequired
+              className="flex flex-col items-start justify-center gap-2 lg:flex-row  lg:gap-5"
+            >
+              <div
+                className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem]
+               lg:flex-row lg:gap-5 lg:pl-0 lg:text-base"
+              >
+                {outstandingOptions.map((item, index) => {
+                  return (
+                    <Radio
+                      key={index}
+                      className="flex items-center "
+                      value={item}
+                    >
+                      {({ isSelected }) => (
+                        <div className=" flex items-center justify-center gap-2">
+                          <div className=" text-2xl">
+                            {isSelected ? (
+                              <MdOutlineRadioButtonChecked />
+                            ) : (
+                              <MdOutlineRadioButtonUnchecked />
+                            )}
+                          </div>
+                          <span className=" font-semibold">{item}</span>
+                        </div>
+                      )}
+                    </Radio>
+                  );
+                })}
+              </div>
+            </RadioGroup>
           </div>
         </section>
         {/* ข้อ 9*/}
@@ -987,6 +1100,6 @@ const NrruDesignForm2 = ({ design }: NrruDesignForm2Props) => {
       </Form>
     </div>
   );
-};
+});
 
 export default NrruDesignForm2;

@@ -145,7 +145,6 @@ function CompanyInterest({ design }: CompanyInterestProps) {
       });
     }
   };
-  console.log(companyInterestCreate);
   return (
     <section className="flex flex-col items-start justify-center gap-2 lg:gap-5 ">
       <section className="flex items-center gap-3">

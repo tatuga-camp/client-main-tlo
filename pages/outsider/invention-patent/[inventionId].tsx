@@ -1,6 +1,6 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { outsiderInventionSection } from "../../../data/PatentSection";
 
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
@@ -19,17 +19,21 @@ import { useRouter } from "next-nprogress-bar";
 import InventionStatus from "../../../components/Status/InventionStatus";
 import NrruInventionForm1 from "../../../components/outsider/invention-patent/NrruInventionForm1/NrruInventionForm1";
 import NrruInventionForm2 from "../../../components/outsider/invention-patent/NrruInventionForm2/NrruInventionForm2";
-import NrruInventionForm3 from "../../../components/outsider/invention-patent/NrruInventionForm3/NrruInventionForm3";
 import NrruInventionForm4 from "../../../components/outsider/invention-patent/NrruInventionForm4/NrruInventionForm4";
 import NrruInventionForm5 from "../../../components/outsider/invention-patent/NrruInventionForm5";
 import MigrantForm from "../../../components/Forms/migrantForm";
+import { IoIosSave } from "react-icons/io";
 
+type ChildFormRef = {
+  saveData: () => Promise<void>;
+};
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
   const [triggerMigrationForm, setTriggerMigrationForm] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const childRef = useRef<ChildFormRef>(null);
   const invention = useQuery({
     queryKey: ["invention", { inventionId: router.query.inventionId }],
     queryFn: () =>
@@ -64,34 +68,76 @@ const Index = ({ user }: { user: User }) => {
     }
   };
 
+  const handleSaveData = async () => {
+    setIsLoading(true);
+    await childRef.current?.saveData();
+    setIsLoading(false);
+  };
+
   const handleValidateForm = ({ number }: { number: number }) => {
-    let message: string;
-    if (
-      number === 1 &&
-      invention.data?.partnerInfoOnInventionPatents.length === 0
-    ) {
-      throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
-    } else if (
-      number === 2 &&
-      (invention.data?.workInfoOnInventionPatent.isComplete === false ||
-        invention.data?.partnerInfoOnInventionPatents.length === 0)
-    ) {
-      throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
-    } else if (
-      number === 3 &&
-      (invention.data?.workInfoOnInventionPatent.isComplete === false ||
-        invention.data?.partnerInfoOnInventionPatents.length === 0 ||
-        invention.data?.fileOnInventionPatents.length === 0)
-    ) {
-      throw new Error("กรุณาข้อมูลเอกสารแนบคำขอ ให้ครบถ้วน");
-    } else if (
-      number === 4 &&
-      (invention.data?.fileOnInventionPatents.length === 0 ||
-        invention.data?.workInfoOnInventionPatent.isComplete === false ||
-        invention.data?.partnerInfoOnInventionPatents.length === 0 ||
-        invention.data?.isComplete === false)
-    ) {
-      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 4");
+    switch (number) {
+      case 0:
+        break;
+      case 1:
+        if (invention.data?.partnerInfoOnInventionPatents.length === 0) {
+          throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 2:
+        if (
+          invention.data?.workInfoOnInventionPatent.isComplete === false ||
+          invention.data?.partnerInfoOnInventionPatents.length === 0
+        ) {
+          throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 3:
+        if (
+          invention.data?.workInfoOnInventionPatent.isComplete === false ||
+          invention.data?.partnerInfoOnInventionPatents.length === 0 ||
+          invention.data?.fileOnInventionPatents.length === 0 ||
+          (invention.data?.fileOnInventionPatents?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (invention.data?.partnerInfoOnInventionPatents?.length ?? 0) ||
+          (invention.data?.fileOnInventionPatents?.filter(
+            (file) => file.documentType === "REQUEST",
+          )?.length ?? 0) === 0 ||
+          invention.data?.fileOnInventionPatents.filter(
+            (f) => f.documentType === "PERSON",
+          ).length === 0
+        ) {
+          throw new Error("กรุณาข้อมูลเอกสารแนบคำขอ ให้ครบถ้วน");
+        }
+        break;
+
+      case 4:
+        if (
+          invention.data?.fileOnInventionPatents.length === 0 ||
+          invention.data?.workInfoOnInventionPatent.isComplete === false ||
+          invention.data?.partnerInfoOnInventionPatents.length === 0 ||
+          (invention.data?.fileOnInventionPatents?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (invention.data?.partnerInfoOnInventionPatents?.length ?? 0) ||
+          (invention.data?.fileOnInventionPatents?.filter(
+            (file) => file.documentType === "REQUEST",
+          )?.length ?? 0) === 0 ||
+          invention.data?.isComplete === false ||
+          invention.data?.fileOnInventionPatents.filter(
+            (f) => f.documentType === "PERSON",
+          ).length === 0
+        ) {
+          throw new Error(
+            "ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 4",
+          );
+        }
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -305,18 +351,22 @@ const Index = ({ user }: { user: User }) => {
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
-                  <NrruInventionForm1 invention={invention} user={user} />
+                  <NrruInventionForm1
+                    ref={childRef}
+                    invention={invention}
+                    user={user}
+                  />
                 </div>
               )}
               {currentSection == 1 && (
                 <div>
-                  <NrruInventionForm2 invention={invention} />
+                  <NrruInventionForm2 ref={childRef} invention={invention} />
                 </div>
               )}
 
               {currentSection == 2 && (
                 <div>
-                  <NrruInventionForm4 invention={invention} />
+                  <NrruInventionForm4 ref={childRef} invention={invention} />
                 </div>
               )}
               {currentSection == 3 && (
@@ -325,7 +375,11 @@ const Index = ({ user }: { user: User }) => {
                     {" "}
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
-                  <NrruInventionForm5 invention={invention} user={user} />
+                  <NrruInventionForm5
+                    ref={childRef}
+                    invention={invention}
+                    user={user}
+                  />
                 </div>
               )}
               {currentSection === 4 && invention.data && (
@@ -337,25 +391,50 @@ const Index = ({ user }: { user: User }) => {
                 </div>
               )}
             </section>
-            <section className=" my-5 flex items-center justify-center gap-3">
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={previousSection}
-                disabled={currentSection === 0}
-              >
-                ย้อนกลับ
-              </button>
+            {currentSection !== 4 && (
+              <section className=" my-5 flex items-center justify-center gap-3">
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3
+                text-[0.6rem] font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={previousSection}
+                  disabled={currentSection === 0}
+                >
+                  ย้อนกลับ
+                </button>
+                {isLoading ? (
+                  <button
+                    className="flex h-8 animate-pulse items-center justify-center rounded-md
+                   border-2 border-solid border-[var(--primary-blue)] bg-main-color px-3
+                font-semibold text-white transition md:w-52"
+                  >
+                    กำลังบันทึกข้อมูล
+                    <IoIosSave />
+                  </button>
+                ) : (
+                  <button
+                    className="flex h-8 items-center justify-center rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 font-semibold transition 
+                hover:bg-main-color hover:text-white disabled:border-slate-300 disabled:text-slate-300 md:w-52"
+                    onClick={handleSaveData}
+                  >
+                    {currentSection === 3
+                      ? "ยืนยันการส่งข้อมูล"
+                      : "บันทึกข้อมูล"}
+                    <IoIosSave />
+                  </button>
+                )}
 
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={nextSection}
-                disabled={
-                  currentSection === outsiderInventionSection.length - 1
-                }
-              >
-                ถัดไป
-              </button>
-            </section>
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 text-[0.6rem]
+                font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={nextSection}
+                  disabled={
+                    currentSection === outsiderInventionSection.length - 1
+                  }
+                >
+                  ถัดไป
+                </button>
+              </section>
+            )}
           </main>
         </div>
       </HomeLayout>

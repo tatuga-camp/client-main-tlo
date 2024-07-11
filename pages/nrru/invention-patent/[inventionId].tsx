@@ -70,54 +70,73 @@ const Index = ({ user }: { user: User }) => {
   };
 
   const handleValidateForm = ({ number }: { number: number }) => {
-    let message: string;
-    if (
-      number === 1 &&
-      invention.data?.partnerInfoOnInventionPatents.length === 0
-    ) {
-      throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
-    } else if (
-      number === 2 &&
-      (invention.data?.workInfoOnInventionPatent.isComplete === false ||
-        invention.data?.partnerInfoOnInventionPatents.length === 0)
-    ) {
-      throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
-    } else if (
-      number === 3 &&
-      (invention.data?.workInfoOnInventionPatent.isComplete === false ||
-        invention.data?.partnerInfoOnInventionPatents.length === 0 ||
-        invention.data?.supportingDataOnInventionPatent.isComplete === false)
-    ) {
-      throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
-    } else if (
-      number === 4 &&
-      ((invention.data?.fileOnInventionPatents?.filter(
-        (file) => file.documentType === "IDCARD",
-      ).length ?? 0) <
-        (invention.data?.partnerInfoOnInventionPatents?.length ?? 0) ||
-        (invention.data?.fileOnInventionPatents?.filter(
-          (file) => file.documentType === "REQUEST",
-        )?.length ?? 0) === 0 ||
-        invention.data?.supportingDataOnInventionPatent.isComplete === false ||
-        invention.data?.workInfoOnInventionPatent.isComplete === false ||
-        invention.data?.partnerInfoOnInventionPatents.length === 0)
-    ) {
-      throw new Error("กรุณาตรวจสอบเอกสาร ว่าอัพโหลดครบถ้วนแล้วหรือไม่");
-    } else if (
-      number === 5 &&
-      ((invention.data?.fileOnInventionPatents?.filter(
-        (file) => file.documentType === "IDCARD",
-      ).length ?? 0) <
-        (invention.data?.partnerInfoOnInventionPatents?.length ?? 0) ||
-        (invention.data?.fileOnInventionPatents?.filter(
-          (file) => file.documentType === "REQUEST",
-        )?.length ?? 0) === 0 ||
-        invention.data?.supportingDataOnInventionPatent.isComplete === false ||
-        invention.data?.workInfoOnInventionPatent.isComplete === false ||
-        invention.data?.partnerInfoOnInventionPatents.length === 0 ||
-        invention.data?.isComplete === false)
-    ) {
-      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 5");
+    switch (number) {
+      case 0:
+        break;
+
+      case 1:
+        if (invention.data?.partnerInfoOnInventionPatents.length === 0) {
+          throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 2:
+        if (
+          invention.data?.workInfoOnInventionPatent.isComplete === false ||
+          invention.data?.partnerInfoOnInventionPatents.length === 0
+        ) {
+          throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 3:
+        if (
+          invention.data?.workInfoOnInventionPatent.isComplete === false ||
+          invention.data?.partnerInfoOnInventionPatents.length === 0 ||
+          invention.data?.supportingDataOnInventionPatent.isComplete === false
+        ) {
+          throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 4:
+        if (
+          (invention.data?.fileOnInventionPatents?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (invention.data?.partnerInfoOnInventionPatents?.length ?? 0) ||
+          (invention.data?.fileOnInventionPatents?.filter(
+            (file) => file.documentType === "REQUEST",
+          )?.length ?? 0) === 0 ||
+          invention.data?.supportingDataOnInventionPatent.isComplete ===
+            false ||
+          invention.data?.workInfoOnInventionPatent.isComplete === false ||
+          invention.data?.partnerInfoOnInventionPatents.length === 0
+        ) {
+          throw new Error("กรุณาตรวจสอบเอกสาร ว่าอัพโหลดครบถ้วนแล้วหรือไม่");
+        }
+        break;
+
+      case 5:
+        if (
+          (invention.data?.fileOnInventionPatents?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (invention.data?.partnerInfoOnInventionPatents?.length ?? 0) ||
+          (invention.data?.fileOnInventionPatents?.filter(
+            (file) => file.documentType === "REQUEST",
+          )?.length ?? 0) === 0 ||
+          invention.data?.supportingDataOnInventionPatent.isComplete ===
+            false ||
+          invention.data?.workInfoOnInventionPatent.isComplete === false ||
+          invention.data?.partnerInfoOnInventionPatents.length === 0 ||
+          invention.data?.isComplete === false
+        ) {
+          throw new Error(
+            "ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 5",
+          );
+        }
+        break;
     }
   };
 

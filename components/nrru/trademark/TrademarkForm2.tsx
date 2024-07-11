@@ -59,7 +59,10 @@ import { Dropdown } from "primereact/dropdown";
 type TrademarkForm2Props = {
   trademark: UseQueryResult<ResponseGetTrademarkService, Error>;
 };
-const TrademarkForm2 = forwardRef(({ trademark }: TrademarkForm2Props, ref) => {
+const TrademarkForm2 = forwardRef(function FormTrademark(
+  { trademark }: TrademarkForm2Props,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;

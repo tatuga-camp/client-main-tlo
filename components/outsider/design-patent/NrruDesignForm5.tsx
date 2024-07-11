@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import {
   Button,
   FieldError,
@@ -22,17 +22,20 @@ import { useRouter } from "next-nprogress-bar";
 import Swal from "sweetalert2";
 import NrruDesignForm1 from "./NrruDesignForm1/NrruDesignForm1";
 import NrruDesignForm2 from "./NrruDesignForm2/NrruDesignForm2";
-import NrruDesignForm3 from "./NrruDesignForm3/NrruDesignForm3";
 import NrruDesignForm4 from "./NrruDesignForm4/NrruDesignForm4";
 
 type NrruDesignForm5Props = {
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;
   user: User;
 };
-const NrruDesignForm5 = ({ design, user }: NrruDesignForm5Props) => {
+const NrruDesignForm5 = forwardRef(function FromDesign(
+  { design, user }: NrruDesignForm5Props,
+  ref,
+) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const handleUpdateDesign = async () => {
+
+  const saveData = async () => {
     try {
       setIsLoading(true);
       Swal.fire({
@@ -76,21 +79,15 @@ const NrruDesignForm5 = ({ design, user }: NrruDesignForm5Props) => {
       });
     }
   };
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
   return (
     <div className="flex flex-col gap-5">
       <NrruDesignForm1 user={user} design={design} />
       <NrruDesignForm2 design={design} />
       <NrruDesignForm4 design={design} />
-      {design.data?.isComplete === false ? (
-        <button
-          disabled={isLoading}
-          onClick={handleUpdateDesign}
-          className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-[#10316B] px-3 py-2
-       font-semibold text-white  drop-shadow-lg transition duration-100 hover:bg-[#19106b] active:ring-2"
-        >
-          ฉันยืนยันข้อมูลถูกต้องและ ต้องการส่งคำขอ
-        </button>
-      ) : (
+      {design.data?.isComplete === true && (
         <div
           className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-green-500 px-3 py-2
        font-semibold text-white  drop-shadow-lg "
@@ -100,6 +97,6 @@ const NrruDesignForm5 = ({ design, user }: NrruDesignForm5Props) => {
       )}
     </div>
   );
-};
+});
 
 export default NrruDesignForm5;

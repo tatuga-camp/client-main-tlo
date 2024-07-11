@@ -32,7 +32,10 @@ import FileOnTrademark from "./FileOnTrademark";
 type TrademarkForm3Props = {
   trademark: UseQueryResult<ResponseGetTrademarkService, Error>;
 };
-const TrademarkForm3 = forwardRef(({ trademark }: TrademarkForm3Props, ref) => {
+const TrademarkForm3 = forwardRef(function FormTrademark(
+  { trademark }: TrademarkForm3Props,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;

@@ -38,7 +38,7 @@ const menuTypes = [
   { value: "design-patent", label: "สิทธิบัตรการออกแบบผลิตภัณฑ์" },
   { value: "copyright", label: "จดแจ้งข้อมูลลิขสิทธ์" },
   { value: "trademark", label: "จดทะเบียนเครื่องหมายการค้า" },
-] as const;
+];
 function RequestSummary({ user }: { user?: User }) {
   const [totalPage, setTotalPage] = useState(1);
   const [requests, setRequests] = useState<{
@@ -268,7 +268,15 @@ function RequestSummary({ user }: { user?: User }) {
                   onChange={(e) => {
                     if (e) {
                       setPage(1);
-                      setFilterType(() => e.value);
+                      setFilterType(
+                        () =>
+                          e.value as
+                            | "invention-patent"
+                            | "all"
+                            | "design-patent"
+                            | "copyright"
+                            | "trademark",
+                      );
                     }
                   }}
                   options={menuTypes}

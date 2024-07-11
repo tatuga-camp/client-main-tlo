@@ -78,49 +78,74 @@ const Index = ({ user }: { user: User }) => {
   };
 
   const handleValidateForm = ({ number }: { number: number }) => {
-    let message: string;
-    if (number === 1 && design.data?.partnerInfoOnDesignPatents.length === 0) {
-      throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
-    } else if (
-      number === 2 &&
-      (design.data?.workInfoOnDesignPatent.isComplete === false ||
-        design.data?.partnerInfoOnDesignPatents.length === 0)
-    ) {
-      throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
-    } else if (
-      number === 3 &&
-      (!design.data?.workInfoOnDesignPatent.id ||
-        design.data?.partnerInfoOnDesignPatents.length === 0 ||
-        design.data?.supportingDataOnDesignPatent.isComplete === false)
-    ) {
-      throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
-    } else if (
-      number === 4 &&
-      ((design.data?.fileOnDesignPatents?.filter(
-        (file) => file.documentType === "IDCARD",
-      ).length ?? 0) < (design.data?.partnerInfoOnDesignPatents?.length ?? 0) ||
-        (design.data?.fileOnDesignPatents?.filter(
-          (file) => file.documentType === "PRODUCT",
-        )?.length ?? 0) === 0 ||
-        design.data?.supportingDataOnDesignPatent.isComplete === false ||
-        design.data?.workInfoOnDesignPatent.isComplete === false ||
-        design.data?.partnerInfoOnDesignPatents.length === 0)
-    ) {
-      throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");
-    } else if (
-      number === 5 &&
-      ((design.data?.fileOnDesignPatents?.filter(
-        (file) => file.documentType === "IDCARD",
-      ).length ?? 0) < (design.data?.partnerInfoOnDesignPatents?.length ?? 0) ||
-        (design.data?.fileOnDesignPatents?.filter(
-          (file) => file.documentType === "PRODUCT",
-        )?.length ?? 0) === 0 ||
-        design.data?.supportingDataOnDesignPatent.isComplete === false ||
-        design.data?.workInfoOnDesignPatent.isComplete === false ||
-        design.data?.partnerInfoOnDesignPatents.length === 0 ||
-        design.data?.isComplete === false)
-    ) {
-      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 5");
+    switch (number) {
+      case 0:
+        break;
+
+      case 1:
+        if (design.data?.workInfoOnDesignPatent.isComplete === false) {
+          throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 2:
+        if (
+          design.data?.workInfoOnDesignPatent.isComplete === false ||
+          design.data?.partnerInfoOnDesignPatents.length === 0
+        ) {
+          throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 3:
+        if (
+          !design.data?.workInfoOnDesignPatent.id ||
+          design.data?.partnerInfoOnDesignPatents.length === 0 ||
+          design.data?.supportingDataOnDesignPatent.isComplete === false
+        ) {
+          throw new Error("กรุณาข้อมูลประกอบการนำไปใช้ประโยชน์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 4:
+        if (
+          (design.data?.fileOnDesignPatents?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (design.data?.partnerInfoOnDesignPatents?.length ?? 0) ||
+          (design.data?.fileOnDesignPatents?.filter(
+            (file) => file.documentType === "PRODUCT",
+          )?.length ?? 0) === 0 ||
+          design.data?.supportingDataOnDesignPatent.isComplete === false ||
+          design.data?.workInfoOnDesignPatent.isComplete === false ||
+          design.data?.partnerInfoOnDesignPatents.length === 0
+        ) {
+          throw new Error("ไม่สามารถไปต่อได้ ให้ครบถ้วน");
+        }
+        break;
+
+      case 5:
+        if (
+          (design.data?.fileOnDesignPatents?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (design.data?.partnerInfoOnDesignPatents?.length ?? 0) ||
+          (design.data?.fileOnDesignPatents?.filter(
+            (file) => file.documentType === "PRODUCT",
+          )?.length ?? 0) === 0 ||
+          design.data?.supportingDataOnDesignPatent.isComplete === false ||
+          design.data?.workInfoOnDesignPatent.isComplete === false ||
+          design.data?.partnerInfoOnDesignPatents.length === 0 ||
+          design.data?.isComplete === false
+        ) {
+          throw new Error(
+            "ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 5",
+          );
+        }
+        break;
+
+      default:
+        break;
     }
   };
 

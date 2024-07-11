@@ -20,6 +20,7 @@ import moment from "moment";
 type SearchWorkInventionProps = {
   invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
   number: number;
+  searchWorkRef: React.RefObject<HTMLDivElement>;
 };
 const menuSearchWorks = [
   {
@@ -41,7 +42,11 @@ const menuSearchWorks = [
     inputThree: "country",
   },
 ];
-function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
+function SearchWorkInvention({
+  invention,
+  number,
+  searchWorkRef,
+}: SearchWorkInventionProps) {
   const queryClient = useQueryClient();
 
   const [activeContent, setActiveContent] = useState<MenuSearchWorks>(
@@ -195,7 +200,10 @@ function SearchWorkInvention({ invention, number }: SearchWorkInventionProps) {
         {number}.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น
         หรืองานที่ปรากฏอยู่ก่อน
       </Label>
-      <div className="flex flex-col items-center justify-center md:w-full">
+      <div
+        ref={searchWorkRef}
+        className="flex flex-col items-center justify-center md:w-full"
+      >
         <section className="flex w-full flex-col gap-2 md:flex-row">
           {menuSearchWorks.map((menu, index) => (
             <button

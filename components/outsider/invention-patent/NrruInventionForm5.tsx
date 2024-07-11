@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import {
   Button,
   FieldError,
@@ -20,7 +20,6 @@ import {
 import NrruInventionForm1 from "./NrruInventionForm1/NrruInventionForm1";
 import moment from "moment";
 import { ErrorMessages, User } from "../../../models";
-import NrruInventionForm3 from "./NrruInventionForm3/NrruInventionForm3";
 import NrruInventionForm2 from "./NrruInventionForm2/NrruInventionForm2";
 import NrruInventionForm4 from "./NrruInventionForm4/NrruInventionForm4";
 import Swal from "sweetalert2";
@@ -30,10 +29,13 @@ type FileOnWorkInventionProps = {
   invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
   user: User;
 };
-const NrruInventionForm5 = ({ invention, user }: FileOnWorkInventionProps) => {
+const NrruInventionForm5 = forwardRef(function FromInvention(
+  { invention, user }: FileOnWorkInventionProps,
+  ref,
+) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const handleUpdateInvention = async () => {
+  const saveData = async () => {
     try {
       setIsLoading(true);
       Swal.fire({
@@ -78,21 +80,15 @@ const NrruInventionForm5 = ({ invention, user }: FileOnWorkInventionProps) => {
       });
     }
   };
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
   return (
     <div className="flex flex-col gap-5">
       <NrruInventionForm1 invention={invention} user={user} />
       <NrruInventionForm2 invention={invention} />
       <NrruInventionForm4 invention={invention} />
-      {invention.data?.isComplete === false ? (
-        <button
-          disabled={isLoading}
-          onClick={handleUpdateInvention}
-          className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-[#10316B] px-3 py-2
-       font-semibold text-white  drop-shadow-lg transition duration-100 hover:bg-[#19106b] active:ring-2"
-        >
-          ฉันยืนยันข้อมูลถูกต้องและ ต้องการส่งคำขอ
-        </button>
-      ) : (
+      {invention.data?.isComplete === true && (
         <div
           className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-green-500 px-3 py-2
        font-semibold text-white  drop-shadow-lg "
@@ -102,6 +98,6 @@ const NrruInventionForm5 = ({ invention, user }: FileOnWorkInventionProps) => {
       )}
     </div>
   );
-};
+});
 
 export default NrruInventionForm5;

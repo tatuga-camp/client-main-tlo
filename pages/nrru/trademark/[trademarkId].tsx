@@ -70,98 +70,112 @@ const Index = ({ user }: { user: User }) => {
   };
 
   const handleValidateForm = ({ number }: { number: number }) => {
-    if (
-      (number === 1 && trademark.data?.firstName === "") ||
-      !trademark.data?.firstName
-    ) {
-      throw new Error("กรุณากรอกข้อมูลทั่วไป ให้ครบถ้วน");
-    } else if (
-      number === 2 &&
-      (trademark.data?.firstName === "" ||
-        !trademark.data?.firstName ||
-        !trademark.data?.titleTrademark ||
-        trademark.data.fileOnTrademarks.filter(
-          (f) => f.documentType === "TRADEMARK",
-        ).length === 0)
-    ) {
-      throw new Error("กรุณากรอกข้อรายละเอียดของเครื่องหมาย ให้ครบถ้วน");
-    } else if (number === 3) {
-      if (
-        trademark.data?.firstName === "" ||
-        !trademark.data?.firstName ||
-        trademark.data?.fileOnTrademarks.length === 0
-      ) {
-        throw new Error("กรุณากรอกข้อมูลเอกสารแนบ ให้ครบถ้วน");
-      }
-      if (
-        trademark.data.personStatus === "ต่างชาติ" ||
-        trademark.data.personStatus === "บุคคลธรรมดา"
-      ) {
+    switch (number) {
+      case 0:
+        break;
+
+      case 1:
+        if (trademark.data?.firstName === "") {
+          throw new Error("กรุณากรอกข้อมูลทั่วไป ให้ครบถ้วน");
+        }
+        break;
+
+      case 2:
         if (
+          trademark.data?.firstName === "" ||
+          !trademark.data?.firstName ||
+          !trademark.data?.titleTrademark ||
           trademark.data.fileOnTrademarks.filter(
-            (f) => f.documentType === "IDCARD",
+            (f) => f.documentType === "TRADEMARK",
           ).length === 0
         ) {
-          throw new Error("อัพโหลดสำเนาบัตรประชาชน ให้ครบถ้วน");
+          throw new Error("กรุณากรอกข้อรายละเอียดของเครื่องหมาย ให้ครบถ้วน");
         }
-      }
-      if (
-        trademark.data.personStatus === "นิติบุคคล" ||
-        trademark.data.personStatus === "ส่วนราชการไทย"
-      ) {
+        break;
+
+      case 3:
         if (
-          trademark.data.fileOnTrademarks.filter(
-            (f) => f.documentType === "COPORATE",
-          ).length === 0 ||
-          trademark.data.fileOnTrademarks.filter(
-            (f) => f.documentType === "AUTORIZEPERSON_COPORATE",
-          ).length === 0
+          trademark.data?.firstName === "" ||
+          !trademark.data?.firstName ||
+          trademark.data?.fileOnTrademarks.length === 0
         ) {
-          throw new Error(
-            "อัพโหลดเอกสาร สำเนาหนังสือรับรองนิติบุคคล หรือ สำเนาบัตรประจำตัวประชาช ผู้มีอำนาจในการลงนาม ให้ครบถ้วน",
-          );
+          throw new Error("กรุณากรอกข้อมูลเอกสารแนบ ให้ครบถ้วน");
         }
-      }
-    } else if (number === 4) {
-      if (trademark.data?.isComplete === false) {
-        throw new Error("กรุณายืนยันการส่งข้อมูล ในส่วนที่ 4");
-      }
-      if (
-        trademark.data?.firstName === "" ||
-        !trademark.data?.firstName ||
-        trademark.data?.fileOnTrademarks.length === 0
-      ) {
-        throw new Error("กรุณากรอกข้อมูลเอกสารแนบ ให้ครบถ้วน");
-      }
-      if (
-        trademark.data.personStatus === "ต่างชาติ" ||
-        trademark.data.personStatus === "บุคคลธรรมดา"
-      ) {
         if (
-          trademark.data.fileOnTrademarks.filter(
-            (f) => f.documentType === "IDCARD",
-          ).length === 0
+          trademark.data.personStatus === "ต่างชาติ" ||
+          trademark.data.personStatus === "บุคคลธรรมดา"
         ) {
-          throw new Error("อัพโหลดสำเนาบัตรประชาชน ให้ครบถ้วน");
+          if (
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "IDCARD",
+            ).length === 0
+          ) {
+            throw new Error("อัพโหลดสำเนาบัตรประชาชน ให้ครบถ้วน");
+          }
         }
-      }
-      if (
-        trademark.data.personStatus === "นิติบุคคล" ||
-        trademark.data.personStatus === "ส่วนราชการไทย"
-      ) {
         if (
-          trademark.data.fileOnTrademarks.filter(
-            (f) => f.documentType === "COPORATE",
-          ).length === 0 ||
-          trademark.data.fileOnTrademarks.filter(
-            (f) => f.documentType === "AUTORIZEPERSON_COPORATE",
-          ).length === 0
+          trademark.data.personStatus === "นิติบุคคล" ||
+          trademark.data.personStatus === "ส่วนราชการไทย"
         ) {
-          throw new Error(
-            "อัพโหลดเอกสาร สำเนาหนังสือรับรองนิติบุคคล หรือ สำเนาบัตรประจำตัวประชาช ผู้มีอำนาจในการลงนาม ให้ครบถ้วน",
-          );
+          if (
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "COPORATE",
+            ).length === 0 ||
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "AUTORIZEPERSON_COPORATE",
+            ).length === 0
+          ) {
+            throw new Error(
+              "อัพโหลดเอกสาร สำเนาหนังสือรับรองนิติบุคคล หรือ สำเนาบัตรประจำตัวประชาช ผู้มีอำนาจในการลงนาม ให้ครบถ้วน",
+            );
+          }
         }
-      }
+        break;
+
+      case 4:
+        if (trademark.data?.isComplete === false) {
+          throw new Error("กรุณายืนยันการส่งข้อมูล ในส่วนที่ 4");
+        }
+        if (
+          trademark.data?.firstName === "" ||
+          !trademark.data?.firstName ||
+          trademark.data?.fileOnTrademarks.length === 0
+        ) {
+          throw new Error("กรุณากรอกข้อมูลเอกสารแนบ ให้ครบถ้วน");
+        }
+        if (
+          trademark.data.personStatus === "ต่างชาติ" ||
+          trademark.data.personStatus === "บุคคลธรรมดา"
+        ) {
+          if (
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "IDCARD",
+            ).length === 0
+          ) {
+            throw new Error("อัพโหลดสำเนาบัตรประชาชน ให้ครบถ้วน");
+          }
+        }
+        if (
+          trademark.data.personStatus === "นิติบุคคล" ||
+          trademark.data.personStatus === "ส่วนราชการไทย"
+        ) {
+          if (
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "COPORATE",
+            ).length === 0 ||
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "AUTORIZEPERSON_COPORATE",
+            ).length === 0
+          ) {
+            throw new Error(
+              "อัพโหลดเอกสาร สำเนาหนังสือรับรองนิติบุคคล หรือ สำเนาบัตรประจำตัวประชาช ผู้มีอำนาจในการลงนาม ให้ครบถ้วน",
+            );
+          }
+        }
+        break;
+
+      default:
+        break;
     }
   };
 

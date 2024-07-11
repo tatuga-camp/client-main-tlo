@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import {
   Button,
   FieldError,
@@ -26,12 +26,16 @@ import {
 } from "../../../../services/google-storage";
 import { UseQueryResult } from "@tanstack/react-query";
 import { ResponseGetInventionPatentService } from "../../../../services/invention-patent/invention-patent";
+import { FiPlusCircle } from "react-icons/fi";
 
 type FileOnInventionProps = {
   invention: UseQueryResult<ResponseGetInventionPatentService, Error>;
 };
 
-const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
+const NrruInventionForm4 = forwardRef(function FromInvention(
+  { invention }: FileOnInventionProps,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -39,6 +43,8 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
     open: false,
     action: <></>,
   });
+  const formRef = React.useRef<HTMLFormElement>(null);
+
   const [files, setFiles] = useState<
     {
       id?: string;
@@ -64,9 +70,23 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
     }
   }, [invention.data]);
 
-  const handleUploadFile = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+      formRef.current?.requestSubmit();
       setSnackBarData(() => {
         return {
           open: true,
@@ -164,28 +184,218 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
       });
     }
   };
-
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
   return (
-    <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
+    <div className=" w-full rounded-md  border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 font-Anuphan md:p-10">
       <Form
-        onSubmit={handleUploadFile}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
       >
         {/* ข้อ 1*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        <section className="flex flex-col items-start justify-center gap-2 md:gap-2 ">
           <section className="flex items-center gap-3">
             <Number number={1} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              สำเนาบัตรประจำตัวประชาชนของผู้ประดิษฐ์ทุกราย
-              (พร้อมรับรองสำเนาถูกต้อง)
+            <p className=" w-full text-[0.8rem] font-semibold md:text-base">
+              สำเนาบัตรประจำตัวประชาชนหรือสำเนานิติบุคคลของผู้ขอรับสิทธิบัตร/อนุสิทธิบัตร
+            </p>
+          </section>
+          {invention.data?.personStatus === "บุคคลธรรมดา" && (
+            <section className="flex flex-col gap-2 rounded-md  p-2">
+              <h3 className="text-base font-semibold">
+                กรณีผู้ขอรับสิทธิบัตร/อนุสิทธิบัตร เป็นบุคคลธรรมดา
+              </h3>
+              <p className=" font-semibold text-purple-500">
+                แนบสำเนาบัตรประจำตัวประชาชนของผู้ขอรับสิทธิบัตร/อนุสิทธิบัตร
+                โดยรับรองสำเนาถูกต้อง ระบุข้อความ
+                “ใช้ประกอบการยื่นคำขอด้านทรัพย์สินทางปัญญาเท่านั้น”
+                ไม่ต้องระบุวันที่
+              </p>
+
+              <section className="flex flex-col gap-2 md:flex-row md:items-start">
+                <FileTrigger
+                  allowsMultiple
+                  onSelect={(e) => {
+                    if (!e) return null;
+
+                    const files: FileList = e;
+                    Array.from(files).forEach((file) => {
+                      const url = URL.createObjectURL(file);
+                      const reader = new FileReader();
+
+                      setFiles((prev) => {
+                        return [
+                          ...prev,
+                          { file: file, url: url, documentType: "PERSON" },
+                        ];
+                      });
+
+                      reader.readAsDataURL(file);
+                    });
+                  }}
+                >
+                  <Button type="button" className="btn-download">
+                    <FiPlusCircle />
+                    สำเนาบัตรประจำตัวประชาชน ของผู้ขอรับสิทธิบัตร (ไฟล์
+                    .pdf/.jpg)
+                  </Button>
+                </FileTrigger>
+              </section>
+              <section
+                className="ml-5 grid grid-cols-1 gap-2 border 
+ border-gray-200 bg-gray-200 p-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4"
+              >
+                {...files
+                  ?.filter((file) => file.documentType === "PERSON")
+                  .map((file) => {
+                    return (
+                      <FileOnInvention
+                        file={file}
+                        key={file.url}
+                        handleDeleteFile={handleDeleteFile}
+                      />
+                    );
+                  })}
+              </section>
+            </section>
+          )}
+
+          {invention.data?.personStatus !== "บุคคลธรรมดา" && (
+            <section className="flex flex-col gap-2 rounded-md  p-2">
+              <h3 className="text-base font-semibold">
+                กรณีผู้ขอรับสิทธิบัตร/อนุสิทธิบัตร
+                เป็นนิติบุคคลหรือหน่วยงานรัฐหรือมูลนิธิ
+              </h3>
+              <p className=" font-semibold text-purple-500">
+                แนบสำเนาบัตรประจำตัวประชาชนของผู้ขอรับสิทธิบัตร/อนุสิทธิบัตร
+                หรือผู้มีอำนาจในการลงนาม และสำเนาหนังสือรับรองนิติบุคคล
+                ที่ออกให้ไม่เกิน 6 เดือนหรือสำเนาหนังสือแสดงการจัดตั้งหน่วยงาน
+                โดยรับรองสำเนาถูกต้อง ระบุข้อความ
+                “ใช้ประกอบการยื่นคำขอด้านทรัพย์สินทางปัญญาเท่านั้น”
+                ไม่ต้องระบุวันที่
+              </p>
+
+              <section className="flex flex-col gap-2 md:flex-row md:items-start">
+                <FileTrigger
+                  allowsMultiple
+                  onSelect={(e) => {
+                    if (!e) return null;
+
+                    const files: FileList = e;
+                    Array.from(files).forEach((file) => {
+                      const url = URL.createObjectURL(file);
+                      const reader = new FileReader();
+
+                      setFiles((prev) => {
+                        return [
+                          ...prev,
+                          { file: file, url: url, documentType: "PERSON" },
+                        ];
+                      });
+
+                      reader.readAsDataURL(file);
+                    });
+                  }}
+                >
+                  <Button type="button" className="btn-download">
+                    <FiPlusCircle />
+                    สำเนาบัตรประจำตัวประชาชน ของผู้ขอรับสิทธิบัตร (ไฟล์
+                    .pdf/.jpg)
+                  </Button>
+                </FileTrigger>
+              </section>
+              <section className="ml-5 grid grid-cols-1 gap-2 border border-gray-200 bg-gray-200 p-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
+                {...files
+                  ?.filter((file) => file.documentType === "PERSON")
+                  .map((file) => {
+                    return (
+                      <FileOnInvention
+                        file={file}
+                        key={file.url}
+                        handleDeleteFile={handleDeleteFile}
+                      />
+                    );
+                  })}
+              </section>
+
+              <section className="flex flex-col gap-2 md:flex-row md:items-start">
+                <FileTrigger
+                  allowsMultiple
+                  onSelect={(e) => {
+                    if (!e) return null;
+
+                    const files: FileList = e;
+                    Array.from(files).forEach((file) => {
+                      const url = URL.createObjectURL(file);
+                      const reader = new FileReader();
+
+                      setFiles((prev) => {
+                        return [
+                          ...prev,
+                          { file: file, url: url, documentType: "COPORATE" },
+                        ];
+                      });
+
+                      reader.readAsDataURL(file);
+                    });
+                  }}
+                >
+                  <Button type="button" className="btn-download">
+                    <FiPlusCircle />
+                    สำเนาหนังสือรับรองนิติบุคคลหรือสำเนาหนังสือ
+                    แสดงการจัดตั้งหน่วยงาน (ไฟล์ .pdf/.jpg)
+                  </Button>
+                </FileTrigger>
+              </section>
+              <section className="ml-5 grid grid-cols-1 gap-2 border border-gray-200 bg-gray-200 p-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
+                {...files
+                  ?.filter((file) => file.documentType === "COPORATE")
+                  .map((file) => {
+                    return (
+                      <FileOnInvention
+                        file={file}
+                        key={file.url}
+                        handleDeleteFile={handleDeleteFile}
+                      />
+                    );
+                  })}
+              </section>
+            </section>
+          )}
+        </section>
+
+        {/* ข้อ 2*/}
+
+        <section className="flex  flex-col items-start justify-center gap-2 md:gap-2 ">
+          <section className="flex items-center gap-3">
+            <Number number={2} />
+            <p className=" w-full text-[0.8rem] font-semibold md:text-base">
+              สำเนาบัตรประจำตัวประชาชนของผู้ประดิษฐ์ทุกราย{" "}
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem]  md:gap-4 md:pl-10 md:text-base">
-            <p className="-mt-2 font-semibold text-purple-500 md:-mt-4">
-              โดยระบุข้อความ “ใช้ประกอบการยื่นคำขอด้านทรัพย์สินทางปัญญาเท่านั้น”
-              ไม่ต้องระบุวันที่
+          <section className="flex w-full flex-col gap-2  rounded-md p-2">
+            <p className="font-normal text-purple-500 underline">
+              โปรดอัพโหลดสำเนาบัตรประจำตัวประชาชนของผู้ประดิษฐ์ทุกราย
+              ตามรายชื่อด้านล่าง
             </p>
+            {invention.data?.partnerInfoOnInventionPatents.map(
+              (partner, index) => {
+                return (
+                  <div key={partner.id} className="flex gap-2">
+                    <p className="font-semibold">
+                      1.{index + 1} ) ชื่อ: {partner.title} {partner.firstName}{" "}
+                      {partner.lastName}
+                    </p>
+                    <p className="font-semibold">
+                      เลขบัตรประจำตัวประชาชน: {partner.idCard}
+                    </p>
+                  </div>
+                );
+              },
+            )}
+
             <section className="flex flex-col gap-2 md:flex-row md:items-start">
               <FileTrigger
                 allowsMultiple
@@ -208,40 +418,41 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
                   });
                 }}
               >
-                <Button
-                  type="button"
-                  className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md"
-                >
-                  อัพโหลดไฟล์ .pdf/.jpg
+                <Button type="button" className="btn-download">
+                  <FiPlusCircle />
+                  สำเนาบัตรประจำตัวประชาชน ของผู้ขอรับสิทธิบัตร (ไฟล์ .pdf/.jpg)
                 </Button>
               </FileTrigger>
             </section>
-          </div>
-          <section className="ml-5 grid grid-cols-1 gap-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
-            {...files
-              ?.filter((file) => file.documentType === "IDCARD")
-              .map((file) => {
-                return (
-                  <FileOnInvention
-                    file={file}
-                    key={file.url}
-                    handleDeleteFile={handleDeleteFile}
-                  />
-                );
-              })}
+            <section
+              className="ml-5 grid grid-cols-1 gap-2 border 
+ border-gray-200 bg-gray-200 p-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4"
+            >
+              {...files
+                ?.filter((file) => file.documentType === "IDCARD")
+                .map((file) => {
+                  return (
+                    <FileOnInvention
+                      file={file}
+                      key={file.url}
+                      handleDeleteFile={handleDeleteFile}
+                    />
+                  );
+                })}
+            </section>
           </section>
         </section>
 
-        {/* ข้อ 2*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        {/* ข้อ 3*/}
+        <section className="flex flex-col items-start justify-center gap-2 md:gap-2 ">
           <section className="flex items-center gap-3">
-            <Number number={2} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              รายละเอียดคำขอรับสิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร
+            <Number number={3} />
+            <p className=" w-full text-[0.8rem] font-semibold md:text-base">
+              รายละเอียดคำขอรับสิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร{" "}
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem]  md:gap-4 md:pl-10 md:text-base">
+          <section className="flex w-full flex-col gap-2  rounded-md p-2">
             <section className="flex flex-col gap-2 md:flex-row md:items-start">
               <FileTrigger
                 allowsMultiple
@@ -264,50 +475,45 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
                   });
                 }}
               >
-                <Button
-                  type="button"
-                  className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md"
-                >
-                  อัพโหลดไฟล์ .pdf/.jpg
+                <Button type="button" className="btn-download">
+                  <FiPlusCircle />
+                  อัพโหลดไฟล์ (ไฟล์ .pdf/.jpg)
                 </Button>
               </FileTrigger>
-
-              <button className="rounded-md bg-[#BED6FF] p-3 font-semibold duration-300 hover:bg-[#91B2EB]">
-                หลักการเขียนรายละเอียด คำขอรับสิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร
-                (คลิก)
-              </button>
             </section>
-          </div>
-          <section className="ml-5 grid grid-cols-1 gap-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
-            {...files
-              ?.filter((file) => file.documentType === "REQUEST")
-              .map((file) => {
-                return (
-                  <FileOnInvention
-                    file={file}
-                    key={file.url}
-                    handleDeleteFile={handleDeleteFile}
-                  />
-                );
-              })}
+            <section
+              className="ml-5 grid grid-cols-1 gap-2 border 
+ border-gray-200 bg-gray-200 p-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4"
+            >
+              {...files
+                ?.filter((file) => file.documentType === "REQUEST")
+                .map((file) => {
+                  return (
+                    <FileOnInvention
+                      file={file}
+                      key={file.url}
+                      handleDeleteFile={handleDeleteFile}
+                    />
+                  );
+                })}
+            </section>
           </section>
         </section>
 
-        {/* ข้อ 3*/}
-        <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
+        <section className="flex flex-col items-start justify-center gap-2 md:gap-2 ">
           <section className="flex items-center gap-3">
-            <Number number={3} />
-            <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
-              เอกสารแนบอื่นๆ (ถ้ามี)
+            <Number number={4} />
+            <p className=" w-full text-[0.8rem] font-semibold md:text-base">
+              เอกสารแนบอื่น ๆ ถ้ามี
             </p>
           </section>
 
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-5 text-[0.8rem]  md:gap-4 md:pl-10 md:text-base">
-            <p className="-mt-2 font-medium md:-mt-4">
-              เช่น หนังสือรับรองการเผยแพร่ผลงาน สัญญาหรือข้อตกลงการรับทุนวิจัย
-              และหนังสือแสดงความเป็นเจ้าของผลงานวิจัย และนวัตกรรม
-              (กรณีรับทุนวิจัยจากแหล่งทุนภายนอก) สัญญาถ่ายโอนวัสดุชีวภาพ เป็นต้น
-            </p>
+          <p className=" font-semibold text-purple-500">
+            เช่น สัญญาหรือข้อตกลงการรับทุนวิจัย ผลการทดสอบหรือผลการทดลอง
+            หนังสือรับรองการเผยแพร่ผลงาน เป็นต้น
+          </p>
+
+          <section className="flex w-full flex-col gap-2  rounded-md p-2">
             <section className="flex flex-col gap-2 md:flex-row md:items-start">
               <FileTrigger
                 allowsMultiple
@@ -330,33 +536,34 @@ const NrruInventionForm4 = ({ invention }: FileOnInventionProps) => {
                   });
                 }}
               >
-                <Button
-                  type="button"
-                  className="rounded-md bg-[var(--secondary-yellow)] px-3 py-3 font-semibold shadow-md"
-                >
-                  อัพโหลดไฟล์ .pdf/.jpg
+                <Button type="button" className="btn-download">
+                  <FiPlusCircle />
+                  อัพโหลดไฟล์ (ไฟล์ .pdf/.jpg)
                 </Button>
               </FileTrigger>
             </section>
-          </div>
-          <section className="ml-5 grid grid-cols-1 gap-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4">
-            {...files
-              ?.filter((file) => file.documentType === "OTHERS")
-              .map((file) => {
-                return (
-                  <FileOnInvention
-                    file={file}
-                    key={file.url}
-                    handleDeleteFile={handleDeleteFile}
-                  />
-                );
-              })}
+            <section
+              className="ml-5 grid grid-cols-1 gap-2 border 
+ border-gray-200 bg-gray-200 p-2 lg:ml-0  xl:grid-cols-3 2xl:grid-cols-4"
+            >
+              {...files
+                ?.filter((file) => file.documentType === "OTHERS")
+                .map((file) => {
+                  return (
+                    <FileOnInvention
+                      file={file}
+                      key={file.url}
+                      handleDeleteFile={handleDeleteFile}
+                    />
+                  );
+                })}
+            </section>
           </section>
         </section>
         {snackBarData.open && snackBarData.action}
       </Form>
     </div>
   );
-};
+});
 
 export default NrruInventionForm4;

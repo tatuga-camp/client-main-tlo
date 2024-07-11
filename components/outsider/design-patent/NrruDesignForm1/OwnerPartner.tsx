@@ -73,7 +73,7 @@ function OwnerPartner({
       className={`flex flex-col gap-5 rounded-lg p-5 ring-1 ring-gray-400  `}
     >
       <h1 className="text-lg font-semibold underline underline-offset-2">
-        ผู้ขอรับสิทธิบัตร/อนุสิทธิบัตร
+        ผู้ขอรับสิทธิบัตร
       </h1>
       <div className="flex flex-col gap-1">
         <div className="w-56 rounded-lg bg-slate-300 p-1">

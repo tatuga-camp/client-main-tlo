@@ -4,7 +4,6 @@ import React, { useState } from "react";
 
 import NrruDesignForm1 from "@/components/outsider/design-patent/NrruDesignForm1/NrruDesignForm1";
 import NrruDesignForm2 from "@/components/outsider/design-patent/NrruDesignForm2/NrruDesignForm2";
-import NrruDesignForm3 from "@/components/outsider/design-patent/NrruDesignForm3/NrruDesignForm3";
 import NrruDesignForm4 from "@/components/outsider/design-patent/NrruDesignForm4/NrruDesignForm4";
 import NrruDesignForm5 from "@/components/outsider/design-patent/NrruDesignForm5";
 import { outsiderDesignSection } from "@/data/PatentSection";
@@ -24,13 +23,17 @@ import { GetUserService } from "../../../services/user";
 import { describe } from "node:test";
 import DesignStatus from "../../../components/Status/designStatus";
 import MigrantForm from "../../../components/Forms/migrantForm";
-
+import { IoIosSave } from "react-icons/io";
+type ChildFormRef = {
+  saveData: () => Promise<void>;
+};
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
   const [triggerMigrationForm, setTriggerMigrationForm] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const childRef = React.useRef<ChildFormRef>(null);
   const design = useQuery({
     queryKey: ["design", { designId: router.query.designId as string }],
     queryFn: () =>
@@ -66,30 +69,68 @@ const Index = ({ user }: { user: User }) => {
   };
 
   const handleValidateForm = ({ number }: { number: number }) => {
-    let message: string;
-    if (number === 1 && design.data?.partnerInfoOnDesignPatents.length === 0) {
-      throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
-    } else if (
-      number === 2 &&
-      (design.data?.workInfoOnDesignPatent.isComplete === false ||
-        design.data?.partnerInfoOnDesignPatents.length === 0)
-    ) {
-      throw new Error("กรุณากรอกข้อมูลของผลงานการออกแบบ ให้ครบถ้วน");
-    } else if (
-      number === 3 &&
-      (!design.data?.workInfoOnDesignPatent.id ||
-        design.data?.partnerInfoOnDesignPatents.length === 0 ||
-        design.data?.fileOnDesignPatents.length === 0)
-    ) {
-      throw new Error("กรุณาข้อมูลเอกสารแนบคำขอ ให้ครบถ้วน");
-    } else if (
-      number === 4 &&
-      (design.data?.fileOnDesignPatents.length === 0 ||
-        design.data?.isComplete === false ||
-        design.data?.workInfoOnDesignPatent.isComplete === false ||
-        design.data?.partnerInfoOnDesignPatents.length === 0)
-    ) {
-      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 4");
+    console.log(number);
+
+    switch (number) {
+      case 0:
+        break;
+
+      case 1:
+        if (design.data?.partnerInfoOnDesignPatents.length === 0) {
+          throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
+        }
+        break;
+      case 2:
+        if (
+          design.data?.workInfoOnDesignPatent.isComplete === false ||
+          design.data?.partnerInfoOnDesignPatents.length === 0
+        ) {
+          throw new Error("กรุณากรอกข้อมูลของผลงานการออกแบบ ให้ครบถ้วน");
+        }
+        break;
+      case 3:
+        if (
+          !design.data?.workInfoOnDesignPatent.id ||
+          design.data?.partnerInfoOnDesignPatents.length === 0 ||
+          design.data?.fileOnDesignPatents.length === 0 ||
+          (design.data?.fileOnDesignPatents?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (design.data?.partnerInfoOnDesignPatents?.length ?? 0) ||
+          (design.data?.fileOnDesignPatents?.filter(
+            (file) => file.documentType === "PRODUCT",
+          )?.length ?? 0) < 7 ||
+          design.data?.fileOnDesignPatents.filter(
+            (f) => f.documentType === "PERSON",
+          ).length === 0
+        ) {
+          throw new Error("กรุณาข้อมูลเอกสารแนบคำขอ ให้ครบถ้วน");
+        }
+        break;
+      case 4:
+        if (
+          design.data?.isComplete === false ||
+          design.data?.workInfoOnDesignPatent.isComplete === false ||
+          design.data?.partnerInfoOnDesignPatents.length === 0 ||
+          design.data?.fileOnDesignPatents.length === 0 ||
+          (design.data?.fileOnDesignPatents?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (design.data?.partnerInfoOnDesignPatents?.length ?? 0) ||
+          (design.data?.fileOnDesignPatents?.filter(
+            (file) => file.documentType === "PRODUCT",
+          )?.length ?? 0) < 7 ||
+          design.data?.fileOnDesignPatents.filter(
+            (f) => f.documentType === "PERSON",
+          ).length === 0
+        ) {
+          throw new Error(
+            "ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 4",
+          );
+        }
+        break;
+      default:
+        break;
     }
   };
 
@@ -211,6 +252,12 @@ const Index = ({ user }: { user: User }) => {
       }
     }
   };
+
+  const handleSaveData = async () => {
+    setIsLoading(true);
+    await childRef.current?.saveData();
+    setIsLoading(false);
+  };
   return (
     <>
       <Head>
@@ -300,18 +347,18 @@ const Index = ({ user }: { user: User }) => {
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
-                  <NrruDesignForm1 user={user} design={design} />
+                  <NrruDesignForm1 ref={childRef} user={user} design={design} />
                 </div>
               )}
               {currentSection == 1 && (
                 <div>
-                  <NrruDesignForm2 design={design} />
+                  <NrruDesignForm2 ref={childRef} design={design} />
                 </div>
               )}
 
               {currentSection == 2 && (
                 <div>
-                  <NrruDesignForm4 design={design} />
+                  <NrruDesignForm4 ref={childRef} design={design} />
                 </div>
               )}
               {currentSection == 3 && (
@@ -319,7 +366,7 @@ const Index = ({ user }: { user: User }) => {
                   <p className="my-5 w-full items-center text-center  font-bold">
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
-                  <NrruDesignForm5 design={design} user={user} />
+                  <NrruDesignForm5 ref={childRef} design={design} user={user} />
                 </div>
               )}
               {currentSection == 4 && (
@@ -332,23 +379,48 @@ const Index = ({ user }: { user: User }) => {
               )}
             </section>
 
-            <section className=" my-5 flex items-center justify-center gap-3">
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={previousSection}
-                disabled={currentSection === 0}
-              >
-                ย้อนกลับ
-              </button>
+            {currentSection !== 4 && (
+              <section className=" my-5 flex items-center justify-center gap-3">
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3
+                text-[0.6rem] font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={previousSection}
+                  disabled={currentSection === 0}
+                >
+                  ย้อนกลับ
+                </button>
+                {isLoading ? (
+                  <button
+                    className="flex h-8 animate-pulse items-center justify-center rounded-md
+                   border-2 border-solid border-[var(--primary-blue)] bg-main-color px-3
+                font-semibold text-white transition md:w-52"
+                  >
+                    กำลังบันทึกข้อมูล
+                    <IoIosSave />
+                  </button>
+                ) : (
+                  <button
+                    className="flex h-8 items-center justify-center rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 font-semibold transition 
+                hover:bg-main-color hover:text-white disabled:border-slate-300 disabled:text-slate-300 md:w-52"
+                    onClick={handleSaveData}
+                  >
+                    {currentSection === 3
+                      ? "ยืนยันการส่งข้อมูล"
+                      : "บันทึกข้อมูล"}
+                    <IoIosSave />
+                  </button>
+                )}
 
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={nextSection}
-                disabled={currentSection === outsiderDesignSection.length - 1}
-              >
-                ถัดไป
-              </button>
-            </section>
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 text-[0.6rem]
+                font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={nextSection}
+                  disabled={currentSection === outsiderDesignSection.length - 1}
+                >
+                  ถัดไป
+                </button>
+              </section>
+            )}
           </main>
         </div>
       </HomeLayout>

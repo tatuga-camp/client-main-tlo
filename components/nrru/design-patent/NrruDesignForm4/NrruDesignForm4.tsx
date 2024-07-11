@@ -35,7 +35,10 @@ import FileOnDesign from "./FileOnDesign";
 type NrruDesignForm4Props = {
   design: UseQueryResult<ResponseGetDesignPatentService, Error>;
 };
-const NrruDesignForm4 = forwardRef(({ design }: NrruDesignForm4Props, ref) => {
+const NrruDesignForm4 = forwardRef(function FormDesign(
+  { design }: NrruDesignForm4Props,
+  ref,
+) {
   const formRef = useRef<HTMLFormElement>(null);
 
   const [snackBarData, setSnackBarData] = useState<{
