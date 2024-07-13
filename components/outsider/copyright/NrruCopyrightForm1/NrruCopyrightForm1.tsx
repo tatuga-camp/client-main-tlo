@@ -1,5 +1,5 @@
 import NumberTitle from "@/components/Number";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import {
   Button,
   FieldError,
@@ -46,7 +46,10 @@ type NrruCopyrightForm1Props = {
   user: User;
   copyright: UseQueryResult<ResponseGetCopyrightService, Error>;
 };
-const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
+const NrruCopyrightForm1 = forwardRef(function CopyrightForm(
+  { user, copyright }: NrruCopyrightForm1Props,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -54,6 +57,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
     open: false,
     action: <></>,
   });
+  const formRef = React.useRef<HTMLFormElement>(null);
   const [ownerData, setOwnerData] = useState<OwnerPartnerType>();
   const [partnerData, setPartnerData] = useState<
     {
@@ -177,7 +181,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
 
   const handleDeletePartner = (id: string) => {
     Swal.fire({
-      title: "คุณแน่ใจหรือไม่ที่จะลบข้อมูลผู้ประดิษฐ์",
+      title: "คุณแน่ใจหรือไม่ที่จะลบข้อมูลผู้สร้างสรรค์ผลงาน ",
       text: "คุณจะไม่สามารถย้อนกลับได้!",
       icon: "warning",
       showCancelButton: true,
@@ -191,7 +195,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
           const mongoDBId = isMongoDBId(id);
           const UUID = isUUIDv4(id);
           Swal.fire({
-            title: "กำลังลบข้อมูลผู้ประดิษฐ์",
+            title: "กำลังลบข้อมูลผู้สร้างสรรค์ผลงาน ",
             text: "กรุณารอสักครู่",
             showConfirmButton: false,
             willOpen: () => {
@@ -211,7 +215,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
           }
           Swal.fire({
             title: "ลบข้อมูลสำเร็จ",
-            text: "ลบข้อมูลผู้ประดิษฐ์สำเร็จ",
+            text: "ลบข้อมูลผู้สร้างสรรค์ผลงาน สำเร็จ",
             icon: "success",
           });
         } catch (error) {
@@ -303,9 +307,23 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
     }
   };
 
-  const handleUpdatePartners = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+      formRef.current?.requestSubmit();
       setSnackBarData(() => {
         return {
           open: true,
@@ -313,7 +331,7 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
         };
       });
       if (partnerData?.length === 0 || !partnerData) {
-        throw new Error("กรุณากรอกข้อมูลผู้ประดิษฐ์");
+        throw new Error("กรุณากรอกข้อมูลผู้สร้างสรรค์ผลงาน ");
       }
       const totalParticipationRate = partnerData.reduce(
         (prev, current) => prev + (current.participateRate ?? 0),
@@ -413,10 +431,14 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
       });
     }
   };
+
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       <Form
-        onSubmit={handleUpdatePartners}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-5 lg:mx-5 lg:my-10 "
       >
         <OwnerPartner
@@ -431,9 +453,9 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
               key={partner.id}
               className={`flex flex-col gap-5 rounded-lg p-5 ring-1 ring-gray-400  `}
             >
-              <h1 className="text-lg font-semibold underline underline-offset-2">
-                ผู้ประดิษฐ์
-              </h1>
+              <h2 className="text-lg font-semibold text-[var(--primary-blue)]">
+                ผู้สร้างสรรค์ผลงานคนที่ {index + 1}
+              </h2>
               <section className="flex items-start justify-start gap-3 lg:items-center lg:gap-5">
                 <NumberTitle number={1} />
                 <div className="flex w-full flex-col gap-3 text-[0.8rem] lg:flex-row lg:gap-5 lg:text-base">
@@ -452,18 +474,16 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                         options={TitleNameList}
                         onChange={(e) => {
                           setPartnerData((prev) => {
-                            const newState = prev?.map((prevPartner) => {
+                            return prev?.map((prevPartner) => {
                               if (prevPartner.id === partner.id) {
                                 return {
                                   ...partner,
                                   title: e.value,
                                 };
+                              } else {
+                                return prevPartner;
                               }
-
-                              return partner;
                             });
-
-                            return newState;
                           });
                         }}
                         required
@@ -822,11 +842,11 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
                 <Button
                   type="button"
                   onPress={() => handleDeletePartner(partner.id)}
-                  className="my-3 flex w-48 items-center justify-center gap-3 rounded-md bg-red-400 p-2 
+                  className="my-3 flex w-72 items-center justify-center gap-3 rounded-md bg-red-400 p-2 
               text-xs font-semibold text-white duration-300 hover:bg-red-700 lg:px-3 lg:py-2 lg:text-base "
                 >
                   <MdDelete />
-                  <p>ลบชื่อผู้ประดิษฐ์</p>
+                  <p>ลบชื่อผู้สร้างสรรค์ผลงาน</p>
                 </Button>
               )}
             </div>
@@ -836,14 +856,14 @@ const NrruCopyrightForm1 = ({ user, copyright }: NrruCopyrightForm1Props) => {
         <Button
           type="button"
           onPress={handleAddMorePartner}
-          className="my-3 flex w-48 items-center justify-center gap-3 rounded-md bg-[#9747FF] p-2 text-xs font-semibold text-white duration-300 hover:bg-purple-700 lg:px-3 lg:py-2 lg:text-base "
+          className="my-3 flex w-72 items-center justify-center gap-3 rounded-md bg-[#9747FF] p-2 text-xs font-semibold text-white duration-300 hover:bg-purple-700 lg:px-3 lg:py-2 lg:text-base "
         >
-          <FiPlusCircle /> <p>เพิ่มชื่อผู้ประดิษฐ์</p>
+          <FiPlusCircle /> <p>เพิ่มชื่อผู้สร้างสรรค์ผลงาน </p>
         </Button>
         {snackBarData.open && snackBarData.action}
       </Form>
     </div>
   );
-};
+});
 
 export default NrruCopyrightForm1;

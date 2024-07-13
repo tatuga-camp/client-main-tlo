@@ -39,6 +39,7 @@ import {
   hireDetailOptions,
   isMarketingLists,
   menuNrruCopyright2,
+  menuNrruCopyright8,
   signedDocumentDetailLists,
   tranferPermissionDurationOptions,
   tranferPermissionOptions,
@@ -66,7 +67,7 @@ import {
   UploadSignURLService,
 } from "../../../../services/google-storage";
 import { CreateFileCopyrightService } from "../../../../services/copyright/file-copyright";
-import { UseQueryResult } from "@tanstack/react-query";
+import { useQueryClient, UseQueryResult } from "@tanstack/react-query";
 import { ResponseGetCopyrightService } from "../../../../services/copyright/copyright";
 import { UpdateWorkCopyrightService } from "../../../../services/copyright/work-copyright/work-copyright";
 import {
@@ -81,6 +82,7 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
   { copyright }: NrruCopyrightForm2Props,
   ref,
 ) {
+  const queryClient = useQueryClient();
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -341,6 +343,9 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
     fileOnWorkId?: string;
   }) => {
     try {
+      if (!copyright.data) {
+        throw new Error("โปรดลองใหม่อีกครั้ง");
+      }
       setSnackBarData(() => {
         return {
           open: true,
@@ -357,6 +362,23 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
             files: prev?.files?.filter((file) => file.url !== url),
           };
         });
+        const fileUnDelete =
+          copyright.data?.workInfoOnCopyright.fileWorkInfoOnCopyrights?.filter(
+            (file) => file.url !== url,
+          );
+        const updateCopyright: ResponseGetCopyrightService = {
+          ...copyright.data,
+          workInfoOnCopyright: {
+            ...copyright.data.workInfoOnCopyright,
+            fileWorkInfoOnCopyrights: [...(fileUnDelete ?? [])],
+          },
+        };
+        queryClient.setQueryData(
+          ["copyright", { copyrightId: copyright.data?.id }],
+          {
+            ...updateCopyright,
+          },
+        );
       } else {
         setWorkData((prev) => {
           return {
@@ -943,14 +965,14 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
             </section>
 
             <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:grid-cols-4 md:gap-3 md:pl-10 md:text-base">
-              {menuNrruCopyright2.map((item, index) => {
+              {menuNrruCopyright8.map((item, index) => {
                 return (
                   <Radio
                     key={index}
                     className={({ isPressed, isSelected }) =>
                       isSelected ? "" : ""
                     }
-                    value={item}
+                    value={item.title}
                   >
                     {({ isSelected }) => (
                       <div className="flex items-center justify-start gap-2 ">
@@ -961,7 +983,7 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
                             <MdOutlineRadioButtonUnchecked />
                           )}
                         </div>
-                        <span className="font-medium">{item}</span>
+                        <span className="font-medium">{item.title}</span>
                       </div>
                     )}
                   </Radio>

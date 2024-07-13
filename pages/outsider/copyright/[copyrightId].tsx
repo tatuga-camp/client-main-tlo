@@ -1,9 +1,8 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { outsiderCopyrightSection } from "../../../data/PatentSection";
 import NrruCopyrightForm2 from "@/components/outsider/copyright/NrruCopyrightForm2/NrruCopyrightForm2";
-import NrruCopyrightForm3 from "@/components/outsider/copyright/NrruCopyrightForm3/NrruCopyrightForm3";
 import NrruCopyrightForm4 from "@/components/outsider/copyright/NrruCopyrightForm4/NrruCopyrightForm4";
 import NrruCopyrightForm5 from "@/components/outsider/copyright/NrruCopyrightForm5";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
@@ -22,12 +21,17 @@ import { MdDelete, MdOutlineDriveFileMove } from "react-icons/md";
 import CopyrightStatus from "../../../components/Status/copyrightStatus";
 import NrruCopyrightForm1 from "../../../components/outsider/copyright/NrruCopyrightForm1/NrruCopyrightForm1";
 import MigrantForm from "../../../components/Forms/migrantForm";
+import { IoIosSave } from "react-icons/io";
+type ChildFormRef = {
+  saveData: () => Promise<void>;
+};
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
   const [triggerMigrationForm, setTriggerMigrationForm] = useState(false);
-
+  const childRef = useRef<ChildFormRef>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const copyright = useQuery({
     queryKey: [
       "copyright",
@@ -38,7 +42,11 @@ const Index = ({ user }: { user: User }) => {
         copyrightId: router.query.copyrightId as string,
       }),
   });
-
+  const handleSaveData = async () => {
+    setIsLoading(true);
+    await childRef.current?.saveData();
+    setIsLoading(false);
+  };
   const previousSection = () => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
@@ -66,29 +74,69 @@ const Index = ({ user }: { user: User }) => {
   };
 
   const handleValidateForm = ({ number }: { number: number }) => {
-    if (number === 1 && copyright.data?.partnerInfoOnCopyrights.length === 0) {
-      throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
-    } else if (
-      number === 2 &&
-      (copyright.data?.workInfoOnCopyright.isComplete === false ||
-        copyright.data?.partnerInfoOnCopyrights.length === 0)
-    ) {
-      throw new Error("กรุณากรอกข้อมูลผลงานที่สร้างสรรค์ ให้ครบถ้วน");
-    } else if (
-      number === 3 &&
-      (!copyright.data?.workInfoOnCopyright.id ||
-        copyright.data?.partnerInfoOnCopyrights.length === 0 ||
-        copyright.data?.fileOnCopyrights.length === 0)
-    ) {
-      throw new Error("กรุณาข้อมูลเอกสารแนบคำขอ ให้ครบถ้วน");
-    } else if (
-      number === 4 &&
-      (copyright.data?.fileOnCopyrights.length === 0 ||
-        copyright.data?.isComplete === false ||
-        copyright.data?.workInfoOnCopyright.isComplete === false ||
-        copyright.data?.partnerInfoOnCopyrights.length === 0)
-    ) {
-      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 4");
+    switch (number) {
+      case 0:
+        break;
+      case 1:
+        if (copyright.data?.partnerInfoOnCopyrights.length === 0) {
+          throw new Error("กรุณากรอกข้อมูลทั่วไปของผู้ประดิษฐ์ ให้ครบถ้วน");
+        }
+        break;
+
+      case 2:
+        if (
+          copyright.data?.workInfoOnCopyright.isComplete === false ||
+          copyright.data?.partnerInfoOnCopyrights.length === 0
+        ) {
+          throw new Error("กรุณากรอกข้อมูลผลงานที่สร้างสรรค์ ให้ครบถ้วน");
+        }
+
+        break;
+
+      case 3:
+        if (
+          !copyright.data?.workInfoOnCopyright.id ||
+          copyright.data?.partnerInfoOnCopyrights.length === 0 ||
+          copyright.data?.fileOnCopyrights.length === 0 ||
+          (copyright.data?.fileOnCopyrights?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (copyright.data?.partnerInfoOnCopyrights?.length ?? 0) ||
+          (copyright.data?.fileOnCopyrights?.filter(
+            (file) => file.documentType === "REQUEST",
+          )?.length ?? 0) === 0 ||
+          copyright.data?.fileOnCopyrights.filter(
+            (f) => f.documentType === "PERSON",
+          ).length === 0
+        ) {
+          throw new Error("กรุณาข้อมูลเอกสารแนบคำขอ ให้ครบถ้วน");
+        }
+        break;
+
+      case 4:
+        if (
+          copyright.data?.fileOnCopyrights.length === 0 ||
+          copyright.data?.isComplete === false ||
+          copyright.data?.workInfoOnCopyright.isComplete === false ||
+          copyright.data?.fileOnCopyrights.length === 0 ||
+          (copyright.data?.fileOnCopyrights?.filter(
+            (file) => file.documentType === "IDCARD",
+          ).length ?? 0) <
+            (copyright.data?.partnerInfoOnCopyrights?.length ?? 0) ||
+          (copyright.data?.fileOnCopyrights?.filter(
+            (file) => file.documentType === "REQUEST",
+          )?.length ?? 0) === 0 ||
+          copyright.data?.fileOnCopyrights.filter(
+            (f) => f.documentType === "PERSON",
+          ).length === 0
+        ) {
+          throw new Error(
+            "ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 4",
+          );
+        }
+        break;
+      default:
+        break;
     }
   };
 
@@ -299,18 +347,22 @@ const Index = ({ user }: { user: User }) => {
             <section className="w-[87%]">
               {currentSection === 0 && (
                 <div>
-                  <NrruCopyrightForm1 user={user} copyright={copyright} />
+                  <NrruCopyrightForm1
+                    ref={childRef}
+                    user={user}
+                    copyright={copyright}
+                  />
                 </div>
               )}
               {currentSection === 1 && (
                 <div>
-                  <NrruCopyrightForm2 copyright={copyright} />
+                  <NrruCopyrightForm2 ref={childRef} copyright={copyright} />
                 </div>
               )}
 
               {currentSection === 2 && (
                 <div>
-                  <NrruCopyrightForm4 copyright={copyright} />
+                  <NrruCopyrightForm4 ref={childRef} copyright={copyright} />
                 </div>
               )}
               {currentSection === 3 && (
@@ -318,7 +370,11 @@ const Index = ({ user }: { user: User }) => {
                   <p className="my-5 w-full items-center text-center  font-bold">
                     กรุณาตรวจสอบความถูกต้องและครบถ้วนของข้อมูลก่อนยื่นคำขอ
                   </p>
-                  <NrruCopyrightForm5 user={user} copyright={copyright} />
+                  <NrruCopyrightForm5
+                    ref={childRef}
+                    user={user}
+                    copyright={copyright}
+                  />
                 </div>
               )}
               {currentSection === 4 && copyright.data && (
@@ -331,25 +387,50 @@ const Index = ({ user }: { user: User }) => {
               )}
             </section>
 
-            <section className=" my-5 flex items-center justify-center gap-3">
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={previousSection}
-                disabled={currentSection === 0}
-              >
-                ย้อนกลับ
-              </button>
+            {currentSection !== 4 && (
+              <section className=" my-5 flex items-center justify-center gap-3">
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3
+                text-[0.6rem] font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={previousSection}
+                  disabled={currentSection === 0}
+                >
+                  ย้อนกลับ
+                </button>
+                {isLoading ? (
+                  <button
+                    className="flex h-8 animate-pulse items-center justify-center rounded-md
+                   border-2 border-solid border-[var(--primary-blue)] bg-main-color px-3
+                font-semibold text-white transition md:w-52"
+                  >
+                    กำลังบันทึกข้อมูล
+                    <IoIosSave />
+                  </button>
+                ) : (
+                  <button
+                    className="flex h-8 items-center justify-center rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 font-semibold transition 
+                hover:bg-main-color hover:text-white disabled:border-slate-300 disabled:text-slate-300 md:w-52"
+                    onClick={handleSaveData}
+                  >
+                    {currentSection === 3
+                      ? "ยืนยันการส่งข้อมูล"
+                      : "บันทึกข้อมูล"}
+                    <IoIosSave />
+                  </button>
+                )}
 
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={nextSection}
-                disabled={
-                  currentSection === outsiderCopyrightSection.length - 1
-                }
-              >
-                ถัดไป
-              </button>
-            </section>
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 text-[0.6rem]
+                font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={nextSection}
+                  disabled={
+                    currentSection === outsiderCopyrightSection.length - 1
+                  }
+                >
+                  ถัดไป
+                </button>
+              </section>
+            )}
           </main>
         </div>
       </HomeLayout>

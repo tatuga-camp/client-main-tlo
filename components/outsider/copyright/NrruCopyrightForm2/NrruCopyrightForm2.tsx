@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -34,6 +34,7 @@ import {
   hireDetailOptions,
   isMarketingLists,
   menuNrruCopyright2,
+  menuNrruCopyright8,
   signedDocumentDetailLists,
   tranferPermissionDurationOptions,
   tranferPermissionOptions,
@@ -64,11 +65,18 @@ import { CreateFileCopyrightService } from "../../../../services/copyright/file-
 import { UseQueryResult } from "@tanstack/react-query";
 import { ResponseGetCopyrightService } from "../../../../services/copyright/copyright";
 import { UpdateWorkCopyrightService } from "../../../../services/copyright/work-copyright/work-copyright";
+import {
+  handleChangeToBuddhistYear,
+  handleChangeToChristianYear,
+} from "../../../../utilities/date";
 
 type NrruCopyrightForm2Props = {
   copyright: UseQueryResult<ResponseGetCopyrightService, Error>;
 };
-const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
+const NrruCopyrightForm2 = forwardRef(function CopyrightForm(
+  { copyright }: NrruCopyrightForm2Props,
+  ref,
+) {
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -76,6 +84,8 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
     open: false,
     action: <></>,
   });
+  const formRef = React.useRef<HTMLFormElement>(null);
+
   const [workData, setWorkData] = useState<{
     name?: string;
     workType?: string;
@@ -125,7 +135,9 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
           };
         },
       ),
-      finishWorkAt: copyright.data?.workInfoOnCopyright.finishWorkAt,
+      finishWorkAt: handleChangeToBuddhistYear(
+        new Date(copyright.data?.workInfoOnCopyright.finishWorkAt as string),
+      ),
       workQuality: copyright.data?.workInfoOnCopyright.workQuality,
       workQualityPartDetail:
         copyright.data?.workInfoOnCopyright.workQualityPartDetail,
@@ -135,7 +147,9 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
       otherBenefit: copyright.data?.workInfoOnCopyright.otherBenefit,
       funding: copyright.data?.workInfoOnCopyright.funding,
       sourceFunding: copyright.data?.workInfoOnCopyright.sourceFunding,
-      yearFunding: copyright.data?.workInfoOnCopyright.yearFunding,
+      yearFunding: handleChangeToBuddhistYear(
+        new Date(copyright.data?.workInfoOnCopyright.yearFunding as string),
+      ),
       researchOwnershipSubmission:
         copyright.data?.workInfoOnCopyright.researchOwnershipSubmission,
       typeAccessibleMedia:
@@ -149,8 +163,11 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
       tranferPermission: copyright.data?.workInfoOnCopyright.tranferPermission,
       tranferPermissionDetail:
         copyright.data?.workInfoOnCopyright.tranferPermissionDetail,
-      tranferPermissionDate:
-        copyright.data?.workInfoOnCopyright.tranferPermissionDate,
+      tranferPermissionDate: handleChangeToBuddhistYear(
+        new Date(
+          copyright.data?.workInfoOnCopyright.tranferPermissionDate as string,
+        ),
+      ),
       tranferPermissionQuality:
         copyright.data?.workInfoOnCopyright.tranferPermissionQuality,
       tranferPermissionQualityDetail:
@@ -163,9 +180,23 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
     };
   });
 
-  const handleUpdateCopyright = async (e: React.FormEvent) => {
+  const saveData = async () => {
     try {
-      e.preventDefault();
+      formRef.current?.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
+      if (!formRef.current?.checkValidity()) {
+        const invalidElement = formRef.current?.querySelector(":invalid");
+        if (invalidElement) {
+          invalidElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          (invalidElement as HTMLElement).focus();
+        }
+        return;
+      }
+      formRef.current?.requestSubmit();
       setSnackBarData(() => {
         return {
           open: true,
@@ -204,7 +235,9 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
         body: {
           name: workData?.name,
           workType: workData?.workType,
-          finishWorkAt: workData?.finishWorkAt,
+          finishWorkAt: handleChangeToChristianYear(
+            new Date(workData?.finishWorkAt as string),
+          ),
           workQuality: workData?.workQuality,
           workQualityPartDetail: workData?.workQualityPartDetail,
           hireWork: workData?.hireWork,
@@ -213,7 +246,9 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
           otherBenefit: workData?.otherBenefit,
           funding: workData?.funding,
           sourceFunding: workData?.sourceFunding,
-          yearFunding: workData?.yearFunding,
+          yearFunding: handleChangeToChristianYear(
+            new Date(workData?.yearFunding as string),
+          ),
           researchOwnershipSubmission: workData?.researchOwnershipSubmission,
           typeAccessibleMedia: workData?.typeAccessibleMedia,
           signedDocument: workData?.signedDocument,
@@ -223,7 +258,9 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
           marketingCountry: workData?.marketingCountry,
           tranferPermission: workData?.tranferPermission,
           tranferPermissionDetail: workData?.tranferPermissionDetail,
-          tranferPermissionDate: workData?.tranferPermissionDate,
+          tranferPermissionDate: handleChangeToChristianYear(
+            new Date(workData?.tranferPermissionDate as string),
+          ),
           tranferPermissionQuality: workData?.tranferPermissionQuality,
           tranferPermissionQualityDetail:
             workData?.tranferPermissionQualityDetail,
@@ -298,61 +335,14 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
     });
   };
 
-  const handleDeleteFile = async ({
-    url,
-    fileOnWorkId,
-  }: {
-    url: string;
-    fileOnWorkId?: string;
-  }) => {
-    try {
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarLoading />,
-        };
-      });
-      if (fileOnWorkId) {
-        await DeleteFileWorkCopyrightService({
-          fileWorkCopyrightId: fileOnWorkId,
-        });
-        setWorkData((prev) => {
-          return {
-            ...prev,
-            files: prev?.files?.filter((file) => file.url !== url),
-          };
-        });
-      } else {
-        setWorkData((prev) => {
-          return {
-            ...prev,
-            files: prev?.files?.filter((file) => file.url !== url),
-          };
-        });
-      }
-      setSnackBarData(() => {
-        return {
-          open: true,
-          action: <SnackbarNoSaveData />,
-        };
-      });
-    } catch (error) {
-      let result = error as ErrorMessages;
-      Swal.fire({
-        title: result.error ? result.error : "เกิดข้อผิดพลาด",
-        text: result.message.toString(),
-        footer: result.statusCode
-          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
-          : "",
-        icon: "error",
-      });
-    }
-  };
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
 
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
       <Form
-        onSubmit={handleUpdateCopyright}
+        ref={formRef}
         className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
       >
         {/* ข้อ 1*/}
@@ -375,7 +365,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                   onChange={handleChangeWorkData}
                   type="text"
                   className="h-8 w-full rounded-md bg-slate-300 p-1 pl-3 md:h-10  md:pl-4 "
-                  placeholder="กรอกชื่อภาษาไทย"
+                  placeholder="กรอกชื่อผลงาน"
                 />
                 <FieldError className="text-xs text-red-700" />
               </section>
@@ -464,6 +454,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                         : null
                     }
                     required
+                    yearRange="2560:2568"
                     locale="th"
                     view="year"
                     placeholder="ระบุปี"
@@ -693,14 +684,14 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
             </section>
 
             <div className="grid w-full grid-cols-1 gap-1.5 px-5 text-[0.8rem] md:grid-cols-4 md:gap-3 md:pl-10 md:text-base">
-              {menuNrruCopyright2.map((item, index) => {
+              {menuNrruCopyright8.map((item, index) => {
                 return (
                   <Radio
                     key={index}
                     className={({ isPressed, isSelected }) =>
                       isSelected ? "" : ""
                     }
-                    value={item}
+                    value={item.title}
                   >
                     {({ isSelected }) => (
                       <div className="flex items-center justify-start gap-2 ">
@@ -711,7 +702,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                             <MdOutlineRadioButtonUnchecked />
                           )}
                         </div>
-                        <span className="font-medium">{item}</span>
+                        <span className="font-medium">{item.title}</span>
                       </div>
                     )}
                   </Radio>
@@ -851,6 +842,7 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
                     })
                   }
                   locale="th"
+                  yearRange="2560:2568"
                   placeholder="วัน/เดือน/ปี"
                   dateFormat="dd/mm/yy"
                 />
@@ -981,126 +973,134 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
             </section>
           </RadioGroup>
 
-          <RadioGroup
-            isRequired={
-              workData?.tranferPermission ===
-              "อนุญาตให้ใช้สิทธิ์/โอนลิขสิทธิ์ให้แก่"
-            }
-            value={workData?.tranferPermissionQuality}
-            onChange={(e) =>
-              handleChangeRaio({ e: e, name: "tranferPermissionQuality" })
-            }
-            className="mb-3 flex flex-col items-start justify-center gap-2 md:ml-12 md:gap-5"
-          >
-            <Label className="font-semibold ">ลักษณะการโอนสิทธิ :</Label>
-            <FieldError className="text-xs text-red-700" />
-            {tranferPermissionQualityOptions.map((item, index) => {
-              return (
-                <Radio
-                  key={index}
-                  value={item}
-                  className="flex w-full items-center"
-                >
-                  {({ isSelected }) => (
-                    <div className="flex flex-col justify-center gap-2  md:flex-row md:items-center">
-                      <div className="flex w-full gap-2 text-2xl md:items-center">
-                        {isSelected ? (
-                          <MdOutlineRadioButtonChecked />
-                        ) : (
-                          <MdOutlineRadioButtonUnchecked />
-                        )}
-                        <div className="flex flex-col items-center md:flex-row">
-                          <span className="w-full text-[0.9rem] font-medium md:min-w-64 md:text-base">
-                            {item}{" "}
-                          </span>
+          {workData.tranferPermission ===
+            "อนุญาตให้ใช้สิทธิ์/โอนลิขสิทธิ์ให้แก่" && (
+            <RadioGroup
+              isRequired={
+                workData?.tranferPermission ===
+                "อนุญาตให้ใช้สิทธิ์/โอนลิขสิทธิ์ให้แก่"
+              }
+              value={workData?.tranferPermissionQuality}
+              onChange={(e) =>
+                handleChangeRaio({ e: e, name: "tranferPermissionQuality" })
+              }
+              className="mb-3 flex flex-col items-start justify-center gap-2 md:ml-12 md:gap-5"
+            >
+              <Label className="font-semibold ">ลักษณะการโอนสิทธิ :</Label>
+              <FieldError className="text-xs text-red-700" />
+              {tranferPermissionQualityOptions.map((item, index) => {
+                return (
+                  <Radio
+                    key={index}
+                    value={item}
+                    className="flex w-full items-center"
+                  >
+                    {({ isSelected }) => (
+                      <div className="flex flex-col justify-center gap-2  md:flex-row md:items-center">
+                        <div className="flex w-full gap-2 text-2xl md:items-center">
+                          {isSelected ? (
+                            <MdOutlineRadioButtonChecked />
+                          ) : (
+                            <MdOutlineRadioButtonUnchecked />
+                          )}
+                          <div className="flex flex-col items-center md:flex-row">
+                            <span className="w-full text-[0.9rem] font-medium md:min-w-64 md:text-base">
+                              {item}{" "}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </Radio>
-              );
-            })}
+                    )}
+                  </Radio>
+                );
+              })}
 
-            <TextField className={"flex w-full flex-col items-center gap-3 "}>
-              <Input
-                value={workData?.tranferPermissionQualityDetail}
-                onChange={handleChangeWorkData}
-                name="tranferPermissionQualityDetail"
-                required={
-                  workData?.tranferPermissionQuality ===
-                  "โอนสิทธิบางส่วน (ระบุ)"
-                }
-                disabled={
-                  workData?.tranferPermissionQuality !==
-                  "โอนสิทธิบางส่วน (ระบุ)"
-                }
-                type="text"
-                className="h-8 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-56 "
-                placeholder="ระบุลักษณะการโอนสิทธิ"
-              />
-              <FieldError className="text-xs text-red-700" />
-            </TextField>
-          </RadioGroup>
-
-          <RadioGroup
-            isRequired={
-              workData?.tranferPermission ===
-              "อนุญาตให้ใช้สิทธิ์/โอนลิขสิทธิ์ให้แก่"
-            }
-            value={workData?.tranferPermissionDuration}
-            onChange={(e) =>
-              handleChangeRaio({ e: e, name: "tranferPermissionDuration" })
-            }
-            className="mb-3 flex flex-col items-start justify-center gap-2 md:ml-12 md:gap-5 "
-          >
-            <Label className="font-semibold ">ระยะเวลาโอนสิทธิ :</Label>
-            {tranferPermissionDurationOptions.map((item, index) => {
-              return (
-                <Radio key={index} value={item} className="flex items-center">
-                  {({ isSelected }) => (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="text-2xl">
-                        {isSelected ? (
-                          <MdOutlineRadioButtonChecked />
-                        ) : (
-                          <MdOutlineRadioButtonUnchecked />
-                        )}
-                      </div>
-                      <span className="font-medium md:min-w-[7rem]">
-                        {item}
-                      </span>
-                    </div>
-                  )}
-                </Radio>
-              );
-            })}
-
-            <TextField className={"flex w-full items-center gap-3 md:ml-10"}>
-              <section className="flex w-full flex-col">
+              <TextField className={"flex w-full flex-col items-center gap-3 "}>
                 <Input
-                  value={workData?.tranferPermissionDurationDetail}
+                  value={workData?.tranferPermissionQualityDetail}
                   onChange={handleChangeWorkData}
-                  name="tranferPermissionDurationDetail"
+                  name="tranferPermissionQualityDetail"
                   required={
-                    workData?.tranferPermissionDuration === "มีกำหนดเวลา (ระบุ)"
+                    workData?.tranferPermissionQuality ===
+                    "โอนสิทธิบางส่วน (ระบุ)"
                   }
                   disabled={
-                    workData?.tranferPermissionDuration !== "มีกำหนดเวลา (ระบุ)"
+                    workData?.tranferPermissionQuality !==
+                    "โอนสิทธิบางส่วน (ระบุ)"
                   }
                   type="text"
                   className="h-8 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-56 "
-                  placeholder=""
+                  placeholder="ระบุลักษณะการโอนสิทธิ"
                 />
                 <FieldError className="text-xs text-red-700" />
-              </section>
-            </TextField>
-          </RadioGroup>
+              </TextField>
+            </RadioGroup>
+          )}
+
+          {workData.tranferPermission ===
+            "อนุญาตให้ใช้สิทธิ์/โอนลิขสิทธิ์ให้แก่" && (
+            <RadioGroup
+              isRequired={
+                workData?.tranferPermission ===
+                "อนุญาตให้ใช้สิทธิ์/โอนลิขสิทธิ์ให้แก่"
+              }
+              value={workData?.tranferPermissionDuration}
+              onChange={(e) =>
+                handleChangeRaio({ e: e, name: "tranferPermissionDuration" })
+              }
+              className={`mb-3 flex flex-col items-start justify-center gap-2 md:ml-12 md:gap-5  `}
+            >
+              <Label className="font-semibold ">ระยะเวลาโอนสิทธิ :</Label>
+              {tranferPermissionDurationOptions.map((item, index) => {
+                return (
+                  <Radio key={index} value={item} className="flex items-center">
+                    {({ isSelected }) => (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="text-2xl">
+                          {isSelected ? (
+                            <MdOutlineRadioButtonChecked />
+                          ) : (
+                            <MdOutlineRadioButtonUnchecked />
+                          )}
+                        </div>
+                        <span className="font-medium md:min-w-[7rem]">
+                          {item}
+                        </span>
+                      </div>
+                    )}
+                  </Radio>
+                );
+              })}
+
+              <TextField className={"flex w-full items-center gap-3 md:ml-10"}>
+                <section className="flex w-full flex-col">
+                  <Input
+                    value={workData?.tranferPermissionDurationDetail}
+                    onChange={handleChangeWorkData}
+                    name="tranferPermissionDurationDetail"
+                    required={
+                      workData?.tranferPermissionDuration ===
+                      "มีกำหนดเวลา (ระบุ)"
+                    }
+                    disabled={
+                      workData?.tranferPermissionDuration !==
+                      "มีกำหนดเวลา (ระบุ)"
+                    }
+                    type="text"
+                    className="h-8 rounded-md bg-slate-300 p-1 pl-3 md:h-10 md:w-56 "
+                    placeholder=""
+                  />
+                  <FieldError className="text-xs text-red-700" />
+                </section>
+              </TextField>
+            </RadioGroup>
+          )}
         </section>
 
-        {/* ข้อ 12*/}
+        {/* ข้อ 10*/}
         <section className="flex flex-col items-start justify-center gap-2 md:gap-5 ">
           <section className="flex items-center gap-3">
-            <Number number={12} />
+            <Number number={10} />
             <p className="my-2 w-full text-[0.8rem] font-semibold md:text-base">
               รายละเอียดผลงานโดยย่อ
             </p>
@@ -1127,6 +1127,6 @@ const NrruCopyrightForm2 = ({ copyright }: NrruCopyrightForm2Props) => {
       </Form>
     </div>
   );
-};
+});
 
 export default NrruCopyrightForm2;

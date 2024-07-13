@@ -1,5 +1,5 @@
 import Number from "@/components/Number";
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import {
   Button,
   FieldError,
@@ -22,17 +22,19 @@ import { useRouter } from "next-nprogress-bar";
 import Swal from "sweetalert2";
 import NrruCopyrightForm1 from "./NrruCopyrightForm1/NrruCopyrightForm1";
 import NrruCopyrightForm2 from "./NrruCopyrightForm2/NrruCopyrightForm2";
-import NrruCopyrightForm3 from "./NrruCopyrightForm3/NrruCopyrightForm3";
 import NrruCopyrightForm4 from "./NrruCopyrightForm4/NrruCopyrightForm4";
 
 type NrruCopyrightForm5Props = {
   copyright: UseQueryResult<ResponseGetCopyrightService, Error>;
   user: User;
 };
-const NrruCopyrightForm5 = ({ copyright, user }: NrruCopyrightForm5Props) => {
+const NrruCopyrightForm5 = forwardRef(function CopyrightForm(
+  { copyright, user }: NrruCopyrightForm5Props,
+  ref,
+) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const handleUpdateCopyright = async () => {
+  const saveData = async () => {
     try {
       setIsLoading(true);
       Swal.fire({
@@ -76,21 +78,15 @@ const NrruCopyrightForm5 = ({ copyright, user }: NrruCopyrightForm5Props) => {
       });
     }
   };
+  React.useImperativeHandle(ref, () => ({
+    saveData,
+  }));
   return (
     <div className="flex flex-col gap-5">
       <NrruCopyrightForm1 user={user} copyright={copyright} />
       <NrruCopyrightForm2 copyright={copyright} />
       <NrruCopyrightForm4 copyright={copyright} />
-      {copyright.data?.isComplete === false ? (
-        <button
-          disabled={isLoading}
-          onClick={handleUpdateCopyright}
-          className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-[#10316B] px-3 py-2
-       font-semibold text-white  drop-shadow-lg transition duration-100 hover:bg-[#19106b] active:ring-2"
-        >
-          ฉันยืนยันข้อมูลถูกต้องและ ต้องการส่งคำขอ
-        </button>
-      ) : (
+      {copyright.data?.isComplete === true && (
         <div
           className="fixed bottom-2 left-2 mt-5 w-80 rounded-md bg-green-500 px-3 py-2
        font-semibold text-white  drop-shadow-lg "
@@ -100,6 +96,6 @@ const NrruCopyrightForm5 = ({ copyright, user }: NrruCopyrightForm5Props) => {
       )}
     </div>
   );
-};
+});
 
 export default NrruCopyrightForm5;
