@@ -101,7 +101,7 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
       type?: string;
       file?: File;
     }[];
-    finishWorkAt?: string;
+    finishWorkAt?: string | null;
     workQuality?: WorkQualityOptions;
     workQualityPartDetail?: string;
     hireWork?: string;
@@ -110,17 +110,17 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
     otherBenefit?: string;
     funding?: string;
     sourceFunding?: string;
-    yearFunding?: string;
+    yearFunding?: string | null;
     researchOwnershipSubmission?: ResearchOwnershipSubmission;
     typeAccessibleMedia?: string;
     signedDocument?: SignedDocumentDetailLists;
     signedDocumentDetail?: string;
     isMarketing?: IsMarketingLists;
-    marketingDate?: string;
+    marketingDate?: string | null;
     marketingCountry?: string;
     tranferPermission?: TranferPermissionOptions;
     tranferPermissionDetail?: string;
-    tranferPermissionDate?: string;
+    tranferPermissionDate?: string | null;
     tranferPermissionQuality?: TranferPermissionQualityOptions;
     tranferPermissionQualityDetail?: string;
     tranferPermissionDuration?: TranferPermissionDurationOptions;
@@ -140,9 +140,11 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
           };
         },
       ),
-      finishWorkAt: handleChangeToBuddhistYear(
-        new Date(copyright.data?.workInfoOnCopyright.finishWorkAt as string),
-      ),
+      finishWorkAt: copyright.data?.workInfoOnCopyright.finishWorkAt
+        ? handleChangeToBuddhistYear(
+            new Date(copyright.data?.workInfoOnCopyright.finishWorkAt),
+          )
+        : null,
       workQuality: copyright.data?.workInfoOnCopyright.workQuality,
       workQualityPartDetail:
         copyright.data?.workInfoOnCopyright.workQualityPartDetail,
@@ -152,9 +154,11 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
       otherBenefit: copyright.data?.workInfoOnCopyright.otherBenefit,
       funding: copyright.data?.workInfoOnCopyright.funding,
       sourceFunding: copyright.data?.workInfoOnCopyright.sourceFunding,
-      yearFunding: handleChangeToBuddhistYear(
-        new Date(copyright.data?.workInfoOnCopyright.yearFunding as string),
-      ),
+      yearFunding: copyright.data?.workInfoOnCopyright.yearFunding
+        ? handleChangeToBuddhistYear(
+            new Date(copyright.data?.workInfoOnCopyright.yearFunding),
+          )
+        : null,
       researchOwnershipSubmission:
         copyright.data?.workInfoOnCopyright.researchOwnershipSubmission,
       typeAccessibleMedia:
@@ -163,13 +167,21 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
       signedDocumentDetail:
         copyright.data?.workInfoOnCopyright.signedDocumentDetail,
       isMarketing: copyright.data?.workInfoOnCopyright.isMarketing,
-      marketingDate: copyright.data?.workInfoOnCopyright.marketingDate,
+      marketingDate: copyright.data?.workInfoOnCopyright.marketingDate
+        ? handleChangeToBuddhistYear(
+            new Date(copyright.data?.workInfoOnCopyright.marketingDate),
+          )
+        : null,
       marketingCountry: copyright.data?.workInfoOnCopyright.marketingCountry,
       tranferPermission: copyright.data?.workInfoOnCopyright.tranferPermission,
       tranferPermissionDetail:
         copyright.data?.workInfoOnCopyright.tranferPermissionDetail,
-      tranferPermissionDate:
-        copyright.data?.workInfoOnCopyright.tranferPermissionDate,
+      tranferPermissionDate: copyright.data?.workInfoOnCopyright
+        .tranferPermissionDate
+        ? handleChangeToBuddhistYear(
+            new Date(copyright.data?.workInfoOnCopyright.tranferPermissionDate),
+          )
+        : null,
       tranferPermissionQuality:
         copyright.data?.workInfoOnCopyright.tranferPermissionQuality,
       tranferPermissionQualityDetail:
@@ -237,9 +249,9 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
         body: {
           name: workData?.name,
           workType: workData?.workType,
-          finishWorkAt: handleChangeToChristianYear(
-            new Date(workData?.finishWorkAt as string),
-          ),
+          finishWorkAt: workData?.finishWorkAt
+            ? handleChangeToChristianYear(new Date(workData?.finishWorkAt))
+            : null,
           workQuality: workData?.workQuality,
           workQualityPartDetail: workData?.workQualityPartDetail,
           hireWork: workData?.hireWork,
@@ -248,19 +260,25 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
           otherBenefit: workData?.otherBenefit,
           funding: workData?.funding,
           sourceFunding: workData?.sourceFunding,
-          yearFunding: handleChangeToChristianYear(
-            new Date(workData?.yearFunding as string),
-          ),
+          yearFunding: workData?.yearFunding
+            ? handleChangeToChristianYear(new Date(workData?.yearFunding))
+            : null,
           researchOwnershipSubmission: workData?.researchOwnershipSubmission,
           typeAccessibleMedia: workData?.typeAccessibleMedia,
           signedDocument: workData?.signedDocument,
           signedDocumentDetail: workData?.signedDocumentDetail,
           isMarketing: workData?.isMarketing,
-          marketingDate: workData?.marketingDate,
+          marketingDate: workData?.marketingDate
+            ? handleChangeToChristianYear(new Date(workData?.marketingDate))
+            : null,
           marketingCountry: workData?.marketingCountry,
           tranferPermission: workData?.tranferPermission,
           tranferPermissionDetail: workData?.tranferPermissionDetail,
-          tranferPermissionDate: workData?.tranferPermissionDate,
+          tranferPermissionDate: workData?.tranferPermissionDate
+            ? handleChangeToChristianYear(
+                new Date(workData?.tranferPermissionDate),
+              )
+            : null,
           tranferPermissionQuality: workData?.tranferPermissionQuality,
           tranferPermissionQualityDetail:
             workData?.tranferPermissionQualityDetail,
@@ -409,6 +427,7 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
   useImperativeHandle(ref, () => ({
     saveData,
   }));
+
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 md:p-10">
       <Form
@@ -512,7 +531,6 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
               <section className="flex flex-col">
                 <div className="w-32 rounded-lg bg-slate-300 p-1 text-xs md:w-40 md:text-base">
                   <Calendar
-                    yearRange="2560:2568"
                     onChange={(e) =>
                       handleChangeCalendar({
                         value: e.value as Date,
@@ -524,6 +542,8 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
                         ? new Date(workData.finishWorkAt)
                         : null
                     }
+                    yearRange="2567:2570"
+                    yearNavigator
                     required
                     locale="th"
                     view="year"
@@ -810,7 +830,8 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
                 </Label>
                 <div className="w-40 rounded-lg bg-slate-300 p-1">
                   <Calendar
-                    yearRange="2560:2568"
+                    yearRange="2567:2570"
+                    yearNavigator
                     value={
                       workData?.yearFunding
                         ? new Date(workData.yearFunding)
@@ -1123,6 +1144,8 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
                     })
                   }
                   locale="th"
+                  yearRange="2567:2570"
+                  yearNavigator
                   placeholder="วัน/เดือน/ปี"
                   dateFormat="dd/mm/yy"
                 />
@@ -1245,6 +1268,8 @@ const NrruCopyrightForm2 = forwardRef(function FormCopyright(
                     })
                   }
                   locale="th"
+                  yearRange="2567:2570"
+                  yearNavigator
                   placeholder="วัน/เดือน/ปี"
                   dateFormat="dd/mm/yy"
                 />

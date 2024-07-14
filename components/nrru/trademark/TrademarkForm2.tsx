@@ -283,14 +283,17 @@ const TrademarkForm2 = forwardRef(function FormTrademark(
         className="mx-0 my-5 flex flex-col gap-5 md:mx-5 md:my-10 "
       >
         {/* ข้อ 1*/}
-        <section className="flex flex-col items-start justify-center gap-3 md:gap-5  lg:flex-row">
+        <section className="flex flex-col items-start justify-start gap-3 md:gap-5  lg:flex-row">
           <section className="flex items-center gap-3">
             <Number number={1} />
             <p className="my-2 text-[0.8rem] font-semibold md:min-w-32 md:text-base">
               กรอกชื่อเครื่องหมายการค้า
             </p>
           </section>
-          <div className="flex w-full flex-col flex-wrap gap-3 pl-7 text-[0.8rem] md:flex-row md:gap-5 md:pl-0 md:text-base">
+          <div
+            className="flex  flex-col flex-wrap gap-3 pl-7 text-[0.8rem]
+           md:flex-row md:gap-5 md:pl-0 md:text-base"
+          >
             <TextField
               isRequired
               className={"flex w-full min-w-60 items-center gap-3 "}

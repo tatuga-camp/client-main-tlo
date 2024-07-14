@@ -37,6 +37,7 @@ import {
   PublicType,
   ResearchOwnershipSubmission,
   ResearchType,
+  SearchResults,
   Websites,
   agreementTitles,
   fundingLists,
@@ -80,6 +81,8 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
   { invention }: InventSection2Props,
   ref,
 ) {
+  const searchWorkRef = React.useRef<HTMLDivElement>(null);
+
   const [snackBarData, setSnackBarData] = useState<{
     open: boolean;
     action: React.ReactNode;
@@ -99,26 +102,26 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
       type?: string;
       file?: File;
     }[];
-    beginWorkAt?: string;
-    finishWorkAt?: string;
+    beginWorkAt?: string | null;
+    finishWorkAt?: string | null;
     benefit?: string[];
     otherBenefit?: string;
     funding?: FundingLists;
     sourceFunding?: string;
-    yearFunding?: string;
+    yearFunding?: string | null;
     researchOwnershipSubmission?: ResearchOwnershipSubmission;
     agreementTitle?: string;
     agreementInstitution?: string;
-    agreementYear?: string;
+    agreementYear?: string | null;
     otherAgreement?: string;
     researchResult?: ResearchType;
     keywords?: string;
     website?: string[];
     otherWebsite?: string;
-    searchResult?: string;
+    searchResult?: SearchResults;
     isRequest?: string;
     requestNumber?: string;
-    requestDate?: string;
+    requestDate?: string | null;
     requestCountry?: string;
     publicType?: string[];
     otherPublicType?: string;
@@ -144,27 +147,35 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
           },
         ) ?? []),
       ],
-      beginWorkAt: handleChangeToBuddhistYear(
-        new Date(
-          invention.data?.workInfoOnInventionPatent.beginWorkAt as string,
-        ),
-      ),
-      finishWorkAt: handleChangeToBuddhistYear(
-        new Date(
-          invention.data?.workInfoOnInventionPatent.finishWorkAt as string,
-        ),
-      ),
+      beginWorkAt: invention.data?.workInfoOnInventionPatent.beginWorkAt
+        ? handleChangeToBuddhistYear(
+            new Date(invention.data?.workInfoOnInventionPatent.beginWorkAt),
+          )
+        : null,
+      finishWorkAt: invention.data?.workInfoOnInventionPatent.finishWorkAt
+        ? handleChangeToBuddhistYear(
+            new Date(invention.data?.workInfoOnInventionPatent.finishWorkAt),
+          )
+        : null,
       benefit: invention.data?.workInfoOnInventionPatent.benefit,
       otherBenefit: invention.data?.workInfoOnInventionPatent.otherBenefit,
       funding: invention.data?.workInfoOnInventionPatent.funding,
       sourceFunding: invention.data?.workInfoOnInventionPatent.sourceFunding,
-      yearFunding: invention.data?.workInfoOnInventionPatent.yearFunding,
+      yearFunding: invention.data?.workInfoOnInventionPatent.yearFunding
+        ? handleChangeToBuddhistYear(
+            new Date(invention.data?.workInfoOnInventionPatent.yearFunding),
+          )
+        : null,
       researchOwnershipSubmission:
         invention.data?.workInfoOnInventionPatent.researchOwnershipSubmission,
       agreementTitle: invention.data?.workInfoOnInventionPatent.agreementTitle,
       agreementInstitution:
         invention.data?.workInfoOnInventionPatent.agreementInstitution,
-      agreementYear: invention.data?.workInfoOnInventionPatent.agreementYear,
+      agreementYear: invention.data?.workInfoOnInventionPatent.agreementYear
+        ? handleChangeToBuddhistYear(
+            new Date(invention.data?.workInfoOnInventionPatent.agreementYear),
+          )
+        : null,
       otherAgreement: invention.data?.workInfoOnInventionPatent.otherAgreement,
       researchResult: invention.data?.workInfoOnInventionPatent.researchResult,
       keywords: invention.data?.workInfoOnInventionPatent.keywords,
@@ -175,7 +186,11 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
         ? "เคย"
         : "ไม่เคย",
       requestNumber: invention.data?.workInfoOnInventionPatent.requestNumber,
-      requestDate: invention.data?.workInfoOnInventionPatent.requestDate,
+      requestDate: invention.data?.workInfoOnInventionPatent.requestDate
+        ? handleChangeToBuddhistYear(
+            new Date(invention.data?.workInfoOnInventionPatent.requestDate),
+          )
+        : null,
       requestCountry: invention.data?.workInfoOnInventionPatent.requestCountry,
       publicType: invention.data?.workInfoOnInventionPatent.publicType,
       otherPublicType:
@@ -207,6 +222,17 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
         return;
       }
       formRef.current?.requestSubmit();
+
+      if (
+        workData.searchResult === "เหมือนหรือคล้ายกับงานที่ปรากฏอยู่ก่อนแล้ว" &&
+        invention.data?.workInfoOnInventionPatent
+          .patentRelateToSearchResultOnInventionPatents.length === 0
+      ) {
+        searchWorkRef.current?.scrollIntoView({});
+        throw new Error(
+          "กรุณาเพิ่มข้อมูล 9.4 สิทธิบัตรหรืออนุสิทธิบัตรที่เกี่ยวข้องที่ได้จากการสืบค้น หรืองานที่ปรากฏอยู่ก่อน",
+        );
+      }
       setSnackBarData(() => {
         return {
           open: true,
@@ -247,28 +273,34 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
           thaiName: workData?.thaiName,
           englishName: workData?.englishName,
           type: workData?.type,
-          beginWorkAt: handleChangeToChristianYear(
-            new Date(workData?.beginWorkAt as string),
-          ),
-          finishWorkAt: handleChangeToChristianYear(
-            new Date(workData?.finishWorkAt as string),
-          ),
+          beginWorkAt: workData?.beginWorkAt
+            ? handleChangeToChristianYear(new Date(workData?.beginWorkAt))
+            : null,
+          finishWorkAt: workData?.finishWorkAt
+            ? handleChangeToChristianYear(new Date(workData?.finishWorkAt))
+            : null,
           benefit: workData?.benefit,
           otherBenefit: workData?.otherBenefit,
           funding: workData?.funding,
           sourceFunding: workData?.sourceFunding,
-          yearFunding: workData?.yearFunding,
+          yearFunding: workData?.yearFunding
+            ? handleChangeToChristianYear(new Date(workData?.yearFunding))
+            : null,
           researchOwnershipSubmission: workData?.researchOwnershipSubmission,
           agreementTitle: workData?.agreementTitle,
           agreementInstitution: workData?.agreementInstitution,
-          agreementYear: workData?.agreementYear,
+          agreementYear: workData?.agreementYear
+            ? handleChangeToChristianYear(new Date(workData?.agreementYear))
+            : null,
           researchResult: workData?.researchResult,
           website: workData?.website,
           otherWebsite: workData?.otherWebsite,
           keywords: workData?.keywords,
           searchResult: workData?.searchResult,
           requestNumber: workData?.requestNumber,
-          requestDate: workData?.requestDate,
+          requestDate: workData?.requestDate
+            ? handleChangeToChristianYear(new Date(workData?.requestDate))
+            : null,
           requestCountry: workData?.requestCountry,
           publicType: workData?.publicType,
           otherPublicType: workData?.otherPublicType,
@@ -523,6 +555,7 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
                       ? new Date(workData.beginWorkAt)
                       : null
                   }
+                  yearNavigator
                   onChange={(e) => {
                     handleChangeCalendar({
                       value: e.value as Date,
@@ -557,6 +590,7 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
                     });
                   }}
                   required
+                  yearNavigator
                   yearRange="2560:2580"
                   locale="th"
                   view="year"
@@ -728,6 +762,8 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
                     disabled={workData?.funding === "ไม่ได้รับทุนอุดหนุนใดๆ"}
                     required={workData?.funding !== "ไม่ได้รับทุนอุดหนุนใดๆ"}
                     locale="th"
+                    yearNavigator
+                    yearRange="2560:2580"
                     view="year"
                     placeholder="ระบุปี"
                     dateFormat="yy"
@@ -931,6 +967,8 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
                   }}
                   required
                   locale="th"
+                  yearNavigator
+                  yearRange="2560:2580"
                   view="year"
                   placeholder="ปีที่ได้ลงนาม"
                   dateFormat="yy"
@@ -1149,7 +1187,13 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
                 )}
               </div>
             </section>
-            <SearchWorkInvention invention={invention} />
+            {workData.searchResult ===
+              "เหมือนหรือคล้ายกับงานที่ปรากฏอยู่ก่อนแล้ว" && (
+              <SearchWorkInvention
+                searchWorkRef={searchWorkRef}
+                invention={invention}
+              />
+            )}
           </div>
         </section>
 
@@ -1237,6 +1281,8 @@ const NrruInventionForm2 = forwardRef(function FormInvention(
                     }}
                     required
                     locale="th"
+                    yearNavigator
+                    yearRange="2560:2580"
                     dateFormat="dd/mm/yy"
                     placeholder="dd/mm/yyyy"
                   />

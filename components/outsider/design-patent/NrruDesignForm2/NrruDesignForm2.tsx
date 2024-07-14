@@ -90,13 +90,13 @@ const NrruDesignForm2 = forwardRef(function FromDesign(
       type?: string;
       file?: File;
     }[];
-    beginWorkAt?: string;
-    finishWorkAt?: string;
+    beginWorkAt?: string | null;
+    finishWorkAt?: string | null;
     benefit?: string[];
     otherBenefit?: string;
     agreementTitle?: string;
     agreementInstitution?: string;
-    agreementYear?: string;
+    agreementYear?: string | null;
     otherAgreement?: string;
     researchResult?: ResearchType;
     keywords?: string;
@@ -105,7 +105,7 @@ const NrruDesignForm2 = forwardRef(function FromDesign(
     searchResult?: SearchResults;
     isRequest?: string;
     requestNumber?: string;
-    requestDate?: string;
+    requestDate?: string | null;
     requestCountry?: string;
     publicType?: string[];
     otherPublicType?: string;
@@ -127,21 +127,27 @@ const NrruDesignForm2 = forwardRef(function FromDesign(
           };
         }) ?? []),
       ],
-      beginWorkAt: handleChangeToBuddhistYear(
-        new Date(design.data?.workInfoOnDesignPatent.beginWorkAt as string),
-      ),
-      finishWorkAt: handleChangeToBuddhistYear(
-        new Date(design.data?.workInfoOnDesignPatent.finishWorkAt as string),
-      ),
+      beginWorkAt: design.data?.workInfoOnDesignPatent.beginWorkAt
+        ? handleChangeToBuddhistYear(
+            new Date(design.data?.workInfoOnDesignPatent.beginWorkAt),
+          )
+        : null,
+      finishWorkAt: design.data?.workInfoOnDesignPatent.finishWorkAt
+        ? handleChangeToBuddhistYear(
+            new Date(design.data?.workInfoOnDesignPatent.finishWorkAt),
+          )
+        : null,
       benefit: design.data?.workInfoOnDesignPatent.benefit,
       otherBenefit: design.data?.workInfoOnDesignPatent.otherBenefit,
 
       agreementTitle: design.data?.workInfoOnDesignPatent.agreementTitle,
       agreementInstitution:
         design.data?.workInfoOnDesignPatent.agreementInstitution,
-      agreementYear: handleChangeToBuddhistYear(
-        new Date(design.data?.workInfoOnDesignPatent.agreementYear as string),
-      ),
+      agreementYear: design.data?.workInfoOnDesignPatent.agreementYear
+        ? handleChangeToBuddhistYear(
+            new Date(design.data?.workInfoOnDesignPatent.agreementYear),
+          )
+        : null,
       otherAgreement: design.data?.workInfoOnDesignPatent.otherAgreement,
       researchResult: design.data?.workInfoOnDesignPatent.researchResult,
       keywords: design.data?.workInfoOnDesignPatent.keywords,
@@ -152,9 +158,11 @@ const NrruDesignForm2 = forwardRef(function FromDesign(
         ? "เคย"
         : "ไม่เคย",
       requestNumber: design.data?.workInfoOnDesignPatent.requestNumber,
-      requestDate: handleChangeToBuddhistYear(
-        new Date(design.data?.workInfoOnDesignPatent.requestDate as string),
-      ),
+      requestDate: design.data?.workInfoOnDesignPatent.requestDate
+        ? handleChangeToBuddhistYear(
+            new Date(design.data?.workInfoOnDesignPatent.requestDate),
+          )
+        : null,
       requestCountry: design.data?.workInfoOnDesignPatent.requestCountry,
       publicType: design.data?.workInfoOnDesignPatent.publicType,
       otherPublicType: design.data?.workInfoOnDesignPatent.otherPublicType,
@@ -243,18 +251,18 @@ const NrruDesignForm2 = forwardRef(function FromDesign(
           otherBenefit: workData?.otherBenefit,
           agreementTitle: workData?.agreementTitle,
           agreementInstitution: workData?.agreementInstitution,
-          agreementYear: handleChangeToChristianYear(
-            new Date(workData?.agreementYear as string),
-          ),
+          agreementYear: workData?.agreementYear
+            ? handleChangeToChristianYear(new Date(workData?.agreementYear))
+            : null,
           researchResult: workData?.researchResult,
           website: workData?.website,
           otherWebsite: workData?.otherWebsite,
           keywords: workData?.keywords,
           searchResult: workData?.searchResult,
           requestNumber: workData?.requestNumber,
-          requestDate: handleChangeToChristianYear(
-            new Date(workData?.requestDate as string),
-          ),
+          requestDate: workData?.requestDate
+            ? handleChangeToChristianYear(new Date(workData?.requestDate))
+            : null,
           requestCountry: workData?.requestCountry,
           publicType: workData?.publicType,
           otherPublicType: workData?.otherPublicType,
@@ -443,6 +451,7 @@ const NrruDesignForm2 = forwardRef(function FromDesign(
                   }}
                   required
                   yearRange="2560:2580"
+                  yearNavigator
                   locale="th"
                   view="year"
                   placeholder="ระบุปี"
@@ -472,6 +481,7 @@ const NrruDesignForm2 = forwardRef(function FromDesign(
                   locale="th"
                   view="year"
                   yearRange="2560:2580"
+                  yearNavigator
                   placeholder="ระบุปี"
                   dateFormat="yy"
                 />
@@ -633,6 +643,7 @@ const NrruDesignForm2 = forwardRef(function FromDesign(
                   required
                   locale="th"
                   yearRange="2560:2580"
+                  yearNavigator
                   view="year"
                   placeholder="ปีที่ได้ลงนาม"
                   dateFormat="yy"
@@ -847,6 +858,7 @@ const NrruDesignForm2 = forwardRef(function FromDesign(
                     required
                     locale="th"
                     yearRange="2560:2580"
+                    yearNavigator
                     dateFormat="dd/mm/yy"
                     placeholder="dd/mm/yyyy"
                   />

@@ -95,13 +95,13 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
       type?: string;
       file?: File;
     }[];
-    beginWorkAt?: string;
-    finishWorkAt?: string;
+    beginWorkAt?: string | null;
+    finishWorkAt?: string | null;
     benefit?: string[];
     otherBenefit?: string;
     agreementTitle?: string;
     agreementInstitution?: string;
-    agreementYear?: string;
+    agreementYear?: string | null;
     otherAgreement?: string;
     researchResult?: ResearchType;
     keywords?: string;
@@ -110,7 +110,7 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
     searchResult?: SearchResults;
     isRequest?: string;
     requestNumber?: string;
-    requestDate?: string;
+    requestDate?: string | null;
     requestCountry?: string;
     publicType?: string[];
     otherPublicType?: string;
@@ -135,28 +135,28 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
           },
         ) ?? []),
       ],
-      beginWorkAt: handleChangeToBuddhistYear(
-        new Date(
-          invention.data?.workInfoOnInventionPatent.beginWorkAt as string,
-        ),
-      ),
+      beginWorkAt: invention.data?.workInfoOnInventionPatent.beginWorkAt
+        ? handleChangeToBuddhistYear(
+            new Date(invention.data?.workInfoOnInventionPatent.beginWorkAt),
+          )
+        : null,
 
-      finishWorkAt: handleChangeToBuddhistYear(
-        new Date(
-          invention.data?.workInfoOnInventionPatent.finishWorkAt as string,
-        ),
-      ),
+      finishWorkAt: invention.data?.workInfoOnInventionPatent.finishWorkAt
+        ? handleChangeToBuddhistYear(
+            new Date(invention.data?.workInfoOnInventionPatent.finishWorkAt),
+          )
+        : null,
       benefit: invention.data?.workInfoOnInventionPatent.benefit,
       otherBenefit: invention.data?.workInfoOnInventionPatent.otherBenefit,
 
       agreementTitle: invention.data?.workInfoOnInventionPatent.agreementTitle,
       agreementInstitution:
         invention.data?.workInfoOnInventionPatent.agreementInstitution,
-      agreementYear: handleChangeToBuddhistYear(
-        new Date(
-          invention.data?.workInfoOnInventionPatent.agreementYear as string,
-        ),
-      ),
+      agreementYear: invention.data?.workInfoOnInventionPatent.agreementYear
+        ? handleChangeToBuddhistYear(
+            new Date(invention.data?.workInfoOnInventionPatent.agreementYear),
+          )
+        : null,
       otherAgreement: invention.data?.workInfoOnInventionPatent.otherAgreement,
       researchResult: invention.data?.workInfoOnInventionPatent.researchResult,
       keywords: invention.data?.workInfoOnInventionPatent.keywords,
@@ -167,11 +167,11 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
         ? "เคย"
         : "ไม่เคย",
       requestNumber: invention.data?.workInfoOnInventionPatent.requestNumber,
-      requestDate: handleChangeToBuddhistYear(
-        new Date(
-          invention.data?.workInfoOnInventionPatent.requestDate as string,
-        ),
-      ),
+      requestDate: invention.data?.workInfoOnInventionPatent.requestDate
+        ? handleChangeToBuddhistYear(
+            new Date(invention.data?.workInfoOnInventionPatent.requestDate),
+          )
+        : null,
       requestCountry: invention.data?.workInfoOnInventionPatent.requestCountry,
       publicType: invention.data?.workInfoOnInventionPatent.publicType,
       otherPublicType:
@@ -206,7 +206,8 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
 
       if (
         workData.searchResult === "เหมือนหรือคล้ายกับงานที่ปรากฏอยู่ก่อนแล้ว" &&
-        !invention.data?.workInfoOnInventionPatent.researchOwnershipSubmission
+        invention.data?.workInfoOnInventionPatent
+          .patentRelateToSearchResultOnInventionPatents.length === 0
       ) {
         searchWorkRef.current?.scrollIntoView({});
         throw new Error(
@@ -253,28 +254,28 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
           thaiName: workData?.thaiName,
           englishName: workData?.englishName,
           type: workData?.type,
-          beginWorkAt: handleChangeToChristianYear(
-            new Date(workData?.beginWorkAt as string),
-          ),
-          finishWorkAt: handleChangeToChristianYear(
-            new Date(workData?.finishWorkAt as string),
-          ),
+          beginWorkAt: workData?.beginWorkAt
+            ? handleChangeToChristianYear(new Date(workData?.beginWorkAt))
+            : null,
+          finishWorkAt: workData?.finishWorkAt
+            ? handleChangeToChristianYear(new Date(workData?.finishWorkAt))
+            : null,
           benefit: workData?.benefit,
           otherBenefit: workData?.otherBenefit,
           agreementTitle: workData?.agreementTitle,
           agreementInstitution: workData?.agreementInstitution,
-          agreementYear: handleChangeToChristianYear(
-            new Date(workData?.agreementYear as string),
-          ),
+          agreementYear: workData?.agreementYear
+            ? handleChangeToChristianYear(new Date(workData?.agreementYear))
+            : null,
           researchResult: workData?.researchResult,
           website: workData?.website,
           otherWebsite: workData?.otherWebsite,
           keywords: workData?.keywords,
           searchResult: workData?.searchResult,
           requestNumber: workData?.requestNumber,
-          requestDate: handleChangeToChristianYear(
-            new Date(workData?.requestDate as string),
-          ),
+          requestDate: workData?.requestDate
+            ? handleChangeToChristianYear(new Date(workData?.requestDate))
+            : null,
           requestCountry: workData?.requestCountry,
           publicType: workData?.publicType,
           otherPublicType: workData?.otherPublicType,
@@ -401,7 +402,7 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
   React.useImperativeHandle(ref, () => ({
     saveData,
   }));
-
+  console.log("workData", workData?.beginWorkAt);
   return (
     <div className=" w-full  rounded-md border-[1px] border-solid border-[#BED6FF] bg-white p-5 py-10 lg:p-10">
       <Form
@@ -525,7 +526,7 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
                   value={
                     workData?.beginWorkAt
                       ? new Date(workData.beginWorkAt)
-                      : null
+                      : undefined
                   }
                   onChange={(e) => {
                     handleChangeCalendar({
@@ -534,6 +535,7 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
                     });
                   }}
                   yearRange="2560:2580"
+                  yearNavigator
                   required
                   locale="th"
                   view="year"
@@ -549,7 +551,6 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
               </Label>
               <div className="w-28 rounded-lg bg-slate-300 p-1 lg:w-40">
                 <Calendar
-                  yearRange="2560:2580"
                   value={
                     workData?.finishWorkAt
                       ? new Date(workData.finishWorkAt)
@@ -562,6 +563,8 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
                     });
                   }}
                   required
+                  yearRange="2560:2580"
+                  yearNavigator
                   locale="th"
                   view="year"
                   placeholder="ระบุปี"
@@ -728,6 +731,7 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
                   required
                   locale="th"
                   yearRange="2560:2580"
+                  yearNavigator
                   view="year"
                   placeholder="ปีที่ได้ลงนาม"
                   dateFormat="yy"
@@ -1039,6 +1043,7 @@ const NrruInventionForm2 = forwardRef(function FromInvention(
                     required
                     locale="th"
                     yearRange="2560:2580"
+                    yearNavigator
                     dateFormat="dd/mm/yy"
                     placeholder="dd/mm/yyyy"
                   />

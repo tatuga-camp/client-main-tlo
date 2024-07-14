@@ -67,17 +67,17 @@ type RequestUpdateWorkDesignPatentService = {
   body: {
     thaiName?: string;
     englishName?: string;
-    beginWorkAt?: string;
-    finishWorkAt?: string;
+    beginWorkAt?: string | null;
+    finishWorkAt?: string | null;
     benefit?: string[];
     otherBenefit?: string;
     funding?: FundingLists;
     sourceFunding?: string;
-    yearFunding?: string;
+    yearFunding?: string | null;
     researchOwnershipSubmission?: ResearchOwnershipSubmission;
     agreementTitle?: string;
     agreementInstitution?: string;
-    agreementYear?: string;
+    agreementYear?: string | null;
     otherAgreement?: string;
     researchResult?: ResearchType;
     keywords?: string;
@@ -86,7 +86,7 @@ type RequestUpdateWorkDesignPatentService = {
     searchResult?: string;
     isRequest?: string;
     requestNumber?: string;
-    requestDate?: string;
+    requestDate?: string | null;
     requestCountry?: string;
     publicType?: string[];
     otherPublicType?: string;

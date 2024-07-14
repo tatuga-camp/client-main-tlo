@@ -1,6 +1,6 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { trademarkSection } from "../../../data/PatentSection";
 import TrademarkForm1 from "@/components/nrru/trademark/TrademarkForm1";
 import TrademarkForm2 from "@/components/nrru/trademark/TrademarkForm2";
@@ -21,13 +21,17 @@ import Swal from "sweetalert2";
 import { MdDelete, MdOutlineDriveFileMove } from "react-icons/md";
 import TrademarkStatus from "../../../components/Status/trademarkStatus";
 import MigrantForm from "../../../components/Forms/migrantForm";
-
+import { IoIosSave } from "react-icons/io";
+type ChildFormRef = {
+  saveData: () => Promise<void>;
+};
 const Index = ({ user }: { user: User }) => {
   const router = NextuseRouter();
   const naviateRouter = useRouter();
   const [currentSection, setCurrentSection] = useState(0);
   const [triggerMigrationForm, setTriggerMigrationForm] = useState(false);
-
+  const childRef = useRef<ChildFormRef>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const trademark = useQuery({
     queryKey: [
       "trademark",
@@ -66,33 +70,112 @@ const Index = ({ user }: { user: User }) => {
   };
 
   const handleValidateForm = ({ number }: { number: number }) => {
-    if (number === 1 && trademark.data?.partnerOnTrademarks.length === 0) {
-      throw new Error("กรุณากรอกข้อมูลทั่วไป ให้ครบถ้วน");
-    } else if (
-      number === 2 &&
-      (trademark.data?.partnerOnTrademarks.length === 0 ||
-        !trademark.data?.titleTrademark)
-    ) {
-      throw new Error("กรุณากรอกข้อรายละเอียดของเครื่องหมาย ให้ครบถ้วน");
-    } else if (
-      number === 3 &&
-      (trademark.data?.partnerOnTrademarks.length === 0 ||
-        trademark.data?.fileOnTrademarks.find(
-          (file) => file.documentType === "IDCARD",
-        ) === undefined ||
-        trademark.data?.fileOnTrademarks.length === 0)
-    ) {
-      throw new Error("กรุณากรอกข้อมูลเอกสารแนบ ให้ครบถ้วน");
-    } else if (
-      number === 4 &&
-      (trademark.data?.partnerOnTrademarks.length === 0 ||
-        trademark.data?.fileOnTrademarks.find(
-          (file) => file.documentType === "IDCARD",
-        ) === undefined ||
-        trademark.data?.fileOnTrademarks.length === 0 ||
-        trademark.data?.isComplete === false)
-    ) {
-      throw new Error("ไม่สามารถไปต่อได้ กรุณายืนยันในการส่งคำขอ ในส่วนที่ 4");
+    switch (number) {
+      case 0:
+        break;
+
+      case 1:
+        if (trademark.data?.firstName === "") {
+          throw new Error("กรุณากรอกข้อมูลทั่วไป ให้ครบถ้วน");
+        }
+        break;
+
+      case 2:
+        if (
+          trademark.data?.firstName === "" ||
+          !trademark.data?.firstName ||
+          !trademark.data?.titleTrademark ||
+          trademark.data.fileOnTrademarks.filter(
+            (f) => f.documentType === "TRADEMARK",
+          ).length === 0
+        ) {
+          throw new Error("กรุณากรอกข้อรายละเอียดของเครื่องหมาย ให้ครบถ้วน");
+        }
+        break;
+
+      case 3:
+        if (
+          trademark.data?.firstName === "" ||
+          !trademark.data?.firstName ||
+          trademark.data?.fileOnTrademarks.length === 0
+        ) {
+          throw new Error("กรุณากรอกข้อมูลเอกสารแนบ ให้ครบถ้วน");
+        }
+        if (
+          trademark.data.personStatus === "ต่างชาติ" ||
+          trademark.data.personStatus === "บุคคลธรรมดา"
+        ) {
+          if (
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "IDCARD",
+            ).length === 0
+          ) {
+            throw new Error("อัพโหลดสำเนาบัตรประชาชน ให้ครบถ้วน");
+          }
+        }
+        if (
+          trademark.data.personStatus === "นิติบุคคล" ||
+          trademark.data.personStatus === "ส่วนราชการไทย"
+        ) {
+          if (
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "COPORATE",
+            ).length === 0 ||
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "AUTORIZEPERSON_COPORATE",
+            ).length === 0
+          ) {
+            throw new Error(
+              "อัพโหลดเอกสาร สำเนาหนังสือรับรองนิติบุคคล หรือ สำเนาบัตรประจำตัวประชาช ผู้มีอำนาจในการลงนาม ให้ครบถ้วน",
+            );
+          }
+        }
+        break;
+
+      case 4:
+        if (trademark.data?.isComplete === false) {
+          throw new Error("กรุณายืนยันการส่งข้อมูล ในส่วนที่ 4");
+        }
+        if (
+          trademark.data?.firstName === "" ||
+          !trademark.data?.firstName ||
+          trademark.data?.fileOnTrademarks.length === 0
+        ) {
+          throw new Error("กรุณากรอกข้อมูลเอกสารแนบ ให้ครบถ้วน");
+        }
+        if (
+          trademark.data.personStatus === "ต่างชาติ" ||
+          trademark.data.personStatus === "บุคคลธรรมดา"
+        ) {
+          if (
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "IDCARD",
+            ).length === 0
+          ) {
+            throw new Error("อัพโหลดสำเนาบัตรประชาชน ให้ครบถ้วน");
+          }
+        }
+        if (
+          trademark.data.personStatus === "นิติบุคคล" ||
+          trademark.data.personStatus === "ส่วนราชการไทย"
+        ) {
+          if (
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "COPORATE",
+            ).length === 0 ||
+            trademark.data.fileOnTrademarks.filter(
+              (f) => f.documentType === "AUTORIZEPERSON_COPORATE",
+            ).length === 0
+          ) {
+            throw new Error(
+              "อัพโหลดเอกสาร สำเนาหนังสือรับรองนิติบุคคล หรือ สำเนาบัตรประจำตัวประชาช ผู้มีอำนาจในการลงนาม ให้ครบถ้วน",
+            );
+          }
+        }
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -219,6 +302,11 @@ const Index = ({ user }: { user: User }) => {
     }
   };
 
+  const handleSaveData = async () => {
+    setIsLoading(true);
+    await childRef.current?.saveData();
+    setIsLoading(false);
+  };
   return (
     <>
       <Head>
@@ -307,22 +395,30 @@ const Index = ({ user }: { user: User }) => {
             <section className="w-[87%]">
               {currentSection == 0 && (
                 <div>
-                  <TrademarkForm1 user={user} trademark={trademark} />
+                  <TrademarkForm1
+                    ref={childRef}
+                    user={user}
+                    trademark={trademark}
+                  />
                 </div>
               )}
               {currentSection == 1 && (
                 <div>
-                  <TrademarkForm2 trademark={trademark} />
+                  <TrademarkForm2 ref={childRef} trademark={trademark} />
                 </div>
               )}
               {currentSection == 2 && (
                 <div>
-                  <TrademarkForm3 trademark={trademark} />
+                  <TrademarkForm3 ref={childRef} trademark={trademark} />
                 </div>
               )}
               {currentSection == 3 && (
                 <div>
-                  <TrademarkForm4 user={user} trademark={trademark} />
+                  <TrademarkForm4
+                    ref={childRef}
+                    user={user}
+                    trademark={trademark}
+                  />
                 </div>
               )}
               {currentSection == 4 && trademark.data && (
@@ -335,23 +431,48 @@ const Index = ({ user }: { user: User }) => {
               )}
             </section>
 
-            <section className=" my-5 flex items-center justify-center gap-3">
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={previousSection}
-                disabled={currentSection === 0}
-              >
-                ย้อนกลับ
-              </button>
+            {currentSection !== 4 && (
+              <section className=" my-5 flex items-center justify-center gap-3">
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3
+                text-[0.6rem] font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={previousSection}
+                  disabled={currentSection === 0}
+                >
+                  ย้อนกลับ
+                </button>
+                {isLoading ? (
+                  <button
+                    className="flex h-8 animate-pulse items-center justify-center rounded-md
+                   border-2 border-solid border-[var(--primary-blue)] bg-main-color px-3
+                font-semibold text-white transition md:w-52"
+                  >
+                    กำลังบันทึกข้อมูล
+                    <IoIosSave />
+                  </button>
+                ) : (
+                  <button
+                    className="flex h-8 items-center justify-center rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 font-semibold transition 
+                hover:bg-main-color hover:text-white disabled:border-slate-300 disabled:text-slate-300 md:w-52"
+                    onClick={handleSaveData}
+                  >
+                    {currentSection === 3
+                      ? "ยืนยันการส่งข้อมูล"
+                      : "บันทึกข้อมูล"}
+                    <IoIosSave />
+                  </button>
+                )}
 
-              <button
-                className="w-24 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 py-2 font-semibold disabled:border-slate-300 disabled:text-slate-300"
-                onClick={nextSection}
-                disabled={currentSection === trademarkSection.length - 1}
-              >
-                ถัดไป
-              </button>
-            </section>
+                <button
+                  className="h-8 w-16 rounded-md border-2 border-solid border-[var(--primary-blue)] px-3 text-[0.6rem]
+                font-semibold disabled:border-slate-300 disabled:text-slate-300 md:w-24 md:text-base"
+                  onClick={nextSection}
+                  disabled={currentSection === trademarkSection.length - 1}
+                >
+                  ถัดไป
+                </button>
+              </section>
+            )}
           </main>
         </div>
       </HomeLayout>

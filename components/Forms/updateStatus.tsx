@@ -122,6 +122,7 @@ function UpdateStatus({
           <Label className="">เพิ่มโน๊ค</Label>
           <div className="flex w-full flex-col gap-1">
             <TextArea
+              disabled={user?.role !== "ADMIN"}
               onChange={(e) => {
                 setUpdateStatusData((prev) => {
                   return {

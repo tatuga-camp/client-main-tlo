@@ -263,10 +263,7 @@ const NrruInventionForm4 = forwardRef(function FormInvention(
                   });
                 }}
               >
-                <Button
-                  type="button"
-                  className="rounded-md bg-[var(--secondary-yellow)] px-3 py-1 font-semibold shadow-md transition duration-150 hover:scale-105"
-                >
+                <Button type="button" className=" btn-download">
                   อัพโหลดไฟล์ .pdf/.jpg
                 </Button>
               </FileTrigger>
@@ -329,10 +326,7 @@ const NrruInventionForm4 = forwardRef(function FormInvention(
                   });
                 }}
               >
-                <Button
-                  type="button"
-                  className="rounded-md bg-[var(--secondary-yellow)] px-3 py-1 font-semibold shadow-md transition duration-150 hover:scale-105"
-                >
+                <Button type="button" className=" btn-download">
                   อัพโหลดไฟล์ .pdf/.jpg
                 </Button>
               </FileTrigger>
@@ -405,10 +399,7 @@ const NrruInventionForm4 = forwardRef(function FormInvention(
                   });
                 }}
               >
-                <Button
-                  type="button"
-                  className="rounded-md bg-[var(--secondary-yellow)] px-3 py-1 font-semibold shadow-md transition duration-150 hover:scale-105"
-                >
+                <Button type="button" className=" btn-download">
                   อัพโหลดไฟล์ .pdf/.jpg
                 </Button>
               </FileTrigger>

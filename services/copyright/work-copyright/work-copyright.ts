@@ -47,7 +47,7 @@ type RequestUpdateWorkCopyrightService = {
   body: {
     name?: string;
     workType?: string;
-    finishWorkAt?: string;
+    finishWorkAt?: string | null;
     workQuality?: WorkQualityOptions;
     workQualityPartDetail?: string;
     hireWork?: string;
@@ -56,17 +56,17 @@ type RequestUpdateWorkCopyrightService = {
     otherBenefit?: string;
     funding?: string;
     sourceFunding?: string;
-    yearFunding?: string;
+    yearFunding?: string | null;
     researchOwnershipSubmission?: ResearchOwnershipSubmission;
     typeAccessibleMedia?: string;
     signedDocument?: SignedDocumentDetailLists;
     signedDocumentDetail?: string;
     isMarketing?: IsMarketingLists;
-    marketingDate?: string;
+    marketingDate?: string | null;
     marketingCountry?: string;
     tranferPermission?: TranferPermissionOptions;
     tranferPermissionDetail?: string;
-    tranferPermissionDate?: string;
+    tranferPermissionDate?: string | null;
     tranferPermissionQuality?: TranferPermissionQualityOptions;
     tranferPermissionQualityDetail?: string;
     tranferPermissionDuration?: TranferPermissionDurationOptions;
