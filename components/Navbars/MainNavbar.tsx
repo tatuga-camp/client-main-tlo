@@ -125,7 +125,7 @@ const Navbar = () => {
               },
               {
                 title: "ดาวน์โหลดเอกสาร",
-                url: "/dashboard",
+                url: "/download",
                 icon: <FaDownload />,
               },
               {
