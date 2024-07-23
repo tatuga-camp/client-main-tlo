@@ -23,4 +23,5 @@ export type MenuSearchWorks =
   | "อื่น ๆ";
 
 export type StatusLists = "PENDING" | "INPROGRESS" | "APPROVED" | "REJECTED";
-export type NewsType = "news" | "knowledge";
+export type NewsType = "news" | "knowledge" | "award";
+export type FileType = "HISTORY" | "STAFF";

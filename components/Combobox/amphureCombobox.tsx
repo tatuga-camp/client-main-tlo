@@ -1,4 +1,9 @@
-import { Combobox, Transition } from "@headlessui/react";
+import {
+  Combobox,
+  ComboboxButton,
+  ComboboxInput,
+  Transition,
+} from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import React, { Fragment, useEffect, useState } from "react";
 import { Input, Label, TextField } from "react-aria-components";
@@ -67,15 +72,15 @@ function AmphureCombobox({
        text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75
         focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
         >
-          <Combobox.Input
+          <ComboboxInput
             required
             className="h-10 w-full rounded-md bg-slate-300 p-2 pl-4 outline-none "
             displayValue={(amphure: Amphure) => amphure.name_th}
             onChange={(event) => setQuery(event.target.value)}
           />
-          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+          <ComboboxButton className="absolute inset-y-0 right-0 flex items-center pr-2">
             <RiExpandUpDownLine />
-          </Combobox.Button>
+          </ComboboxButton>
         </div>
         <Transition
           as={Fragment}

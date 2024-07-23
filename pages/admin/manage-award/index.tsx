@@ -23,7 +23,10 @@ import { Navigation } from "swiper/modules";
 import Image from "next/image";
 import parse from "html-react-parser";
 import FileOnNews from "../../../components/Forms/News/FileOnNews";
-
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 function Index() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
@@ -31,19 +34,19 @@ function Index() {
     delay: "",
     actual: "",
   });
-  const knowledges = useQuery({
-    queryKey: ["knowledge", { page: page, searchField: searchField.actual }],
+  const awards = useQuery({
+    queryKey: ["awards", { page: page, searchField: searchField.actual }],
     queryFn: () =>
       GetNewsByPageService({
         page: page,
         limit: 5,
         searchField: searchField.actual,
-        type: "knowledge",
+        type: "award",
       }),
   });
 
   useEffect(() => {
-    knowledges.refetch();
+    awards.refetch();
   }, []);
 
   useEffect(() => {
@@ -59,8 +62,8 @@ function Index() {
     return () => clearTimeout(delayDebounceFn);
   }, [searchField]);
 
-  const handleDeleteNews = async ({ knowledgeId }: { knowledgeId: string }) => {
-    if (!knowledges.data) {
+  const handleDeleteNews = async ({ awardId }: { awardId: string }) => {
+    if (!awards.data) {
       throw new Error("โปรดรอสักครู่ และลองใหม่อีกครั้ง");
     }
     const replacedText = "ยืนยันการลบข้อมูล";
@@ -95,16 +98,16 @@ function Index() {
         });
 
         await DeleteNewsService({
-          newsId: knowledgeId,
+          newsId: awardId,
         });
 
         const updateNews: ResponseGetNewsByPageService = {
-          data: knowledges.data?.data.filter((news) => news.id !== knowledgeId),
-          meta: knowledges.data?.meta,
+          data: awards.data?.data.filter((news) => news.id !== awardId),
+          meta: awards.data?.meta,
         };
 
         await queryClient.setQueryData(
-          ["knowledge", { page: page, searchField: searchField.actual }],
+          ["awards", { page: page, searchField: searchField.actual }],
           updateNews,
         );
 
@@ -130,7 +133,7 @@ function Index() {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
-        <title>จัดการ คลังความรู้</title>
+        <title>จัดการ ผลงานทรัพย์สินทางปัญญา</title>
       </Head>
 
       <AdminLayout>
@@ -143,10 +146,10 @@ function Index() {
               className="mt-16 w-[70%]  bg-[var(--secondary-yellow)] p-2 
           text-center font-semibold "
             >
-              คลังความรู้
+              ผลงานทรัพย์สินทางปัญญา
             </div>
             <Link
-              href={"/admin/manage-knowledge/create"}
+              href={"/admin/manage-award/create"}
               className="flex w-96 items-center justify-center gap-2 rounded-md
              bg-[#BED6FF] p-2 font-semibold drop-shadow-md
            transition  duration-100 hover:bg-[#87aced] active:scale-105 "
@@ -173,7 +176,7 @@ function Index() {
                   setPage(() => 1);
                 }}
                 value={searchField.delay}
-                placeholder="ค้นหาด้วยชื่อหรือเนื้อหาคลังความรู้"
+                placeholder="ค้นหาด้วยชื่อหรือเนื้อหาผลงานทรัพย์สินทางปัญญา"
                 className="w-full rounded-md border-[1.5px] border-solid border-[#BED6FF] p-3 pl-2 placeholder:font-medium placeholder:text-[#2166DD] 
                 md:p-2 md:pl-10"
               />
@@ -181,13 +184,13 @@ function Index() {
             <Pagination
               page={page}
               onChange={(e, page) => setPage(page)}
-              count={knowledges.data?.meta.total || 1}
+              count={awards.data?.meta.total || 1}
               color="primary"
             />
-            {knowledges.isLoading ? (
+            {awards.isLoading ? (
               <div>Loading...</div>
             ) : (
-              knowledges.data?.data.map((list) => {
+              awards.data?.data.map((list) => {
                 return (
                   <section
                     key={list.id}
@@ -201,7 +204,7 @@ function Index() {
                       </div>
                       <div className=" ml-2 mt-5 flex flex-col gap-2 font-semibold text-[#6e98e199] md:ml-0 md:mt-0 md:flex-row md:items-center md:gap-5">
                         <Link
-                          href={`/admin/manage-knowledge/${list.id}`}
+                          href={`/admin/manage-award/${list.id}`}
                           className="flex items-center gap-2 duration-200 hover:text-[#5372a7]"
                         >
                           <div className="text-xl">
@@ -210,9 +213,7 @@ function Index() {
                           <p>แก้ไขโพสต์</p>
                         </Link>
                         <button
-                          onClick={() =>
-                            handleDeleteNews({ knowledgeId: list.id })
-                          }
+                          onClick={() => handleDeleteNews({ awardId: list.id })}
                           className="flex items-center gap-2 duration-200 hover:text-[#5372a7]"
                         >
                           <div className="text-xl">

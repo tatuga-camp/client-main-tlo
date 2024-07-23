@@ -7,7 +7,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "../../models";
 import Image from "next/image";
 import { IoIosArrowDropdown, IoIosArrowDropdownCircle } from "react-icons/io";
-import { Popover, Transition } from "@headlessui/react";
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  Transition,
+} from "@headlessui/react";
 import { Fragment } from "react";
 import { MdAccountCircle, MdAdminPanelSettings } from "react-icons/md";
 import { GoSignOut } from "react-icons/go";
@@ -67,7 +72,7 @@ const AdminNavbar = ({ setTriggerSidebar }: AdminNavbarProps) => {
           <Popover>
             {({ open }) => (
               <>
-                <Popover.Button
+                <PopoverButton
                   className="group mr-3 flex items-center
                gap-1 rounded-lg  p-2 font-Anuphan  text-base font-semibold text-[var(--primary-blue)] text-main-color
                 ring-main-color hover:ring-1 md:mr-10 md:gap-3 md:text-xl"
@@ -87,7 +92,7 @@ const AdminNavbar = ({ setTriggerSidebar }: AdminNavbarProps) => {
                   </div>
                   <IoIosArrowDropdown className="block group-hover:hidden" />
                   <IoIosArrowDropdownCircle className="hidden group-hover:block" />
-                </Popover.Button>
+                </PopoverButton>
                 <Transition
                   as={Fragment}
                   enter="transition ease-out duration-200"
@@ -97,7 +102,7 @@ const AdminNavbar = ({ setTriggerSidebar }: AdminNavbarProps) => {
                   leaveFrom="opacity-100 translate-y-0"
                   leaveTo="opacity-0 translate-y-1"
                 >
-                  <Popover.Panel className="absolute right-10 top-[4.5rem] w-60 rounded-md bg-white p-5 ring-1 ring-main-color drop-shadow-md">
+                  <PopoverPanel className="absolute right-10 top-[4.5rem] w-60 rounded-md bg-white p-5 ring-1 ring-main-color drop-shadow-md">
                     <ul>
                       <li>
                         <Link
@@ -121,7 +126,7 @@ const AdminNavbar = ({ setTriggerSidebar }: AdminNavbarProps) => {
                         ออกจากระบบ
                       </li>
                     </ul>
-                  </Popover.Panel>
+                  </PopoverPanel>
                 </Transition>
               </>
             )}

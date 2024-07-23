@@ -17,6 +17,10 @@ const menuSidebars = [
     link: "/admin/manage-knowledge",
   },
   {
+    title: "ผลงานทรัพย์สินทางปัญญา",
+    link: "/admin/manage-award",
+  },
+  {
     title: "หน้าหลัก",
     link: "/",
   },

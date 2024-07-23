@@ -29,7 +29,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import { filePickerCallback } from "../../../utilities/filePickerCallback";
 import FileOnNews from "../News/FileOnNews";
 
-function CreateKnowledge() {
+function CreateAward() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [newsData, setNewsData] = useState<{
@@ -89,7 +89,7 @@ function CreateKnowledge() {
       }
 
       Swal.fire({
-        title: "กำลังสร้างคลังความรู้",
+        title: "กำลังสร้างผลงานทรัพย์สินทางปัญญา",
         text: "กรุณารอสักครู่",
         icon: "info",
         showConfirmButton: false,
@@ -104,7 +104,7 @@ function CreateKnowledge() {
         title: newsData?.title as string,
         isPublic: newsData?.isPublic,
         releaseAt: new Date(newsData?.date).toISOString(),
-        type: "knowledge",
+        type: "award",
       });
       const imageBase64 = filterBase64Image(newsData?.description);
 
@@ -150,7 +150,7 @@ function CreateKnowledge() {
           }),
         ),
       );
-      router.push("/admin/manage-knowledge");
+      router.push("/admin/manage-award");
       Swal.fire({
         title: "สร้างความรู้สำเร็จ",
         text: "ระบบกำลังดำเนินการตรวจสอบข้อมูล",
@@ -174,7 +174,7 @@ function CreateKnowledge() {
       className="relative flex h-max w-9/12 flex-col gap-5 rounded-md bg-background-color p-10 drop-shadow-xl "
     >
       <Link
-        href={"/admin/manage-knowledge"}
+        href={"/admin/manage-award"}
         className="absolute right-2 top-2 m-auto flex items-center
      justify-center gap-2 rounded-md bg-red-300 px-3 py-1 text-red-600
       transition duration-150 hover:bg-red-400 active:scale-105"
@@ -190,7 +190,7 @@ function CreateKnowledge() {
             onChange={handleChange}
             value={newsData?.title}
             className=" w-full rounded-sm bg-white p-1 pl-4 ring-1 ring-blue-200  md:h-10 "
-            placeholder="ใส่หัวข้อความรู้"
+            placeholder="ใส่หัวข้อ"
           />
           <FieldError className="text-xs text-red-700" />
         </section>
@@ -328,13 +328,13 @@ function CreateKnowledge() {
       </section>
       <Button
         type="submit"
-        className="w-40 rounded-md bg-main-color px-3 py-3 font-semibold
+        className="w-max rounded-md bg-main-color px-3 py-3 font-semibold
      text-white shadow-md transition duration-100 hover:drop-shadow-lg active:scale-105"
       >
-        สร้างคลังความรู้
+        สร้างผลงานทรัพย์สินทางปัญญา
       </Button>
     </Form>
   );
 }
 
-export default CreateKnowledge;
+export default CreateAward;

@@ -7,6 +7,7 @@ type RequestGetNewsByPageService = {
   limit: number;
   searchField: string;
   type: NewsType;
+  isPublic?: boolean;
 };
 
 export type ResponseGetNewsByPageService = Pagination<

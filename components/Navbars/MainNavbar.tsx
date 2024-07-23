@@ -7,15 +7,26 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "../../models";
 import Image from "next/image";
 import { IoIosArrowDropdown, IoIosArrowDropdownCircle } from "react-icons/io";
-import { Popover, Transition } from "@headlessui/react";
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  Transition,
+} from "@headlessui/react";
 import { Fragment } from "react";
 import { MdAccountCircle, MdAdminPanelSettings } from "react-icons/md";
 import { GoSignOut } from "react-icons/go";
 import { useRouter } from "next-nprogress-bar";
 import Cookies from "js-cookie";
 import { GetUserService } from "../../services/user";
-import { IoMenu } from "react-icons/io5";
+import { IoDocumentTextSharp, IoMenu } from "react-icons/io5";
 import { useRouter as NextUseRouter } from "next/router";
+import { GrContact, GrHome, GrServices } from "react-icons/gr";
+import PopoverElement from "../Popover";
+import { FaBook, FaDownload } from "react-icons/fa";
+import { HiNewspaper } from "react-icons/hi";
+import { BsAward, BsBook, BsPeople } from "react-icons/bs";
+import { FaServicestack, FaVideo } from "react-icons/fa6";
 
 const Navbar = () => {
   const router = useRouter();
@@ -37,69 +48,142 @@ const Navbar = () => {
 
   return (
     <nav
-      className="sticky top-0 z-30 flex  min-h-16 w-full items-center justify-between 
-    bg-white p-2 font-Anuphan drop-shadow-md"
+      className="sticky top-0 z-30 flex min-h-16 w-full items-center  justify-between bg-white p-2 font-Anuphan 
+    font-semibold text-[var(--primary-blue)] text-main-color drop-shadow-md"
     >
       {/* Logo */}
 
       <Link href="/" className="ml-3 w-[5rem] md:ml-10 md:w-[6.25rem]">
         <LogoFile />
       </Link>
-
-      <div className="flex gap-2">
-        {user.data && user.data.role === "ADMIN" && (
-          <Link
-            href={"/admin"}
-            className="flex w-20 items-center justify-center gap-2 rounded-md p-2 text-lg text-main-color
+      <div className=" w-11/12 overflow-auto px-2   py-1">
+        <div className="flex w-max min-w-full items-center justify-end gap-3 ">
+          {user.data && user.data.role === "ADMIN" && (
+            <Link
+              href={"/admin"}
+              className="flex w-20 items-center justify-center gap-2 rounded-md p-2 text-lg text-main-color
          ring-1 ring-main-color transition duration-150 hover:bg-main-color
           hover:text-white md:w-40"
+            >
+              <MdAdminPanelSettings />
+              <span className="hidden md:block">ผู้ดูแลระบบ</span>
+            </Link>
+          )}
+
+          <PopoverElement icon={<GrHome />} title="หน้าหลัก" url="/" />
+
+          <PopoverElement
+            icon={<BsPeople />}
+            title="เกี่ยวกับ TLO"
+            url="/about-us"
+          />
+
+          <PopoverElement
+            icon={<BsBook />}
+            title="ความรู้ด้านทรัพย์สินทางปัญญา"
+            lists={[
+              {
+                title: "สื่อวิดีโองานทรัพย์สินทางปัญญา",
+                url: "/dashboard",
+                icon: <FaVideo />,
+              },
+              {
+                title: "ลิขสิทธิ์",
+                url: "/dashboard",
+              },
+              {
+                title: "สิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร",
+                url: "/news",
+              },
+              {
+                title: "สิทธิบัตรการออกแบบผลิตภัณฑ์",
+                url: "/news",
+              },
+              {
+                title: "เครื่องหมายการค้า",
+                url: "/news",
+              },
+              {
+                title: "สิ่งบ่งชี้ทางภูมิศาสตร์",
+                url: "/news",
+              },
+            ]}
+          />
+          <PopoverElement
+            icon={<GrServices />}
+            title="บริการของเรา"
+            lists={[
+              {
+                title: "ยื่นคำขอ",
+                url: "/dashboard",
+                icon: <IoDocumentTextSharp />,
+              },
+              {
+                title: "ผลงานทรัพย์สินทางปัญญา",
+                url: "/awards",
+                icon: <BsAward />,
+              },
+              {
+                title: "ดาวน์โหลดเอกสาร",
+                url: "/dashboard",
+                icon: <FaDownload />,
+              },
+              {
+                title: "ข่าวสาร",
+                url: "/news",
+                icon: <HiNewspaper />,
+              },
+            ]}
+          />
+          <Link
+            href={""}
+            className="flex items-center gap-1 duration-300 hover:text-[#2166DD] md:gap-2"
           >
-            <MdAdminPanelSettings />
-            <span className="hidden md:block">ผู้ดูแลระบบ</span>
+            <GrContact />
+            <p className="text-[0.8rem] md:text-base">ติดต่อเรา</p>
           </Link>
-        )}
-        {/* Links */}
-        {user.data ? (
-          <Popover>
-            {({ open }) => (
-              <>
-                <Popover.Button
-                  className="group mr-3 flex items-center
-               gap-1 rounded-lg  p-2 font-Anuphan  text-base font-semibold text-[var(--primary-blue)] text-main-color
-                ring-main-color hover:ring-1 md:mr-10 md:gap-3 md:text-xl"
-                >
-                  <div className="relative h-6 w-6 overflow-hidden rounded-full md:h-10 md:w-10">
-                    <Image
-                      src={user.data.picture}
-                      alt="profile picture"
-                      fill
-                      className=" object-cover"
-                    />
-                  </div>
-                  <div className="flex max-w-20 items-center  gap-2 truncate  text-base md:max-w-96">
-                    <span className="hidden md:block">{user.data.title}</span>
-                    <span>{user.data.firstName}</span>
-                    <span className="truncate">{user.data.lastName}</span>
-                  </div>
-                  <IoIosArrowDropdown className="block group-hover:hidden" />
-                  <IoIosArrowDropdownCircle className="hidden group-hover:block" />
-                </Popover.Button>
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-200"
-                  enterFrom="opacity-0 translate-y-1"
-                  enterTo="opacity-100 translate-y-0"
-                  leave="transition ease-in duration-150"
-                  leaveFrom="opacity-100 translate-y-0"
-                  leaveTo="opacity-0 translate-y-1"
-                >
-                  <Popover.Panel className="absolute right-10 top-[4.5rem] w-60 rounded-md bg-white p-5 ring-1 ring-main-color drop-shadow-md">
+          {/* Links */}
+          {user.data ? (
+            <Popover>
+              {({ open }) => (
+                <>
+                  <PopoverButton
+                    className="flex h-10 w-20 items-center justify-center gap-2 rounded-md p-2 text-lg text-main-color
+                  ring-1 ring-main-color transition duration-150 hover:bg-main-color
+                   hover:text-white md:w-60"
+                  >
+                    <div className="relative h-6 w-6 overflow-hidden rounded-full md:h-7 md:w-7">
+                      <Image
+                        src={user.data.picture}
+                        alt="profile picture"
+                        fill
+                        className=" object-cover"
+                      />
+                    </div>
+                    <div className="flex max-w-20 items-center  gap-2 truncate  text-base md:max-w-96">
+                      <span className="hidden md:block">{user.data.title}</span>
+                      <span>{user.data.firstName}</span>
+                      <span className="truncate">{user.data.lastName}</span>
+                    </div>
+                    <IoIosArrowDropdown className="block group-hover:hidden" />
+                    <IoIosArrowDropdownCircle className="hidden group-hover:block" />
+                  </PopoverButton>
+
+                  <PopoverPanel
+                    anchor={{
+                      to: "bottom start",
+                      gap: 20,
+                    }}
+                    className="z-50 w-60   divide-y divide-white/5 rounded-md bg-white p-5  
+          text-sm/6 ring-1 ring-main-color drop-shadow-md transition duration-200 ease-in-out
+           data-[closed]:-translate-y-1 data-[closed]:opacity-0"
+                  >
                     <ul>
                       <li>
                         <Link
                           href="/account/setting"
                           className="flex cursor-pointer items-center justify-start gap-2 
-                    rounded-md p-2 text-xl  no-underline
+                    rounded-md p-2 font-Anuphan text-base text-main-color  no-underline
                      transition duration-150 hover:bg-slate-200  "
                         >
                           <MdAccountCircle />
@@ -110,45 +194,38 @@ const Navbar = () => {
                       <li
                         onClick={handleSignOut}
                         className="flex cursor-pointer items-center 
-                    justify-start gap-2 rounded-md p-2 text-xl
+                    justify-start gap-2 rounded-md p-2 font-Anuphan text-base text-main-color
                      transition duration-150 hover:bg-slate-200  "
                       >
                         <GoSignOut />
                         ออกจากระบบ
                       </li>
                     </ul>
-                  </Popover.Panel>
-                </Transition>
-              </>
-            )}
-          </Popover>
-        ) : (
-          <div className="mr-3 flex gap-4 text-base font-semibold text-[var(--primary-blue)] md:mr-10 md:gap-6 md:text-xl">
-            <Link
-              href={"/auth/sign-in"}
-              className="flex items-center gap-1 duration-300 hover:text-[#2166DD] md:gap-2 "
-            >
-              {" "}
-              <PiUserCircleFill />
-              <p className="text-[0.8rem] md:text-base">เข้าสู่ระบบ</p>
-            </Link>
-            <Link
-              href={"/auth/sign-up"}
-              className="flex items-center gap-1 duration-300 hover:text-[#2166DD] md:gap-2"
-            >
-              {" "}
-              <PiUserCirclePlus />{" "}
-              <p className="text-[0.8rem] md:text-base">ลงทะเบียน</p>
-            </Link>
-            <Link
-              href={""}
-              className="flex items-center gap-1 duration-300 hover:text-[#2166DD] md:gap-2"
-            >
-              {" "}
-              <p className="text-[0.8rem] md:text-base">ติดต่อเรา</p>
-            </Link>
-          </div>
-        )}
+                  </PopoverPanel>
+                </>
+              )}
+            </Popover>
+          ) : (
+            <>
+              <Link
+                href={"/auth/sign-in"}
+                className="flex items-center gap-1 duration-300 hover:text-[#2166DD] md:gap-2 "
+              >
+                {" "}
+                <PiUserCircleFill />
+                <p className="text-[0.8rem] md:text-base">เข้าสู่ระบบ</p>
+              </Link>
+              <Link
+                href={"/auth/sign-up"}
+                className="flex items-center gap-1 duration-300 hover:text-[#2166DD] md:gap-2"
+              >
+                {" "}
+                <PiUserCirclePlus />{" "}
+                <p className="text-[0.8rem] md:text-base">ลงทะเบียน</p>
+              </Link>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );
