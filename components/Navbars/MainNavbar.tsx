@@ -27,6 +27,7 @@ import { FaBook, FaDownload } from "react-icons/fa";
 import { HiNewspaper } from "react-icons/hi";
 import { BsAward, BsBook, BsPeople } from "react-icons/bs";
 import { FaServicestack, FaVideo } from "react-icons/fa6";
+import { GetNewsByPageService } from "../../services/news/news";
 
 const Navbar = () => {
   const router = useRouter();
@@ -46,6 +47,16 @@ const Navbar = () => {
     router.push("/");
   };
 
+  const knowledges = useQuery({
+    queryKey: ["knowledge", { page: 1 }],
+    queryFn: () =>
+      GetNewsByPageService({
+        limit: 10,
+        page: 1,
+        searchField: "",
+        type: "knowledge",
+      }),
+  });
   return (
     <nav
       className="sticky top-0 z-30 flex min-h-16 w-full items-center  justify-between bg-white p-2 font-Anuphan 
@@ -81,33 +92,11 @@ const Navbar = () => {
           <PopoverElement
             icon={<BsBook />}
             title="ความรู้ด้านทรัพย์สินทางปัญญา"
-            lists={[
-              {
-                title: "สื่อวิดีโองานทรัพย์สินทางปัญญา",
-                url: "/dashboard",
-                icon: <FaVideo />,
-              },
-              {
-                title: "ลิขสิทธิ์",
-                url: "/dashboard",
-              },
-              {
-                title: "สิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร",
-                url: "/news",
-              },
-              {
-                title: "สิทธิบัตรการออกแบบผลิตภัณฑ์",
-                url: "/news",
-              },
-              {
-                title: "เครื่องหมายการค้า",
-                url: "/news",
-              },
-              {
-                title: "สิ่งบ่งชี้ทางภูมิศาสตร์",
-                url: "/news",
-              },
-            ]}
+            lists={knowledges.data?.data.map((knowledge) => ({
+              title: knowledge.title,
+              url: `/news/${knowledge.id}`,
+              icon: <FaBook />,
+            }))}
           />
           <PopoverElement
             icon={<GrServices />}
@@ -136,7 +125,7 @@ const Navbar = () => {
             ]}
           />
           <Link
-            href={""}
+            href={"/contact-us"}
             className="flex items-center gap-1 duration-300 hover:text-[#2166DD] md:gap-2"
           >
             <GrContact />
