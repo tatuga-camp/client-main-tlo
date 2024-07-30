@@ -41,6 +41,7 @@ const menuTypes = [
 ];
 function RequestSummary({ user }: { user?: User }) {
   const [totalPage, setTotalPage] = useState(1);
+  const [totalRequestForm, setTotalRequestForm] = useState(0);
   const [requests, setRequests] = useState<{
     inventions:
       | (InventionPatent & {
@@ -128,6 +129,17 @@ function RequestSummary({ user }: { user?: User }) {
         trademarks.data.meta.total,
         copyrights.data.meta.total,
       ];
+
+      const totalCount = [
+        inventions.data.meta.totalCount ?? 0,
+        designs.data.meta.totalCount ?? 0,
+        trademarks.data.meta.totalCount ?? 0,
+        copyrights.data.meta.totalCount ?? 0,
+      ];
+      console.log(totalCount);
+
+      setTotalRequestForm(() => totalCount.reduce((a, b) => a + b, 0));
+
       const highestPage = Math.max(...pages);
 
       setRequests(() => {
@@ -335,129 +347,133 @@ function RequestSummary({ user }: { user?: User }) {
       </Element>
 
       <div className="mt-12 flex w-full flex-col items-center gap-8">
-        <div className="relative max-h-96 w-11/12 overflow-auto md:w-10/12">
-          <table
-            className="w-max min-w-full border-separate border-spacing-1 
+        <div className="flex w-full flex-col items-center justify-center gap-2 bg-white py-5">
+          <span>
+            จำนวนคำขอทั้งหมด: {totalRequestForm.toLocaleString()} คำขอ
+          </span>
+          <div className="relative max-h-96 w-11/12 overflow-auto md:w-10/12">
+            <table
+              className="w-max min-w-full border-separate border-spacing-1 
           rounded-md bg-white  text-center text-[0.7rem]  md:p-4 md:text-base"
-          >
-            <thead className="">
-              <tr className="sticky top-0 z-10 bg-white  p-5 ">
-                <th className=" rounded-md bg-[#BED6FF] p-2">ลำดับหมายเลข</th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">
-                  รายชื่อผู้ยื่น
-                </th>
-                <th className=" rounded-md bg-[#BED6FF] p-2">วันยื่นคำขอ</th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทบุคคล</th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
-                <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
-              </tr>
-            </thead>
+            >
+              <thead className="">
+                <tr className="sticky top-0 z-10 bg-white  p-5 ">
+                  <th className=" rounded-md bg-[#BED6FF] p-2">ลำดับหมายเลข</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">
+                    รายชื่อผู้ยื่น
+                  </th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2">วันยื่นคำขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทบุคคล</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
+                </tr>
+              </thead>
 
-            <tbody className="relative">
-              {inventions.isLoading ||
-              designs.isLoading ||
-              trademarks.isLoading ||
-              copyrights.isLoading
-                ? [...Array(5)].map((_, index) => (
-                    <tr key={index} className="animate-pulse">
-                      <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-200 p-2"></td>
-                      <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-50 p-2"></td>
-                      <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-500 p-2"></td>
-                      <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-slate-300 p-2"></td>
-                      <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-100 p-2"></td>
-                    </tr>
-                  ))
-                : Object.values(requests)
-                    .flat()
-                    .sort((a, b) => b.order - a.order)
-                    .map((item) => {
-                      let title:
-                        | "สิทธิบัตรการประดิษฐ์"
-                        | "อนุสิทธิบัตร"
-                        | "สิทธิบัตรการออกแบบผลิตภัณฑ์"
-                        | "ลิขสิทธิ์"
-                        | "เครื่องหมายการค้า" = "สิทธิบัตรการประดิษฐ์";
+              <tbody className="relative">
+                {inventions.isLoading ||
+                designs.isLoading ||
+                trademarks.isLoading ||
+                copyrights.isLoading
+                  ? [...Array(5)].map((_, index) => (
+                      <tr key={index} className="animate-pulse">
+                        <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-200 p-2"></td>
+                        <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-50 p-2"></td>
+                        <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-500 p-2"></td>
+                        <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-slate-300 p-2"></td>
+                        <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] bg-gray-100 p-2"></td>
+                      </tr>
+                    ))
+                  : Object.values(requests)
+                      .flat()
+                      .sort((a, b) => b.order - a.order)
+                      .map((item) => {
+                        let title:
+                          | "สิทธิบัตรการประดิษฐ์"
+                          | "อนุสิทธิบัตร"
+                          | "สิทธิบัตรการออกแบบผลิตภัณฑ์"
+                          | "ลิขสิทธิ์"
+                          | "เครื่องหมายการค้า" = "สิทธิบัตรการประดิษฐ์";
 
-                      switch (item.type) {
-                        case "copyright":
-                          title = "ลิขสิทธิ์";
-                          break;
-                        case "invention-patent":
-                          if (item.workOnInvention.type === "INVENTION") {
-                            title = "สิทธิบัตรการประดิษฐ์";
-                          } else if (item.workOnInvention.type === "PETTY") {
-                            title = "อนุสิทธิบัตร";
-                          }
+                        switch (item.type) {
+                          case "copyright":
+                            title = "ลิขสิทธิ์";
+                            break;
+                          case "invention-patent":
+                            if (item.workOnInvention.type === "INVENTION") {
+                              title = "สิทธิบัตรการประดิษฐ์";
+                            } else if (item.workOnInvention.type === "PETTY") {
+                              title = "อนุสิทธิบัตร";
+                            }
 
-                          break;
-                        case "design-patent":
-                          title = "สิทธิบัตรการออกแบบผลิตภัณฑ์";
-                          break;
-                        case "trademark":
-                          title = "เครื่องหมายการค้า";
-                          break;
-                      }
-                      let url = `/status/${item.type}/${item.id}`;
-                      if (user?.role === "ADMIN") {
-                        url = `/${item.userType === "INTERNAL" ? "nrru" : "outsider"}/${item.type}/${item.id}`;
-                      }
+                            break;
+                          case "design-patent":
+                            title = "สิทธิบัตรการออกแบบผลิตภัณฑ์";
+                            break;
+                          case "trademark":
+                            title = "เครื่องหมายการค้า";
+                            break;
+                        }
+                        let url = `/status/${item.type}/${item.id}`;
+                        if (user?.role === "ADMIN") {
+                          url = `/${item.userType === "INTERNAL" ? "nrru" : "outsider"}/${item.type}/${item.id}`;
+                        }
 
-                      return (
-                        <tr key={item.id} className="hover:bg-gray-200">
-                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                            {item.order}
-                          </td>
-                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                            {item.user.title} {item.user.firstName}{" "}
-                            {item.user.lastName}
-                          </td>
-                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                            {item.requestDate ? (
-                              <span>
-                                {new Date(item.requestDate).toLocaleDateString(
-                                  "th-TH",
-                                  {
+                        return (
+                          <tr key={item.id} className="hover:bg-gray-200">
+                            <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                              {item.order}
+                            </td>
+                            <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                              {item.user.title} {item.user.firstName}{" "}
+                              {item.user.lastName}
+                            </td>
+                            <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                              {item.requestDate ? (
+                                <span>
+                                  {new Date(
+                                    item.requestDate,
+                                  ).toLocaleDateString("th-TH", {
                                     day: "numeric",
                                     month: "short",
                                     year: "numeric",
-                                  },
-                                )}
-                              </span>
-                            ) : (
-                              <span className="text-red-600">
-                                ไม่มีพบวันยื่นคำขอ
-                              </span>
-                            )}
-                          </td>
-                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                            {item.numberRequest ?? (
-                              <span className="text-red-600">
-                                ไม่มีหมายเลขคำขอ
-                              </span>
-                            )}
-                          </td>
-                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                            {item.userType === "INTERNAL"
-                              ? "บุคลากรมหาวิทยาลัย"
-                              : "บุคลากรภายนอก"}
-                          </td>
-                          <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                            {title}
-                          </td>
-                          <td>
-                            <LinkNextJS
-                              className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:bg-main-color hover:text-white"
-                              href={url}
-                            >
-                              ตรวจสอบ
-                            </LinkNextJS>
-                          </td>
-                        </tr>
-                      );
-                    })}
-            </tbody>
-          </table>
+                                  })}
+                                </span>
+                              ) : (
+                                <span className="text-red-600">
+                                  ไม่มีพบวันยื่นคำขอ
+                                </span>
+                              )}
+                            </td>
+                            <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                              {item.numberRequest ?? (
+                                <span className="text-red-600">
+                                  ไม่มีหมายเลขคำขอ
+                                </span>
+                              )}
+                            </td>
+                            <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                              {item.userType === "INTERNAL"
+                                ? "บุคลากรมหาวิทยาลัย"
+                                : "บุคลากรภายนอก"}
+                            </td>
+                            <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                              {title}
+                            </td>
+                            <td>
+                              <LinkNextJS
+                                className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:bg-main-color hover:text-white"
+                                href={url}
+                              >
+                                ตรวจสอบ
+                              </LinkNextJS>
+                            </td>
+                          </tr>
+                        );
+                      })}
+              </tbody>
+            </table>
+          </div>
         </div>
         <PaginationMUI
           page={page}
