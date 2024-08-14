@@ -188,9 +188,12 @@ function Index({ user }: { user: User | null }) {
                 </Button>
               )}
               <section className="grid w-80 gap-5 p-2 md:w-10/12">
-                {filesDocuments?.data?.map((file) => {
+                {filesDocuments?.data?.map((file, index) => {
                   return (
-                    <div className="flex w-full flex-col items-start gap-2">
+                    <div
+                      key={index}
+                      className="flex w-full flex-col items-start gap-2"
+                    >
                       <span className="w-max max-w-80 truncate text-base font-bold text-white md:w-full md:text-main-color ">
                         {file.title}
                       </span>
