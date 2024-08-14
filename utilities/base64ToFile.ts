@@ -45,3 +45,20 @@ export async function Base64ToFile({
 
   return files;
 }
+
+export async function ConvertToImageJpeg({
+  file,
+}: {
+  file: File;
+}): Promise<File> {
+  const heic2any = (await import("heic2any")).default;
+  if (file.type === "") {
+    const blob: any = await heic2any({
+      blob: file,
+      toType: "image/jpeg",
+    });
+    file = new File([blob], file.name, { type: "image/jpeg" });
+  }
+
+  return file;
+}

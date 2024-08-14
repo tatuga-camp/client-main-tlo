@@ -7,5 +7,7 @@ export type File = {
   fileType: FileType;
   type: string;
   url: string;
+  title?: string;
+  description?: string;
   size: number;
 };

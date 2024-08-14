@@ -25,38 +25,31 @@ import { BsFileEarmarkCode, BsPeople } from "react-icons/bs";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { GetUserService } from "../services/user";
 import { MdDelete } from "react-icons/md";
+import CreateDownload from "../components/Forms/createDownload";
 
 function Index({ user }: { user: User | null }) {
-  const [files, setFiles] = useState<
-    {
-      id?: string;
-      url: string;
-      fileType: FileType;
-      type?: string;
-      file?: File;
-    }[]
-  >([]);
-
+  const [triggerCreateDownload, setTriggerCreateDownload] = useState(false);
   const filesDocuments = useQuery({
     queryKey: ["files-document"],
     queryFn: () =>
       GetFileService({
         fileType: "DOCUMENT",
+      }).then((res) => {
+        return Object.entries(
+          Object.groupBy(res, (item) => item?.title ?? "no-title"),
+        ).map(([title, items]) => ({
+          title,
+          description: items?.[0].description,
+          items,
+        }));
       }),
   });
 
-  useEffect(() => {
-    if (filesDocuments.data) {
-      setFiles(() => [...filesDocuments.data]);
-    }
-  }, [filesDocuments.data]);
-
   const handleDeleteFile = async ({
-    url,
     fileId,
   }: {
     url: string;
-    fileId?: string;
+    fileId: string;
   }) => {
     const replacedText = "ยืนยันการลบข้อมูล";
     let content = document.createElement("div");
@@ -88,19 +81,10 @@ function Index({ user }: { user: User | null }) {
           },
         });
 
-        if (fileId) {
-          await DeleteFileService({
-            fileId: fileId,
-          });
-          setFiles((prev) => {
-            return [...prev?.filter((file) => file.url !== url)];
-          });
-          await filesDocuments.refetch();
-        } else {
-          setFiles((prev) => {
-            return [...prev?.filter((file) => file.url !== url)];
-          });
-        }
+        await DeleteFileService({
+          fileId: fileId,
+        });
+        await filesDocuments.refetch();
         Swal.fire({
           title: "ลบข้อมูลสำเร็จ",
           icon: "success",
@@ -117,57 +101,6 @@ function Index({ user }: { user: User | null }) {
           icon: "error",
         });
       }
-    }
-  };
-
-  const handleUploadFile = async () => {
-    try {
-      Swal.fire({
-        title: "กำลังดำเนินการอัพโหลดไฟล์",
-        html: "กรุณารอสักครู่",
-        allowEscapeKey: false,
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
-      const filterFiles = files?.filter((file) => !file.id);
-      if (filterFiles) {
-        for (const file of filterFiles) {
-          const getSignURL = await GetSignURLService({
-            fileName: file.file?.name as string,
-            fileType: file.file?.type as string,
-          });
-
-          await UploadSignURLService({
-            contentType: file.file?.type as string,
-            file: file.file as File,
-            signURL: getSignURL.signURL,
-          });
-
-          await CreateFileService({
-            type: file.file?.type as string,
-            url: getSignURL.originalURL,
-            fileType: file.fileType,
-            size: file.file?.size as number,
-          });
-        }
-      }
-      await filesDocuments.refetch();
-      Swal.fire({
-        title: "อัพโหลดไฟล์สำเร็จ",
-        icon: "success",
-      });
-    } catch (error) {
-      let result = error as ErrorMessages;
-      Swal.fire({
-        title: result.error ? result.error : "เกิดข้อผิดพลาด",
-        text: result.message.toString(),
-        footer: result.statusCode
-          ? "รหัสข้อผิดพลาด: " + result.statusCode?.toString()
-          : "",
-        icon: "error",
-      });
     }
   };
 
@@ -207,6 +140,12 @@ function Index({ user }: { user: User | null }) {
         </title>
       </Head>
       <HomeLayout>
+        {triggerCreateDownload && (
+          <CreateDownload
+            filesDocuments={filesDocuments}
+            setTrigger={setTriggerCreateDownload}
+          />
+        )}
         {/* Header */}
         <header
           className=" flex   w-full flex-col items-center justify-center 
@@ -235,90 +174,80 @@ function Index({ user }: { user: User | null }) {
                 <FaDownLong />
                 ดาวโหลดเอกสาร
               </div>
-              {user?.role === "ADMIN" && (
-                <button onClick={handleUploadFile} className="btn-download">
-                  <FiSave /> บันทึกข้อมูล
-                </button>
-              )}
             </div>
             <section className=" flex h-full w-full flex-col items-center justify-center gap-3">
               {user?.role === "ADMIN" && (
-                <FileTrigger
-                  allowsMultiple
-                  onSelect={(e) => {
-                    if (!e) return null;
-
-                    const files: FileList = e;
-                    Array.from(files).forEach((file) => {
-                      const url = URL.createObjectURL(file);
-                      const reader = new FileReader();
-
-                      setFiles((prev) => {
-                        return [
-                          ...prev,
-                          { file: file, url: url, fileType: "DOCUMENT" },
-                        ];
-                      });
-
-                      reader.readAsDataURL(file);
-                    });
+                <Button
+                  onPress={() => {
+                    setTriggerCreateDownload(true);
+                    document.body.style.overflow = "hidden";
                   }}
+                  className="btn-download"
                 >
-                  <Button className="btn-download">
-                    <FiUploadCloud /> อัพโหลด ไฟล์
-                  </Button>
-                </FileTrigger>
+                  <FiUploadCloud /> อัพโหลด ไฟล์
+                </Button>
               )}
-              <section
-                className=" flex flex-wrap 
-gap-2 border border-gray-200 bg-gray-200  p-2 "
-              >
-                {...files
-                  ?.filter((file) => file.fileType === "DOCUMENT")
-                  .map((file) => {
-                    const fileName = file?.url?.split("/").pop();
+              <section className="grid w-80 gap-5 p-2 md:w-10/12">
+                {filesDocuments?.data?.map((file) => {
+                  return (
+                    <div className="flex w-full flex-col items-start gap-2">
+                      <span className="w-max max-w-80 truncate text-base font-bold text-white md:w-full md:text-main-color ">
+                        {file.title}
+                      </span>
+                      <span className="w-full text-sm text-white  md:text-main-color ">
+                        {file.description}
+                      </span>
 
-                    return (
-                      <div
-                        key={file.url}
-                        className="flex h-10 w-full items-center justify-between gap-5 rounded-md
-       border-[1px] border-solid border-[#cbdbf9] bg-white p-2 "
-                      >
-                        <div className="flex justify-center gap-1">
-                          <div className="flex items-center justify-center text-black">
-                            <BsFileEarmarkCode />
-                          </div>
-                          <span className="w-max max-w-80 truncate text-sm ">
-                            {file?.id ? fileName : file.file?.name}
-                          </span>
-                        </div>
-                        <div className="flex gap-2">
-                          <div
-                            onClick={() => window.open(file.url, "_blank")}
-                            className=" z-10 flex
-   cursor-pointer items-center justify-center gap-2 rounded-md bg-green-500 p-1  text-xl text-white"
-                          >
-                            <GrFormView />
-                          </div>
-                          {user?.role === "ADMIN" && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleDeleteFile({
-                                  url: file.url,
-                                  fileId: file.id,
-                                })
-                              }
-                              className=" z-10 flex cursor-pointer 
-   items-center justify-center gap-2 rounded-md bg-red-500 p-1  text-xl text-white"
+                      <div className="grid w-full gap-2 border border-gray-200 bg-gray-200  p-2">
+                        {file.items?.map((item) => {
+                          const fileName = item?.url?.split("/").pop();
+                          return (
+                            <div
+                              key={item?.url}
+                              className="flex h-10 w-full items-center justify-between gap-5 rounded-md 
+                          border-[1px] border-solid border-[#cbdbf9] bg-white p-2 "
                             >
-                              <MdDelete />
-                            </button>
-                          )}
-                        </div>
+                              <div className="flex justify-center gap-1">
+                                <div className="flex items-center justify-center text-black">
+                                  <BsFileEarmarkCode />
+                                </div>
+                                <span className="w-48 truncate text-sm md:w-full ">
+                                  {fileName}
+                                </span>
+                              </div>
+                              <div className="flex gap-2">
+                                <div
+                                  onClick={() =>
+                                    window.open(item?.url, "_blank")
+                                  }
+                                  className=" z-10 flex cursor-pointer items-center justify-center
+                               gap-2 rounded-md bg-green-500 p-1  text-xl text-white"
+                                >
+                                  <GrFormView />
+                                </div>
+                                {user?.role === "ADMIN" && (
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleDeleteFile({
+                                        url: item?.url,
+                                        fileId: item?.id,
+                                      })
+                                    }
+                                    className=" z-10 flex cursor-pointer 
+     items-center justify-center gap-2 rounded-md bg-red-500 p-1  text-xl text-white"
+                                  >
+                                    <MdDelete />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })}
               </section>
             </section>
           </div>

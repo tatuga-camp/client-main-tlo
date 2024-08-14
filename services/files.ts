@@ -7,7 +7,7 @@ type RequestGetFileService = {
   fileType: FileType;
 };
 
-type ResponseGetFileService = File[];
+export type ResponseGetFileService = File[];
 export async function GetFileService(
   input: RequestGetFileService,
 ): Promise<ResponseGetFileService> {
@@ -37,6 +37,8 @@ type RequestCreateFileService = {
   url: string;
   size: number;
   fileType: FileType;
+  title?: string;
+  description?: string;
 };
 
 type ResponseCreateFileService = File;
