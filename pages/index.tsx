@@ -186,11 +186,8 @@ export default function Home() {
                 </Link>
               </button>
               <button className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-0 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base">
-                <Link
-                  to="aboutUs"
-                  smooth={true}
-                  offset={-100}
-                  duration={300}
+                <LinkNextJS
+                  href={"/about-us"}
                   className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base"
                 >
                   <div className="rounded-full bg-[var(--primary-blue)] p-4 text-[2.5rem] text-white duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-[var(--primary-blue)] md:text-[4.6rem]">
@@ -199,7 +196,7 @@ export default function Home() {
                   <p className="text-[0.85rem] duration-300 group-hover:text-[0.95rem] group-hover:text-white md:text-[1.1rem] md:group-hover:text-base">
                     เกี่ยวกับเรา
                   </p>
-                </Link>
+                </LinkNextJS>
               </button>
             </section>
           </main>
@@ -287,144 +284,6 @@ export default function Home() {
                 </div>
               </section>
             </Element>
-          </div>
-          {/* เกี่ยวกับเรา */}
-          <div
-            className="mt-12 flex w-full flex-col items-center gap-8 bg-[var(--primary-blue)]
-           py-5 md:items-start md:bg-[#F4F8FF] md:py-0"
-          >
-            <Element
-              name="aboutUs"
-              className="w-[85% z-10 flex  items-center justify-center gap-5 
-              bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold 
-         hover:drop-shadow-md md:justify-start md:pl-32 md:text-start md:text-xl"
-            >
-              <PiUserCircleFill />
-              เกี่ยวกับเรา
-            </Element>
-
-            <div className="  flex min-h-[50rem] w-full bg-[var(--primary-blue)] py-10 text-[white] ">
-              <div className="relative min-h-full w-[35%] bg-slate-400">
-                <Image
-                  alt="pictor of aboutUs"
-                  fill
-                  className="object-cover"
-                  src={"/picture/aboutUs.png"}
-                />
-              </div>
-              <section className="z-10  flex flex-col gap-10">
-                {/* วิสัยทัศน์ */}
-                <div className="-ml-9 flex items-center gap-5">
-                  <div
-                    className="flex h-16 w-16 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)]
-                   bg-[#DDE9FF] text-7xl text-[var(--primary-blue)] md:h-32 md:w-32"
-                  >
-                    <GoGoal />
-                  </div>
-                  <div className="flex w-10/12 flex-col justify-center gap-3">
-                    <h1 className=" text-2xl font-semibold">วิสัยทัศน์</h1>
-                    <p className="text-sm md:text-base">
-                      การบริหารจัดการทรัพย์สินทางปัญญา
-                      ให้เกิดการจัดการองค์ความรู้
-                      และประโยชน์ที่ได้รับจากการจัดการทรัพย์สินทางปัญญา
-                    </p>
-                  </div>
-                </div>
-
-                {/* พันธกิจ */}
-                <div className="-ml-9 flex items-center gap-5">
-                  <div
-                    className="flex h-16 w-16 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)]
-                   bg-[#DDE9FF] text-7xl text-[var(--primary-blue)] md:h-32 md:w-32"
-                  >
-                    <LiaClipboardListSolid />
-                  </div>
-                  <div className="flex w-[70%] flex-col justify-center gap-3">
-                    <h1 className="text-2xl font-semibold">พันธกิจ</h1>
-                    <ol className="text-sm md:text-base">
-                      <li>1. บริการฝึกอบรมความรู้ทางด้านทรัพย์สินทางปัญญา</li>
-                      <li>
-                        2. บริการให้คำปรึกษาทางด้านทรัพย์สินทางปัญญา
-                        แก่ผู้เข้าร่วมโครงการและชุมชนท้องถิ่น
-                      </li>
-                      <li>
-                        3. บริการให้ความช่วยเหลือด้านทรัพย์สินทางปัญญา
-                        ในการดำเนินการต่างๆ ที่เกี่ยวข้องกับงานทรัพย์สินทางปัญญา
-                      </li>
-                      <li>
-                        4.
-                        สร้างและพัฒนาเครือข่ายความร่วมมือทางด้านทรัพย์สินทางปัญญา
-                      </li>
-                      <li>
-                        5.
-                        สนับสนุนวิจัยเพื่อพัฒนาและต่อยอดงานทรัพย์สินทางปัญญาและจดทะเบียนทรัพย์สินทางปัญญา
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-
-                {/* กลุ่มเป้าหมาย */}
-                <div className="-ml-9 flex items-center gap-5">
-                  <div
-                    className="flex h-16 w-16 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)]
-                   bg-[#DDE9FF] text-7xl text-[var(--primary-blue)] md:h-32 md:w-32"
-                  >
-                    <GrGroup />
-                  </div>
-                  <div className="flex w-[70%] flex-col justify-center gap-3">
-                    <h1 className="text-2xl font-semibold">กลุ่มเป้าหมาย</h1>
-                    <ol className="text-sm md:text-base">
-                      <li>1. นักศึกษามหาวิทยาลัยราชภัฏนครราชสีมา</li>
-                      <li>
-                        2. คณาจารย์/นักวิชาการ ที่มีผลงานวิจัย
-                        สามารถนำมาพัฒนาต่อยอดได้
-                      </li>
-                      <li>3. บัณฑิตของมหาวิทยาลัย</li>
-                      <li>
-                        4. ผู้ประกอบการในพื้นที่การให้บริการของมหาวิทยาลัย
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-
-                {/* บริการของเรา */}
-                <div className="-ml-9 flex items-center gap-5">
-                  <div
-                    className="flex h-16 w-16 items-center justify-center rounded-full border-[0.5rem] border-solid border-[var(--primary-blue)]
-                   bg-[#DDE9FF] text-7xl text-[var(--primary-blue)] md:h-32 md:w-32"
-                  >
-                    <FaRegCircleCheck />
-                  </div>
-                  <div className="flex w-[70%] flex-col justify-center gap-3">
-                    <h1 className="text-2xl font-semibold">บริการของเรา</h1>
-                    <ol className="text-sm md:text-base">
-                      <li>
-                        1.
-                        บริการให้คำปรึกษาแนะนำความรู้เกี่ยวกับทรัพย์สินทางปัญญาแก่นักศึกษา
-                        คณาจารย์ เจ้าหน้าที่ภายในมหาวิทยาลัยและผู้สนใจทั่วไป
-                      </li>
-                      <li>
-                        2. ช่วยเหลือในการร่างคำขอ
-                        ยื่นคำขอและติดตามผลการจดทะเบียนทรัพย์สินทางปัญญา
-                      </li>
-                      <li>
-                        3.
-                        ให้ข่าวสารประชาสัมพันธ์และจัดอบรมสัมมนาความรู้เกี่ยวกับทรัพย์สินทางปัญญา
-                      </li>
-                      <li>
-                        4.
-                        ส่งเสริมการนำผลงานวิจัยภายในมหาวิทยาลัยไปใช้เชิงพาณิชย์
-                        หรือพัฒนาเป็นผลิตภัณฑ์ผ่านการถ่ายทอดเทคโนโลยี
-                      </li>
-                      <li>5. ประเมินมูลค่าทรัพย์สินทางปัญญา</li>
-                      <li>
-                        6. ค้นหาธุรกิจใหม่ที่ใช้องค์ความรู้ด้านทรัพย์สินทางปัญญา
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-              </section>
-            </div>
           </div>
         </div>
       </HomeLayout>

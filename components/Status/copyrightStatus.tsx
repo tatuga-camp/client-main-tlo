@@ -217,9 +217,7 @@ function CopyrightStatus({ copyrightId, user }: CopyrightStatusProps) {
           )}
         </Form>
 
-        <h1 className="font-semibold lg:text-xl">
-          ประเภท : สิทธิบัตรการประดิษฐ์
-        </h1>
+        <h1 className="font-semibold lg:text-xl">ประเภท : ลิขสิทธิ์</h1>
         <section className="grid w-full grid-cols-2 gap-5 p-5">
           <p>
             <span className="font-semibold">ชื่อการประดิษฐ์ : </span>{" "}

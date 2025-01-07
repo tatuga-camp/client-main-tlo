@@ -10,7 +10,7 @@ function Index() {
     <HomeLayout>
       <>
         <Head>
-          <title>ตรวจสอบสถานะ คำขอรับสิทธิบัตรการออกแบบผลิตภัณฑ์</title>
+          <title>ตรวจสอบสถานะ คำขอรับลิขสิทธิ์</title>
         </Head>
         <main className="font-Anuphan">
           {router.isReady && router.query.copyrightId ? (
