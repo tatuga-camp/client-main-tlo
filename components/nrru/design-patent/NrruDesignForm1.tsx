@@ -1,4 +1,10 @@
+import AmphureCombobox from "@/components/Combobox/amphureCombobox";
+import ProviceCombobox from "@/components/Combobox/proviceCombobox";
+import TambonCombobox from "@/components/Combobox/tambonCombobox";
 import NumberTitle from "@/components/Number";
+import { UseQueryResult } from "@tanstack/react-query";
+import { Dropdown } from "primereact/dropdown";
+import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import React, {
   forwardRef,
   useEffect,
@@ -14,11 +20,12 @@ import {
   Label,
   TextField,
 } from "react-aria-components";
-import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import { FiPlusCircle } from "react-icons/fi";
-import ProviceCombobox from "@/components/Combobox/proviceCombobox";
-import AmphureCombobox from "@/components/Combobox/amphureCombobox";
-import TambonCombobox from "@/components/Combobox/tambonCombobox";
+import { MdDelete } from "react-icons/md";
+import Swal from "sweetalert2";
+import { v4 as uuidv4 } from "uuid";
+import { TitleNameList } from "../../../data/name";
+import { FacultyLists } from "../../../data/user";
 import {
   Amphure,
   ErrorMessages,
@@ -26,22 +33,15 @@ import {
   Tambon,
   User,
 } from "../../../models";
-import { UseQueryResult } from "@tanstack/react-query";
 import { ResponseGetDesignPatentService } from "../../../services/design-patent/design-patent";
-import { v4 as uuidv4 } from "uuid";
-import Swal from "sweetalert2";
-import { isMongoDBId, isUUIDv4 } from "../../../utilities/validateID";
 import {
   CreatePartnerDesignPatentService,
   DeletePartnerDesignPatentService,
   UpdatePartnerDesignPatentService,
 } from "../../../services/design-patent/partner-design";
+import { isMongoDBId, isUUIDv4 } from "../../../utilities/validateID";
 import SnackbarLoading from "../../Snackbars/SnackBarLoading";
 import SnackbarNoSaveData from "../../Snackbars/SnackBarNoSaveData";
-import { MdDelete } from "react-icons/md";
-import { Dropdown } from "primereact/dropdown";
-import { TitleNameList } from "../../../data/name";
-import { FacultyLists } from "../../../data/user";
 
 type NrruDesignForm1Props = {
   user: User;

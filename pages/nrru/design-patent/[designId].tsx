@@ -1,6 +1,6 @@
 import HomeLayout from "@/layouts/homepageLayout";
 import Head from "next/head";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import NrruDesignForm1 from "@/components/nrru/design-patent/NrruDesignForm1";
 import NrruDesignForm2 from "@/components/nrru/design-patent/NrruDesignForm2/NrruDesignForm2";
@@ -8,23 +8,22 @@ import NrruDesignForm3 from "@/components/nrru/design-patent/NrruDesignForm3/Nrr
 import NrruDesignForm4 from "@/components/nrru/design-patent/NrruDesignForm4/NrruDesignForm4";
 import NrruDesignForm5 from "@/components/nrru/design-patent/NrruDesignForm5";
 import { nrruDesignnSection } from "@/data/PatentSection";
-import { useRouter as NextuseRouter } from "next/router";
-import { useRouter } from "next-nprogress-bar";
 import { useQuery } from "@tanstack/react-query";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useRouter } from "next-nprogress-bar";
+import { useRouter as NextuseRouter } from "next/router";
+import { IoIosSave } from "react-icons/io";
+import { MdDelete, MdOutlineDriveFileMove } from "react-icons/md";
+import Swal from "sweetalert2";
+import MigrantForm from "../../../components/Forms/migrantForm";
+import DesignStatus from "../../../components/Status/designStatus";
+import { ErrorMessages, User } from "../../../models";
 import {
   DeleteDesignPatentService,
   GetDesignPatentService,
   MigrantDesignPatentService,
 } from "../../../services/design-patent/design-patent";
-import { ErrorMessages, User } from "../../../models";
-import Swal from "sweetalert2";
-import { MdDelete, MdOutlineDriveFileMove } from "react-icons/md";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { GetUserService } from "../../../services/user";
-import { describe } from "node:test";
-import DesignStatus from "../../../components/Status/designStatus";
-import MigrantForm from "../../../components/Forms/migrantForm";
-import { IoIosSave } from "react-icons/io";
 
 type ChildFormRef = {
   saveData: () => Promise<void>;
@@ -83,7 +82,7 @@ const Index = ({ user }: { user: User }) => {
         break;
 
       case 1:
-        if (design.data?.workInfoOnDesignPatent.isComplete === false) {
+        if (design.data?.partnerInfoOnDesignPatents.length === 0) {
           throw new Error("กรุณากรอกข้อมูลของผลงานการประดิษฐ์ ให้ครบถ้วน");
         }
         break;
