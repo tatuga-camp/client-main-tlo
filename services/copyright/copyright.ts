@@ -19,7 +19,11 @@ type RequestGetCopyrightsService = {
 };
 
 type ResponseGetCopyrightsService = Pagination<
-  Copyright & { user: User; work: WorkInfoOnCopyright }
+  Copyright & {
+    user: User;
+    work: WorkInfoOnCopyright;
+    owner: PartnerInfoOnCopyright;
+  }
 >;
 export async function GetCopyrightsService(
   input: RequestGetCopyrightsService,

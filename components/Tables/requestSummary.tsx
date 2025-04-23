@@ -1,32 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { Pagination as PaginationMUI } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import LinkNextJS from "next/link";
+import { useEffect, useState } from "react";
+import { LuSearch } from "react-icons/lu";
+import { Element } from "react-scroll";
+import Select from "react-select";
 import {
   Copyright,
   DesignPatent,
   InventionPatent,
+  PartnerInfoOnCopyright,
+  PartnerInfoOnDesignPatent,
+  PartnerInfoOnInventionPatent,
+  PartnerInfoOnTrademark,
   Trademark,
   User,
   WorkInfoOnCopyright,
   WorkInfoOnDesignPatent,
   WorkInfoOnInventionPatent,
 } from "../../models";
-import { useQuery } from "@tanstack/react-query";
-import { GetInventionPatentsService } from "../../services/invention-patent/invention-patent";
-import { GetDesignPatentsService } from "../../services/design-patent/design-patent";
 import { GetCopyrightsService } from "../../services/copyright/copyright";
+import { GetDesignPatentsService } from "../../services/design-patent/design-patent";
+import { GetInventionPatentsService } from "../../services/invention-patent/invention-patent";
 import { GetTrademarksService } from "../../services/trademark/trademark";
-import {
-  Link,
-  Button,
-  Element,
-  Events,
-  animateScroll as scroll,
-  scrollSpy,
-} from "react-scroll";
-import Select from "react-select";
-import { LuSearch } from "react-icons/lu";
-import LinkNextJS from "next/link";
-import { Pagination as PaginationMUI } from "@mui/material";
-import moment from "moment";
 
 const menuTypes = [
   {
@@ -50,6 +46,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "invention-patent";
           user: User;
           work: WorkInfoOnInventionPatent;
+          owner: PartnerInfoOnInventionPatent;
         })[]
       | [];
     designs:
@@ -57,6 +54,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "design-patent";
           user: User;
           work: WorkInfoOnDesignPatent;
+          owner: PartnerInfoOnDesignPatent;
         })[]
       | [];
     copyrights:
@@ -64,6 +62,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "copyright";
           user: User;
           work: WorkInfoOnCopyright;
+          owner: PartnerInfoOnCopyright;
         })[]
       | [];
     trademarks:
@@ -71,6 +70,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "trademark";
           user: User;
           work: { titleTrademark: string };
+          owner: PartnerInfoOnTrademark;
         })[]
       | [];
   }>({
@@ -94,7 +94,7 @@ function RequestSummary({ user }: { user?: User }) {
       GetInventionPatentsService({
         page: page,
         searchField: searchField.actual,
-        limit: 3,
+        limit: 20,
       }),
   });
 
@@ -104,7 +104,7 @@ function RequestSummary({ user }: { user?: User }) {
       GetDesignPatentsService({
         page: page,
         searchField: searchField.actual,
-        limit: 3,
+        limit: 20,
       }),
     staleTime: 1000 * 10,
     refetchInterval: 1000 * 10,
@@ -116,7 +116,7 @@ function RequestSummary({ user }: { user?: User }) {
       GetCopyrightsService({
         page: page,
         searchField: searchField.actual,
-        limit: 3,
+        limit: 20,
       }),
     staleTime: 1000 * 10,
     refetchInterval: 1000 * 10,
@@ -128,7 +128,7 @@ function RequestSummary({ user }: { user?: User }) {
       GetTrademarksService({
         page: page,
         searchField: searchField.actual,
-        limit: 3,
+        limit: 20,
       }),
     staleTime: 1000 * 10,
     refetchInterval: 1000 * 10,
@@ -172,6 +172,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "invention-patent";
           user: User;
           work: WorkInfoOnInventionPatent;
+          owner: PartnerInfoOnInventionPatent;
         })[];
 
         const designsState = designs.data.data.map((design) => {
@@ -183,6 +184,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "design-patent";
           user: User;
           work: WorkInfoOnDesignPatent;
+          owner: PartnerInfoOnDesignPatent;
         })[];
 
         const copyrightsState = copyrights.data.data.map((copyright) => {
@@ -194,6 +196,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "copyright";
           user: User;
           work: WorkInfoOnCopyright;
+          owner: PartnerInfoOnCopyright;
         })[];
 
         const trademarksState = trademarks.data.data.map((trademark) => {
@@ -205,6 +208,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "trademark";
           user: User;
           work: { titleTrademark: string };
+          owner: PartnerInfoOnTrademark;
         })[];
 
         switch (filterType) {
@@ -458,14 +462,15 @@ function RequestSummary({ user }: { user?: User }) {
 
                         return (
                           <tr key={item.id} className="hover:bg-gray-200">
-                            <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                            <td className="h-10 max-w-96 truncate rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:max-w-none">
                               {workTitle}
                             </td>
                             <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                               {title}
                             </td>
                             <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                              {item.title} {item.firstName} {item.lastName}
+                              {item.owner.title} {item.owner.firstName}{" "}
+                              {item.owner.lastName}
                             </td>
                             <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                               {item.requestDate ? (
