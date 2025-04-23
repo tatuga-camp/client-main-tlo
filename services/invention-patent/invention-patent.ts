@@ -21,7 +21,7 @@ type RequestGetInventionPatentsService = {
 
 type ResponseGetInventionPatentsService = Pagination<
   InventionPatent & { user: User } & {
-    workOnInvention: WorkInfoOnInventionPatent;
+    work: WorkInfoOnInventionPatent;
   }
 >;
 export async function GetInventionPatentsService(

@@ -18,7 +18,9 @@ type RequestGetCopyrightsService = {
   searchField?: string;
 };
 
-type ResponseGetCopyrightsService = Pagination<Copyright & { user: User }>;
+type ResponseGetCopyrightsService = Pagination<
+  Copyright & { user: User; work: WorkInfoOnCopyright }
+>;
 export async function GetCopyrightsService(
   input: RequestGetCopyrightsService,
 ): Promise<ResponseGetCopyrightsService> {

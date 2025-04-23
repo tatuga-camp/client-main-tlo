@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
-  Chart as ChartJS,
   ArcElement,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  ChartData,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
-  ChartData,
 } from "chart.js";
-import { Pie } from "react-chartjs-2";
-import { FaSquare } from "react-icons/fa";
+import { Calendar } from "primereact/calendar";
+import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { IoOptionsOutline } from "react-icons/io5";
-import { useQuery } from "@tanstack/react-query";
 import { GetCountCopyrightService } from "../../services/copyright/copyright";
-import { Calendar } from "primereact/calendar";
-import { GetCountInventionService } from "../../services/invention-patent/invention-patent";
 import { GetCountDesignService } from "../../services/design-patent/design-patent";
+import { GetCountInventionService } from "../../services/invention-patent/invention-patent";
 import { GetCountTrademarkService } from "../../services/trademark/trademark";
 import {
   handleChangeToBuddhistYear,

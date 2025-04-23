@@ -5,6 +5,8 @@ import {
   InventionPatent,
   Trademark,
   User,
+  WorkInfoOnCopyright,
+  WorkInfoOnDesignPatent,
   WorkInfoOnInventionPatent,
 } from "../../models";
 import { useQuery } from "@tanstack/react-query";
@@ -47,12 +49,30 @@ function RequestSummary({ user }: { user?: User }) {
       | (InventionPatent & {
           type: "invention-patent";
           user: User;
-          workOnInvention: WorkInfoOnInventionPatent;
+          work: WorkInfoOnInventionPatent;
         })[]
       | [];
-    designs: (DesignPatent & { type: "design-patent"; user: User })[] | [];
-    copyrights: (Copyright & { type: "copyright"; user: User })[] | [];
-    trademarks: (Trademark & { type: "trademark"; user: User })[] | [];
+    designs:
+      | (DesignPatent & {
+          type: "design-patent";
+          user: User;
+          work: WorkInfoOnDesignPatent;
+        })[]
+      | [];
+    copyrights:
+      | (Copyright & {
+          type: "copyright";
+          user: User;
+          work: WorkInfoOnCopyright;
+        })[]
+      | [];
+    trademarks:
+      | (Trademark & {
+          type: "trademark";
+          user: User;
+          work: { titleTrademark: string };
+        })[]
+      | [];
   }>({
     inventions: [],
     designs: [],
@@ -151,7 +171,7 @@ function RequestSummary({ user }: { user?: User }) {
         }) as (InventionPatent & {
           type: "invention-patent";
           user: User;
-          workOnInvention: WorkInfoOnInventionPatent;
+          work: WorkInfoOnInventionPatent;
         })[];
 
         const designsState = designs.data.data.map((design) => {
@@ -159,21 +179,33 @@ function RequestSummary({ user }: { user?: User }) {
             ...design,
             type: "design-patent",
           };
-        }) as (DesignPatent & { type: "design-patent"; user: User })[];
+        }) as (DesignPatent & {
+          type: "design-patent";
+          user: User;
+          work: WorkInfoOnDesignPatent;
+        })[];
 
         const copyrightsState = copyrights.data.data.map((copyright) => {
           return {
             ...copyright,
             type: "copyright",
           };
-        }) as (Copyright & { type: "copyright"; user: User })[];
+        }) as (Copyright & {
+          type: "copyright";
+          user: User;
+          work: WorkInfoOnCopyright;
+        })[];
 
         const trademarksState = trademarks.data.data.map((trademark) => {
           return {
             ...trademark,
             type: "trademark",
           };
-        }) as (Trademark & { type: "trademark"; user: User })[];
+        }) as (Trademark & {
+          type: "trademark";
+          user: User;
+          work: { titleTrademark: string };
+        })[];
 
         switch (filterType) {
           case "all":
@@ -358,14 +390,15 @@ function RequestSummary({ user }: { user?: User }) {
             >
               <thead className="">
                 <tr className="sticky top-0 z-10 bg-white  p-5 ">
-                  <th className=" rounded-md bg-[#BED6FF] p-2">ลำดับหมายเลข</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">
-                    รายชื่อผู้ยื่น
-                  </th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2">วันยื่นคำขอ</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">หมายเลขคำขอ</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทบุคคล</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2">ชื่อผลงาน</th>
                   <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2">
+                    ผู้สร้างสรรค์
+                  </th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">
+                    วันที่ยื่นคำขอ
+                  </th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">เลขที่คำขอ</th>
                   <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
                 </tr>
               </thead>
@@ -395,23 +428,27 @@ function RequestSummary({ user }: { user?: User }) {
                           | "ลิขสิทธิ์"
                           | "เครื่องหมายการค้า" = "สิทธิบัตรการประดิษฐ์";
 
+                        let workTitle = "";
                         switch (item.type) {
                           case "copyright":
                             title = "ลิขสิทธิ์";
+                            workTitle = item.work.name ?? "";
                             break;
                           case "invention-patent":
-                            if (item.workOnInvention.type === "INVENTION") {
+                            if (item.work.type === "INVENTION") {
                               title = "สิทธิบัตรการประดิษฐ์";
-                            } else if (item.workOnInvention.type === "PETTY") {
+                            } else if (item.work.type === "PETTY") {
                               title = "อนุสิทธิบัตร";
                             }
-
+                            workTitle = item.work.thaiName;
                             break;
                           case "design-patent":
                             title = "สิทธิบัตรการออกแบบผลิตภัณฑ์";
+                            workTitle = item.work.thaiName;
                             break;
                           case "trademark":
                             title = "เครื่องหมายการค้า";
+                            workTitle = item.work.titleTrademark;
                             break;
                         }
                         let url = `/status/${item.type}/${item.id}`;
@@ -422,11 +459,13 @@ function RequestSummary({ user }: { user?: User }) {
                         return (
                           <tr key={item.id} className="hover:bg-gray-200">
                             <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                              {item.order}
+                              {workTitle}
                             </td>
                             <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                              {item.user.title} {item.user.firstName}{" "}
-                              {item.user.lastName}
+                              {title}
+                            </td>
+                            <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                              {item.title} {item.firstName} {item.lastName}
                             </td>
                             <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                               {item.requestDate ? (
@@ -451,14 +490,6 @@ function RequestSummary({ user }: { user?: User }) {
                                   ไม่มีหมายเลขคำขอ
                                 </span>
                               )}
-                            </td>
-                            <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                              {item.userType === "INTERNAL"
-                                ? "บุคลากรมหาวิทยาลัย"
-                                : "บุคลากรภายนอก"}
-                            </td>
-                            <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                              {title}
                             </td>
                             <td>
                               <LinkNextJS

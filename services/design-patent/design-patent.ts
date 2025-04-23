@@ -20,7 +20,7 @@ type RequestGetDesignPatentsService = {
 };
 
 type ResponseGetDesignPatentsService = Pagination<
-  DesignPatent & { user: User }
+  DesignPatent & { user: User; work: WorkInfoOnDesignPatent }
 >;
 export async function GetDesignPatentsService(
   input: RequestGetDesignPatentsService,
