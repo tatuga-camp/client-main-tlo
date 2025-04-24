@@ -53,7 +53,7 @@ type RequestGetCopyrightsByUserIdService = {
 };
 
 type ResponseGetCopyrightsByUserIdService = Pagination<
-  Copyright & { workOnCopyright: WorkInfoOnCopyright }
+  Copyright & { work: WorkInfoOnCopyright }
 >;
 export async function GetCopyrightsByUserIdService(
   input: RequestGetCopyrightsByUserIdService,

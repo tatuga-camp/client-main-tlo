@@ -1,7 +1,17 @@
-import React, { useEffect, useState } from "react";
-import HomeLayout from "../../layouts/homepageLayout";
+import { Pagination } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import moment from "moment";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { GetUserService } from "../../services/user";
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { FaPaintbrush, FaTrademark } from "react-icons/fa6";
+import { MdLightbulbCircle } from "react-icons/md";
+import { PiCertificateBold } from "react-icons/pi";
+import Select from "react-select";
+import HomeLayout from "../../layouts/homepageLayout";
 import {
   Copyright,
   DesignPatent,
@@ -12,23 +22,25 @@ import {
   WorkInfoOnDesignPatent,
   WorkInfoOnInventionPatent,
 } from "../../models";
-import Image from "next/image";
-import Head from "next/head";
-import { PiCertificateBold } from "react-icons/pi";
-import { FaPaintbrush, FaTrademark } from "react-icons/fa6";
-import { MdLightbulbCircle } from "react-icons/md";
-import Link from "next/link";
-import { Input, SearchField } from "react-aria-components";
-import { IoSearchCircleSharp } from "react-icons/io5";
-import { useQuery } from "@tanstack/react-query";
-import { Pagination } from "@mui/material";
-import { GetInventionPatentsByUserIdService } from "../../services/invention-patent/invention-patent";
-import { GetDesignPatentsByUserIdService } from "../../services/design-patent/design-patent";
 import { GetCopyrightsByUserIdService } from "../../services/copyright/copyright";
+import { GetDesignPatentsByUserIdService } from "../../services/design-patent/design-patent";
+import { GetInventionPatentsByUserIdService } from "../../services/invention-patent/invention-patent";
 import { GetTrademarksByUserIdService } from "../../services/trademark/trademark";
-import moment from "moment";
-import { useRouter } from "next/router";
-
+import { GetUserService } from "../../services/user";
+import { LuSearch } from "react-icons/lu";
+const menuTypes = [
+  {
+    value: "all",
+    label: "ทั้งหมด",
+  },
+  {
+    value: "invention-patent",
+    label: "สิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร",
+  },
+  { value: "design-patent", label: "สิทธิบัตรการออกแบบผลิตภัณฑ์" },
+  { value: "copyright", label: "จดแจ้งข้อมูลลิขสิทธ์" },
+  { value: "trademark", label: "จดทะเบียนเครื่องหมายการค้า" },
+];
 const menuRegister = [
   {
     title: "สิทธิบัตรการประดิษฐ์และอนุสิทธิบัตร",
@@ -47,23 +59,34 @@ function Index({ user }: { user: User }) {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  const [filterType, setFilterType] = useState<
+    "invention-patent" | "all" | "design-patent" | "copyright" | "trademark"
+  >("all");
+  const [searchField, setSearchField] = useState({
+    delay: "",
+    actual: "",
+  });
   const [requests, setRequests] = useState<{
     inventions:
       | (InventionPatent & { type: "invention-patent" } & {
-          workOnInvention: WorkInfoOnInventionPatent;
+          work: WorkInfoOnInventionPatent;
         })[]
       | [];
     designs:
       | (DesignPatent & { type: "design-patent" } & {
-          workOnDesign: WorkInfoOnDesignPatent;
+          work: WorkInfoOnDesignPatent;
         })[]
       | [];
     copyrights:
       | (Copyright & { type: "copyright" } & {
-          workOnCopyright: WorkInfoOnCopyright;
+          work: WorkInfoOnCopyright;
         })[]
       | [];
-    trademarks: (Trademark & { type: "trademark" })[] | [];
+    trademarks:
+      | (Trademark & { type: "trademark" } & {
+          work: { titleTrademark: string };
+        })[]
+      | [];
   }>({
     inventions: [],
     designs: [],
@@ -71,39 +94,42 @@ function Index({ user }: { user: User }) {
     trademarks: [],
   });
   const inventions = useQuery({
-    queryKey: ["inventions", { page: page }],
+    queryKey: ["inventions", { page: page, searchField: searchField.actual }],
     queryFn: () =>
       GetInventionPatentsByUserIdService({
         page: page,
-        limit: 5,
+        limit: 10,
+        searchField: searchField.actual,
       }),
   });
   const designs = useQuery({
-    queryKey: ["designs", { page: page }],
+    queryKey: ["designs", { page: page, searchField: searchField.actual }],
     queryFn: () =>
       GetDesignPatentsByUserIdService({
         page: page,
-        limit: 5,
+        limit: 10,
+        searchField: searchField.actual,
       }),
   });
 
   const trademarks = useQuery({
-    queryKey: ["trademarks", { page: page }],
+    queryKey: ["trademarks", { page: page, searchField: searchField.actual }],
     queryFn: () =>
       GetTrademarksByUserIdService({
         page: page,
-        limit: 5,
+        limit: 10,
+        searchField: searchField.actual,
       }),
   });
 
   const copyrights = useQuery({
-    queryKey: ["copyrights", { page: page }],
+    queryKey: ["copyrights", { page: page, searchField: searchField.actual }],
     queryFn: () =>
       GetCopyrightsByUserIdService({
         page: page,
-        limit: 5,
+        limit: 10,
+        searchField: searchField.actual,
       }),
-    // Disables automatic refetching when browser window is focused.
   });
 
   useEffect(() => {
@@ -124,42 +150,128 @@ function Index({ user }: { user: User }) {
       const highestPage = Math.max(...pages);
       setTotalPage(() => highestPage);
       setRequests(() => {
-        return {
-          inventions: inventions.data.data.map((invention) => {
+        const inventionsState = inventions.data.data.map((invention) => {
+          return {
+            ...invention,
+            type: "invention-patent",
+          };
+        }) as (InventionPatent & {
+          type: "invention-patent";
+          work: WorkInfoOnInventionPatent;
+        })[];
+
+        const designsState = designs.data.data.map((design) => {
+          return {
+            ...design,
+            type: "design-patent",
+          };
+        }) as (DesignPatent & {
+          type: "design-patent";
+          work: WorkInfoOnDesignPatent;
+        })[];
+
+        const copyrightsState = copyrights.data.data.map((copyright) => {
+          return {
+            ...copyright,
+            type: "copyright",
+          };
+        }) as (Copyright & {
+          type: "copyright";
+          work: WorkInfoOnCopyright;
+        })[];
+
+        const trademarksState = trademarks.data.data.map((trademark) => {
+          return {
+            ...trademark,
+            type: "trademark",
+          };
+        }) as (Trademark & {
+          type: "trademark";
+          work: { titleTrademark: string };
+        })[];
+
+        switch (filterType) {
+          case "all":
+            setTotalPage(() => highestPage);
             return {
-              ...invention,
-              type: "invention-patent",
+              inventions: inventionsState,
+              designs: designsState,
+              copyrights: copyrightsState,
+              trademarks: trademarksState,
             };
-          }) as (InventionPatent & { type: "invention-patent" } & {
-            workOnInvention: WorkInfoOnInventionPatent;
-          })[],
-          designs: designs.data.data.map((design) => {
+
+            break;
+
+          case "copyright":
+            setTotalPage(() => copyrights.data.meta.total);
             return {
-              ...design,
-              type: "design-patent",
+              copyrights: copyrightsState,
+              inventions: [],
+              designs: [],
+              trademarks: [],
             };
-          }) as (DesignPatent & { type: "design-patent" } & {
-            workOnDesign: WorkInfoOnDesignPatent;
-          })[],
-          copyrights: copyrights.data.data.map((copyright) => {
+            break;
+
+          case "design-patent":
+            setTotalPage(() => designs.data.meta.total);
             return {
-              ...copyright,
-              type: "copyright",
+              copyrights: [],
+              inventions: [],
+              designs: designsState,
+              trademarks: [],
             };
-          }) as (Copyright & { type: "copyright" } & {
-            workOnCopyright: WorkInfoOnCopyright;
-          })[],
-          trademarks: trademarks.data.data.map((trademark) => {
+            break;
+
+          case "trademark":
+            setTotalPage(() => trademarks.data.meta.total);
             return {
-              ...trademark,
-              type: "trademark",
+              copyrights: [],
+              inventions: [],
+              designs: [],
+              trademarks: trademarksState,
             };
-          }) as (Trademark & { type: "trademark" })[],
-        };
+            break;
+
+          case "invention-patent":
+            setTotalPage(() => inventions.data.meta.total);
+            return {
+              copyrights: [],
+              inventions: inventionsState,
+              designs: [],
+              trademarks: [],
+            };
+            break;
+
+          default:
+            return {
+              inventions: [],
+              designs: [],
+              trademarks: [],
+              copyrights: [],
+            };
+        }
       });
     }
-  }, [inventions.data, designs.data, trademarks.data, copyrights.data]);
+  }, [
+    inventions.data,
+    designs.data,
+    trademarks.data,
+    copyrights.data,
+    filterType,
+  ]);
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      setSearchField((prev) => {
+        return {
+          ...prev,
+          actual: prev.delay,
+        };
+      });
+    }, 1500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchField]);
   return (
     <HomeLayout>
       <Head>
@@ -208,6 +320,89 @@ function Index({ user }: { user: User }) {
           ))}
         </ul>
         <main className="mt-20 flex w-11/12 flex-col gap-5 md:w-10/12">
+          <div className="mt-12 flex w-full flex-col items-center gap-8">
+            <h1 className="w-full  bg-[var(--secondary-yellow)] px-4 py-2 text-center font-semibold hover:drop-shadow-md md:text-xl">
+              ตรวจสอบสถานะคำขอ
+            </h1>
+            <section
+              className="flex w-full flex-col items-center justify-center gap-4 rounded-md 
+                        border-[1.5px] border-solid border-[#BED6FF] bg-white p-4 text-xs md:gap-8 md:p-12 md:text-base "
+            >
+              {/* Select */}
+              <div className="flex w-full flex-col gap-3 md:flex-row md:gap-10 ">
+                <div className="flex w-full items-center  gap-3  md:gap-5 ">
+                  <label className=" w-20 font-semibold">ประเภท</label>
+                  <Select
+                    defaultValue={menuTypes.find(
+                      (type) => type.value === "all",
+                    )}
+                    onChange={(e) => {
+                      if (e) {
+                        setPage(1);
+                        setFilterType(
+                          () =>
+                            e.value as
+                              | "invention-patent"
+                              | "all"
+                              | "design-patent"
+                              | "copyright"
+                              | "trademark",
+                        );
+                      }
+                    }}
+                    options={menuTypes}
+                    className="z-20 w-full"
+                    placeholder={<div>เลือกประเภท</div>}
+                    styles={{
+                      control: (base, state) => ({
+                        ...base,
+                        border: "1.5px solid #BED6FF",
+                        padding: "0.25rem 0.3rem",
+                        borderRadius: "5px",
+                        color: "blue",
+                        zIndex: 10,
+                      }),
+                      singleValue: (provided: any) => ({
+                        ...provided,
+                        color: "#2166DD",
+                        fontWeight: "500",
+                      }),
+                      placeholder: (defaultStyles) => {
+                        return {
+                          ...defaultStyles,
+                          color: "#2166DD",
+                          fontWeight: "500",
+                        };
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+              {/* Search */}
+              <div className="flex w-full items-center justify-center gap-2 md:gap-5">
+                <div className="w-20 text-base md:text-xl">
+                  <LuSearch />
+                </div>
+
+                <input
+                  type="text"
+                  onChange={(e) => {
+                    setSearchField((prev) => {
+                      return {
+                        ...prev,
+                        delay: e.target.value,
+                      };
+                    });
+                    setPage(() => 1);
+                  }}
+                  value={searchField.delay}
+                  placeholder="กรอกชื่อสิ่งประดิษฐ์ เลขที่คำขอ หรือชื่อผู้ประดิษฐ์ผลงาน"
+                  className="w-full rounded-md border-[1.5px] border-solid border-[#BED6FF] p-3 pl-2 placeholder:font-medium placeholder:text-[#2166DD] 
+                          md:p-2 md:pl-10"
+                />
+              </div>
+            </section>
+          </div>
           <div
             className="w-fulljustify-between flex bg-second-color px-2 py-1 text-2xl font-semibold text-main-color
            drop-shadow-md"
@@ -215,10 +410,11 @@ function Index({ user }: { user: User }) {
             รายงานผลการยื่นคำขอจดทะเบียน
           </div>
 
-          <div className="relative max-h-96 w-full overflow-auto md:max-h-max">
+          <div className="relative max-h-[40rem] w-full overflow-auto">
             <table
-              className="w-max   border-separate border-spacing-1 rounded-md border
-             border-gray-400 bg-white p-1 text-center text-[0.7rem] md:w-full md:border-spacing-2 md:p-4 md:text-base"
+              className="w-max min-w-full  border-separate border-spacing-1 rounded-md border
+             border-gray-400 bg-white p-1 text-center text-[0.7rem] 
+              md:border-spacing-2 md:p-4 md:text-base"
             >
               <thead className="">
                 <tr className="sticky top-2 bg-white">
@@ -246,21 +442,18 @@ function Index({ user }: { user: User }) {
                     switch (item.type) {
                       case "copyright":
                         title = "ลิขสิทธิ์";
-                        workName =
-                          item.workOnCopyright?.name ?? "ไม่พบชื่อผลงาน";
+                        workName = item.work?.name ?? "ไม่พบชื่อผลงาน";
                         break;
                       case "invention-patent":
-                        workName =
-                          item.workOnInvention?.thaiName ?? "ไม่พบชื่อผลงาน";
-                        if (item.workOnInvention?.type === "INVENTION") {
+                        workName = item.work?.thaiName ?? "ไม่พบชื่อผลงาน";
+                        if (item.work?.type === "INVENTION") {
                           title = "สิทธิบัตรการประดิษฐ์";
-                        } else if (item.workOnInvention?.type === "PETTY") {
+                        } else if (item.work?.type === "PETTY") {
                           title = "อนุสิทธิบัตร";
                         }
                         break;
                       case "design-patent":
-                        workName =
-                          item.workOnDesign?.thaiName ?? "ไม่พบชื่อผลงาน";
+                        workName = item.work?.thaiName ?? "ไม่พบชื่อผลงาน";
                         title = "สิทธิบัตรการออกแบบผลิตภัณฑ์";
                         break;
                       case "trademark":
@@ -279,8 +472,13 @@ function Index({ user }: { user: User }) {
                             ? moment(item.requestDate).format("DD/MM/YYYY")
                             : "ไม่มีพบวันยื่นคำขอ"}
                         </td>
-                        <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                          {workName}
+                        <td className="">
+                          <div
+                            className="min-w-full max-w-96 truncate rounded-md border-[1px]
+                           border-solid border-[#BED6FF] p-2 hover:max-w-none"
+                          >
+                            {workName}
+                          </div>
                         </td>
                         <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                           {title}

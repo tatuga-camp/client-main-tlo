@@ -78,10 +78,11 @@ export async function GetCountInventionService(
 type RequestGetInventionPatentsByUserIdService = {
   limit: number;
   page: number;
+  searchField?: string;
 };
 
 type ResponseGetInventionPatentsByUserIdService = Pagination<
-  InventionPatent & { workOnInvention: WorkInfoOnInventionPatent }
+  InventionPatent & { work: WorkInfoOnInventionPatent }
 >;
 export async function GetInventionPatentsByUserIdService(
   input: RequestGetInventionPatentsByUserIdService,

@@ -106,8 +106,6 @@ function RequestSummary({ user }: { user?: User }) {
         searchField: searchField.actual,
         limit: 20,
       }),
-    staleTime: 1000 * 10,
-    refetchInterval: 1000 * 10,
   });
 
   const copyrights = useQuery({
@@ -118,8 +116,6 @@ function RequestSummary({ user }: { user?: User }) {
         searchField: searchField.actual,
         limit: 20,
       }),
-    staleTime: 1000 * 10,
-    refetchInterval: 1000 * 10,
   });
 
   const trademarks = useQuery({
@@ -130,8 +126,6 @@ function RequestSummary({ user }: { user?: User }) {
         searchField: searchField.actual,
         limit: 20,
       }),
-    staleTime: 1000 * 10,
-    refetchInterval: 1000 * 10,
   });
 
   useEffect(() => {

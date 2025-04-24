@@ -77,7 +77,9 @@ type RequestGetTrademarksByUserIdService = {
   searchField?: string;
 };
 
-type ResponseGetTrademarksByUserIdService = Pagination<Trademark>;
+type ResponseGetTrademarksByUserIdService = Pagination<
+  Trademark & { work: { titleTrademark: string } }
+>;
 export async function GetTrademarksByUserIdService(
   input: RequestGetTrademarksByUserIdService,
 ): Promise<ResponseGetTrademarksByUserIdService> {

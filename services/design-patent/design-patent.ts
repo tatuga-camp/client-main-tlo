@@ -83,7 +83,7 @@ type RequestGetDesignPatentsByUserIdService = {
 };
 
 type ResponseGetDesignPatentsByUserIdService = Pagination<
-  DesignPatent & { workOnDesign: WorkInfoOnDesignPatent }
+  DesignPatent & { work: WorkInfoOnDesignPatent }
 >;
 export async function GetDesignPatentsByUserIdService(
   input: RequestGetDesignPatentsByUserIdService,
