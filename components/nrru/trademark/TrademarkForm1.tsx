@@ -47,6 +47,7 @@ import {
   PersonStatusOptions,
   personStatusOptions,
 } from "../../../data/trademark";
+import { UpdatePartnerTrademarkervice } from "../../../services/trademark/partner-trademark";
 
 type TrademarkForm1Props = {
   trademark: UseQueryResult<ResponseGetTrademarkService, Error>;
@@ -89,35 +90,35 @@ const TrademarkForm1 = forwardRef(function FormTrademark(
   useEffect(() => {
     if (trademark.data) {
       setPartnerData(() => {
+        const person = trademark.data.partnerOnTrademarks[0];
         return {
           personStatus:
-            (trademark.data.personStatus as PersonStatusOptions) ??
-            "บุคคลธรรมดา",
-          firstName: trademark.data.firstName,
-          lastName: trademark.data.lastName,
-          title: trademark.data.title,
-          email: trademark.data.email,
+            (person.personStatus as PersonStatusOptions) ?? "บุคคลธรรมดา",
+          firstName: person.firstName,
+          lastName: person.lastName,
+          title: person.title,
+          email: person.email,
 
-          country: trademark.data.country,
-          phone: trademark.data.phone,
-          idCard: trademark.data.idCard,
-          houseNumber: trademark.data.addressNumber,
-          authorizedPerson: trademark.data.authorizedPerson,
-          passPort: trademark.data.passPort,
-          villageNumber: trademark.data.moo,
-          nationality: trademark.data.nationality,
+          country: person.country,
+          phone: person.phone,
+          idCard: person.idCard,
+          houseNumber: person.addressNumber,
+          authorizedPerson: person.authorizedPerson,
+          passPort: person.passPort,
+          villageNumber: person.moo,
+          nationality: person.nationality,
           tambon: {
-            name_th: trademark.data.tambon as string,
+            name_th: person.tambon as string,
           },
           amphure: {
-            name_th: trademark.data.amphure as string,
+            name_th: person.amphure as string,
           },
           province: {
-            name_th: trademark.data.province as string,
+            name_th: person.province as string,
           },
-          road: trademark.data.road,
-          zipCode: trademark.data.postalCode,
-          career: trademark.data.career,
+          road: person.road,
+          zipCode: person.postalCode,
+          career: person.career,
         };
       });
     }
@@ -172,6 +173,7 @@ const TrademarkForm1 = forwardRef(function FormTrademark(
 
   const saveData = async () => {
     try {
+      if (!trademark.data) return;
       formRef.current?.addEventListener("submit", (e) => {
         e.preventDefault();
       });
@@ -197,9 +199,9 @@ const TrademarkForm1 = forwardRef(function FormTrademark(
         throw new Error("กรุณากรอกข้อมูลผู้ประดิษฐ์");
       }
 
-      await UpdateTrademarkervice({
+      await UpdatePartnerTrademarkervice({
         query: {
-          trademarkId: trademark.data?.id as string,
+          partnerId: trademark.data?.partnerOnTrademarks[0].id,
         },
         body: {
           personStatus: partnerData?.personStatus as PersonStatusOptions,
@@ -219,7 +221,6 @@ const TrademarkForm1 = forwardRef(function FormTrademark(
           nationality: partnerData?.nationality as string,
           amphure: partnerData?.amphure?.name_th as string,
           province: partnerData?.province?.name_th as string,
-          postcode: partnerData?.zipCode as string,
           phone: partnerData?.phone?.replace(/-/g, "") as string,
           career: partnerData?.career as string,
         },

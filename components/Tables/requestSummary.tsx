@@ -463,8 +463,8 @@ function RequestSummary({ user }: { user?: User }) {
                               {title}
                             </td>
                             <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                              {item.owner.title} {item.owner.firstName}{" "}
-                              {item.owner.lastName}
+                              {item.owner?.title} {item.owner?.firstName}{" "}
+                              {item.owner?.lastName}
                             </td>
                             <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                               {item.requestDate ? (
