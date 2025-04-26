@@ -46,7 +46,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "invention-patent";
           user: User;
           work: WorkInfoOnInventionPatent;
-          owner: PartnerInfoOnInventionPatent;
+          owners: PartnerInfoOnInventionPatent[];
         })[]
       | [];
     designs:
@@ -54,7 +54,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "design-patent";
           user: User;
           work: WorkInfoOnDesignPatent;
-          owner: PartnerInfoOnDesignPatent;
+          owners: PartnerInfoOnDesignPatent[];
         })[]
       | [];
     copyrights:
@@ -62,7 +62,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "copyright";
           user: User;
           work: WorkInfoOnCopyright;
-          owner: PartnerInfoOnCopyright;
+          owners: PartnerInfoOnCopyright[];
         })[]
       | [];
     trademarks:
@@ -70,7 +70,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "trademark";
           user: User;
           work: { titleTrademark: string };
-          owner: PartnerInfoOnTrademark;
+          owners: PartnerInfoOnTrademark[];
         })[]
       | [];
   }>({
@@ -166,7 +166,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "invention-patent";
           user: User;
           work: WorkInfoOnInventionPatent;
-          owner: PartnerInfoOnInventionPatent;
+          owners: PartnerInfoOnInventionPatent[];
         })[];
 
         const designsState = designs.data.data.map((design) => {
@@ -178,7 +178,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "design-patent";
           user: User;
           work: WorkInfoOnDesignPatent;
-          owner: PartnerInfoOnDesignPatent;
+          owners: PartnerInfoOnDesignPatent[];
         })[];
 
         const copyrightsState = copyrights.data.data.map((copyright) => {
@@ -190,7 +190,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "copyright";
           user: User;
           work: WorkInfoOnCopyright;
-          owner: PartnerInfoOnCopyright;
+          owners: PartnerInfoOnCopyright[];
         })[];
 
         const trademarksState = trademarks.data.data.map((trademark) => {
@@ -202,7 +202,7 @@ function RequestSummary({ user }: { user?: User }) {
           type: "trademark";
           user: User;
           work: { titleTrademark: string };
-          owner: PartnerInfoOnTrademark;
+          owners: PartnerInfoOnTrademark[];
         })[];
 
         switch (filterType) {
@@ -463,8 +463,19 @@ function RequestSummary({ user }: { user?: User }) {
                               {title}
                             </td>
                             <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                              {item.owner?.title} {item.owner?.firstName}{" "}
-                              {item.owner?.lastName}
+                              <ul className="flex flex-col gap-1">
+                                {item.owners.map((owner) => {
+                                  return (
+                                    <li
+                                      key={owner.id}
+                                      className="w-full text-left"
+                                    >
+                                      {owner?.title} {owner?.firstName}{" "}
+                                      {owner?.lastName}
+                                    </li>
+                                  );
+                                })}
+                              </ul>
                             </td>
                             <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                               {item.requestDate ? (

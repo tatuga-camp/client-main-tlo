@@ -16,6 +16,10 @@ import {
   Copyright,
   DesignPatent,
   InventionPatent,
+  PartnerInfoOnCopyright,
+  PartnerInfoOnDesignPatent,
+  PartnerInfoOnInventionPatent,
+  PartnerInfoOnTrademark,
   Trademark,
   User,
   WorkInfoOnCopyright,
@@ -56,7 +60,6 @@ const menuRegister = [
   { title: "เครื่องหมายการค้า", icon: FaTrademark, slut: "trademark" },
 ] as const;
 function Index({ user }: { user: User }) {
-  const router = useRouter();
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [filterType, setFilterType] = useState<
@@ -70,21 +73,25 @@ function Index({ user }: { user: User }) {
     inventions:
       | (InventionPatent & { type: "invention-patent" } & {
           work: WorkInfoOnInventionPatent;
+          owners: PartnerInfoOnInventionPatent[];
         })[]
       | [];
     designs:
       | (DesignPatent & { type: "design-patent" } & {
           work: WorkInfoOnDesignPatent;
+          owners: PartnerInfoOnDesignPatent[];
         })[]
       | [];
     copyrights:
       | (Copyright & { type: "copyright" } & {
           work: WorkInfoOnCopyright;
+          owners: PartnerInfoOnCopyright[];
         })[]
       | [];
     trademarks:
       | (Trademark & { type: "trademark" } & {
           work: { titleTrademark: string };
+          owners: PartnerInfoOnTrademark[];
         })[]
       | [];
   }>({
@@ -158,6 +165,7 @@ function Index({ user }: { user: User }) {
         }) as (InventionPatent & {
           type: "invention-patent";
           work: WorkInfoOnInventionPatent;
+          owners: PartnerInfoOnInventionPatent[];
         })[];
 
         const designsState = designs.data.data.map((design) => {
@@ -168,6 +176,7 @@ function Index({ user }: { user: User }) {
         }) as (DesignPatent & {
           type: "design-patent";
           work: WorkInfoOnDesignPatent;
+          owners: PartnerInfoOnDesignPatent[];
         })[];
 
         const copyrightsState = copyrights.data.data.map((copyright) => {
@@ -178,6 +187,7 @@ function Index({ user }: { user: User }) {
         }) as (Copyright & {
           type: "copyright";
           work: WorkInfoOnCopyright;
+          owners: PartnerInfoOnCopyright[];
         })[];
 
         const trademarksState = trademarks.data.data.map((trademark) => {
@@ -188,6 +198,7 @@ function Index({ user }: { user: User }) {
         }) as (Trademark & {
           type: "trademark";
           work: { titleTrademark: string };
+          owners: PartnerInfoOnTrademark[];
         })[];
 
         switch (filterType) {
@@ -418,13 +429,16 @@ function Index({ user }: { user: User }) {
             >
               <thead className="">
                 <tr className="sticky top-2 bg-white">
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">
-                    ลำดับหมายเลข
-                  </th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">วันยื่นคำขอ</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">ชื่อผลงาน</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2">ชื่อผลงาน</th>
                   <th className=" rounded-md bg-[#BED6FF] p-2 ">ประเภทคำขอ</th>
-                  <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2">
+                    ผู้สร้างสรรค์
+                  </th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">
+                    วันที่ยื่นคำขอ
+                  </th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">เลขที่คำขอ</th>
+                  <th className=" rounded-md bg-[#BED6FF] p-2 ">สถานะคำขอ</th>
                 </tr>
               </thead>
               <tbody>
@@ -438,50 +452,75 @@ function Index({ user }: { user: User }) {
                       | "สิทธิบัตรการออกแบบผลิตภัณฑ์"
                       | "ลิขสิทธิ์"
                       | "เครื่องหมายการค้า" = "สิทธิบัตรการประดิษฐ์";
-                    let workName: string = "ไม่พบชื่อผลงาน";
+
+                    let workTitle = "";
                     switch (item.type) {
                       case "copyright":
                         title = "ลิขสิทธิ์";
-                        workName = item.work?.name ?? "ไม่พบชื่อผลงาน";
+                        workTitle = item.work?.name ?? "";
                         break;
                       case "invention-patent":
-                        workName = item.work?.thaiName ?? "ไม่พบชื่อผลงาน";
                         if (item.work?.type === "INVENTION") {
                           title = "สิทธิบัตรการประดิษฐ์";
                         } else if (item.work?.type === "PETTY") {
                           title = "อนุสิทธิบัตร";
                         }
+                        workTitle = item.work?.thaiName;
                         break;
                       case "design-patent":
-                        workName = item.work?.thaiName ?? "ไม่พบชื่อผลงาน";
                         title = "สิทธิบัตรการออกแบบผลิตภัณฑ์";
+                        workTitle = item.work?.thaiName;
                         break;
                       case "trademark":
-                        workName = item?.titleTrademark ?? "ไม่พบชื่อผลงาน";
                         title = "เครื่องหมายการค้า";
+                        workTitle = item.work?.titleTrademark;
                         break;
                     }
 
                     return (
                       <tr key={item.id} className="hover:bg-gray-200">
-                        <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                          {item.order}
+                        <td className="h-10 max-w-96 truncate rounded-md border-[1px] border-solid border-[#BED6FF] p-2 hover:max-w-none">
+                          {workTitle}
                         </td>
-                        <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
-                          {item.requestDate
-                            ? moment(item.requestDate).format("DD/MM/YYYY")
-                            : "ไม่มีพบวันยื่นคำขอ"}
-                        </td>
-                        <td className="">
-                          <div
-                            className="min-w-full max-w-96 truncate rounded-md border-[1px]
-                           border-solid border-[#BED6FF] p-2 hover:max-w-none"
-                          >
-                            {workName}
-                          </div>
-                        </td>
-                        <td className="rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                        <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
                           {title}
+                        </td>
+                        <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                          <ul className="flex flex-col gap-1">
+                            {item.owners.map((owner) => {
+                              return (
+                                <li key={owner.id} className="w-full text-left">
+                                  {owner?.title} {owner?.firstName}{" "}
+                                  {owner?.lastName}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </td>
+                        <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                          {item.requestDate ? (
+                            <span>
+                              {new Date(item.requestDate).toLocaleDateString(
+                                "th-TH",
+                                {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                },
+                              )}
+                            </span>
+                          ) : (
+                            <span className="text-red-600">
+                              ไม่มีพบวันยื่นคำขอ
+                            </span>
+                          )}
+                        </td>
+                        <td className="h-10 rounded-md border-[1px] border-solid border-[#BED6FF] p-2">
+                          {item.numberRequest ?? (
+                            <span className="text-red-600">
+                              ไม่มีหมายเลขคำขอ
+                            </span>
+                          )}
                         </td>
                         <td>
                           {item.isComplete === true ? (

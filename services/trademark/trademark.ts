@@ -18,7 +18,7 @@ type ResponseGetTrademarksService = Pagination<
   Trademark & {
     user: User;
     work: { titleTrademark: string };
-    owner: PartnerInfoOnTrademark;
+    owners: PartnerInfoOnTrademark[];
   }
 >;
 export async function GetTrademarksService(
@@ -78,7 +78,10 @@ type RequestGetTrademarksByUserIdService = {
 };
 
 type ResponseGetTrademarksByUserIdService = Pagination<
-  Trademark & { work: { titleTrademark: string } }
+  Trademark & {
+    work: { titleTrademark: string };
+    owners: PartnerInfoOnTrademark[];
+  }
 >;
 export async function GetTrademarksByUserIdService(
   input: RequestGetTrademarksByUserIdService,

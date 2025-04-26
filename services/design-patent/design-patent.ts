@@ -23,7 +23,7 @@ type ResponseGetDesignPatentsService = Pagination<
   DesignPatent & {
     user: User;
     work: WorkInfoOnDesignPatent;
-    owner: PartnerInfoOnDesignPatent;
+    owners: PartnerInfoOnDesignPatent[];
   }
 >;
 export async function GetDesignPatentsService(
@@ -83,7 +83,10 @@ type RequestGetDesignPatentsByUserIdService = {
 };
 
 type ResponseGetDesignPatentsByUserIdService = Pagination<
-  DesignPatent & { work: WorkInfoOnDesignPatent }
+  DesignPatent & {
+    work: WorkInfoOnDesignPatent;
+    owners: PartnerInfoOnDesignPatent[];
+  }
 >;
 export async function GetDesignPatentsByUserIdService(
   input: RequestGetDesignPatentsByUserIdService,

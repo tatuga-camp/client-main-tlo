@@ -22,7 +22,7 @@ type ResponseGetCopyrightsService = Pagination<
   Copyright & {
     user: User;
     work: WorkInfoOnCopyright;
-    owner: PartnerInfoOnCopyright;
+    owners: PartnerInfoOnCopyright[];
   }
 >;
 export async function GetCopyrightsService(
@@ -53,7 +53,7 @@ type RequestGetCopyrightsByUserIdService = {
 };
 
 type ResponseGetCopyrightsByUserIdService = Pagination<
-  Copyright & { work: WorkInfoOnCopyright }
+  Copyright & { work: WorkInfoOnCopyright; owners: PartnerInfoOnCopyright[] }
 >;
 export async function GetCopyrightsByUserIdService(
   input: RequestGetCopyrightsByUserIdService,

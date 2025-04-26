@@ -1,4 +1,9 @@
+import AmphureCombobox from "@/components/Combobox/amphureCombobox";
+import ProviceCombobox from "@/components/Combobox/proviceCombobox";
+import TambonCombobox from "@/components/Combobox/tambonCombobox";
 import NumberTitle from "@/components/Number";
+import { UseQueryResult } from "@tanstack/react-query";
+import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import React, {
   forwardRef,
   useEffect,
@@ -7,19 +12,13 @@ import React, {
   useState,
 } from "react";
 import {
-  Button,
   FieldError,
   Form,
   Input,
   Label,
   TextField,
 } from "react-aria-components";
-import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
-import { FiPlusCircle } from "react-icons/fi";
-import ProviceCombobox from "@/components/Combobox/proviceCombobox";
-import AmphureCombobox from "@/components/Combobox/amphureCombobox";
-import TambonCombobox from "@/components/Combobox/tambonCombobox";
-import Checkbox from "@mui/material/Checkbox";
+import Swal from "sweetalert2";
 import {
   Amphure,
   ErrorMessages,
@@ -27,27 +26,18 @@ import {
   Tambon,
   User,
 } from "../../../models";
-import { UseQueryResult } from "@tanstack/react-query";
-import {
-  ResponseGetTrademarkService,
-  UpdateTrademarkervice,
-} from "../../../services/trademark/trademark";
-import { v4 as uuidv4 } from "uuid";
-import Swal from "sweetalert2";
-import { isMongoDBId, isUUIDv4 } from "../../../utilities/validateID";
+import { ResponseGetTrademarkService } from "../../../services/trademark/trademark";
 
-import SnackbarNoSaveData from "../../Snackbars/SnackBarNoSaveData";
-import SnackbarLoading from "../../Snackbars/SnackBarLoading";
-import { MdDelete } from "react-icons/md";
 import { Dropdown } from "primereact/dropdown";
 import { TitleNameList } from "../../../data/name";
-import { OccupationLists } from "../../../data/user";
-import { partnerStatus } from "../../../data/invention";
 import {
   PersonStatusOptions,
   personStatusOptions,
 } from "../../../data/trademark";
+import { OccupationLists } from "../../../data/user";
 import { UpdatePartnerTrademarkervice } from "../../../services/trademark/partner-trademark";
+import SnackbarLoading from "../../Snackbars/SnackBarLoading";
+import SnackbarNoSaveData from "../../Snackbars/SnackBarNoSaveData";
 
 type TrademarkForm1Props = {
   trademark: UseQueryResult<ResponseGetTrademarkService, Error>;
