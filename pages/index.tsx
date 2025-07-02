@@ -1,38 +1,25 @@
 import LogoFile from "@/components/LogoFile";
 import HomeLayout from "@/layouts/homepageLayout";
+import { Pagination as PaginationMUI } from "@mui/material";
 import Head from "next/head";
-import { PiCertificate } from "react-icons/pi";
-import { BsEnvelopePaper } from "react-icons/bs";
-import { GiBrain } from "react-icons/gi";
-import { FaUserCircle } from "react-icons/fa";
-import { IoBulbOutline } from "react-icons/io5";
 import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
+import LinkNextJS from "next/link";
+import { BsEnvelopePaper } from "react-icons/bs";
+import { FaUserCircle } from "react-icons/fa";
+import { GiBrain } from "react-icons/gi";
+import { IoBulbOutline } from "react-icons/io5";
+import { PiCertificate } from "react-icons/pi";
 import "swiper/css";
 import { Autoplay, Pagination } from "swiper/modules";
-import { PiUserCircleFill } from "react-icons/pi";
-import { GoGoal } from "react-icons/go";
-import { LiaClipboardListSolid } from "react-icons/lia";
-import { GrGroup } from "react-icons/gr";
-import { FaRegCircleCheck } from "react-icons/fa6";
-import LinkNextJS from "next/link";
-import { Pagination as PaginationMUI } from "@mui/material";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-import {
-  Link,
-  Button,
-  Element,
-  Events,
-  animateScroll as scroll,
-  scrollSpy,
-} from "react-scroll";
-import moment from "moment";
-import RequestSummary from "../components/Tables/requestSummary";
 import { useQuery } from "@tanstack/react-query";
-import { GetNewsByPageService } from "../services/news/news";
 import { useState } from "react";
+import { Element, Link } from "react-scroll";
 import NewsCard from "../components/Forms/News/newsCard";
 import NewsList from "../components/Tables/newsList";
+import RequestSummary from "../components/Tables/requestSummary";
+import { GetNewsByPageService } from "../services/news/news";
 
 export default function Home() {
   const [page, setPage] = useState(1);
@@ -119,7 +106,7 @@ export default function Home() {
                 href="/dashboard"
                 className=" bg-[var(--secondary-yellow)] px-3 py-1 text-base font-semibold text-[var(--primary-blue)] duration-300 hover:scale-110 hover:bg-yellow-500 hover:drop-shadow-md md:px-4 md:py-2 md:text-xl"
               >
-                เข้าสู้หน้าหลักพื่อยื่นคำขอ
+                เข้าสู่หน้าหลักเพื่อยื่นคำขอ
               </LinkNextJS>
             </section>
           </header>
@@ -132,72 +119,6 @@ export default function Home() {
               <h1 className="bg-[var(--secondary-yellow)] px-4 py-2 font-semibold hover:drop-shadow-md md:text-xl">
                 มหาวิทยาลัยราชภัฏนครราชสีมา
               </h1>
-            </section>
-
-            <section className="mt-8 grid grid-cols-2 items-center justify-center gap-4 font-semibold lg:grid-cols-4 lg:grid-rows-1 lg:gap-3">
-              <button className="">
-                <Link
-                  to="request"
-                  smooth={true}
-                  offset={10}
-                  duration={300}
-                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base"
-                >
-                  <div className="rounded-full bg-[var(--primary-blue)] p-4 text-[2.5rem] text-white duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-[var(--primary-blue)] md:p-3 md:text-[5rem]">
-                    <PiCertificate />
-                  </div>
-                  <p className="text-[0.85rem] duration-300 group-hover:text-[0.95rem] group-hover:text-white md:text-[1.1rem] md:group-hover:text-base">
-                    จดทะเบียน <br></br>ทรัพย์สินทางปัญญา
-                  </p>
-                </Link>
-              </button>
-
-              <button className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-0 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base">
-                <Link
-                  to="information"
-                  smooth={true}
-                  offset={-100}
-                  duration={300}
-                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base"
-                >
-                  <div className="rounded-full bg-[var(--primary-blue)] p-4 text-[2.5rem] text-white duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-[var(--primary-blue)] md:text-[4.6rem]">
-                    <BsEnvelopePaper />
-                  </div>
-                  <p className="text-[0.85rem] duration-300 group-hover:text-[0.95rem] group-hover:text-white md:text-[1.1rem] md:group-hover:text-base">
-                    ข่าวประชาสัมพันธ์
-                  </p>
-                </Link>
-              </button>
-
-              <button className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-0 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base">
-                <Link
-                  to="knowledge"
-                  smooth={true}
-                  offset={-100}
-                  duration={300}
-                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base"
-                >
-                  <div className="rounded-full bg-[var(--primary-blue)] p-4 text-[2.5rem] text-white  duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-[var(--primary-blue)] md:p-3 md:text-[5rem]">
-                    <GiBrain />
-                  </div>
-                  <p className="text-[0.85rem] duration-300 group-hover:text-[0.95rem] group-hover:text-white md:text-[1.1rem] md:group-hover:text-base">
-                    ความรู้เกี่ยวกับ <br></br>ทรัพย์สินทางปัญญา
-                  </p>
-                </Link>
-              </button>
-              <button className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-0 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base">
-                <LinkNextJS
-                  href={"/about-us"}
-                  className="group flex h-40 w-40 flex-col items-center gap-3 bg-white pt-6 text-center text-xs duration-300 hover:bg-[var(--primary-blue)] hover:drop-shadow-md md:h-52 md:w-52 md:gap-4 md:text-base"
-                >
-                  <div className="rounded-full bg-[var(--primary-blue)] p-4 text-[2.5rem] text-white duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-[var(--primary-blue)] md:text-[4.6rem]">
-                    <FaUserCircle />
-                  </div>
-                  <p className="text-[0.85rem] duration-300 group-hover:text-[0.95rem] group-hover:text-white md:text-[1.1rem] md:group-hover:text-base">
-                    เกี่ยวกับเรา
-                  </p>
-                </LinkNextJS>
-              </button>
             </section>
           </main>
 

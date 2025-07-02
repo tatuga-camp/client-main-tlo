@@ -14,7 +14,7 @@ const HomepageSidebar = () => {
         </h1>
         <h2 className="text-3xl text-[#10316B]">งานทรัพย์สินทางปัญญา</h2>
         <p className="text-[0.9rem] font-semibold text-[#2166DD99]">
-          กองพัฒนาพิเศษ สำนักงานอธิการบดี
+          กองกิจการพิเศษ สำนักงานอธิการบดี
         </p>
 
         <div className="relative mt-3 h-[19rem]  w-[20rem] ">
