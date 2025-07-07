@@ -48,9 +48,18 @@ export async function GetInventionPatentsService(
 
 type RequestGetCountInventionService = {
   requestYear: string;
+  group?: "faculty";
 };
 
-type ResponseGetCountInventionService = number;
+type ResponseGetCountInventionService = {
+  count: number;
+  groups: {
+    _count: {
+      [key: string]: number;
+    };
+    faculty: string;
+  }[];
+};
 export async function GetCountInventionService(
   input: RequestGetCountInventionService,
 ): Promise<ResponseGetCountInventionService> {

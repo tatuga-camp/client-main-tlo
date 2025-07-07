@@ -49,9 +49,18 @@ export async function GetDesignPatentsService(
 
 type RequestGetCountDesignService = {
   requestYear: string;
+  group?: "faculty";
 };
 
-type ResponseGetCountDesignService = number;
+type ResponseGetCountDesignService = {
+  count: number;
+  groups: {
+    _count: {
+      [key: string]: number;
+    };
+    faculty: string;
+  }[];
+};
 export async function GetCountDesignService(
   input: RequestGetCountDesignService,
 ): Promise<ResponseGetCountDesignService> {

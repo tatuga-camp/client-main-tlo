@@ -20,6 +20,7 @@ import NewsCard from "../components/Forms/News/newsCard";
 import NewsList from "../components/Tables/newsList";
 import RequestSummary from "../components/Tables/requestSummary";
 import { GetNewsByPageService } from "../services/news/news";
+import SummaryData from "../components/Tables/SummaryData";
 
 export default function Home() {
   const [page, setPage] = useState(1);
@@ -121,6 +122,8 @@ export default function Home() {
               </h1>
             </section>
           </main>
+
+          <SummaryData />
 
           <RequestSummary />
 

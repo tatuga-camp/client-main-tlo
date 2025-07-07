@@ -40,10 +40,24 @@ const BarOptions: Chart.ChartOptions = {
 };
 
 type Data = number[];
+const menuSummary = [
+  "จำแนกตามประเภททรัพย์สินทางปัญญา",
+  "จำแนกตามคณะ/หน่วยงาน",
+] as const;
 
+type MenuSummary = (typeof menuSummary)[number];
+const defaultLabel = [
+  "สิทธิบัตรการออกแบบผลิตภัณฑ์",
+  "ลิขสิทธิ์",
+  "สิทธิบัตรการประดิษฐ์และอนุสิทธิบัตร",
+  "เครื่องหมายการค้า",
+];
 const SummaryData = () => {
   const currentYear = new Date().getFullYear();
   const [barData, setBarData] = useState<ChartData<"bar">>();
+  const [selectMenu, setselectMenu] = useState<MenuSummary>(
+    "จำแนกตามประเภททรัพย์สินทางปัญญา",
+  );
 
   // Construct the ISO date string for January 1st of the current year
   const currentYearISO = new Date(
@@ -56,54 +70,135 @@ const SummaryData = () => {
   );
 
   const copyright = useQuery({
-    queryKey: ["copyright-count", { requestYear: requestYear }],
-    queryFn: () => GetCountCopyrightService({ requestYear: requestYear }),
+    queryKey: [
+      "copyright-count",
+      {
+        requestYear: requestYear,
+        ...(selectMenu === "จำแนกตามคณะ/หน่วยงาน" && { group: "faculty" }),
+      },
+    ],
+    queryFn: () =>
+      GetCountCopyrightService({
+        requestYear: requestYear,
+        ...(selectMenu === "จำแนกตามคณะ/หน่วยงาน" && { group: "faculty" }),
+      }),
   });
   const invention = useQuery({
-    queryKey: ["invention-count", { requestYear: requestYear }],
-    queryFn: () => GetCountInventionService({ requestYear: requestYear }),
+    queryKey: [
+      "invention-count",
+      {
+        requestYear: requestYear,
+        ...(selectMenu === "จำแนกตามคณะ/หน่วยงาน" && { group: "faculty" }),
+      },
+    ],
+    queryFn: () =>
+      GetCountInventionService({
+        requestYear: requestYear,
+        ...(selectMenu === "จำแนกตามคณะ/หน่วยงาน" && { group: "faculty" }),
+      }),
   });
 
   const design = useQuery({
-    queryKey: ["design-count", { requestYear: requestYear }],
-    queryFn: () => GetCountDesignService({ requestYear: requestYear }),
+    queryKey: [
+      "design-count",
+      {
+        requestYear: requestYear,
+        ...(selectMenu === "จำแนกตามคณะ/หน่วยงาน" && { group: "faculty" }),
+      },
+    ],
+    queryFn: () =>
+      GetCountDesignService({
+        requestYear: requestYear,
+        ...(selectMenu === "จำแนกตามคณะ/หน่วยงาน" && { group: "faculty" }),
+      }),
   });
 
   const trademark = useQuery({
-    queryKey: ["trademark-count", { requestYear: requestYear }],
-    queryFn: () => GetCountTrademarkService({ requestYear: requestYear }),
+    queryKey: [
+      "trademark-count",
+      {
+        requestYear: requestYear,
+        ...(selectMenu === "จำแนกตามคณะ/หน่วยงาน" && { group: "career" }),
+      },
+    ],
+    queryFn: () =>
+      GetCountTrademarkService({
+        requestYear: requestYear,
+        ...(selectMenu === "จำแนกตามคณะ/หน่วยงาน" && { group: "career" }),
+      }),
   });
 
   useEffect(() => {
-    setBarData(() => {
-      return {
-        labels: [
-          "สิทธิบัตรการออกแบบผลิตภัณฑ์",
-          "ลิขสิทธิ์",
-          "สิทธิบัตรการประดิษฐ์และอนุสิทธิบัตร",
-          "เครื่องหมายการค้า",
-        ],
-        datasets: [
-          {
-            label: "จำนวนคำข้อทั้งหมด",
-            data: [
-              design.data ?? 0,
-              copyright.data ?? 0,
-              invention.data ?? 0,
-              trademark.data ?? 0,
-            ],
-            backgroundColor: [
-              "rgba(70, 95, 229, 1)",
-              "rgba(229, 238, 249, 1)",
-              "rgba(189, 211, 244, 1)",
-              "rgba(150, 175, 239, 1)",
-            ],
-            borderWidth: 0,
-          },
-        ],
-      };
-    });
-  }, [copyright.data, design.data, invention.data, trademark.data]);
+    if (selectMenu === "จำแนกตามประเภททรัพย์สินทางปัญญา") {
+      setBarData(() => {
+        return {
+          labels: defaultLabel,
+          datasets: [
+            {
+              label: "จำนวนคำข้อทั้งหมด",
+              data: [
+                design.data?.count ?? 0,
+                copyright.data?.count ?? 0,
+                invention.data?.count ?? 0,
+                trademark.data?.count ?? 0,
+              ],
+              backgroundColor: [
+                "rgba(70, 95, 229, 1)",
+                "rgba(229, 238, 249, 1)",
+                "rgba(189, 211, 244, 1)",
+                "rgba(150, 175, 239, 1)",
+              ],
+              borderWidth: 0,
+            },
+          ],
+        };
+      });
+    }
+    if (selectMenu === "จำแนกตามคณะ/หน่วยงาน") {
+      const listData = [
+        ...(invention.data?.groups ?? []),
+        ...(design.data?.groups ?? []),
+        ...(copyright.data?.groups ?? []),
+      ].reduce(
+        (acc, item) => {
+          const facultyName = item.faculty;
+          const count = item._count.faculty;
+
+          if (acc[facultyName]) {
+            acc[facultyName]._count.faculty += count;
+          } else {
+            acc[facultyName] = {
+              faculty: facultyName,
+              _count: { faculty: count },
+            };
+          }
+
+          return acc;
+        },
+        {} as Record<string, { faculty: string; _count: { faculty: number } }>,
+      );
+      const groupedList = Object.values(listData);
+
+      setBarData(() => {
+        return {
+          labels: groupedList.map((item) => item.faculty),
+          datasets: [
+            {
+              label: "จำนวนรายชื่อ",
+              data: groupedList.map((item) => item._count.faculty),
+              backgroundColor: [
+                "rgba(70, 95, 229, 1)",
+                "rgba(229, 238, 249, 1)",
+                "rgba(189, 211, 244, 1)",
+                "rgba(150, 175, 239, 1)",
+              ],
+              borderWidth: 0,
+            },
+          ],
+        };
+      });
+    }
+  }, [copyright.data, design.data, invention.data, trademark.data, selectMenu]);
 
   return (
     <div className="mb-5 flex w-[80%] flex-col items-center gap-5">
@@ -156,10 +251,10 @@ const SummaryData = () => {
               </h1>
             ) : (
               <h1 className="text-2xl font-semibold text-[var(--secondary-yellow)] ">
-                {(trademark?.data ?? 0) +
-                  (design?.data ?? 0) +
-                  (invention?.data ?? 0) +
-                  (copyright.data ?? 0)}
+                {(trademark?.data?.count ?? 0) +
+                  (design?.data?.count ?? 0) +
+                  (invention?.data?.count ?? 0) +
+                  (copyright.data?.count ?? 0)}
               </h1>
             )}
             <p className="text-xs font-semibold text-white">จำนวนการยื่นคำขอ</p>
@@ -175,6 +270,19 @@ const SummaryData = () => {
           className=" h-full w-full rounded-md border-[1px] border-solid
          border-slate-200 bg-white p-5"
         >
+          <ul className="flex w-full items-center justify-center gap-4">
+            {menuSummary.map((text, index) => {
+              return (
+                <li
+                  onClick={() => setselectMenu(text)}
+                  key={index}
+                  className={`cursor-pointer rounded-md  ${selectMenu === text ? "bg-main-color text-white" : "text-main-color"} px-5  transition hover:scale-105`}
+                >
+                  {text}
+                </li>
+              );
+            })}
+          </ul>
           <h1 className="my-5 ml-5 text-base font-semibold text-[var(--primary-blue)] md:text-xl">
             ประเภทคำขอ
           </h1>

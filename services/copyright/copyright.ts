@@ -81,9 +81,18 @@ export async function GetCopyrightsByUserIdService(
 
 type RequestGetCountCopyrightService = {
   requestYear: string;
+  group?: "faculty";
 };
 
-type ResponseGetCountCopyrightService = number;
+type ResponseGetCountCopyrightService = {
+  count: number;
+  groups: {
+    _count: {
+      [key: string]: number;
+    };
+    faculty: string;
+  }[];
+};
 export async function GetCountCopyrightService(
   input: RequestGetCountCopyrightService,
 ): Promise<ResponseGetCountCopyrightService> {

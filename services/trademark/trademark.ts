@@ -44,9 +44,18 @@ export async function GetTrademarksService(
 
 type RequestGetCountTrademarkService = {
   requestYear: string;
+  group?: "career";
 };
 
-type ResponseGetCountTrademarkService = number;
+type ResponseGetCountTrademarkService = {
+  count: number;
+  groups: {
+    _count: {
+      [key: string]: number;
+    };
+    career: string;
+  }[];
+};
 export async function GetCountTrademarkService(
   input: RequestGetCountTrademarkService,
 ): Promise<ResponseGetCountTrademarkService> {
