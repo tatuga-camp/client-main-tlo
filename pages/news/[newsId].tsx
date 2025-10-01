@@ -1,28 +1,23 @@
-import { GetServerSideProps } from "next";
-import React, { useEffect, useState } from "react";
-import {
-  GetNewsByIdService,
-  ResponseGetNewsByIdService,
-} from "../../services/news/news";
-import HomeLayout from "../../layouts/homepageLayout";
-import moment from "moment";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import Image from "next/image";
 import parse from "html-react-parser";
-import FileOnNews from "../../components/Forms/News/FileOnNews";
+import moment from "moment";
+import { GetServerSideProps } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { FacebookIcon, FacebookShareButton } from "react-share";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import FileOnNews from "../../components/Forms/News/FileOnNews";
+import HomeLayout from "../../layouts/homepageLayout";
 import {
-  FacebookShareButton,
-  WhatsappShareButton,
-  WhatsappIcon,
-  FacebookIcon,
-} from "react-share";
-import { useRouter } from "next/router";
-import Head from "next/head";
+  GetNewsByIdService,
+  ResponseGetNewsByIdService,
+} from "../../services/news/news";
 function Index({ news }: { news: ResponseGetNewsByIdService }) {
   const [fullUrl, setFullUrl] = useState("");
   const router = useRouter();

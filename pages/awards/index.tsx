@@ -126,7 +126,7 @@ function Index() {
 
               return (
                 <Link
-                  href={`/awards/${award.id}`}
+                  href={`/news/${award.id}`}
                   className="group flex h-80 min-w-80 flex-col  items-center overflow-hidden rounded-md bg-white ring-1 ring-blue-300 transition hover:scale-105 hover:drop-shadow-md"
                   key={index}
                 >
@@ -146,7 +146,7 @@ function Index() {
                       {moment(award.releaseAt).format("DD/MM/YYYY HH:mm")}
                     </p>
                     <Link
-                      href={`/awards/${award.id}`}
+                      href={`/news/${award.id}`}
                       className="text-xs  text-blue-400 hover:underline"
                     >
                       อ่านต่อ
